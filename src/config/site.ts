@@ -8,7 +8,11 @@ export const site = {
   tagline: 'Lab-Grown Diamond Fine Jewelry',
   description:
     'Aurevia crafts certified lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
+  // NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is detected automatically
+  url: (
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000')
+  ).replace(/\/$/, ''),
   locale: 'en-US',
   currency: 'USD',
   foundedYear: 2010,
