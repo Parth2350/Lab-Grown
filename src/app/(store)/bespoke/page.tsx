@@ -1,0 +1,225 @@
+import { Gem, Gift, MessageSquareText, PenTool } from 'lucide-react';
+import { site } from '@/config/site';
+import { pageMeta } from '@/lib/seo';
+import { ButtonLink } from '@/components/ui/Button';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { Reveal } from '@/components/ui/Reveal';
+import { BespokeWizard } from '@/components/content/bespoke/BespokeWizard';
+import { FaqSection, type Faq } from '@/components/content/FaqSection';
+import { ArtPanel, NumberedSteps, TextLink } from '@/components/content/ui';
+import type { ArtSpec } from '@/components/art/JewelryArt';
+
+export const metadata = pageMeta({
+  title: 'Bespoke Design',
+  description: `Create a one-of-a-kind engagement ring or fine jewelry piece with ${site.name}'s designers and master jewelers. Share your vision and start your bespoke request today.`,
+  path: '/bespoke',
+});
+
+const STEPS = [
+  {
+    title: 'Share Your Vision',
+    text: 'Tell us about the piece you imagine — the style, the diamond, the story behind it. Inspiration images are always welcome.',
+    icon: <MessageSquareText className="h-5 w-5" strokeWidth={1} aria-hidden />,
+  },
+  {
+    title: 'Custom Design & Selection',
+    text: 'Your designer prepares sketches and detailed CAD renders, and our gemologists hand-select certified diamonds to match.',
+    icon: <PenTool className="h-5 w-5" strokeWidth={1} aria-hidden />,
+  },
+  {
+    title: 'Expert Craftsmanship & Precision',
+    text: 'Once you approve, our master jewelers cast, set and finish your piece by hand in our own workshop.',
+    icon: <Gem className="h-5 w-5" strokeWidth={1} aria-hidden />,
+  },
+  {
+    title: 'Your Dream Jewelry, Made For You',
+    text: 'Inspected, polished and presented in our signature box, your piece arrives fully insured — ready for its moment.',
+    icon: <Gift className="h-5 w-5" strokeWidth={1} aria-hidden />,
+  },
+];
+
+const SHOWCASE: { title: string; text: string; spec: ArtSpec; shape: string; metal: string; carat?: number; tone: 'default' | 'warm' | 'cool' }[] = [
+  {
+    title: 'The heirloom reset',
+    text: 'A grandmother’s diamonds, reimagined as a three-stone ring with tapered pear sides.',
+    spec: { kind: 'ring', head: 'three-stone', sides: 'pear', band: 'plain' },
+    shape: 'oval',
+    metal: 'yellow',
+    carat: 1.5,
+    tone: 'warm',
+  },
+  {
+    title: 'East-west, on a whisper',
+    text: 'An oval turned on its side and set on a slender band, for a modern minimalist.',
+    spec: { kind: 'ring', head: 'east-west', band: 'plain', size: 'thin' },
+    shape: 'oval',
+    metal: 'white',
+    carat: 1.5,
+    tone: 'cool',
+  },
+  {
+    title: 'Wedding-day drops',
+    text: 'Pear-shaped drops in rose gold, sized to frame the face and match a vintage gown.',
+    spec: { kind: 'drops', head: 'halo' },
+    shape: 'pear',
+    metal: 'rose',
+    tone: 'default',
+  },
+  {
+    title: 'A two-tone tennis line',
+    text: 'Oval diamonds in yellow and white gold, made for a twentieth anniversary.',
+    spec: { kind: 'tennis-bracelet', stoneShape: 'oval' },
+    shape: 'oval',
+    metal: 'yellow-white',
+    tone: 'warm',
+  },
+];
+
+const FAQS: Faq[] = [
+  {
+    q: 'How much does a bespoke piece cost?',
+    a: 'The price depends mainly on the diamond and the amount of gold. Many of our commissions begin at around $1,000, and we always design to the budget you share with us. Your proposal is itemised, so you can see exactly where your money goes.',
+  },
+  {
+    q: 'Is there a charge for the design consultation?',
+    a: 'No. Your consultation, sketches and first CAD renders are complimentary and carry no obligation. We ask for a 30% deposit only when you approve your final design and are ready for us to begin.',
+  },
+  {
+    q: 'How long does it take?',
+    a: 'Most commissions take 4–6 weeks from first conversation to delivery — about a week for design and diamond selection, then 3–5 weeks in our workshop. If you have a date in mind, tell us and we will plan around it.',
+  },
+  {
+    q: 'Can you use my own diamond or heirloom gold?',
+    a: 'Often, yes. We inspect heirloom diamonds before resetting them to make sure they are sound. Old gold can sometimes be refined and reused; our jewelers will advise on what is possible for your piece.',
+  },
+  {
+    q: 'Will I see my design before it is made?',
+    a: 'Always. You review photorealistic CAD renders from several angles and can request changes. For rings, we can also send a resin model so you can check the proportions on your hand.',
+  },
+  {
+    q: 'Does a bespoke piece include certification and a warranty?',
+    a: 'Yes. Centre diamonds are graded by IGI or GIA, and every bespoke piece is covered by our lifetime manufacturing warranty and complimentary lifetime care.',
+  },
+];
+
+export default function BespokePage() {
+  return (
+    <>
+      {/* ───────── hero ───────── */}
+      <section className="container-x pb-16 pt-8 md:pb-24 md:pt-12">
+        <Breadcrumbs items={[{ label: 'Bespoke Design', href: '/bespoke' }]} />
+        <div className="mt-10 grid items-center gap-10 md:mt-14 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <p className="eyebrow mb-4">Bespoke Design</p>
+            <h1 className="h-display text-balance">Your idea, made by hand</h1>
+            <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-taupe md:text-[17px]">
+              Work one-to-one with our designers and master jewelers to create an engagement ring or fine jewelry piece that exists nowhere else — crafted in
+              our own workshop with certified lab-grown diamonds.
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <ButtonLink href="#start" size="lg">
+                Start Your Design
+              </ButtonLink>
+              <ButtonLink href="#how-it-works" variant="outline" size="lg">
+                How It Works
+              </ButtonLink>
+            </div>
+            <ul className="mt-10 grid grid-cols-3 gap-4 border-t border-line pt-6 text-[12px] leading-snug text-taupe">
+              <li>
+                <span className="block font-serif text-2xl text-ink">Free</span>consultation &amp; CAD
+              </li>
+              <li>
+                <span className="block font-serif text-2xl text-ink">4–6</span>weeks to delivery
+              </li>
+              <li>
+                <span className="block font-serif text-2xl text-ink">For life</span>warranty &amp; care
+              </li>
+            </ul>
+          </div>
+          <div className="grid grid-cols-5 grid-rows-[auto_auto] gap-3 sm:gap-4 lg:col-span-7">
+            <Reveal className="col-span-3 row-span-2">
+              <ArtPanel
+                spec={{ kind: 'ring', head: 'toi-et-moi', second: 'oval', band: 'plain' }}
+                shape="pear"
+                metal="yellow"
+                carat={1.5}
+                tone="warm"
+                className="aspect-[3/4] h-full"
+                inset="p-6 sm:p-10"
+                title="A toi et moi ring with pear and oval diamonds"
+                caption={<span>Toi et moi · pear &amp; oval</span>}
+              />
+            </Reveal>
+            <Reveal delay={0.1} className="col-span-2">
+              <ArtPanel spec={{ kind: 'ring', head: 'double-halo', band: 'pave' }} shape="asscher" metal="white" carat={2} tone="cool" className="aspect-square" inset="p-4 sm:p-6" title="An asscher double halo ring" />
+            </Reveal>
+            <Reveal delay={0.2} className="col-span-2">
+              <ArtPanel spec={{ kind: 'pendant', head: 'bezel' }} shape="emerald" metal="rose" className="aspect-square" inset="p-4 sm:p-6" title="An emerald-cut bezel pendant" />
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ───────── how it works ───────── */}
+      <section id="how-it-works" aria-labelledby="how-title" className="container-x scroll-mt-32 pb-16 md:pb-24">
+        <div className="mb-10 max-w-2xl md:mb-14">
+          <p className="eyebrow mb-3">The Process</p>
+          <h2 id="how-title" className="h-section">
+            How bespoke works
+          </h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-taupe">Four considered steps, guided from start to finish by your personal design consultant.</p>
+        </div>
+        <NumberedSteps steps={STEPS} />
+      </section>
+
+      {/* ───────── showcase ───────── */}
+      <section aria-labelledby="showcase-title" className="bg-porcelain py-16 md:py-24">
+        <div className="container-x">
+          <div className="mb-10 max-w-2xl md:mb-14">
+            <p className="eyebrow mb-3">From the atelier</p>
+            <h2 id="showcase-title" className="h-section">
+              Designs we have brought to life
+            </h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-taupe">A few examples of the kinds of commissions our designers create.</p>
+          </div>
+          <ul className="grid gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
+            {SHOWCASE.map((s, i) => (
+              <li key={s.title}>
+                <Reveal delay={i * 0.08}>
+                  <ArtPanel spec={s.spec} shape={s.shape} metal={s.metal} carat={s.carat ?? 1} tone={s.tone} className="aspect-[4/5] bg-white" inset="p-6" title={s.title} />
+                  <h3 className="mt-5 font-serif text-[1.5rem] leading-tight">{s.title}</h3>
+                  <p className="mt-2 text-[14px] leading-relaxed text-taupe">{s.text}</p>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ───────── inquiry ───────── */}
+      <section id="start" aria-labelledby="start-title" className="container-x scroll-mt-32 py-16 md:py-24">
+        <div className="mb-10 grid gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="eyebrow mb-3">Begin Here</p>
+            <h2 id="start-title" className="h-section">
+              Start your bespoke request
+            </h2>
+            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-taupe">
+              It takes about three minutes. There is no obligation — just the beginning of a conversation with your designer.
+            </p>
+          </div>
+          <p className="text-[14px] leading-relaxed text-taupe lg:col-span-5 lg:text-right">
+            Prefer to talk first?{' '}
+            <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-stone underline-offset-4 hover:decoration-ink">
+              Message us on WhatsApp
+            </a>{' '}
+            or <TextLink href="/contact">send a note</TextLink>.
+          </p>
+        </div>
+        <BespokeWizard />
+      </section>
+
+      <FaqSection items={FAQS} title="Bespoke, answered" intro={<>Anything else? Our design team is always happy to talk it through.</>} />
+    </>
+  );
+}

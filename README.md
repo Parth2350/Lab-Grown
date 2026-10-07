@@ -1,0 +1,135 @@
+# Aurevia — Lab-Grown Diamond Fine Jewelry
+
+A production-grade luxury jewelry storefront and admin, built with **Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS · PostgreSQL · Prisma · NextAuth · Zustand · Framer Motion**.
+
+The brand ("Aurevia") is fictional. Change it in one place: `src/config/site.ts`.
+
+---
+
+## Quick start
+
+```bash
+npm install
+cp .env.example .env            # then set NEXTAUTH_SECRET (any long random string)
+npm run db:start                # terminal 1 — embedded PostgreSQL on :5433 (no install needed)
+npx prisma migrate deploy       # terminal 2 — create the schema
+npm run db:seed                 # demo catalog, diamonds, customers, orders, reviews…
+npm run dev                     # http://localhost:3000
+```
+
+`npm run db:start` launches a real PostgreSQL server from the `embedded-postgres` package and keeps its data in `~/.aurevia/pgdata` (outside synced folders such as OneDrive). Already have PostgreSQL? Skip that step and point `DATABASE_URL` at it.
+
+### Demo logins
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@aurevia.example` | `Aurevia@Admin1` |
+| Customer | `demo@aurevia.example` | `Aurevia@Demo1` |
+
+Change or remove these before going live (`prisma/seed.ts`).
+
+### Coupons in the seed
+
+`WELCOME10` (10% off) · `LUXE150` ($150 off orders over $1,500) · `BRIDAL15` (15% off over $2,000) · `SUMMER20` (expired — shows the error state).
+
+---
+
+## Configuration
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `NEXTAUTH_URL`, `NEXTAUTH_SECRET` | Auth.js / NextAuth session signing |
+| `GOOGLE_CLIENT_ID/SECRET` | Optional Google sign-in |
+| `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `NEXT_PUBLIC_RAZORPAY_KEY_ID` | Live/test payments (UPI, cards, net banking, wallets). **Blank = built-in demo payment flow, no charges.** |
+| `CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET` | Product, hero and bespoke image uploads. Blank = files saved to `public/uploads`. Any S3-compatible store can be swapped in at `src/lib/server/storage.ts`. |
+| `REDIS_URL` | Optional shared cache for API responses (falls back to in-memory) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URLs, sitemap and Open Graph |
+| `RAZORPAY_WEBHOOK_SECRET` | Verifies Razorpay webhooks at `/api/payments/razorpay/webhook` (`payment.captured`, `order.paid`) |
+| `NEXT_PUBLIC_DEMO_MODE` | `false` hides the demo-login hint on the sign-in page |
+
+---
+
+## What's inside
+
+**Storefront** — sticky header with mega-menus, search overlay (recent + popular searches, live results across products, categories, collections and shapes), cart drawer, account menu, mobile navigation, marquee announcement bar, editorial homepage, collection pages with faceted filtering (price, metal type, purity, shape, centre and total carat, setting, style, collection), smart search ("2ct oval halo", SKUs), sort, load-more and infinite scroll, mobile bottom-sheet filters.
+
+**Product pages** — gallery with hover zoom, fullscreen, swipe, a drag-to-rotate 360° view and video support; live pricing as purity, metal colour, diamond and ring size change; a **diamond configurator** that searches certified loose diamonds by carat, colour, clarity, cut, lab and price; quick view; wishlist, compare, share; reviews with moderation; related and recently viewed products.
+
+**Commerce** — persistent cart and wishlist (localStorage, synced to the database when signed in), compare up to four pieces, coupon codes, server-side re-pricing of every line at checkout, Razorpay (or demo) payments, stock and diamond allocation on payment, order confirmation.
+
+**Account** — profile, orders and order detail with tracking, saved addresses, wishlist, compare, recently viewed, returns and support.
+
+**Content** — lab-grown diamond education, about, contact, bespoke multi-step inquiry with image upload, partner program application, gift guide, Find Your Match quiz with recommendations, policy pages, FAQ.
+
+**Admin (`/admin`)** — dashboard KPIs and charts, products (variants, diamond options, imagery, SEO), categories, collections, orders, customers, diamonds, inventory, coupons, reviews, bespoke requests, partner applications, payments, shipping, analytics, messages and store settings. Every admin write revalidates the storefront cache, so changes appear immediately.
+
+### Imagery
+
+There is no stock photography. Every product is rendered by an original **procedural SVG renderer** (`src/components/art/JewelryArt.tsx`) that redraws instantly in the selected metal colour, diamond shape and carat. Uploading photos for a product in the admin automatically replaces the illustration (served through `next/image` as AVIF/WebP).
+
+---
+
+## Architecture
+
+```
+prisma/                 schema, migrations, seed + demo catalog data
+scripts/db.mjs          embedded PostgreSQL for local development
+src/app/(store)/        storefront routes (layout = header, marquee, footer, drawers)
+src/app/admin/          admin panel (own layout, ADMIN role only)
+src/app/api/            route handlers (products, diamonds, search, checkout, payments, account…)
+src/components/         ui · layout · art · product · pdp · collection · cart · home · content · account · admin
+src/config/             brand, navigation & mega-menus, quiz
+src/lib/                catalog vocabulary, filters & smart search, pricing, SEO helpers, types
+src/lib/server/         Prisma client, auth, catalog queries, cache, storage, revalidation
+src/store/              Zustand stores (cart, wishlist, compare, recently viewed, UI)
+```
+
+- **Money** is stored as integer cents everywhere.
+- **Pricing**: `variant price (purity × colour)` + `selected diamond` or `total-weight package`. `Product.fromPrice` is denormalised for fast sorting and filtering and recomputed whenever variants, options or diamond inventory change.
+- **Filtering**: one predicate (`src/lib/filters.ts`) drives both listings and disjunctive facet counts, so counts and results always agree. The catalog index is cached with the `products` tag and revalidated by admin writes.
+- **Caching**: Next.js data cache with tags (`products`, `categories`, `collections`, `settings`) + optional Redis for API responses.
+- **SEO**: per-page metadata with canonical URLs, Open Graph images (generated per product), `sitemap.xml`, `robots.txt`, and JSON-LD for Organization, WebSite search, Product (offers, rating, reviews), BreadcrumbList, ItemList and FAQPage.
+- **Security**: role-gated middleware for `/admin` and `/account`, zod validation on every API, server-side re-pricing, HMAC verification of Razorpay signatures, rate limits on public forms.
+
+## Performance & quality (measured)
+
+Lighthouse 13, mobile preset (simulated slow 4G, 4× CPU), production build:
+
+| Page | Performance | Accessibility | Best practices | SEO |
+| --- | --- | --- | --- | --- |
+| Home | 88 | 100 | 100 | 100 |
+| Engagement rings (listing) | 90 | 100 | 100 | 100 |
+| Product page | 91 | 100 | 100 | 100 |
+| All jewelry | 90 | 100 | 100 | 100 |
+| About · Gifts · Find Your Match | 93–94 | 100 | 100 | 100 |
+
+What keeps it fast: server components by default; product art below the fold mounts only as it nears the viewport (`LazyMount`); hover views render on first hover; Framer Motion loads its animation features after hydration (`LazyMotion` + `m.*` components — `strict` mode flags any `motion.*`); fonts are self-hosted Latin subsets in `public/fonts` with metric-matched fallbacks and preloads (zero layout shift); metadata is rendered in `<head>` for every client.
+
+> Note: `next/font` is not used because its preload manifest came out empty when building from a path containing spaces on Windows — the self-hosted setup in `globals.css` + `layout.tsx` behaves the same everywhere.
+
+## Notes for operators
+
+- **Order notes** — `Order.notes` holds only the customer's own checkout note; staff and system notes (e.g. inventory shortfalls found at payment) live in `Order.adminNotes` and are never shown to customers.
+- **Roles** are re-checked against the database on every admin request, so demoting an admin takes effect immediately.
+- **Uploads** are validated by file signature (magic bytes), not just the declared MIME type.
+- **After re-seeding**, existing sessions point at user ids that no longer exist — sign out and back in.
+- **Production build alongside `next dev`**: `NEXT_DIST_DIR=.next-prod npm run build` then `NEXT_DIST_DIR=.next-prod npx next start -p 3100`.
+
+## Deploying
+
+1. Provision PostgreSQL (Neon, Supabase, RDS…) and set the env vars above.
+2. `npx prisma migrate deploy` (and `npm run db:seed` for demo data).
+3. `npm run build && npm start`, or deploy to Vercel (build command `npm run build`).
+
+## Scripts
+
+| Script | |
+| --- | --- |
+| `npm run dev` / `build` / `start` | Next.js |
+| `npm run typecheck` | TypeScript |
+| `npm run db:start` | Embedded PostgreSQL |
+| `npm run db:migrate` | Create a migration after editing the schema |
+| `npm run db:deploy` | Apply migrations |
+| `npm run db:seed` | Reset & seed demo data |
+| `npm run db:studio` | Prisma Studio |

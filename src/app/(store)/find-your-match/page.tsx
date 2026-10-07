@@ -1,0 +1,36 @@
+import { site } from '@/config/site';
+import { pageMeta } from '@/lib/seo';
+import { getQuizDefinition } from '@/lib/server/recommend';
+import { QuizWizard } from '@/components/content/quiz/QuizWizard';
+import { PageIntro, TextLink } from '@/components/content/ui';
+
+export const revalidate = 3600;
+
+export const metadata = pageMeta({
+  title: 'Find Your Match — Jewelry Quiz',
+  description: `Answer a few quick questions and ${site.name} will recommend lab-grown diamond jewelry matched to your style, occasion, metal, diamond shape and budget.`,
+  path: '/find-your-match',
+});
+
+export default async function FindYourMatchPage() {
+  const quiz = await getQuizDefinition();
+  return (
+    <>
+      <PageIntro
+        crumbs={[{ label: 'Find Your Match', href: '/find-your-match' }]}
+        eyebrow="Personal Recommendations"
+        title={quiz.title}
+        intro={
+          <>
+            Shopping for an engagement ring, a gift or a little something for yourself? Answer a few questions and we will match you with pieces from our
+            collection. Prefer to talk to a person? <TextLink href="/contact">Our concierge is here</TextLink>.
+          </>
+        }
+        className="pb-8 md:pb-10"
+      />
+      <section aria-label="Find your match quiz" className="container-x pb-16 md:pb-24">
+        <QuizWizard questions={quiz.questions} />
+      </section>
+    </>
+  );
+}
