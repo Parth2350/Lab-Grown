@@ -123,13 +123,13 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
                       >
                         <div className="flex items-center gap-2">
                           {unread ? <span className="h-2 w-2 shrink-0 rounded-full bg-gold" aria-hidden /> : <span className="h-2 w-2 shrink-0" aria-hidden />}
-                          <span className={cn('min-w-0 truncate text-[13px]', unread ? 'font-semibold text-ink' : 'text-charcoal')}>{m.name}</span>
+                          <span className={cn('min-w-0 truncate text-[15px]', unread ? 'font-semibold text-ink' : 'text-charcoal')}>{m.name}</span>
                           {unread && <span className="sr-only">(unread)</span>}
-                          <time dateTime={m.createdAt.toISOString()} title={formatDateTime(m.createdAt)} className="ml-auto shrink-0 text-[11px] tabular-nums text-taupe">
+                          <time dateTime={m.createdAt.toISOString()} title={formatDateTime(m.createdAt)} className="ml-auto shrink-0 text-[13px] tabular-nums text-taupe">
                             {formatRelative(m.createdAt)}
                           </time>
                         </div>
-                        <p className={cn('mt-0.5 truncate pl-4 text-[13px]', unread ? 'font-medium text-ink' : 'text-charcoal')}>{m.subject}</p>
+                        <p className={cn('mt-0.5 truncate pl-4 text-[15px]', unread ? 'font-medium text-ink' : 'text-charcoal')}>{m.subject}</p>
                         <p className="mt-0.5 line-clamp-1 break-all pl-4 text-xs text-taupe">{m.message}</p>
                       </Link>
                     </li>
@@ -153,14 +153,14 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
             <article className="border border-line bg-white" aria-labelledby="message-subject">
               <header className="border-b border-line px-5 py-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <h2 id="message-subject" className="min-w-0 break-words text-[17px] font-medium leading-snug text-ink">
+                  <h2 id="message-subject" className="min-w-0 break-words text-[19px] font-medium leading-snug text-ink">
                     {selected.subject}
                   </h2>
                   <Badge tone={selected.isRead ? 'neutral' : 'gold'} dot>
                     {selected.isRead ? 'Read' : 'Unread'}
                   </Badge>
                 </div>
-                <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[13px]">
+                <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[15px]">
                   <dt className="text-taupe">From</dt>
                   <dd className="min-w-0 break-words text-ink">
                     {selected.name}{' '}
@@ -227,7 +227,7 @@ export default async function MessagesPage({ searchParams }: { searchParams: Pro
               </div>
 
               <div className="px-5 py-5">
-                <p className="whitespace-pre-wrap break-words text-[14px] leading-relaxed text-charcoal">{selected.message}</p>
+                <p className="whitespace-pre-wrap break-words text-[16px] leading-relaxed text-charcoal">{selected.message}</p>
               </div>
             </article>
           ) : (

@@ -64,7 +64,7 @@ export function CartDrawer() {
                 Checkout
               </ButtonLink>
             </div>
-            <Link href="/cart" onClick={close} className="mt-3 block text-center text-[12px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+            <Link href="/cart" onClick={close} className="mt-3 block text-center text-[14px] text-taupe underline-offset-4 hover:text-ink hover:underline">
               View full bag
             </Link>
           </div>
@@ -87,7 +87,7 @@ export function CartDrawer() {
         </div>
       ) : (
         <>
-          <div className="mt-4 flex items-center gap-3 bg-porcelain px-4 py-3 text-[12.5px] text-charcoal">
+          <div className="mt-4 flex items-center gap-3 bg-porcelain px-4 py-3 text-[14.5px] text-charcoal">
             <Truck className="h-4 w-4 shrink-0 text-gold" strokeWidth={1.25} />
             Complimentary insured shipping & {settings.returnsDays}-day returns on every order.
           </div>
@@ -96,7 +96,7 @@ export function CartDrawer() {
               <CartLineItem key={l.key} line={l} compact onNavigate={close} />
             ))}
           </div>
-          <p className="flex items-center gap-2 pb-6 text-[12px] text-taupe">
+          <p className="flex items-center gap-2 pb-6 text-[14px] text-taupe">
             <ShieldCheck className="h-4 w-4 text-gold" strokeWidth={1.25} /> Every diamond ships with its IGI or GIA certificate.
           </p>
         </>

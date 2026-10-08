@@ -93,7 +93,7 @@ export default async function ShippingPage({ searchParams }: { searchParams: Pro
                   </td>
                   <td className={table.td}>
                     <StatusBadge status={s.status} />
-                    <p className="mt-1 text-[11px] text-taupe">Order {enumLabel(s.order.status).toLowerCase()}</p>
+                    <p className="mt-1 text-[13px] text-taupe">Order {enumLabel(s.order.status).toLowerCase()}</p>
                   </td>
                   <td className={`${table.tdMuted} whitespace-nowrap text-xs`}>
                     <p>{s.shippedAt ? `Shipped ${formatDate(s.shippedAt)}` : `Created ${formatDate(s.createdAt)}`}</p>

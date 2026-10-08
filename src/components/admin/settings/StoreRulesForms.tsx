@@ -58,7 +58,7 @@ export function TaxForm({ taxRate, taxLabel }: { taxRate: number; taxLabel: stri
               </span>
             </div>
             <FieldMsg state={form.state} name="taxRatePercent" />
-            <p id="tax-rate-hint" className="mt-1.5 text-[11px] text-taupe">
+            <p id="tax-rate-hint" className="mt-1.5 text-[13px] text-taupe">
               0–30%, up to 3 decimals. Applied to the subtotal after discounts.
               {valid && (
                 <>
@@ -86,7 +86,7 @@ export function TaxForm({ taxRate, taxLabel }: { taxRate: number; taxLabel: stri
               className="field py-2.5"
             />
             <FieldMsg state={form.state} name="taxLabel" />
-            <p id="tax-label-hint" className="mt-1.5 text-[11px] text-taupe">
+            <p id="tax-label-hint" className="mt-1.5 text-[13px] text-taupe">
               Shown in the cart and at checkout, e.g. “Estimated taxes” or “GST”.
             </p>
           </div>
@@ -135,7 +135,7 @@ export function ReturnsForm({ returnsDays }: { returnsDays: number }) {
           </span>
         </div>
         <FieldMsg state={form.state} name="returnsDays" />
-        <p id="returns-days-hint" className="mt-1.5 text-[11px] text-taupe">
+        <p id="returns-days-hint" className="mt-1.5 text-[13px] text-taupe">
           0–365. Shown on product pages, the cart and checkout, and decides which delivered orders customers can still return.
         </p>
       </Panel>
@@ -182,7 +182,7 @@ export function InventoryForm({ lowStockThreshold }: { lowStockThreshold: number
           </span>
         </div>
         <FieldMsg state={form.state} name="lowStockThreshold" />
-        <p id="low-stock-hint" className="mt-1.5 text-[11px] text-taupe">
+        <p id="low-stock-hint" className="mt-1.5 text-[13px] text-taupe">
           0–1000. Variants at or below this stock level count toward the dashboard’s Low-stock KPI and the{' '}
           <Link href="/admin/inventory" className="underline underline-offset-4 hover:text-ink">
             Inventory

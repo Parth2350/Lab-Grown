@@ -20,7 +20,7 @@ export async function ShopByShape() {
           <h2 id="shapes-title" className="h-section">
             Start With the Stone
           </h2>
-          <p className="mt-4 text-[15px] text-taupe">
+          <p className="mt-4 text-[17px] text-taupe">
             Every piece begins with a single diamond. Choose the silhouette that speaks to you, and we will show you every design made to hold it.
           </p>
         </div>
@@ -48,7 +48,7 @@ export async function ShopByShape() {
                 <span className="mt-4 font-serif text-[1.15rem] leading-tight text-ink">
                   <span className="link-underline group-hover:[background-size:100%_1px]">{shape.label}</span>
                 </span>
-                <span className="mt-1 text-[11px] tracking-wide text-taupe transition-colors group-hover:text-gold-deep">{pluralize(counts[i], 'design')}</span>
+                <span className="mt-1 text-[13px] tracking-wide text-taupe transition-colors group-hover:text-gold-deep">{pluralize(counts[i], 'design')}</span>
               </Link>
             </li>
           ))}

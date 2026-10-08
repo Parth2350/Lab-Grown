@@ -64,7 +64,7 @@ export function ProductGrid({ initial, total, page, pageCount, apiQuery, nextHre
       </ul>
 
       <div ref={sentinel} className="mt-14 flex flex-col items-center gap-4">
-        <p className="text-[12px] text-taupe" aria-live="polite">
+        <p className="text-[14px] text-taupe" aria-live="polite">
           Showing {items.length} of {total}
         </p>
         <div className="h-px w-48 bg-line">

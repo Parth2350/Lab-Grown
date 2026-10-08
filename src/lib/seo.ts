@@ -35,7 +35,7 @@ export function organizationLd() {
     name: site.name,
     legalName: site.legalName,
     url: site.url,
-    logo: absoluteUrl('/icon.svg'),
+    logo: absoluteUrl('/brand/logo.png'),
     description: site.description,
     email: site.contact.email,
     telephone: site.contact.phone,

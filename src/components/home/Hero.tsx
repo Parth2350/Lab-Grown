@@ -41,7 +41,7 @@ export function Hero({ hero }: Props) {
           <h1 id="hero-title" className={cn('mt-5 max-w-[15ch] font-serif text-[2.6rem] font-light leading-[1.04] tracking-[-0.015em] text-ink xs:text-[3rem] sm:text-[3.6rem] lg:text-[4.1rem] xl:text-[4.6rem]', s.lift)}>
             {hero.title}
           </h1>
-          <p className={cn('mt-6 max-w-[34rem] text-[16px] leading-relaxed text-charcoal/80 sm:text-[17px]', s.rise)} style={{ animationDelay: '160ms' }}>
+          <p className={cn('mt-6 max-w-[34rem] text-[18px] leading-relaxed text-charcoal/80 sm:text-[19px]', s.rise)} style={{ animationDelay: '160ms' }}>
             {hero.subtitle}
           </p>
           <div className={cn('mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap', s.rise)} style={{ animationDelay: '260ms' }}>
@@ -53,7 +53,7 @@ export function Hero({ hero }: Props) {
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.5} aria-hidden />
             </ButtonLink>
           </div>
-          <ul className={cn('mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[12px] tracking-wide text-taupe', s.rise)} style={{ animationDelay: '360ms' }}>
+          <ul className={cn('mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[14px] tracking-wide text-taupe', s.rise)} style={{ animationDelay: '360ms' }}>
             <li className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-gold" strokeWidth={1.25} aria-hidden />
               IGI &amp; GIA certified diamonds

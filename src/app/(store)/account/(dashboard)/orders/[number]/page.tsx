@@ -54,7 +54,7 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
             <h2 className="font-serif text-3xl font-light sm:text-4xl">Order {order.number}</h2>
             <p className="mt-1 text-sm text-taupe">Placed {formatDate(order.createdAt, { dateStyle: 'long' })}</p>
           </div>
-          <StatusBadge status={order.status} className="text-[11px]" />
+          <StatusBadge status={order.status} className="text-[13px]" />
         </div>
       </div>
 
@@ -67,7 +67,7 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
           dates={{ PENDING: order.createdAt, PAID: payment?.status === 'CAPTURED' ? payment.createdAt : null, SHIPPED: shipment?.shippedAt ?? null, DELIVERED: delivered }}
         />
         {(shipment || arrival) && (
-          <div className="mt-8 flex flex-wrap items-start gap-x-10 gap-y-4 border-t border-line pt-6 text-[13px]">
+          <div className="mt-8 flex flex-wrap items-start gap-x-10 gap-y-4 border-t border-line pt-6 text-[15px]">
             {shipment && (
               <div className="flex items-start gap-3">
                 <Truck className="mt-0.5 h-4 w-4 text-gold" strokeWidth={1.25} aria-hidden />
@@ -123,7 +123,7 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
               .filter((i) => i.slug)
               .slice(0, 3)
               .map((i) => (
-                <Link key={i.id} href={`/products/${i.slug}`} className="inline-flex items-center gap-1.5 text-[12.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+                <Link key={i.id} href={`/products/${i.slug}`} className="inline-flex items-center gap-1.5 text-[14.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
                   View {i.name} <ExternalLink className="h-3 w-3" strokeWidth={1.5} aria-hidden />
                 </Link>
               ))}
@@ -143,13 +143,13 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
             <div className="space-y-5">
               <div>
                 <h3 className="label-caps text-taupe">Delivery</h3>
-                <p className="mt-3 text-[13.5px] text-ink">{order.delivery.label}</p>
-                {order.delivery.eta && <p className="text-[13px] text-taupe">{order.delivery.eta}</p>}
+                <p className="mt-3 text-[15.5px] text-ink">{order.delivery.label}</p>
+                {order.delivery.eta && <p className="text-[15px] text-taupe">{order.delivery.eta}</p>}
               </div>
               <div>
                 <h3 className="label-caps text-taupe">Payment</h3>
-                <p className="mt-3 text-[13.5px] text-ink">{order.status === 'PENDING' ? 'Awaiting payment' : paymentLabel(payment)}</p>
-                {payment?.providerPaymentId && order.status !== 'PENDING' && <p className="break-all text-[12px] text-taupe">Ref. {payment.providerPaymentId}</p>}
+                <p className="mt-3 text-[15.5px] text-ink">{order.status === 'PENDING' ? 'Awaiting payment' : paymentLabel(payment)}</p>
+                {payment?.providerPaymentId && order.status !== 'PENDING' && <p className="break-all text-[14px] text-taupe">Ref. {payment.providerPaymentId}</p>}
               </div>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default async function OrderDetailPage({ params }: { params: Params }) {
                 Request a return
               </ButtonLink>
             )}
-            <p className="text-[12.5px] text-taupe">
+            <p className="text-[14.5px] text-taupe">
               Questions about this order? Call{' '}
               <a href={site.contact.phoneHref} className="text-ink underline-offset-4 hover:underline">
                 {site.contact.phone}

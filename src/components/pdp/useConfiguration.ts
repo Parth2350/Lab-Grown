@@ -4,8 +4,9 @@ import type { DiamondData, DiamondOptionData, ProductDetail } from '@/lib/types'
 import { useCart } from '@/store/cart';
 import { useUI } from '@/store/ui';
 import { unitPrice } from '@/lib/pricing';
+import { SHAPE_SLUGS, type ShapeSlug } from '@/lib/catalog';
 
-export type InitialConfig = { metal?: string; purity?: string; size?: string };
+export type InitialConfig = { metal?: string; purity?: string; size?: string; shape?: string };
 
 export function diamondSummary(d: Pick<DiamondData, 'carat' | 'shape' | 'color' | 'clarity' | 'cut'>) {
   return `${d.carat.toFixed(2)} ct ${d.shape[0].toUpperCase()}${d.shape.slice(1)} · ${d.color} · ${d.clarity} · ${d.cut}`;
@@ -15,7 +16,11 @@ export function diamondSummary(d: Pick<DiamondData, 'carat' | 'shape' | 'color' 
 export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
   const [metal, setMetal] = useState(init.metal && p.metalColors.includes(init.metal) ? init.metal : p.defaultMetalColor);
   const [purity, setPurity] = useState(init.purity && p.purities.includes(init.purity) ? init.purity : p.purities.includes(p.defaultPurity) ? p.defaultPurity : p.purities[0]);
-  const [diamond, setDiamond] = useState<DiamondData | null>(p.defaultDiamond);
+  const centerOption = p.diamondOptions.find((o) => o.kind === 'CENTER_STONE') ?? null;
+  const homeShape = p.defaultDiamond?.shape ?? centerOption?.shape ?? p.shapes[0] ?? 'round';
+  // centre-stone pieces can be set with any shape; the picker loads matching diamonds when it changes
+  const [stoneShape, setStoneShape] = useState(init.shape && SHAPE_SLUGS.includes(init.shape as ShapeSlug) ? init.shape : homeShape);
+  const [diamond, setDiamond] = useState<DiamondData | null>(stoneShape === homeShape ? p.defaultDiamond : null);
   const tw = p.diamondOptions.filter((o) => o.kind === 'TOTAL_WEIGHT');
   const [option, setOption] = useState<DiamondOptionData | null>(tw.find((o) => o.isDefault) ?? tw[0] ?? null);
   const [ringSize, setRingSize] = useState<string>(init.size ?? '');
@@ -24,7 +29,6 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
   const add = useCart((s) => s.add);
   const { setCart, toast } = useUI();
 
-  const centerOption = p.diamondOptions.find((o) => o.kind === 'CENTER_STONE') ?? null;
   const variant = useMemo(
     () => p.variants.find((v) => v.purity === purity && v.metalColor === metal) ?? p.variants.find((v) => v.purity === purity) ?? p.variants[0],
     [p.variants, purity, metal],
@@ -33,7 +37,7 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
   const optionPrice = !centerOption ? option?.priceDelta ?? 0 : 0;
   const price = unitPrice({ variantPrice: variant?.price ?? p.fromPrice, diamondPrice, optionDelta: optionPrice });
   const carat = centerOption ? diamond?.carat ?? p.centerCarat ?? 1 : option?.totalCarat ?? p.totalCarat ?? 1;
-  const shape = (centerOption ? diamond?.shape : undefined) ?? p.shapes[0] ?? 'round';
+  const shape = centerOption ? stoneShape : p.shapes[0] ?? 'round';
   const inStock = (variant?.stock ?? 0) > 0;
   const needsDiamond = !!centerOption && !diamond;
 
@@ -77,6 +81,7 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
     setPurity,
     diamond,
     setDiamond,
+    setShape: setStoneShape,
     option,
     setOption,
     ringSize,

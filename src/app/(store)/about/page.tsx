@@ -49,7 +49,7 @@ function Chapter({
           <h2 id={`${id}-title`} className="h-section text-balance">
             {title}
           </h2>
-          <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-charcoal/90 md:text-[16px]">{children}</div>
+          <div className="mt-6 space-y-4 text-[17px] leading-relaxed text-charcoal/90 md:text-[18px]">{children}</div>
           {link && <ArrowLink href={link.href} className="mt-6">{link.label}</ArrowLink>}
         </Reveal>
       </div>
@@ -90,7 +90,7 @@ export default function AboutPage() {
               Est. {site.foundedYear} · {city}
             </p>
             <h1 className="h-display text-balance">Fine jewelry, made by the hands that design it</h1>
-            <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-taupe md:text-[17px]">
+            <p className="mt-6 max-w-xl text-[18px] leading-relaxed text-taupe md:text-[19px]">
               {site.name} is a family workshop of designers, setters and polishers who believe the most meaningful jewelry should be made with care, sold with
               honesty and worn for a lifetime.
             </p>
@@ -179,7 +179,7 @@ export default function AboutPage() {
               <h2 id="workshop-title" className="h-section text-balance">
                 One roof, {site.stats.artisans} artisans, every step
               </h2>
-              <p className="mt-6 text-[15px] leading-relaxed text-charcoal/90 md:text-[16px]">
+              <p className="mt-6 text-[17px] leading-relaxed text-charcoal/90 md:text-[18px]">
                 Design, CAD modelling, casting, setting, inspection and finishing all happen in our own workshop. Nothing is outsourced, which means we answer for
                 every piece — and can make almost any design in your choice of metal, purity and diamond.
               </p>
@@ -233,7 +233,7 @@ export default function AboutPage() {
               <Reveal delay={i * 0.06}>
                 <p className="font-serif text-xl italic text-gold">{['i', 'ii', 'iii', 'iv'][i]}.</p>
                 <h3 className="mt-6 font-serif text-[1.6rem] leading-tight">{v.t}</h3>
-                <p className="mt-3 text-[14px] leading-relaxed text-taupe">{v.d}</p>
+                <p className="mt-3 text-[16px] leading-relaxed text-taupe">{v.d}</p>
               </Reveal>
             </li>
           ))}
@@ -252,7 +252,7 @@ export default function AboutPage() {
             <h2 id="quality-title" className="h-section">
               Proof, not promises
             </h2>
-            <p className="mt-5 text-[15px] leading-relaxed text-taupe">
+            <p className="mt-5 text-[17px] leading-relaxed text-taupe">
               Independent grading and clear guarantees mean you never have to take our word for it.
             </p>
             <ArrowLink href="/pages/warranty" className="mt-6">
@@ -265,7 +265,7 @@ export default function AboutPage() {
                 <Icon className="mt-1 h-6 w-6 shrink-0 text-gold" strokeWidth={1} aria-hidden />
                 <div>
                   <h3 className="font-serif text-xl">{t}</h3>
-                  <p className="mt-2 text-[14px] leading-relaxed text-taupe">{d}</p>
+                  <p className="mt-2 text-[16px] leading-relaxed text-taupe">{d}</p>
                 </div>
               </li>
             ))}
@@ -288,14 +288,14 @@ export default function AboutPage() {
             <h2 id="reach-title" className="h-section text-balance">
               From {city} to the world
             </h2>
-            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-charcoal/90 md:text-[16px]">
+            <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-charcoal/90 md:text-[18px]">
               Today our jewelry is worn in more than {site.stats.countries.replace('+', '')} countries. Every piece still begins on the same benches — and every
               one travels to its new home fully insured.
             </p>
             <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8">
               {stats.map((s) => (
                 <div key={s.l} className="flex flex-col-reverse">
-                  <dt className="mt-2 text-[11px] uppercase tracking-[0.16em] text-taupe">{s.l}</dt>
+                  <dt className="mt-2 text-[13px] uppercase tracking-[0.16em] text-taupe">{s.l}</dt>
                   <dd className="font-serif text-[2.6rem] font-light leading-none sm:text-[3.2rem]">{s.v}</dd>
                 </div>
               ))}

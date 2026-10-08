@@ -102,14 +102,14 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
                   <p className="eyebrow flex items-center gap-2">
                     <Clock className="h-3.5 w-3.5" strokeWidth={1.25} /> Recent searches
                   </p>
-                  <button onClick={clear} className="text-[11px] text-taupe underline-offset-4 hover:underline">
+                  <button onClick={clear} className="text-[13px] text-taupe underline-offset-4 hover:underline">
                     Clear
                   </button>
                 </div>
                 <ul className="space-y-2.5">
                   {terms.map((t) => (
                     <li key={t}>
-                      <button onClick={() => go(t)} className="link-underline text-[15px] text-charcoal">
+                      <button onClick={() => go(t)} className="link-underline text-[17px] text-charcoal">
                         {t}
                       </button>
                     </li>
@@ -124,7 +124,7 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
               <ul className="flex flex-wrap gap-2">
                 {popular.map((t) => (
                   <li key={t}>
-                    <button onClick={() => go(t)} className="border border-line px-3.5 py-2 text-[13px] transition-colors hover:border-ink">
+                    <button onClick={() => go(t)} className="border border-line px-3.5 py-2 text-[15px] transition-colors hover:border-ink">
                       {t}
                     </button>
                   </li>
@@ -136,7 +136,7 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
               <ul className="grid grid-cols-5 gap-2">
                 {SHAPES.map((s) => (
                   <li key={s.slug}>
-                    <Link href={`/collections/shape/${s.slug}`} onClick={close} className="group flex flex-col items-center gap-1 py-1 text-[11px] text-taupe hover:text-ink">
+                    <Link href={`/collections/shape/${s.slug}`} onClick={close} className="group flex flex-col items-center gap-1 py-1 text-[13px] text-taupe hover:text-ink">
                       <ShapeIcon shape={s.slug} size={30} className="transition-colors group-hover:text-gold" />
                       {s.label}
                     </Link>
@@ -151,7 +151,7 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
             <p className="mt-2 text-sm text-taupe">Try a shape like “oval”, a style like “halo”, or browse popular searches.</p>
             <div className="mt-5 flex flex-wrap justify-center gap-2">
               {popular.slice(0, 4).map((t) => (
-                <button key={t} onClick={() => setQ(t)} className="border border-line px-3.5 py-2 text-[13px] hover:border-ink">
+                <button key={t} onClick={() => setQ(t)} className="border border-line px-3.5 py-2 text-[15px] hover:border-ink">
                   {t}
                 </button>
               ))}
@@ -171,7 +171,7 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
                       <ul className="space-y-2">
                         {g.items.map((c) => (
                           <li key={c.href}>
-                            <Link href={c.href} onClick={close} className="link-underline text-[15px]">
+                            <Link href={c.href} onClick={close} className="link-underline text-[17px]">
                               {c.name}
                             </Link>
                           </li>
@@ -186,7 +186,7 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
                   <ul className="flex flex-wrap gap-3">
                     {res.shapes.map((s) => (
                       <li key={s.slug}>
-                        <Link href={s.href} onClick={close} className="flex items-center gap-2 border border-line px-3 py-2 text-[13px] hover:border-ink">
+                        <Link href={s.href} onClick={close} className="flex items-center gap-2 border border-line px-3 py-2 text-[15px] hover:border-ink">
                           <ShapeIcon shape={s.slug} size={20} /> {s.name}
                         </Link>
                       </li>
@@ -218,8 +218,8 @@ export function SearchOverlay({ popular }: { popular: string[] }) {
                       <div className="art-tile aspect-square overflow-hidden p-3">
                         <ProductMedia name={p.name} art={p.art} images={p.images} shape={p.shapes[0]} metal={p.defaultMetalColor} carat={p.centerCarat ?? p.totalCarat} className="transition-transform duration-500 group-hover:scale-105" sizes="200px" />
                       </div>
-                      <p className="mt-2 line-clamp-2 font-serif text-[15px] leading-snug">{p.name}</p>
-                      <p className="text-[12px] text-taupe">From {formatMoney(p.fromPrice)}</p>
+                      <p className="mt-2 line-clamp-2 font-serif text-[17px] leading-snug">{p.name}</p>
+                      <p className="text-[14px] text-taupe">From {formatMoney(p.fromPrice)}</p>
                     </Link>
                   </li>
                 ))}

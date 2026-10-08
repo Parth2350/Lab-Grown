@@ -8,9 +8,9 @@ export type DraftUpdate = (patch: Partial<ProductDraft> | ((d: ProductDraft) => 
 export type FieldErrors = Record<string, string>;
 export type SectionProps = { draft: ProductDraft; update: DraftUpdate; errors: FieldErrors };
 
-export const labelCls = 'mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
-export const inputCls = 'field py-2.5 text-[13px]';
-export const selectCls = 'field cursor-pointer appearance-none py-2.5 pl-4 pr-9 text-[13px]';
+export const labelCls = 'mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
+export const inputCls = 'field py-2.5 text-[15px]';
+export const selectCls = 'field cursor-pointer appearance-none py-2.5 pl-4 pr-9 text-[15px]';
 export const chevronStyle = {
   backgroundImage:
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23141311' stroke-width='1.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
@@ -24,7 +24,7 @@ export function EditorSection({ id, title, description, actions, children, class
     <section id={id} aria-labelledby={`${id}-title`} className={cn('scroll-mt-32 border border-line bg-white xl:scroll-mt-20', className)}>
       <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line px-5 py-3.5">
         <div className="min-w-0">
-          <h2 id={`${id}-title`} className="font-sans text-[13px] font-medium uppercase tracking-[0.12em] text-ink">
+          <h2 id={`${id}-title`} className="font-sans text-[15px] font-medium uppercase tracking-[0.12em] text-ink">
             {title}
           </h2>
           {description && <p className="mt-0.5 text-xs text-taupe">{description}</p>}
@@ -82,7 +82,7 @@ export function Switch({ checked, onChange, label, description, id, disabled }: 
         <span className={cn('absolute h-3 w-3 transition-all', checked ? 'left-[16px] bg-ivory' : 'left-[2px] bg-stone')} />
       </button>
       <div className="min-w-0">
-        <label htmlFor={id} className="cursor-pointer text-[13px] text-ink">
+        <label htmlFor={id} className="cursor-pointer text-[15px] text-ink">
           {label}
         </label>
         {description && (
@@ -122,7 +122,7 @@ export function Chip({ selected, onClick, children, swatch, disabled, title }: {
       disabled={disabled}
       title={title}
       className={cn(
-        'inline-flex h-8 items-center gap-2 border px-3 text-[12.5px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gold disabled:cursor-not-allowed disabled:opacity-50',
+        'inline-flex h-8 items-center gap-2 border px-3 text-[14.5px] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-gold disabled:cursor-not-allowed disabled:opacity-50',
         selected ? 'border-ink bg-ink text-ivory' : 'border-line bg-white text-charcoal hover:border-ink hover:text-ink',
       )}
     >
@@ -140,7 +140,7 @@ export function toggleIn<T>(list: T[], value: T) {
 export function MoneyInput({ id, value, onChange, invalid, describedBy, className, placeholder, label }: { id: string; value: string; onChange: (v: string) => void; invalid?: boolean; describedBy?: string; className?: string; placeholder?: string; label?: string }) {
   return (
     <div className={cn('relative', className)}>
-      <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[13px] text-taupe" aria-hidden>
+      <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[15px] text-taupe" aria-hidden>
         $
       </span>
       <input
@@ -153,7 +153,7 @@ export function MoneyInput({ id, value, onChange, invalid, describedBy, classNam
         aria-describedby={describedBy}
         aria-label={label}
         placeholder={placeholder}
-        className="field py-2.5 pl-7 text-[13px] tabular-nums"
+        className="field py-2.5 pl-7 text-[15px] tabular-nums"
       />
     </div>
   );

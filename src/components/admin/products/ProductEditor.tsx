@@ -117,14 +117,14 @@ function SectionLinks({ active, errorCounts, orientation }: { active: SectionId;
               href={`#${s.id}`}
               aria-current={isActive ? 'location' : undefined}
               className={cn(
-                'flex items-center gap-2 text-[12.5px] transition-colors',
+                'flex items-center gap-2 text-[14.5px] transition-colors',
                 orientation === 'vertical' ? 'border-l-2 px-3 py-1.5' : 'border-b-2 px-2.5 py-2.5',
                 isActive ? 'border-ink text-ink' : 'border-transparent text-taupe hover:text-ink',
               )}
             >
               {s.label}
               {n > 0 && (
-                <span className="ml-auto min-w-[18px] bg-danger px-1 text-center text-[10px] font-medium leading-[16px] text-white" title={`${n} field${n === 1 ? '' : 's'} need attention`}>
+                <span className="ml-auto min-w-[18px] bg-danger px-1 text-center text-[12px] font-medium leading-[16px] text-white" title={`${n} field${n === 1 ? '' : 's'} need attention`}>
                   {n}
                 </span>
               )}
@@ -281,7 +281,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
               productId ? (
                 <MediaManager productId={productId} productName={saved.name} items={mediaItems} onItemsChange={setMediaItems} metals={saved.metalColors} />
               ) : (
-                <p className="border border-dashed border-line bg-ivory/60 px-4 py-4 text-[13px] text-taupe">
+                <p className="border border-dashed border-line bg-ivory/60 px-4 py-4 text-[15px] text-taupe">
                   Save the product first, then upload photos and video here. Uploaded photos replace the illustration on the storefront.
                 </p>
               )
@@ -295,7 +295,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
         <aside className="hidden xl:block" aria-label="Product summary">
           <div className="no-scrollbar sticky top-[76px] max-h-[calc(100vh-150px)] space-y-4 overflow-y-auto">
             <nav aria-label="Editor sections" className="border border-line bg-white py-2">
-              <p className="px-3 pb-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-taupe">On this page</p>
+              <p className="px-3 pb-1.5 text-[12px] font-medium uppercase tracking-[0.2em] text-taupe">On this page</p>
               <SectionLinks active={active} errorCounts={errorCounts} orientation="vertical" />
             </nav>
 
@@ -306,7 +306,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
               <div className="space-y-3 p-4">
                 <div>
                   <p className="font-serif text-lg leading-snug text-ink">{draft.name || 'Untitled product'}</p>
-                  <p className="font-mono text-[11px] text-taupe">{draft.sku || 'No SKU yet'}</p>
+                  <p className="font-mono text-[13px] text-taupe">{draft.sku || 'No SKU yet'}</p>
                 </div>
                 <div className="flex flex-wrap gap-1">
                   <Badge tone={draft.isActive ? 'success' : 'neutral'} dot>
@@ -318,13 +318,13 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
                 </div>
                 <MetalSwitcher metals={draft.metalColors} value={metal} onChange={setPreviewMetal} />
                 <DescList
-                  className="grid-cols-[minmax(84px,auto)_1fr] text-[12.5px]"
+                  className="grid-cols-[minmax(84px,auto)_1fr] text-[14.5px]"
                   items={[
                     [
                       'From',
                       fromEstimate != null ? (
                         <span key="from">
-                          {formatMoney(fromEstimate)} <span className="text-[11px] text-taupe">est.</span>
+                          {formatMoney(fromEstimate)} <span className="text-[13px] text-taupe">est.</span>
                         </span>
                       ) : (
                         <span key="from" className="text-taupe">
@@ -352,7 +352,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
 
       <div className="sticky bottom-0 z-30 -mx-4 mt-6 border-t border-line bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="min-w-0 text-[13px]" aria-live="polite">
+          <div className="min-w-0 text-[15px]" aria-live="polite">
             {form.pending ? (
               <span className="text-taupe">Saving…</span>
             ) : errorCount > 0 ? (
@@ -371,7 +371,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
             )}
           </div>
           <div className="flex items-center gap-2">
-            <span className="hidden text-[11px] text-taupe xl:inline">Ctrl / ⌘ + S</span>
+            <span className="hidden text-[13px] text-taupe xl:inline">Ctrl / ⌘ + S</span>
             {dirty && (
               <Button type="button" size="sm" variant="ghost" onClick={() => setDiscardOpen(true)} disabled={form.pending}>
                 Discard

@@ -16,17 +16,17 @@ export function ChartTooltip({ x, y, containerWidth, title, rows, footer }: { x:
       style={{ left, top: Math.max(0, y), width: w, transform: 'translateY(-100%)' }}
       role="presentation"
     >
-      <p className="mb-1 text-[11px] text-taupe">{title}</p>
+      <p className="mb-1 text-[13px] text-taupe">{title}</p>
       <ul className="space-y-0.5">
         {rows.map((r) => (
-          <li key={r.key} className="flex items-center gap-2 text-[12px]">
+          <li key={r.key} className="flex items-center gap-2 text-[14px]">
             {r.color && (r.shape === 'rect' ? <span className="h-2 w-2 shrink-0" style={{ background: r.color }} aria-hidden /> : <span className="h-0.5 w-3 shrink-0" style={{ background: r.color }} aria-hidden />)}
             <span className="font-medium tabular-nums text-ink">{r.value}</span>
             <span className="min-w-0 truncate text-taupe">{r.label}</span>
           </li>
         ))}
       </ul>
-      {footer && <div className="mt-1 border-t border-line pt-1 text-[11px] text-taupe">{footer}</div>}
+      {footer && <div className="mt-1 border-t border-line pt-1 text-[13px] text-taupe">{footer}</div>}
     </div>
   );
 }

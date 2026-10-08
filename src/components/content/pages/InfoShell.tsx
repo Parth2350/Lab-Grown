@@ -35,7 +35,7 @@ export function InfoShell({
     <>
       <PageIntro crumbs={crumbs} eyebrow={eyebrow} title={title} intro={intro}>
         {updated && (
-          <p className="mt-6 text-[11px] uppercase tracking-[0.16em] text-taupe">
+          <p className="mt-6 text-[13px] uppercase tracking-[0.16em] text-taupe">
             Last updated <time dateTime={updated}>{formatDate(updated, { dateStyle: 'long' })}</time>
           </p>
         )}
@@ -71,7 +71,7 @@ export function SideNav({ currentHref }: { currentHref: string }) {
                 href={l.href}
                 aria-current={on ? 'page' : undefined}
                 className={cn(
-                  'inline-flex h-10 items-center border px-4 text-[11px] uppercase tracking-[0.14em] transition-colors',
+                  'inline-flex h-10 items-center border px-4 text-[13px] uppercase tracking-[0.14em] transition-colors',
                   on ? 'border-ink bg-ink text-ivory' : 'border-line bg-white text-charcoal hover:border-ink',
                 )}
               >
@@ -95,7 +95,7 @@ export function SideNav({ currentHref }: { currentHref: string }) {
                       href={l.href}
                       aria-current={on ? 'page' : undefined}
                       className={cn(
-                        '-ml-px flex min-h-9 items-center border-l py-1.5 pl-4 text-[14px] transition-colors',
+                        '-ml-px flex min-h-9 items-center border-l py-1.5 pl-4 text-[16px] transition-colors',
                         on ? 'border-ink text-ink' : 'border-transparent text-taupe hover:border-stone hover:text-ink',
                       )}
                     >
@@ -118,7 +118,7 @@ function OnThisPage({ sections }: { sections: DocSection[] }) {
       <p className="eyebrow mb-4">On this page</p>
       <ol className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
         {sections.map((s, i) => (
-          <li key={s.id} className="flex gap-3 text-[14px]">
+          <li key={s.id} className="flex gap-3 text-[16px]">
             <span className="w-5 shrink-0 tabular-nums text-taupe">{String(i + 1).padStart(2, '0')}</span>
             <a href={`#${s.id}`} className="text-charcoal underline-offset-4 transition-colors hover:text-ink hover:underline">
               {s.title}
@@ -132,7 +132,7 @@ function OnThisPage({ sections }: { sections: DocSection[] }) {
 
 export function DocSections({ sections }: { sections: DocSection[] }) {
   return (
-    <div className="prose-luxe max-w-3xl text-[15px] [&>section:first-child>h2]:mt-0">
+    <div className="prose-luxe max-w-3xl text-[17px] [&>section:first-child>h2]:mt-0">
       {sections.map((s) => (
         <section key={s.id} id={s.id} aria-labelledby={`${s.id}-title`} className="scroll-mt-32">
           <h2 id={`${s.id}-title`}>{s.title}</h2>
@@ -149,11 +149,11 @@ function HelpCard() {
     <aside aria-label="Contact client care" className="mt-16 grid gap-6 border border-line bg-porcelain p-6 sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
       <div>
         <p className="font-serif text-2xl">Still have a question?</p>
-        <p className="mt-2 max-w-md text-[14px] leading-relaxed text-taupe">
+        <p className="mt-2 max-w-md text-[16px] leading-relaxed text-taupe">
           Our client care team replies within one business day — or reach us instantly on WhatsApp during studio hours.
         </p>
       </div>
-      <ul className="flex flex-col gap-2 text-[13px] sm:flex-row sm:flex-wrap md:flex-col">
+      <ul className="flex flex-col gap-2 text-[15px] sm:flex-row sm:flex-wrap md:flex-col">
         <li>
           <a href={c.whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center gap-2 text-ink hover:underline hover:underline-offset-4">
             <MessageCircle className="h-4 w-4 text-gold" strokeWidth={1.25} aria-hidden /> WhatsApp {c.whatsapp}
@@ -188,12 +188,12 @@ export function Steps({ children }: { children: ReactNode }) {
 export function DataTable({ head, rows, caption }: { head: string[]; rows: ReactNode[][]; caption?: string }) {
   return (
     <div className="mb-6 overflow-x-auto border border-line bg-white">
-      <table className="w-full min-w-[480px] text-left text-[14px]">
+      <table className="w-full min-w-[480px] text-left text-[16px]">
         {caption && <caption className="sr-only">{caption}</caption>}
         <thead>
           <tr className="border-b border-line bg-porcelain">
             {head.map((h) => (
-              <th key={h} scope="col" className="px-4 py-3 text-[11px] font-medium uppercase tracking-[0.14em] text-charcoal">
+              <th key={h} scope="col" className="px-4 py-3 text-[13px] font-medium uppercase tracking-[0.14em] text-charcoal">
                 {h}
               </th>
             ))}
@@ -223,5 +223,5 @@ export function DataTable({ head, rows, caption }: { head: string[]; rows: React
 
 /** A quiet highlighted note inside long-form content. */
 export function Note({ children }: { children: ReactNode }) {
-  return <div className="my-6 border-l-2 border-gold bg-white px-5 py-4 text-[14px] leading-relaxed text-charcoal">{children}</div>;
+  return <div className="my-6 border-l-2 border-gold bg-white px-5 py-4 text-[16px] leading-relaxed text-charcoal">{children}</div>;
 }

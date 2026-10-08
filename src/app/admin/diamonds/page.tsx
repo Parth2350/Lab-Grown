@@ -82,7 +82,7 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
           </AutoSubmitSelect>
         </div>
         <fieldset>
-          <legend className="mb-1 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">Carat</legend>
+          <legend className="mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Carat</legend>
           <div className="flex items-center gap-1">
             <label htmlFor="f-cmin" className="sr-only">
               Minimum carat
@@ -150,7 +150,7 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
           </AutoSubmitSelect>
         </div>
         <fieldset>
-          <legend className="mb-1 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">Price ($)</legend>
+          <legend className="mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Price ($)</legend>
           <div className="flex items-center gap-1">
             <label htmlFor="f-pmin" className="sr-only">
               Minimum price in dollars
@@ -240,10 +240,10 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
                         </span>
                       </td>
                       <td className={table.td}>
-                        <Link href={`/admin/diamonds/${d.id}`} className="font-mono text-[12.5px] underline-offset-4 hover:underline">
+                        <Link href={`/admin/diamonds/${d.id}`} className="font-mono text-[14.5px] underline-offset-4 hover:underline">
                           {d.sku}
                         </Link>
-                        <p className="text-[11px] text-taupe">{d.growth}</p>
+                        <p className="text-[13px] text-taupe">{d.growth}</p>
                       </td>
                       <td className={table.tdRight}>{d.carat.toFixed(2)} ct</td>
                       <td className={table.td}>{d.color}</td>
@@ -258,14 +258,14 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
                                 href={d.certificate.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 font-mono text-[12px] underline-offset-4 hover:underline"
+                                className="inline-flex items-center gap-1 font-mono text-[14px] underline-offset-4 hover:underline"
                                 aria-label={`${d.certificate.lab} report ${d.certificate.number} (opens in a new tab)`}
                               >
                                 {d.certificate.number}
                                 <ExternalLink className="h-3 w-3 text-taupe" strokeWidth={1.5} aria-hidden />
                               </a>
                             ) : (
-                              <span className="font-mono text-[12px] text-charcoal">{d.certificate.number}</span>
+                              <span className="font-mono text-[14px] text-charcoal">{d.certificate.number}</span>
                             )}
                           </span>
                         ) : (
@@ -284,7 +284,7 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
                         ) : (
                           <span className="text-taupe">—</span>
                         )}
-                        {inCarts > 0 && <p className="mt-0.5 text-[11px] text-taupe">In {inCarts} cart{inCarts === 1 ? '' : 's'}</p>}
+                        {inCarts > 0 && <p className="mt-0.5 text-[13px] text-taupe">In {inCarts} cart{inCarts === 1 ? '' : 's'}</p>}
                       </td>
                       <td className={`${table.td} whitespace-nowrap text-right`}>
                         <Link href={`/admin/diamonds/${d.id}`} className={iconBtn} aria-label={`Edit ${d.sku}`} title="Edit">

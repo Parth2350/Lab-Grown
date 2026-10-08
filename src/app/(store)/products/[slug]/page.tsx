@@ -57,7 +57,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
         />
       </div>
       <section className="container-x mt-6 md:mt-8" aria-label="Product">
-        <ProductExperience p={p} init={{ metal: one(sp.metal), purity: one(sp.purity) }} configure={one(sp.configure) === '1'} />
+        <ProductExperience p={p} init={{ metal: one(sp.metal), purity: one(sp.purity), shape: one(sp.shape) }} configure={one(sp.configure) === '1'} />
       </section>
 
       <section className="mt-20 bg-porcelain py-14 md:mt-28" aria-label="Our promise">
@@ -71,7 +71,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
               <Icon className="mt-1 h-6 w-6 shrink-0 text-gold" strokeWidth={1} />
               <div>
                 <p className="font-serif text-xl">{title}</p>
-                <p className="mt-2 text-[14px] leading-relaxed text-taupe">{text}</p>
+                <p className="mt-2 text-[16px] leading-relaxed text-taupe">{text}</p>
               </div>
             </li>
           ))}

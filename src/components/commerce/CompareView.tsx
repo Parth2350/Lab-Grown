@@ -114,7 +114,7 @@ export function CompareView() {
             <ArrowLeftRight className="h-8 w-8 text-gold" strokeWidth={1} aria-hidden />
           </span>
           <h1 className="mt-8 font-serif text-4xl font-light sm:text-5xl">Nothing to compare yet</h1>
-          <p className="mt-4 max-w-md text-[15px] text-taupe">
+          <p className="mt-4 max-w-md text-[17px] text-taupe">
             Select the compare icon on up to {COMPARE_MAX} pieces to see shape, carat, metal and certification side by side.
           </p>
           <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
@@ -140,7 +140,7 @@ export function CompareView() {
           <h1 className="mt-2 font-serif text-4xl font-light sm:text-5xl">Compare Pieces</h1>
         </div>
         <div className="flex items-center gap-5">
-          <label className="flex cursor-pointer items-center gap-3 text-[13px] text-charcoal">
+          <label className="flex cursor-pointer items-center gap-3 text-[15px] text-charcoal">
             <span className="relative inline-flex h-5 w-9 shrink-0 items-center">
               <input type="checkbox" checked={highlight} onChange={(e) => setHighlight(e.target.checked)} className="peer sr-only" />
               <span className="absolute inset-0 rounded-full bg-stone transition-colors peer-checked:bg-ink peer-focus-visible:ring-1 peer-focus-visible:ring-gold peer-focus-visible:ring-offset-2" />
@@ -154,18 +154,18 @@ export function CompareView() {
               clear();
               toast({ title: 'Compare list cleared' });
             }}
-            className="text-[12px] uppercase tracking-[0.14em] text-taupe underline-offset-4 hover:text-ink hover:underline"
+            className="text-[14px] uppercase tracking-[0.14em] text-taupe underline-offset-4 hover:text-ink hover:underline"
           >
             Clear all
           </button>
         </div>
       </div>
 
-      <p className="mb-3 text-[12px] text-taupe md:hidden" aria-hidden>
+      <p className="mb-3 text-[14px] text-taupe md:hidden" aria-hidden>
         Swipe to see every piece →
       </p>
       <div className="-mx-4 overflow-x-auto overscroll-x-contain px-4 sm:mx-0 sm:px-0" role="region" aria-label="Comparison table" tabIndex={0}>
-        <table className="w-full border-collapse text-left text-[13px]" style={{ minWidth: `${130 + cols * 190}px` }}>
+        <table className="w-full border-collapse text-left text-[15px]" style={{ minWidth: `${130 + cols * 190}px` }}>
           <caption className="sr-only">Comparison of {items.length} pieces</caption>
           <colgroup>
             <col className="w-[130px] sm:w-[170px]" />
@@ -176,7 +176,7 @@ export function CompareView() {
           <thead>
             <tr className="align-top">
               <th scope="col" className="sticky left-0 z-10 bg-ivory pb-6 pr-4 text-left align-bottom">
-                <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-taupe">
+                <span className="text-[13px] font-medium uppercase tracking-[0.16em] text-taupe">
                   {items.length} of {COMPARE_MAX}
                 </span>
               </th>
@@ -196,10 +196,10 @@ export function CompareView() {
                     </button>
                     <WishlistButton product={c} className="absolute left-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-ivory/90" />
                   </div>
-                  <Link href={productHref(c)} className="mt-4 block font-serif text-[17px] leading-snug hover:text-gold-deep">
+                  <Link href={productHref(c)} className="mt-4 block font-serif text-[19px] leading-snug hover:text-gold-deep">
                     {c.name}
                   </Link>
-                  <p className="mt-1 text-[12px] text-taupe">{c.category.name}</p>
+                  <p className="mt-1 text-[14px] text-taupe">{c.category.name}</p>
                 </th>
               ))}
               {Array.from({ length: placeholders }).map((_, i) => (
@@ -209,7 +209,7 @@ export function CompareView() {
                     className="flex aspect-square flex-col items-center justify-center gap-3 border border-dashed border-stone text-taupe transition-colors hover:border-ink hover:text-ink"
                   >
                     <Plus className="h-5 w-5" strokeWidth={1} aria-hidden />
-                    <span className="text-[11px] uppercase tracking-[0.16em]">Add a piece</span>
+                    <span className="text-[13px] uppercase tracking-[0.16em]">Add a piece</span>
                   </Link>
                 </td>
               ))}
@@ -222,12 +222,12 @@ export function CompareView() {
               const mark = highlight && differs;
               return (
                 <tr key={row.id} className={cn('border-t border-line align-top transition-colors', mark && 'bg-gold-pale/40')}>
-                  <th scope="row" className={cn('sticky left-0 z-10 py-4 pr-4 text-[11px] font-medium uppercase tracking-[0.14em] text-taupe', mark ? 'bg-[#F6EFE1]' : 'bg-ivory')}>
+                  <th scope="row" className={cn('sticky left-0 z-10 py-4 pr-4 text-[13px] font-medium uppercase tracking-[0.14em] text-taupe', mark ? 'bg-[#F6EFE1]' : 'bg-ivory')}>
                     {row.label}
                     {mark && <span className="sr-only"> (differs)</span>}
                   </th>
                   {values.map((v, i) => (
-                    <td key={items[i].id} className={cn('px-3 py-4 text-charcoal sm:px-4', row.id === 'price' && 'text-[14px] text-ink')}>
+                    <td key={items[i].id} className={cn('px-3 py-4 text-charcoal sm:px-4', row.id === 'price' && 'text-[16px] text-ink')}>
                       {v.node ?? v.text}
                     </td>
                   ))}
@@ -258,7 +258,7 @@ export function CompareView() {
           </tbody>
         </table>
       </div>
-      <p className="mt-6 text-[12px] text-taupe">
+      <p className="mt-6 text-[14px] text-taupe">
         Prices shown are starting prices; the final price depends on the metal and the certified diamond you choose. Colour and clarity reflect the default stone or diamond package.
       </p>
     </div>

@@ -34,13 +34,13 @@ export function NewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Your email address"
-        className="h-12 w-full border-b border-white/30 bg-transparent pr-12 text-[14px] text-ivory placeholder:text-ivory/40 focus:border-gold-light focus:outline-none"
+        className="h-12 w-full border-b border-white/30 bg-transparent pr-12 text-[16px] text-ivory placeholder:text-ivory/40 focus:border-gold-light focus:outline-none"
       />
       <button type="submit" disabled={state === 'loading'} aria-label="Subscribe" className="absolute right-0 top-0 flex h-12 w-12 items-center justify-center text-ivory transition-colors hover:text-gold-light">
         {state === 'done' ? <Check className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" strokeWidth={1.5} />}
       </button>
       {msg && (
-        <p className={`mt-2 text-[12px] ${state === 'error' ? 'text-red-300' : 'text-gold-light'}`} role="status">
+        <p className={`mt-2 text-[14px] ${state === 'error' ? 'text-red-300' : 'text-gold-light'}`} role="status">
           {msg}
         </p>
       )}

@@ -87,8 +87,8 @@ export default function LabGrownDiamondsPage() {
           <div className="lg:col-span-6">
             <p className="eyebrow mb-4">The Diamond Guide</p>
             <h1 className="h-display text-balance">Lab-grown diamonds, beautifully explained</h1>
-            <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-taupe md:text-[17px]">
-              Every {site.name} diamond is a real diamond — grown rather than mined, graded by independent laboratories, and cut to bring out every flash of light.
+            <p className="mt-6 max-w-xl text-[18px] leading-relaxed text-taupe md:text-[19px]">
+              Every diamond at {site.name} is a real diamond — grown rather than mined, graded by independent laboratories, and cut to bring out every flash of light.
               Here is everything you need to choose yours with confidence.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -103,7 +103,7 @@ export default function LabGrownDiamondsPage() {
               <div className="absolute inset-0 p-10 sm:p-16">
                 <LooseDiamond shape="round" className="h-full w-full" title="A round brilliant lab-grown diamond" />
               </div>
-              <p className="absolute bottom-4 left-4 text-[10.5px] uppercase tracking-[0.16em] text-taupe sm:bottom-6 sm:left-6">Round brilliant · 57 facets</p>
+              <p className="absolute bottom-4 left-4 text-[12.5px] uppercase tracking-[0.16em] text-taupe sm:bottom-6 sm:left-6">Round brilliant · 57 facets</p>
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function LabGrownDiamondsPage() {
               What is a lab-grown diamond?
             </h2>
           </div>
-          <div className="space-y-5 text-[16px] leading-relaxed text-charcoal/90 lg:col-span-7">
+          <div className="space-y-5 text-[18px] leading-relaxed text-charcoal/90 lg:col-span-7">
             <p>
               A lab-grown diamond is a diamond in every scientific sense: carbon atoms locked into the same rigid cubic lattice that gives a mined diamond its
               hardness and its fire. The difference is where it forms. Instead of billions of years under the earth&apos;s crust, it grows over a few weeks inside
@@ -152,7 +152,7 @@ export default function LabGrownDiamondsPage() {
             <div key={x.k} className="flex flex-col bg-ivory p-8">
               <dt className="label-caps text-taupe">{x.k}</dt>
               <dd className="mt-3 font-serif text-[2.4rem] font-light leading-none">{x.v}</dd>
-              <dd className="mt-3 text-[14px] leading-relaxed text-taupe">{x.d}</dd>
+              <dd className="mt-3 text-[16px] leading-relaxed text-taupe">{x.d}</dd>
             </div>
           ))}
         </dl>
@@ -166,7 +166,7 @@ export default function LabGrownDiamondsPage() {
             <h2 id="grown-title" className="h-section">
               Two ways to grow a diamond
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-taupe">
+            <p className="mt-4 text-[17px] leading-relaxed text-taupe">
               Every lab-grown diamond starts with a tiny slice of existing diamond, called a seed. Growers use one of two proven methods to build new diamond
               crystal upon it, atom by atom.
             </p>
@@ -195,10 +195,10 @@ export default function LabGrownDiamondsPage() {
                 <div className="flex flex-1 flex-col p-6 sm:p-8">
                   <p className="font-serif text-[2.2rem] font-light leading-none text-gold">{m.abbr}</p>
                   <h3 className="mt-2 font-serif text-2xl">{m.name}</h3>
-                  <p className="mt-4 text-[15px] leading-relaxed text-charcoal/90">{m.text}</p>
+                  <p className="mt-4 text-[17px] leading-relaxed text-charcoal/90">{m.text}</p>
                   <ul className="mt-6 space-y-2 border-t border-line pt-5">
                     {m.facts.map((f) => (
-                      <li key={f} className="flex items-center gap-3 text-[14px] text-charcoal">
+                      <li key={f} className="flex items-center gap-3 text-[16px] text-charcoal">
                         <Check className="h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} aria-hidden />
                         {f}
                       </li>
@@ -216,7 +216,7 @@ export default function LabGrownDiamondsPage() {
             ].map((x) => (
               <div key={x.t} className="border-t border-ink pt-5">
                 <h3 className="font-serif text-xl">{x.t}</h3>
-                <p className="mt-2 text-[14px] leading-relaxed text-taupe">{x.d}</p>
+                <p className="mt-2 text-[16px] leading-relaxed text-taupe">{x.d}</p>
               </div>
             ))}
           </div>
@@ -230,7 +230,7 @@ export default function LabGrownDiamondsPage() {
           <h2 id="fourcs-title" className="h-section">
             The 4Cs, made simple
           </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-taupe">
+          <p className="mt-4 text-[17px] leading-relaxed text-taupe">
             Lab-grown diamonds are graded on exactly the same scales as mined diamonds. Understanding the 4Cs helps you decide where to prioritise — and where you
             can save without seeing a difference.
           </p>
@@ -276,7 +276,7 @@ export default function LabGrownDiamondsPage() {
               <p className="eyebrow mb-3">And a fifth consideration</p>
               <h3 className="font-serif text-[2rem] font-light leading-tight">Ten shapes, one standard</h3>
             </div>
-            <p className="max-w-md text-[14px] text-taupe">Shape is a matter of personal taste. Explore pieces by the shape you love.</p>
+            <p className="max-w-md text-[16px] text-taupe">Shape is a matter of personal taste. Explore pieces by the shape you love.</p>
           </div>
           <ul className="mt-10 grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-3 lg:grid-cols-5">
             {SHAPES.map((s) => (
@@ -284,7 +284,7 @@ export default function LabGrownDiamondsPage() {
                 <Link href={`/collections/shape/${s.slug}`} className="group flex h-full flex-col items-center bg-ivory px-4 py-8 text-center transition-colors hover:bg-white">
                   <ShapeIcon shape={s.slug} size={52} className="text-charcoal transition-colors duration-300 group-hover:text-gold" />
                   <span className="label-caps mt-4 text-ink">{s.label}</span>
-                  <span className="mt-2 text-[12.5px] leading-snug text-taupe">{s.blurb}</span>
+                  <span className="mt-2 text-[14.5px] leading-snug text-taupe">{s.blurb}</span>
                 </Link>
               </li>
             ))}
@@ -300,8 +300,8 @@ export default function LabGrownDiamondsPage() {
             <h2 id="cert-title" className="h-section">
               Independently certified by IGI &amp; GIA
             </h2>
-            <p className="mt-5 text-[15px] leading-relaxed text-charcoal/90">
-              Every {site.name} centre diamond is accompanied by a grading report from the International Gemological Institute (IGI) or the Gemological Institute of
+            <p className="mt-5 text-[17px] leading-relaxed text-charcoal/90">
+              Every centre diamond from {site.name} is accompanied by a grading report from the International Gemological Institute (IGI) or the Gemological Institute of
               America (GIA) — two of the world&apos;s most respected independent laboratories. The report confirms that your diamond is laboratory-grown and records
               its measurements and quality in detail, so you know exactly what you are buying.
             </p>
@@ -313,7 +313,7 @@ export default function LabGrownDiamondsPage() {
                 'Visit the laboratory’s official website — igi.org or gia.edu — and enter the number in its report-check service.',
                 'Confirm that the shape, carat weight, colour, clarity and measurements match your report and your diamond.',
               ].map((t, i) => (
-                <li key={t} className="flex gap-4 text-[15px] leading-relaxed text-charcoal/90">
+                <li key={t} className="flex gap-4 text-[17px] leading-relaxed text-charcoal/90">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gold font-serif text-gold">{i + 1}</span>
                   <span className="pt-1">{t}</span>
                 </li>
@@ -331,7 +331,7 @@ export default function LabGrownDiamondsPage() {
                   <ShapeIcon shape="oval" size={64} className="text-gold" />
                 </span>
               </div>
-              <dl className="grid grid-cols-2 gap-x-6 text-[13px]">
+              <dl className="grid grid-cols-2 gap-x-6 text-[15px]">
                 {[
                   ['Shape & cutting style', 'Oval brilliant'],
                   ['Carat weight', '1.52 ct'],
@@ -345,12 +345,12 @@ export default function LabGrownDiamondsPage() {
                   ['Inscription', 'Report number on girdle'],
                 ].map(([k, v]) => (
                   <div key={k} className="border-b border-line py-3">
-                    <dt className="text-[10.5px] uppercase tracking-[0.14em] text-taupe">{k}</dt>
+                    <dt className="text-[12.5px] uppercase tracking-[0.14em] text-taupe">{k}</dt>
                     <dd className="mt-1 text-ink">{v}</dd>
                   </div>
                 ))}
               </dl>
-              <figcaption className="mt-5 text-[12px] leading-relaxed text-taupe">
+              <figcaption className="mt-5 text-[14px] leading-relaxed text-taupe">
                 An illustrative example of the information found on a grading report. Your diamond&apos;s own report accompanies your jewelry.
               </figcaption>
             </figure>
@@ -365,20 +365,20 @@ export default function LabGrownDiamondsPage() {
           <h2 id="compare-title" className="h-section">
             Lab-grown vs mined diamonds
           </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-taupe">The same diamond in every way you can see and feel. The differences lie in where it comes from — and what it costs.</p>
+          <p className="mt-4 text-[17px] leading-relaxed text-taupe">The same diamond in every way you can see and feel. The differences lie in where it comes from — and what it costs.</p>
         </div>
         <div className="mt-10 overflow-x-auto border border-line bg-white">
-          <table className="w-full min-w-[560px] text-left text-[14px]">
+          <table className="w-full min-w-[560px] text-left text-[16px]">
             <caption className="sr-only">Comparison of lab-grown and mined diamonds</caption>
             <thead>
               <tr className="border-b border-line">
-                <th scope="col" className="w-[32%] px-5 py-4 text-[11px] font-medium uppercase tracking-[0.14em] text-taupe">
+                <th scope="col" className="w-[32%] px-5 py-4 text-[13px] font-medium uppercase tracking-[0.14em] text-taupe">
                   Property
                 </th>
-                <th scope="col" className="bg-porcelain px-5 py-4 text-[11px] font-medium uppercase tracking-[0.14em] text-ink">
+                <th scope="col" className="bg-porcelain px-5 py-4 text-[13px] font-medium uppercase tracking-[0.14em] text-ink">
                   Lab-grown diamond
                 </th>
-                <th scope="col" className="px-5 py-4 text-[11px] font-medium uppercase tracking-[0.14em] text-taupe">
+                <th scope="col" className="px-5 py-4 text-[13px] font-medium uppercase tracking-[0.14em] text-taupe">
                   Mined diamond
                 </th>
               </tr>
@@ -434,11 +434,11 @@ export default function LabGrownDiamondsPage() {
             ].map((x) => (
               <div key={x.t} className="border-t border-white/20 pt-6">
                 <h3 className="font-serif text-2xl text-ivory">{x.t}</h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-ivory/70">{x.d}</p>
+                <p className="mt-3 text-[17px] leading-relaxed text-ivory/70">{x.d}</p>
               </div>
             ))}
           </div>
-          <p className="mt-12 max-w-2xl text-[14px] leading-relaxed text-ivory/60">
+          <p className="mt-12 max-w-2xl text-[16px] leading-relaxed text-ivory/60">
             Every piece is then made by our own artisans — read about our{' '}
             <Link href="/pages/manufacturing" className="text-ivory underline decoration-white/40 underline-offset-4 hover:decoration-ivory">
               six-step manufacturing process
@@ -485,7 +485,7 @@ function FourC({ n, eyebrow, title, children }: { n: string; eyebrow: string; ti
         <p className="eyebrow mt-4">{eyebrow}</p>
         <h3 className="mt-3 font-serif text-[1.9rem] font-light leading-tight">{title}</h3>
       </div>
-      <div className="text-[15px] leading-relaxed text-charcoal/90 lg:col-span-8">{children}</div>
+      <div className="text-[17px] leading-relaxed text-charcoal/90 lg:col-span-8">{children}</div>
     </Reveal>
   );
 }

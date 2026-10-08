@@ -47,8 +47,8 @@ export function CollectionView({ title, eyebrow = 'Collection', description, cru
           <div className="max-w-3xl">
             <p className="eyebrow mb-3">{eyebrow}</p>
             <h1 className="font-serif text-[2.4rem] font-light leading-[1.05] md:text-[3.4rem]">{title}</h1>
-            {description && <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-taupe">{description}</p>}
-            <p className="mt-4 text-[12px] uppercase tracking-[0.16em] text-charcoal">{pluralize(scopeTotal, 'design')}</p>
+            {description && <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-taupe">{description}</p>}
+            <p className="mt-4 text-[14px] uppercase tracking-[0.16em] text-charcoal">{pluralize(scopeTotal, 'design')}</p>
           </div>
           {aside}
         </div>
@@ -63,7 +63,7 @@ export function CollectionView({ title, eyebrow = 'Collection', description, cru
                     href={`${basePath}${filtersToSearch({ ...filters, page: 1, shape: on ? [] : [s.slug] })}`}
                     scroll={false}
                     aria-current={on ? 'true' : undefined}
-                    className={cn('flex w-[84px] flex-col items-center gap-2 border py-3 text-[11px] uppercase tracking-[0.12em] transition-colors', on ? 'border-ink bg-white text-ink' : 'border-transparent text-taupe hover:border-line hover:text-ink')}
+                    className={cn('flex w-[84px] flex-col items-center gap-2 border py-3 text-[13px] uppercase tracking-[0.12em] transition-colors', on ? 'border-ink bg-white text-ink' : 'border-transparent text-taupe hover:border-line hover:text-ink')}
                   >
                     <ShapeIcon shape={s.slug} size={34} className={on ? 'text-gold' : ''} />
                     {s.label}
@@ -81,7 +81,7 @@ export function CollectionView({ title, eyebrow = 'Collection', description, cru
             <CollectionSearch />
           </div>
           <MobileFilters facets={facets} total={total} />
-          <p className="hidden text-[12px] text-taupe md:block" aria-live="polite">
+          <p className="hidden text-[14px] text-taupe md:block" aria-live="polite">
             {pluralize(total, 'piece')}
           </p>
           <SortSelect />

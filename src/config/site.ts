@@ -3,11 +3,11 @@
  * SEO metadata, structured data, emails and the admin.
  */
 export const site = {
-  name: 'Aurevia',
-  legalName: 'Aurevia Fine Jewelry Pvt. Ltd.',
+  name: 'The V Jewels',
+  legalName: 'The V Jewels',
   tagline: 'Lab-Grown Diamond Fine Jewelry',
   description:
-    'Aurevia crafts certified lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
+    'The V Jewels crafts certified lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
   // NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is detected automatically
   url: (
     process.env.NEXT_PUBLIC_SITE_URL ??
@@ -17,7 +17,7 @@ export const site = {
   currency: 'USD',
   foundedYear: 2010,
   contact: {
-    email: 'concierge@aurevia.example',
+    email: 'concierge@thevjewels.example',
     phone: '+1 (212) 555-0148',
     phoneHref: 'tel:+12125550148',
     whatsapp: '+91 98200 00000',

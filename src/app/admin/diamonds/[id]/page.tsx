@@ -100,7 +100,7 @@ export default async function DiamondDetailPage({ params }: Props) {
           <Panel bodyClassName="p-0">
             <div className="art-tile flex flex-col items-center justify-center gap-2 border-b border-line px-5 py-7 text-charcoal">
               <ShapeIcon shape={d.shape} size={84} strokeWidth={0.9} />
-              <p className="text-[10.5px] font-medium uppercase tracking-[0.18em] text-taupe">{shapeName}</p>
+              <p className="text-[12.5px] font-medium uppercase tracking-[0.18em] text-taupe">{shapeName}</p>
             </div>
             <div className="space-y-4 p-5">
               <div className="flex items-center justify-between gap-3">
@@ -139,7 +139,7 @@ export default async function DiamondDetailPage({ params }: Props) {
             </div>
           </Panel>
 
-          <Panel title="Where it’s used" bodyClassName="space-y-4 p-5 text-[13px]">
+          <Panel title="Where it’s used" bodyClassName="space-y-4 p-5 text-[15px]">
             <div className="flex items-baseline justify-between gap-3">
               <span className="text-taupe">Settings offering it</span>
               <span>{formatNumber(usage.productCount)}</span>
@@ -157,10 +157,10 @@ export default async function DiamondDetailPage({ params }: Props) {
                 {usage.orderItems.map((item) => (
                   <li key={item.id} className="flex items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <Link href={`/admin/orders/${item.order.id}`} className="font-mono text-[12.5px] underline-offset-4 hover:underline">
+                      <Link href={`/admin/orders/${item.order.id}`} className="font-mono text-[14.5px] underline-offset-4 hover:underline">
                         {item.order.number}
                       </Link>
-                      <p className="truncate text-[11.5px] text-taupe">{item.name}</p>
+                      <p className="truncate text-[13.5px] text-taupe">{item.name}</p>
                     </div>
                     <StatusBadge status={item.order.status} />
                   </li>

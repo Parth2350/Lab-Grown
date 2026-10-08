@@ -9,11 +9,10 @@ import { cn, formatMoney } from '@/lib/utils';
 import { useUI } from '@/store/ui';
 import { Stars } from '@/components/ui/Stars';
 import { Sheet } from '@/components/ui/Sheet';
-import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { QtyStepper } from '@/components/cart/CartLineItem';
 import { CompareButton, WishlistButton } from '@/components/product/ProductCard';
-import { DiamondConfigurator } from './DiamondConfigurator';
-import { diamondSummary, type Configuration } from './useConfiguration';
+import { CenterDiamondPicker } from './CenterDiamondPicker';
+import type { Configuration } from './useConfiguration';
 
 const SIZE_CHART = [
   ['4', '14.9', '46.8'],
@@ -33,7 +32,7 @@ function SizeGuide({ open, onClose }: { open: boolean; onClose: () => void }) {
       </p>
       <table className="mt-6 w-full text-left text-sm">
         <thead>
-          <tr className="border-b border-line text-[11px] uppercase tracking-[0.14em] text-taupe">
+          <tr className="border-b border-line text-[13px] uppercase tracking-[0.14em] text-taupe">
             <th className="py-2 font-medium">US size</th>
             <th className="py-2 font-medium">Diameter (mm)</th>
             <th className="py-2 font-medium">Circumference (mm)</th>
@@ -49,7 +48,7 @@ function SizeGuide({ open, onClose }: { open: boolean; onClose: () => void }) {
           ))}
         </tbody>
       </table>
-      <p className="mt-6 bg-porcelain p-4 text-[13px] text-charcoal">
+      <p className="mt-6 bg-porcelain p-4 text-[15px] text-charcoal">
         Not sure? Choose your best estimate — your first resize within 60 days is complimentary, or request a free reusable ring sizer from our concierge.
       </p>
     </Sheet>
@@ -59,7 +58,6 @@ function SizeGuide({ open, onClose }: { open: boolean; onClose: () => void }) {
 export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p: ProductDetail; card: ProductCard; c: Configuration; compact?: boolean; initialConfigure?: boolean }) {
   const router = useRouter();
   const toast = useUI((s) => s.toast);
-  const [diamondOpen, setDiamondOpen] = useState(!!initialConfigure && !!c.centerOption);
   const [sizeGuide, setSizeGuide] = useState(false);
   const settingPrice = c.variant?.price ?? 0;
 
@@ -84,7 +82,7 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
         </Link>
       </p>
       {compact ? <h2 className="font-serif text-3xl font-light leading-tight">{p.name}</h2> : <h1 className="font-serif text-[2rem] font-light leading-[1.1] md:text-[2.5rem]">{p.name}</h1>}
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-taupe">
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-taupe">
         {p.reviewCount > 0 ? (
           <a href="#reviews" className="flex items-center gap-2 hover:text-ink">
             <Stars rating={p.rating} /> {p.rating.toFixed(1)} ({p.reviewCount} reviews)
@@ -99,9 +97,9 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
         <p className="font-serif text-[2rem] leading-none text-ink" aria-live="polite">
           {formatMoney(c.price)}
         </p>
-        <p className="pb-1 text-[12px] text-taupe">From {formatMoney(p.fromPrice)}</p>
+        <p className="pb-1 text-[14px] text-taupe">From {formatMoney(p.fromPrice)}</p>
       </div>
-      <p className="mt-1.5 text-[12px] text-taupe">{c.centerOption ? 'Setting + centre diamond. ' : ''}Taxes calculated at checkout · Complimentary insured shipping</p>
+      <p className="mt-1.5 text-[14px] text-taupe">{c.centerOption ? 'Setting + centre diamond. ' : ''}Taxes calculated at checkout · Complimentary insured shipping</p>
 
       {/* metal purity */}
       <fieldset className="mt-8">
@@ -116,7 +114,7 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
               type="button"
               aria-pressed={c.purity === x.slug}
               onClick={() => c.setPurity(x.slug)}
-              className={cn('h-11 border text-[13px] transition-colors', c.purity === x.slug ? 'border-ink bg-ink text-ivory' : 'border-line bg-white hover:border-ink')}
+              className={cn('h-11 border text-[15px] transition-colors', c.purity === x.slug ? 'border-ink bg-ink text-ivory' : 'border-line bg-white hover:border-ink')}
             >
               {x.label}
             </button>
@@ -148,66 +146,6 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
         </div>
       </fieldset>
 
-      {/* diamond */}
-      {c.centerOption && (
-        <div className="mt-7">
-          <p className="label-caps mb-3">Centre diamond</p>
-          <button
-            type="button"
-            onClick={() => setDiamondOpen(true)}
-            className="group flex w-full items-center gap-4 border border-line bg-white p-4 text-left transition-colors hover:border-ink"
-          >
-            <span className="art-tile flex h-14 w-14 shrink-0 items-center justify-center">
-              <ShapeIcon shape={c.shape} size={34} className="text-gold" />
-            </span>
-            <span className="min-w-0 flex-1">
-              {c.diamond ? (
-                <>
-                  <span className="block text-[14px] text-ink">{diamondSummary(c.diamond)}</span>
-                  <span className="mt-0.5 flex items-center gap-1.5 text-[12px] text-taupe">
-                    <ShieldCheck className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} /> {c.diamond.certificate?.lab} certified #{c.diamond.certificate?.number} · {formatMoney(c.diamond.price)}
-                  </span>
-                </>
-              ) : (
-                <span className="text-[14px] text-taupe">Choose your diamond</span>
-              )}
-            </span>
-            <span className="label-caps shrink-0 border-b border-ink pb-0.5">{c.diamond ? 'Change' : 'Select'}</span>
-          </button>
-          <button type="button" onClick={() => setDiamondOpen(true)} className="label-caps mt-3 flex h-12 w-full items-center justify-center gap-2 border border-ink transition-colors hover:bg-ink hover:text-ivory">
-            <Gem className="h-4 w-4" strokeWidth={1.25} /> View Diamond Options
-          </button>
-          <DiamondConfigurator open={diamondOpen} onClose={() => setDiamondOpen(false)} option={c.centerOption} selected={c.diamond} settingPrice={settingPrice} onSelect={(d) => c.setDiamond(d)} />
-        </div>
-      )}
-      {!c.centerOption && c.totalWeightOptions.length > 0 && (
-        <fieldset className="mt-7">
-          <legend className="label-caps mb-3">Diamond weight & quality</legend>
-          <div className="space-y-2">
-            {c.totalWeightOptions.map((o) => {
-              const on = c.option?.id === o.id;
-              return (
-                <button
-                  key={o.id}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => c.setOption(o)}
-                  className={cn('flex w-full items-center justify-between gap-3 border px-4 py-3 text-left text-[13.5px] transition-colors', on ? 'border-ink bg-white' : 'border-line hover:border-stone')}
-                >
-                  <span>
-                    <span className="capitalize text-ink">{o.label}</span>
-                    <span className="block text-[12px] text-taupe">
-                      {o.color} colour · {o.clarity}+ clarity · {label.shape(p.shapes[0])} · IGI certified
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-taupe">{formatMoney((c.variant?.price ?? 0) + o.priceDelta)}</span>
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-      )}
-
       {/* ring size */}
       {p.requiresSize && (
         <div className="mt-7">
@@ -215,7 +153,7 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
             <label htmlFor={`ring-size-${p.id}`} className="label-caps">
               Ring size (US)
             </label>
-            <button type="button" onClick={() => setSizeGuide(true)} className="flex items-center gap-1.5 text-[12px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+            <button type="button" onClick={() => setSizeGuide(true)} className="flex items-center gap-1.5 text-[14px] text-taupe underline-offset-4 hover:text-ink hover:underline">
               <Ruler className="h-3.5 w-3.5" strokeWidth={1.25} /> Size guide
             </button>
           </div>
@@ -236,6 +174,47 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
           {c.sizeError && <p className="mt-1.5 text-xs text-danger">Please choose a ring size — first resize within 60 days is complimentary.</p>}
           <SizeGuide open={sizeGuide} onClose={() => setSizeGuide(false)} />
         </div>
+      )}
+
+      {/* centre diamond */}
+      {c.centerOption && (
+        <CenterDiamondPicker
+          option={c.centerOption}
+          shape={c.shape}
+          onShape={c.setShape}
+          diamond={c.diamond}
+          onDiamond={c.setDiamond}
+          settingPrice={settingPrice}
+          defaultCarat={p.centerCarat ?? 1}
+          scrollIntoView={initialConfigure}
+        />
+      )}
+      {!c.centerOption && c.totalWeightOptions.length > 0 && (
+        <fieldset className="mt-7">
+          <legend className="label-caps mb-3">Diamond weight & quality</legend>
+          <div className="space-y-2">
+            {c.totalWeightOptions.map((o) => {
+              const on = c.option?.id === o.id;
+              return (
+                <button
+                  key={o.id}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => c.setOption(o)}
+                  className={cn('flex w-full items-center justify-between gap-3 border px-4 py-3 text-left text-[15.5px] transition-colors', on ? 'border-ink bg-white' : 'border-line hover:border-stone')}
+                >
+                  <span>
+                    <span className="capitalize text-ink">{o.label}</span>
+                    <span className="block text-[14px] text-taupe">
+                      {o.color} colour · {o.clarity}+ clarity · {label.shape(p.shapes[0])} · IGI certified
+                    </span>
+                  </span>
+                  <span className="shrink-0 text-taupe">{formatMoney((c.variant?.price ?? 0) + o.priceDelta)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
       )}
 
       {/* quantity + CTAs */}
@@ -266,11 +245,11 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
         </button>
       </div>
 
-      <p className={cn('mt-5 flex items-center gap-2 text-[13px]', c.inStock ? 'text-success' : 'text-charcoal')}>
+      <p className={cn('mt-5 flex items-center gap-2 text-[15px]', c.inStock ? 'text-success' : 'text-charcoal')}>
         <span className={cn('h-2 w-2 rounded-full', c.inStock ? 'bg-success' : 'bg-gold')} />
         {c.inStock ? 'In stock — ready to ship in 3–5 business days' : 'Made to order — ships in 2–3 weeks'}
       </p>
-      <ul className="mt-5 grid grid-cols-2 gap-3 text-[12px] text-charcoal">
+      <ul className="mt-5 grid grid-cols-2 gap-3 text-[14px] text-charcoal">
         <li className="flex items-center gap-2">
           <ShieldCheck className="h-4 w-4 text-gold" strokeWidth={1.25} /> IGI / GIA Certified
         </li>

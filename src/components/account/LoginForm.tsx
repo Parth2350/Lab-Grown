@@ -51,10 +51,10 @@ export function LoginForm({ callbackUrl, adminNotice, signedInAs }: { callbackUr
     <div>
       <p className="eyebrow">Your account</p>
       <h1 className="mt-3 font-serif text-4xl font-light sm:text-5xl">Welcome back</h1>
-      <p className="mt-3 text-[15px] text-taupe">Sign in to track orders, revisit your wishlist and check out faster.</p>
+      <p className="mt-3 text-[17px] text-taupe">Sign in to track orders, revisit your wishlist and check out faster.</p>
 
       {adminNotice && (
-        <div role="alert" className="mt-8 flex gap-3 border border-gold/40 bg-gold-pale/40 px-4 py-3 text-[13px] text-charcoal">
+        <div role="alert" className="mt-8 flex gap-3 border border-gold/40 bg-gold-pale/40 px-4 py-3 text-[15px] text-charcoal">
           <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" strokeWidth={1.5} aria-hidden />
           <div>
             <p className="text-ink">The admin area is for {site.name} administrators.</p>
@@ -104,13 +104,13 @@ export function LoginForm({ callbackUrl, adminNotice, signedInAs }: { callbackUr
           error={errors.password}
         />
         <div className="flex justify-end">
-          <Link href="/contact?topic=account" className="text-[12.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+          <Link href="/contact?topic=account" className="text-[14.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
             Forgotten your password?
           </Link>
         </div>
         <div aria-live="assertive">
           {error && (
-            <p id="login-error" className="flex items-start gap-2 border border-danger/30 bg-danger/5 px-4 py-3 text-[13px] text-danger">
+            <p id="login-error" className="flex items-start gap-2 border border-danger/30 bg-danger/5 px-4 py-3 text-[15px] text-danger">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden /> {error}
             </p>
           )}
@@ -120,7 +120,7 @@ export function LoginForm({ callbackUrl, adminNotice, signedInAs }: { callbackUr
         </Button>
       </form>
 
-      <p className="mt-8 border-t border-line pt-6 text-center text-[14px] text-taupe">
+      <p className="mt-8 border-t border-line pt-6 text-center text-[16px] text-taupe">
         New to {site.name}?{' '}
         <Link href={`/account/register${callbackUrl !== '/account' ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`} className="text-ink underline underline-offset-4 hover:text-gold-deep">
           Create an account
@@ -129,10 +129,10 @@ export function LoginForm({ callbackUrl, adminNotice, signedInAs }: { callbackUr
 
       {showDemo && (
         <div className="mt-8 border border-dashed border-stone bg-porcelain/60 px-5 py-4">
-          <p className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-charcoal">
+          <p className="flex items-center gap-2 text-[13px] font-medium uppercase tracking-[0.16em] text-charcoal">
             <KeyRound className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} aria-hidden /> Demo account
           </p>
-          <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[13px]">
+          <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[15px]">
             <dt className="text-taupe">Email</dt>
             <dd className="select-all break-all text-ink">{DEMO.email}</dd>
             <dt className="text-taupe">Password</dt>
@@ -146,7 +146,7 @@ export function LoginForm({ callbackUrl, adminNotice, signedInAs }: { callbackUr
               setErrors({});
               setError(null);
             }}
-            className="mt-3 text-[12px] uppercase tracking-[0.14em] text-ink underline underline-offset-4 hover:text-gold-deep"
+            className="mt-3 text-[14px] uppercase tracking-[0.14em] text-ink underline underline-offset-4 hover:text-gold-deep"
           >
             Use demo account
           </button>

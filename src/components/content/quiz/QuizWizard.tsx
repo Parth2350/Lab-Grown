@@ -188,7 +188,7 @@ export function QuizWizard({ questions }: { questions: QuizQuestion[] }) {
             <h2 id="quiz-intro-title" ref={headingRef} tabIndex={-1} className="font-serif text-[2.4rem] font-light leading-[1.05] focus:outline-none sm:text-[3rem]">
               Let us help you find the one
             </h2>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-taupe">
+            <p className="mt-5 max-w-md text-[17px] leading-relaxed text-taupe">
               Tell us who you are shopping for, what you love and what feels right for your budget. We will curate a short edit of pieces chosen just for you.
             </p>
             <div className="mt-9">
@@ -233,7 +233,7 @@ export function QuizWizard({ questions }: { questions: QuizQuestion[] }) {
                     </m.div>
                   </div>
                   <p className="mt-8 font-serif text-3xl font-light">Curating your matches…</p>
-                  <p className="mt-2 text-[14px] text-taupe">Weighing style, metal and budget across every design.</p>
+                  <p className="mt-2 text-[16px] text-taupe">Weighing style, metal and budget across every design.</p>
                 </m.div>
               ) : (
                 <m.div
@@ -248,7 +248,7 @@ export function QuizWizard({ questions }: { questions: QuizQuestion[] }) {
                     <h2 id="quiz-question-title" ref={headingRef} tabIndex={-1} className="font-serif text-[2rem] font-light leading-tight focus:outline-none sm:text-[2.6rem]">
                       {question.title}
                     </h2>
-                    {question.subtitle && <p className="mt-3 text-[15px] text-taupe">{question.subtitle}</p>}
+                    {question.subtitle && <p className="mt-3 text-[17px] text-taupe">{question.subtitle}</p>}
                   </div>
                   <Options question={question} value={answers[question.id]} onChoose={(o) => choose(question, o)} />
                   <FormAlert className="mx-auto mt-8 max-w-xl">{error}</FormAlert>
@@ -301,7 +301,7 @@ function Options({ question, value, onChoose }: { question: QuizQuestion; value?
               ) : (
                 <ShapeIcon shape={o.value} size={42} className={cn('transition-colors', value === o.value ? 'text-gold' : 'text-charcoal group-hover:text-gold')} />
               )}
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ink">{o.label}</span>
+              <span className="text-[13px] uppercase tracking-[0.14em] text-ink">{o.label}</span>
             </OptionButton>
           </li>
         ))}
@@ -322,7 +322,7 @@ function Options({ question, value, onChoose }: { question: QuizQuestion; value?
                     <JewelryArt spec={a.spec} shape={a.shape} metal={a.metal} carat={a.carat ?? 1} className="h-full w-full transition-transform duration-700 ease-luxe group-hover:scale-105" />
                   </span>
                 )}
-                <span className="px-3 py-4 text-[14px] text-ink">{o.label}</span>
+                <span className="px-3 py-4 text-[16px] text-ink">{o.label}</span>
               </OptionButton>
             </li>
           );
@@ -342,7 +342,7 @@ function Options({ question, value, onChoose }: { question: QuizQuestion; value?
                 style={{ background: METAL_SWATCH[o.value] ?? 'conic-gradient(from 45deg,#E9CB80,#D6D9DC,#E8AE97,#E9CB80)' }}
                 aria-hidden
               />
-              <span className="text-[14px] text-ink">{o.label}</span>
+              <span className="text-[16px] text-ink">{o.label}</span>
             </OptionButton>
           </li>
         ))}
@@ -356,7 +356,7 @@ function Options({ question, value, onChoose }: { question: QuizQuestion; value?
         <li key={o.value}>
           <OptionButton selected={value === o.value} onClick={() => onChoose(o)} className="min-h-[88px] px-5 py-5">
             <span className="font-serif text-[1.35rem] leading-tight text-ink">{o.label}</span>
-            {o.hint && <span className="mt-1.5 text-[12.5px] text-taupe">{o.hint}</span>}
+            {o.hint && <span className="mt-1.5 text-[14.5px] text-taupe">{o.hint}</span>}
           </OptionButton>
         </li>
       ))}
@@ -394,7 +394,7 @@ function Results({
           <h2 id="quiz-results-title" ref={headingRef} tabIndex={-1} className="h-section focus:outline-none">
             Your Perfect Matches
           </h2>
-          <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-taupe">
+          <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-taupe">
             {result.exactCount >= result.products.length
               ? 'Every piece below matches all of your answers. Save your favourites to your wishlist, or compare them side by side.'
               : result.exactCount > 0
@@ -423,7 +423,7 @@ function Results({
               <button
                 type="button"
                 onClick={() => onEdit(i)}
-                className="group inline-flex min-h-10 items-center gap-2 border border-line bg-white px-4 py-2 text-[13px] transition-colors hover:border-ink"
+                className="group inline-flex min-h-10 items-center gap-2 border border-line bg-white px-4 py-2 text-[15px] transition-colors hover:border-ink"
               >
                 <span className="text-taupe">{SHORT_LABELS[q.id] ?? q.title}:</span>
                 <span className="text-ink">{opt!.label}</span>
@@ -456,7 +456,7 @@ function Results({
           <ul className="flex flex-wrap gap-3">
             {result.links.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="group inline-flex min-h-11 items-center gap-2 border border-ink/80 px-5 text-[11px] font-medium uppercase tracking-[0.16em] text-ink transition-colors hover:bg-ink hover:text-ivory">
+                <Link href={l.href} className="group inline-flex min-h-11 items-center gap-2 border border-ink/80 px-5 text-[13px] font-medium uppercase tracking-[0.16em] text-ink transition-colors hover:bg-ink hover:text-ivory">
                   {l.label}
                   <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden />
                 </Link>

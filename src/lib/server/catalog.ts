@@ -76,7 +76,7 @@ export const getCatalogIndex = unstable_cache(
         .replace(/-/g, ' '),
     }));
   },
-  ['catalog-index'],
+  ['catalog-index', 'v2'],
   { tags: ['products'], revalidate: 3600 },
 );
 
@@ -151,7 +151,7 @@ export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
   return ids.map((id) => map.get(id)).filter(Boolean) as ProductCard[];
 }
 
-export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids'], {
+export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'v2'], {
   tags: ['products'],
   revalidate: 3600,
 });
@@ -357,7 +357,7 @@ export const getProductBySlug = unstable_cache(
       updatedAt: p.updatedAt.toISOString(),
     };
   },
-  ['product-by-slug'],
+  ['product-by-slug', 'v2'],
   { tags: ['products'], revalidate: 3600 },
 );
 
@@ -391,7 +391,7 @@ export async function queryDiamonds(q: DiamondQuery) {
   };
   const orderBy: Prisma.DiamondOrderByWithRelationInput =
     q.sort === 'price-desc' ? { price: 'desc' } : q.sort === 'carat-asc' ? { carat: 'asc' } : q.sort === 'carat-desc' ? { carat: 'desc' } : { price: 'asc' };
-  const pageSize = Math.min(60, q.pageSize ?? 24);
+  const pageSize = Math.min(200, q.pageSize ?? 24);
   const page = Math.max(1, q.page ?? 1);
   const [total, items] = await Promise.all([
     db.diamond.count({ where }),

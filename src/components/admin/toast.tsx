@@ -59,7 +59,7 @@ export function AdminToaster() {
             >
               <Icon className={cn('mt-0.5 h-4 w-4 shrink-0', t.tone === 'success' ? 'text-gold-light' : 'text-danger')} strokeWidth={1.5} aria-hidden />
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-medium">{t.title}</p>
+                <p className="text-[15px] font-medium">{t.title}</p>
                 {t.description && <p className={cn('mt-0.5 text-xs', t.tone === 'success' ? 'text-ivory/70' : 'text-charcoal')}>{t.description}</p>}
               </div>
               <button type="button" onClick={() => dismiss(t.id)} aria-label="Dismiss notification" className={t.tone === 'success' ? 'text-ivory/60 hover:text-ivory' : 'text-danger/60 hover:text-danger'}>

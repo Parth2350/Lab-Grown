@@ -7,10 +7,10 @@ import { addressLines, readAddress } from './address';
 
 export function AddressBlock({ value, empty = 'No address on file' }: { value: Prisma.JsonValue | null | undefined; empty?: string }) {
   const a = readAddress(value);
-  if (!a) return <p className="text-[13px] text-taupe">{empty}</p>;
+  if (!a) return <p className="text-[15px] text-taupe">{empty}</p>;
   const lines = addressLines(a);
   return (
-    <address className="text-[13px] not-italic leading-relaxed text-ink">
+    <address className="text-[15px] not-italic leading-relaxed text-ink">
       {lines.map((l, i) => (
         <span key={i} className={cn('block', i === 0 && 'font-medium')}>
           {l}
@@ -41,7 +41,7 @@ export function OrderTimeline({ events }: { events: TimelineEvent[] }) {
       {sorted.map((e, i) => (
         <li key={i} className="relative">
           <span className={cn('absolute -left-[25px] top-1 h-2.5 w-2.5 rounded-full border', DOT[e.tone ?? 'default'])} aria-hidden />
-          <p className="text-[13px] text-ink">{e.title}</p>
+          <p className="text-[15px] text-ink">{e.title}</p>
           <p className="text-xs text-taupe">
             <time dateTime={e.at.toISOString()}>{formatDateTime(e.at)}</time>
             {e.detail && <> · {e.detail}</>}
@@ -56,7 +56,7 @@ export function OrderTimeline({ events }: { events: TimelineEvent[] }) {
 export function Ref({ value, className }: { value: string | null | undefined; className?: string }) {
   if (!value) return <span className="text-taupe">—</span>;
   return (
-    <span title={value} className={cn('inline-block max-w-[160px] truncate align-bottom font-mono text-[11.5px] text-charcoal', className)}>
+    <span title={value} className={cn('inline-block max-w-[160px] truncate align-bottom font-mono text-[13.5px] text-charcoal', className)}>
       {value}
     </span>
   );

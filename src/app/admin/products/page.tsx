@@ -172,7 +172,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                               {p.name}
                             </Link>
                             <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-taupe">
-                              <span className="font-mono text-[11px]">{p.sku}</span>
+                              <span className="font-mono text-[13px]">{p.sku}</span>
                               <span aria-hidden>·</span>
                               <Link href={`${BASE}?category=${p.category.slug}`} className="hover:text-ink">
                                 {p.category.name}
@@ -194,14 +194,14 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                             Low stock
                           </Badge>
                         ) : p.soldOutVariants > 0 ? (
-                          <p className="text-[11px] text-taupe">
+                          <p className="text-[13px] text-taupe">
                             {p.soldOutVariants} variant{p.soldOutVariants === 1 ? '' : 's'} sold out
                           </p>
                         ) : null}
                       </td>
                       <td className={table.tdRight}>
                         <p>{formatNumber(p.activeVariants)}</p>
-                        {inactiveVariants > 0 && <p className="text-[11px] text-taupe">+{inactiveVariants} inactive</p>}
+                        {inactiveVariants > 0 && <p className="text-[13px] text-taupe">+{inactiveVariants} inactive</p>}
                       </td>
                       <td className={table.td}>
                         {p.reviewCount > 0 ? (

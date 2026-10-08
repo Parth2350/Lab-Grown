@@ -44,10 +44,10 @@ export function ShipmentRowForm({ id, status, trackingNumber, orderNumber }: { i
           autoComplete="off"
           spellCheck={false}
           aria-invalid={err ? true : undefined}
-          className={`${fieldSm} font-mono text-[12px]`}
+          className={`${fieldSm} font-mono text-[14px]`}
         />
         {err && (
-          <p className="mt-1 text-[11px] text-danger" role="alert">
+          <p className="mt-1 text-[13px] text-danger" role="alert">
             {err}
           </p>
         )}

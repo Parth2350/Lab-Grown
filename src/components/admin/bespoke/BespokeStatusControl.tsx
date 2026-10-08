@@ -47,7 +47,7 @@ export function BespokeStatusControl({ id, status }: { id: string; status: Bespo
               {!last && <span className={cn('absolute left-[11px] top-6 h-[calc(100%-1.5rem)] w-px', done ? 'bg-ink' : 'bg-line')} aria-hidden />}
               <span
                 className={cn(
-                  'relative z-[1] flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[10.5px] tabular-nums',
+                  'relative z-[1] flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[12.5px] tabular-nums',
                   done && 'border-ink bg-ink text-ivory',
                   current && 'border-gold bg-gold-pale text-gold-deep ring-4 ring-gold-pale/60',
                   !done && !current && 'border-line bg-white text-taupe',
@@ -57,7 +57,7 @@ export function BespokeStatusControl({ id, status }: { id: string; status: Bespo
                 {done ? <Check className="h-3 w-3" strokeWidth={2} /> : i + 1}
               </span>
               <div className="min-w-0 pt-0.5">
-                <p className={cn('text-[13px] leading-5', current ? 'font-medium text-ink' : done ? 'text-charcoal' : 'text-taupe')}>
+                <p className={cn('text-[15px] leading-5', current ? 'font-medium text-ink' : done ? 'text-charcoal' : 'text-taupe')}>
                   {BESPOKE_STATUS_LABEL[step]}
                   <span className="sr-only">{done ? ' — done' : current ? ' — current stage' : ' — upcoming'}</span>
                 </p>
@@ -76,7 +76,7 @@ export function BespokeStatusControl({ id, status }: { id: string; status: Bespo
           <X className="h-3 w-3" strokeWidth={2} />
         </span>
         <div className="min-w-0 pt-0.5">
-          <p className={cn('text-[13px] leading-5', closed ? 'font-medium text-ink' : 'text-taupe')}>
+          <p className={cn('text-[15px] leading-5', closed ? 'font-medium text-ink' : 'text-taupe')}>
             {BESPOKE_STATUS_LABEL.CLOSED}
             {closed && <span className="sr-only"> — current stage</span>}
           </p>
@@ -103,7 +103,7 @@ export function BespokeStatusControl({ id, status }: { id: string; status: Bespo
         )}
 
         <div>
-          <label htmlFor={selectId} className="mb-1 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+          <label htmlFor={selectId} className="mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
             Set status
           </label>
           <div className="flex gap-2">

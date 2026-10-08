@@ -111,12 +111,12 @@ function CategoryTile({ tile, count, priority, tall }: { tile: Tile; count: numb
         <div className="absolute inset-0 p-8 transition-transform duration-700 ease-luxe group-hover:scale-[1.04] sm:p-10">
           <LazyJewelryArt spec={tile.art.spec} shape={tile.art.shape} metal={tile.art.metal} carat={tile.art.carat ?? 1} className="block h-full w-full" title={tile.title} />
         </div>
-        <span className="absolute left-4 top-4 bg-ivory/90 px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-charcoal">{pluralize(count, 'piece')}</span>
+        <span className="absolute left-4 top-4 bg-ivory/90 px-2.5 py-1 text-[12px] uppercase tracking-[0.16em] text-charcoal">{pluralize(count, 'piece')}</span>
       </div>
       <div className="mt-4 flex items-start justify-between gap-4">
         <div>
           <h3 className="font-serif text-[1.45rem] leading-tight">{tile.title}</h3>
-          <p className="mt-1 text-[13.5px] leading-snug text-taupe">{tile.blurb}</p>
+          <p className="mt-1 text-[15.5px] leading-snug text-taupe">{tile.blurb}</p>
         </div>
         <ArrowRight className="mt-2 h-4 w-4 shrink-0 text-ink transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.25} aria-hidden />
       </div>
@@ -134,7 +134,7 @@ function ProductRail({ id, eyebrow, title, subtitle, products, href }: { id: str
           <h2 id={`${id}-title`} className="h-section">
             {title}
           </h2>
-          <p className="mt-3 text-[15px] text-taupe">{subtitle}</p>
+          <p className="mt-3 text-[17px] text-taupe">{subtitle}</p>
         </div>
         <Link href={href} className="label-caps group inline-flex min-h-10 shrink-0 items-center gap-2 text-ink">
           <span className="link-underline pb-0.5">Shop all</span>
@@ -172,7 +172,7 @@ export default async function GiftsPage() {
             <h1 className="h-display text-balance">Gifts they will treasure for a lifetime</h1>
           </div>
           <div className="lg:col-span-5 lg:pb-3">
-            <p className="max-w-md text-[16px] leading-relaxed text-taupe">
+            <p className="max-w-md text-[18px] leading-relaxed text-taupe">
               Certified lab-grown diamonds in solid gold, beautifully wrapped and delivered fully insured. Find the perfect piece by budget or by occasion.
             </p>
             <Link href="/find-your-match" className="label-caps group mt-6 inline-flex min-h-10 items-center gap-2 text-ink">
@@ -249,7 +249,7 @@ export default async function GiftsPage() {
       <section aria-labelledby="services-title" className="mt-8 border-y border-line bg-white">
         <div className="container-x py-14 md:py-16">
           <h2 id="services-title" className="eyebrow font-sans mb-10 text-center">
-            The {site.name} gifting service
+            {site.name} gifting service
           </h2>
           <ul className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {SERVICES.map(({ icon: Icon, t, d }) => (
@@ -258,7 +258,7 @@ export default async function GiftsPage() {
                   <Icon className="h-5 w-5" strokeWidth={1} aria-hidden />
                 </span>
                 <h3 className="mt-5 font-serif text-xl">{t}</h3>
-                <p className="mt-2 max-w-[260px] text-[14px] leading-relaxed text-taupe">{d}</p>
+                <p className="mt-2 max-w-[260px] text-[16px] leading-relaxed text-taupe">{d}</p>
               </li>
             ))}
           </ul>
@@ -278,7 +278,7 @@ export default async function GiftsPage() {
             <h2 id="gift-quiz-title" className="h-section text-balance">
               Not sure what they would love?
             </h2>
-            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-taupe">
+            <p className="mt-4 max-w-md text-[17px] leading-relaxed text-taupe">
               Answer a few quick questions about them — their style, the occasion and your budget — and we will curate a short edit of perfect gifts.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">

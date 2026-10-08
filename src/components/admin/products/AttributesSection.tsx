@@ -47,7 +47,7 @@ function TagInput({ tags, onChange, error }: { tags: string[]; onChange: (tags: 
           onBlur={() => commit(text)}
           aria-describedby="p-tags-hint"
           aria-invalid={error ? true : undefined}
-          className="min-w-[120px] flex-1 border-0 bg-transparent px-1 py-1 text-[13px] focus:outline-none"
+          className="min-w-[120px] flex-1 border-0 bg-transparent px-1 py-1 text-[15px] focus:outline-none"
           placeholder={tags.length ? '' : 'Type a tag and press Enter'}
         />
       </div>

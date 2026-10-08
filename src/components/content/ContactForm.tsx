@@ -73,7 +73,7 @@ export function ContactForm() {
               <Check className="h-6 w-6" strokeWidth={1.25} aria-hidden />
             </span>
             <h3 className="mt-6 font-serif text-3xl font-light">Thank you — your message is with us</h3>
-            <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-taupe">
+            <p className="mx-auto mt-4 max-w-md text-[17px] leading-relaxed text-taupe">
               A member of our client care team will reply to <span className="break-all text-ink">{sentTo}</span> within one business day. For anything urgent,
               WhatsApp is the quickest way to reach us.
             </p>
@@ -110,7 +110,7 @@ export function ContactForm() {
             />
             <FormAlert className="sm:col-span-2">{alert}</FormAlert>
             <div className="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[12px] text-taupe">
+              <p className="text-[14px] text-taupe">
                 <span className="text-gold">*</span> Required. We only use your details to reply to you.
               </p>
               <Button type="submit" size="lg" loading={status === 'submitting'} className="w-full sm:w-auto">

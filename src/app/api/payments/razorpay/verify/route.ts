@@ -5,7 +5,7 @@ import { clientIp, errorResponse, finalizeRazorpay, rateLimit, readJson, tooMany
 export const dynamic = 'force-dynamic';
 
 const schema = z.object({
-  orderNumber: z.string().trim().regex(/^AUR-\d{6}$/),
+  orderNumber: z.string().trim().regex(/^[A-Z]{3}-\d{6}$/),
   razorpay_order_id: z.string().trim().min(1).max(64),
   razorpay_payment_id: z.string().trim().min(1).max(64),
   razorpay_signature: z.string().trim().min(1).max(256),

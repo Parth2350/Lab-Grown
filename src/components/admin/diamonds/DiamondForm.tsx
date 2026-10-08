@@ -36,7 +36,7 @@ export type DiamondFormValues = {
   certIssuedAt: string | null;
 };
 
-const lbl = 'mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
+const lbl = 'mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
 const hint = 'mt-1 text-xs text-taupe';
 
 function Field({ id, label, required, state, name, children, help }: { id: string; label: string; required?: boolean; state: FormState; name: string; children: ReactNode; help?: ReactNode }) {
@@ -106,7 +106,7 @@ export function DiamondForm({ diamond, mode, duplicateOf }: { diamond: DiamondFo
     <form onSubmit={onSubmit} noValidate className="space-y-5">
       {diamond.id && <input type="hidden" name="id" value={diamond.id} />}
       {duplicateOf && (
-        <p className="border border-gold/30 bg-gold-pale px-4 py-2.5 text-[13px] text-gold-deep">
+        <p className="border border-gold/30 bg-gold-pale px-4 py-2.5 text-[15px] text-gold-deep">
           Duplicating <span className="font-medium">{duplicateOf}</span> — grading is copied; enter a new SKU and certificate number.
         </p>
       )}
@@ -226,7 +226,7 @@ export function DiamondForm({ diamond, mode, duplicateOf }: { diamond: DiamondFo
         <Field id="d-price" label="Price ($)" required state={state} name="price" help="Loose stone price. Ring prices add the setting.">
           <input id="d-price" name="price" inputMode="decimal" defaultValue={centsToInput(diamond.price)} aria-invalid={err('price')} className="field py-2.5" placeholder="1450" />
         </Field>
-        <label className="flex cursor-pointer items-start gap-3 border border-line bg-ivory/60 px-4 py-3 text-[13px] sm:mt-6">
+        <label className="flex cursor-pointer items-start gap-3 border border-line bg-ivory/60 px-4 py-3 text-[15px] sm:mt-6">
           <input type="checkbox" name="isAvailable" defaultChecked={diamond.isAvailable} className="mt-0.5 h-4 w-4 accent-ink" />
           <span>
             <span className="font-medium text-ink">Available for sale</span>

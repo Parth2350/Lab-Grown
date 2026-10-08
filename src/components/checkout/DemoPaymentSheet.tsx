@@ -57,8 +57,8 @@ export function DemoPaymentSheet({
         </span>
         <p className="eyebrow mt-5 text-gold-deep">Demo payment — no real charge</p>
         <h2 className="mt-2 font-serif text-3xl font-light">Confirm test payment</h2>
-        <p className="mx-auto mt-3 max-w-sm text-[13.5px] leading-relaxed text-taupe">
-          This {site.name} store is running in test mode because live Razorpay keys aren’t configured. Confirming will mark your order as paid so you can preview the full journey — nothing is charged.
+        <p className="mx-auto mt-3 max-w-sm text-[15.5px] leading-relaxed text-taupe">
+          This store is running in test mode because live Razorpay keys aren’t configured. Confirming will mark your order as paid so you can preview the full journey — nothing is charged.
         </p>
       </div>
 
@@ -78,7 +78,7 @@ export function DemoPaymentSheet({
       </dl>
 
       {error && (
-        <p role="alert" className="mt-5 flex items-start gap-2 text-[13px] text-danger">
+        <p role="alert" className="mt-5 flex items-start gap-2 text-[15px] text-danger">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden /> {error}
         </p>
       )}

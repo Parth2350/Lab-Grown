@@ -38,7 +38,7 @@ export function TotalsList({
       {totals.discount > 0 && (
         <div className="flex justify-between gap-4 text-success">
           <dt>
-            Discount{couponCode ? <span className="ml-1.5 border border-success/30 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.14em]">{couponCode}</span> : null}
+            Discount{couponCode ? <span className="ml-1.5 border border-success/30 px-1.5 py-0.5 text-[12px] font-medium uppercase tracking-[0.14em]">{couponCode}</span> : null}
           </dt>
           <dd className="tabular-nums">−{formatMoney(totals.discount, { exact: true })}</dd>
         </div>
@@ -46,7 +46,7 @@ export function TotalsList({
       <div className="flex justify-between gap-4">
         <dt className="text-taupe">
           {shippingLabel}
-          {shippingNote && <span className="block text-[11.5px] text-taupe/80">{shippingNote}</span>}
+          {shippingNote && <span className="block text-[13.5px] text-taupe/80">{shippingNote}</span>}
         </dt>
         <dd className="tabular-nums">{totals.shipping ? formatMoney(totals.shipping, { exact: true }) : 'Complimentary'}</dd>
       </div>
@@ -59,7 +59,7 @@ export function TotalsList({
       <div className="flex items-baseline justify-between gap-4 border-t border-line pt-4" aria-live="polite" aria-atomic="true">
         <dt className="font-serif text-xl">{totalLabel}</dt>
         <dd className="text-lg font-normal tabular-nums">
-          <span className="mr-1.5 text-[11px] uppercase tracking-[0.14em] text-taupe">{site.currency}</span>
+          <span className="mr-1.5 text-[13px] uppercase tracking-[0.14em] text-taupe">{site.currency}</span>
           {formatMoney(totals.total, { exact: true })}
         </dd>
       </div>

@@ -33,7 +33,7 @@ export default async function BespokeRequestPage({ params }: Props) {
   if (!r) notFound();
 
   const reference = bespokeReference(r.id);
-  const mailto = mailtoHref(r.email, `Your ${site.name} bespoke ${r.jewelryType} request`);
+  const mailto = mailtoHref(r.email, `Your bespoke ${r.jewelryType} request — ${site.name}`);
   const tel = telHref(r.phone);
   const images = r.inspirationUrls.map((u) => safeUrl(u)).filter((u): u is string => Boolean(u));
   const hiddenImages = r.inspirationUrls.length - images.length;
@@ -78,9 +78,9 @@ export default async function BespokeRequestPage({ params }: Props) {
 
           <Panel title="Client notes" description="In the client’s own words.">
             {r.notes ? (
-              <p className="whitespace-pre-wrap break-words text-[13px] leading-relaxed text-charcoal">{r.notes}</p>
+              <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed text-charcoal">{r.notes}</p>
             ) : (
-              <p className="text-[13px] text-taupe">The client didn’t add any notes.</p>
+              <p className="text-[15px] text-taupe">The client didn’t add any notes.</p>
             )}
           </Panel>
 
@@ -118,7 +118,7 @@ export default async function BespokeRequestPage({ params }: Props) {
             ) : (
               <div className="flex flex-col items-center justify-center gap-2 border border-dashed border-line bg-ivory/60 px-6 py-10 text-center">
                 <ImageOff className="h-5 w-5 text-taupe" strokeWidth={1.25} aria-hidden />
-                <p className="text-[13px] text-taupe">No inspiration images</p>
+                <p className="text-[15px] text-taupe">No inspiration images</p>
               </div>
             )}
             {hiddenImages > 0 && (

@@ -19,7 +19,7 @@ import { AccountMenu } from './AccountMenu';
 function Badge({ n }: { n: number }) {
   if (!n) return null;
   return (
-    <span className="absolute -right-1.5 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-gold px-1 text-[9.5px] font-medium leading-none text-white">
+    <span className="absolute -right-1.5 -top-1 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-gold px-1 text-[11.5px] font-medium leading-none text-white">
       {n > 99 ? '99+' : n}
     </span>
   );
@@ -38,7 +38,7 @@ function MegaPanel({ item, onNavigate }: { item: NavItem; onNavigate: () => void
             <ul className={cn(col.kind === 'shapes' ? 'grid grid-cols-2 gap-x-4 gap-y-3' : 'space-y-3')}>
               {col.links.map((l) => (
                 <li key={l.href + l.label}>
-                  <Link href={l.href} onClick={onNavigate} className="group/link flex items-center gap-3 text-[14px] text-charcoal transition-colors hover:text-ink">
+                  <Link href={l.href} onClick={onNavigate} className="group/link flex items-center gap-3 text-[16px] text-charcoal transition-colors hover:text-ink">
                     {l.shape && <ShapeIcon shape={l.shape} size={22} className="text-taupe transition-colors group-hover/link:text-gold" />}
                     {l.metal && (
                       <span
@@ -113,7 +113,7 @@ export function Header() {
             </button>
             <button
               onClick={() => setSearch(true)}
-              className="group hidden h-10 items-center gap-3 border-b border-line pr-6 text-[13px] text-taupe transition-colors hover:border-ink hover:text-ink xl:flex"
+              className="group hidden h-10 items-center gap-3 border-b border-line pr-6 text-[15px] text-taupe transition-colors hover:border-ink hover:text-ink xl:flex"
               aria-label="Search"
             >
               <Search className="h-4 w-4" strokeWidth={1.25} />
@@ -147,7 +147,7 @@ export function Header() {
         </div>
 
         <nav aria-label="Main" className="hidden xl:block">
-          <ul className="flex h-11 items-center justify-center gap-6 2xl:gap-9">
+          <ul className="flex h-11 items-center justify-center gap-5 2xl:gap-9">
             {MAIN_NAV.map((item, i) => {
               const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
@@ -157,7 +157,7 @@ export function Header() {
                     aria-expanded={item.mega ? active === i : undefined}
                     aria-current={current ? 'page' : undefined}
                     className={cn(
-                      'relative flex h-11 items-center text-[10.5px] font-medium uppercase tracking-[0.16em] text-charcoal transition-colors hover:text-ink 2xl:text-[11px]',
+                      'relative flex h-11 items-center whitespace-nowrap text-[12.5px] font-medium uppercase tracking-[0.1em] text-charcoal transition-colors hover:text-ink 2xl:text-[13px] 2xl:tracking-[0.16em]',
                       (active === i || current) && 'text-ink',
                       item.label === 'Find Your Match' && 'text-gold-deep',
                     )}

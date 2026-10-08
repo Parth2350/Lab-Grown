@@ -50,7 +50,7 @@ export default async function CollectionDetailPage({ params }: Props) {
               href={`/collections/${collection.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-9 items-center gap-2 border border-line bg-white px-4 text-[11px] font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink"
+              className="inline-flex h-9 items-center gap-2 border border-line bg-white px-4 text-[13px] font-medium uppercase tracking-[0.18em] text-ink transition-colors hover:border-ink"
             >
               <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />
               View in store
@@ -117,7 +117,7 @@ export default async function CollectionDetailPage({ params }: Props) {
                               <Link href={`/admin/products/${p.id}`} className="block max-w-[260px] truncate underline-offset-4 hover:underline">
                                 {p.name}
                               </Link>
-                              <p className="font-mono text-[11.5px] text-taupe">{p.sku}</p>
+                              <p className="font-mono text-[13.5px] text-taupe">{p.sku}</p>
                             </div>
                           </div>
                         </td>

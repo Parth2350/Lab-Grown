@@ -16,8 +16,8 @@ const MODES: { value: DiamondMode; title: string; description: string }[] = [
   { value: 'TOTAL_WEIGHT', title: 'Total-weight packages', description: 'Pre-set carat weight & quality options with a price add-on.' },
 ];
 
-const cell = 'field h-9 px-2.5 py-0 text-[12.5px]';
-const cellSelect = 'field h-9 cursor-pointer appearance-none py-0 pl-2.5 pr-7 text-[12.5px]';
+const cell = 'field h-9 px-2.5 py-0 text-[14.5px]';
+const cellSelect = 'field h-9 cursor-pointer appearance-none py-0 pl-2.5 pr-7 text-[14.5px]';
 
 function newOption(isDefault: boolean): OptionDraft {
   return { id: null, key: optionKey(), label: '', totalCarat: '', color: 'G', clarity: 'VS1', priceDelta: '', isDefault };
@@ -91,7 +91,7 @@ export function DiamondSection({ draft, update, errors, eligible, setEligible }:
               <label key={m.value} className={cn('flex cursor-pointer gap-3 border p-3 transition-colors focus-within:outline focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-gold', selected ? 'border-ink bg-ivory' : 'border-line hover:border-stone')}>
                 <input type="radio" name="diamondMode" value={m.value} checked={selected} onChange={() => setMode(m.value)} className="mt-0.5 h-4 w-4 shrink-0 accent-ink" />
                 <span>
-                  <span className="block text-[13px] text-ink">{m.title}</span>
+                  <span className="block text-[15px] text-ink">{m.title}</span>
                   <span className="text-xs text-taupe">{m.description}</span>
                 </span>
               </label>
@@ -132,24 +132,24 @@ export function DiamondSection({ draft, update, errors, eligible, setEligible }:
           </div>
           <div className="sm:col-span-3" aria-live="polite">
             {eligible.status === 'loading' && (
-              <p className="flex items-center gap-2 text-[13px] text-taupe">
+              <p className="flex items-center gap-2 text-[15px] text-taupe">
                 <span className="h-3.5 w-3.5 animate-spin rounded-full border border-current border-t-transparent" aria-hidden />
                 Checking inventory…
               </p>
             )}
             {eligible.status === 'done' && eligible.count > 0 && (
-              <p className="flex items-center gap-2 border border-success/25 bg-success/[0.06] px-3 py-2 text-[13px] text-success">
+              <p className="flex items-center gap-2 border border-success/25 bg-success/[0.06] px-3 py-2 text-[15px] text-success">
                 <Gem className="h-4 w-4 shrink-0" strokeWidth={1.4} aria-hidden />
                 {eligible.count.toLocaleString()} available diamond{eligible.count === 1 ? '' : 's'} fit this setting{eligible.cheapest != null && <> · from {formatMoney(eligible.cheapest)}</>}
               </p>
             )}
             {eligible.status === 'done' && eligible.count === 0 && (
-              <p className="flex items-center gap-2 border border-[#E6CF9E] bg-[#FBF3E1] px-3 py-2 text-[13px] text-[#7A5718]">
+              <p className="flex items-center gap-2 border border-[#E6CF9E] bg-[#FBF3E1] px-3 py-2 text-[15px] text-[#7A5718]">
                 <CircleAlert className="h-4 w-4 shrink-0" strokeWidth={1.4} aria-hidden />
                 No available diamonds match — shoppers won’t be able to complete this ring. Widen the range or add stones to inventory.
               </p>
             )}
-            {eligible.status === 'error' && <p className="text-[13px] text-danger">Couldn’t check diamond inventory right now.</p>}
+            {eligible.status === 'error' && <p className="text-[15px] text-danger">Couldn’t check diamond inventory right now.</p>}
             {eligible.status === 'idle' && <Hint>Enter a carat range to see how many loose diamonds are available.</Hint>}
           </div>
         </div>
@@ -159,9 +159,9 @@ export function DiamondSection({ draft, update, errors, eligible, setEligible }:
         <div className="mt-5">
           <ErrorText msg={errors.options} />
           <div className="overflow-x-auto border border-line">
-            <table className="w-full min-w-[760px] border-collapse text-left text-[13px] tabular-nums">
+            <table className="w-full min-w-[760px] border-collapse text-left text-[15px] tabular-nums">
               <thead className="border-b border-line bg-ivory/70">
-                <tr className="text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                <tr className="text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                   <th scope="col" className="w-[64px] px-3 py-2 font-medium">
                     Default
                   </th>
@@ -268,7 +268,7 @@ export function DiamondSection({ draft, update, errors, eligible, setEligible }:
                 })}
                 {draft.options.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-3 py-6 text-center text-[13px] text-taupe">
+                    <td colSpan={7} className="px-3 py-6 text-center text-[15px] text-taupe">
                       No packages yet.
                     </td>
                   </tr>

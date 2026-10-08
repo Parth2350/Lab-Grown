@@ -73,7 +73,7 @@ export function TimeChart({ labels, titles, series, kind, format, height = 240, 
   return (
     <div>
       {series.length > 1 && (
-        <ul className="mb-3 flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-charcoal" aria-label="Legend">
+        <ul className="mb-3 flex flex-wrap gap-x-4 gap-y-1 text-[14px] text-charcoal" aria-label="Legend">
           {series.map((s, si) => (
             <li key={s.key} className="flex items-center gap-1.5">
               {kind === 'line' ? <span className="h-0.5 w-3.5" style={{ background: VIZ.series[si] }} aria-hidden /> : <span className="h-2.5 w-2.5" style={{ background: VIZ.series[si] }} aria-hidden />}

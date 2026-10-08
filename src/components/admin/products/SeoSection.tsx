@@ -33,7 +33,7 @@ export function SeoSection({ draft, update, errors }: SectionProps) {
               rows={4}
               maxLength={320}
               aria-invalid={errors.seoDescription ? true : undefined}
-              className="field min-h-[96px] resize-y py-2.5 text-[13px] leading-relaxed"
+              className="field min-h-[96px] resize-y py-2.5 text-[15px] leading-relaxed"
               placeholder="Defaults to the product description"
             />
             <ErrorText msg={errors.seoDescription} />
@@ -41,23 +41,23 @@ export function SeoSection({ draft, update, errors }: SectionProps) {
         </div>
 
         <div>
-          <p className="mb-1.5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal">Search preview</p>
+          <p className="mb-1.5 text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal">Search preview</p>
           <div className="border border-line bg-white p-4" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
             <div className="flex items-center gap-2.5">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#dadce0] bg-[#f1f3f4] font-serif text-[13px] text-ink" aria-hidden>
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#dadce0] bg-[#f1f3f4] font-serif text-[15px] text-ink" aria-hidden>
                 {site.name.charAt(0)}
               </span>
               <div className="min-w-0 leading-tight">
-                <p className="truncate text-[14px] text-[#202124]">{site.name}</p>
-                <p className="truncate text-[12px] text-[#4d5156]">
+                <p className="truncate text-[16px] text-[#202124]">{site.name}</p>
+                <p className="truncate text-[14px] text-[#4d5156]">
                   {host} › products › {slug}
                 </p>
               </div>
             </div>
             <p className="mt-2 truncate text-[20px] leading-snug text-[#1a0dab]">{clip(title, 70)}</p>
-            <p className="mt-1 line-clamp-2 text-[14px] leading-[1.58] text-[#4d5156]">{clip(description, 160)}</p>
+            <p className="mt-1 line-clamp-2 text-[16px] leading-[1.58] text-[#4d5156]">{clip(description, 160)}</p>
           </div>
-          <p className="mt-2 break-all text-[11px] text-taupe">
+          <p className="mt-2 break-all text-[13px] text-taupe">
             {site.url}/products/{slug}
           </p>
         </div>

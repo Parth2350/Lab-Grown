@@ -26,7 +26,7 @@ export default async function SupportPage() {
       <div>
         <h2 className="font-serif text-3xl font-light">Concierge & support</h2>
         <p className="mt-1 max-w-2xl text-sm text-taupe">
-          Every {site.name} client has a dedicated specialist — for sizing, resizing, cleaning, a question about your certificate or a bespoke idea. Have your order number to hand and we’ll take it from there.
+          Every client has a dedicated specialist — for sizing, resizing, cleaning, a question about your certificate or a bespoke idea. Have your order number to hand and we’ll take it from there.
         </p>
       </div>
 
@@ -39,9 +39,9 @@ export default async function SupportPage() {
               className="group flex h-full flex-col border border-line p-6 transition-colors hover:border-ink"
             >
               <c.icon className="h-5 w-5 text-gold" strokeWidth={1.1} aria-hidden />
-              <span className="mt-5 text-[11px] uppercase tracking-[0.16em] text-taupe">{c.label}</span>
+              <span className="mt-5 text-[13px] uppercase tracking-[0.16em] text-taupe">{c.label}</span>
               <span className="mt-1 break-words font-serif text-xl text-ink">{c.value}</span>
-              <span className="mt-1 text-[12.5px] text-taupe">{c.note}</span>
+              <span className="mt-1 text-[14.5px] text-taupe">{c.note}</span>
             </a>
           </li>
         ))}
@@ -58,8 +58,8 @@ export default async function SupportPage() {
                 <Link href={g.href} className="group flex items-center gap-4 py-4 transition-colors hover:bg-porcelain/50 sm:px-2">
                   <g.icon className="h-4 w-4 shrink-0 text-gold" strokeWidth={1.25} aria-hidden />
                   <span className="min-w-0 flex-1">
-                    <span className="block text-[14px] text-ink">{g.label}</span>
-                    <span className="block text-[12.5px] text-taupe">{g.text}</span>
+                    <span className="block text-[16px] text-ink">{g.label}</span>
+                    <span className="block text-[14.5px] text-taupe">{g.text}</span>
                   </span>
                   <ArrowRight className="h-4 w-4 text-stone transition-all group-hover:translate-x-1 group-hover:text-ink" strokeWidth={1.25} aria-hidden />
                 </Link>
@@ -69,7 +69,7 @@ export default async function SupportPage() {
         </section>
         <aside className="bg-porcelain p-6">
           <h3 className="label-caps text-taupe">Studio hours</h3>
-          <dl className="mt-4 space-y-2 text-[13px]">
+          <dl className="mt-4 space-y-2 text-[15px]">
             {site.contact.hours.map((h) => (
               <div key={h.days} className="flex justify-between gap-4">
                 <dt className="text-charcoal">{h.days}</dt>
@@ -78,7 +78,7 @@ export default async function SupportPage() {
             ))}
           </dl>
           <h3 className="label-caps mt-8 text-taupe">The atelier</h3>
-          <address className="mt-3 text-[13px] not-italic leading-relaxed text-charcoal">
+          <address className="mt-3 text-[15px] not-italic leading-relaxed text-charcoal">
             {site.legalName}
             <br />
             {a.street}

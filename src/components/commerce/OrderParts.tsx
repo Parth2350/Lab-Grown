@@ -17,7 +17,7 @@ export type AddressLike = {
 export function AddressBlock({ address, className }: { address: AddressLike; className?: string }) {
   if (!address?.line1) return <p className={cn('text-sm text-taupe', className)}>No address on file</p>;
   return (
-    <address className={cn('text-[13.5px] not-italic leading-relaxed text-charcoal', className)}>
+    <address className={cn('text-[15.5px] not-italic leading-relaxed text-charcoal', className)}>
       <span className="block text-ink">
         {address.firstName} {address.lastName}
       </span>
@@ -82,7 +82,7 @@ export function OrderTotals({
       <div className="flex items-baseline justify-between gap-4 border-t border-line pt-4">
         <dt className="font-serif text-xl">Total</dt>
         <dd className="text-lg tabular-nums">
-          <span className="mr-1.5 text-[11px] uppercase tracking-[0.14em] text-taupe">{site.currency}</span>
+          <span className="mr-1.5 text-[13px] uppercase tracking-[0.14em] text-taupe">{site.currency}</span>
           {formatMoney(order.total, { exact: true })}
         </dd>
       </div>
@@ -144,7 +144,7 @@ export const STATUS_LABELS: Record<string, string> = {
 
 export function StatusBadge({ status, className }: { status: string; className?: string }) {
   return (
-    <span className={cn('inline-flex items-center whitespace-nowrap border px-2 py-1 text-[10px] font-medium uppercase leading-none tracking-[0.14em]', STATUS_STYLES[status] ?? 'border-line text-taupe', className)}>
+    <span className={cn('inline-flex items-center whitespace-nowrap border px-2 py-1 text-[12px] font-medium uppercase leading-none tracking-[0.14em]', STATUS_STYLES[status] ?? 'border-line text-taupe', className)}>
       {STATUS_LABELS[status] ?? status}
     </span>
   );

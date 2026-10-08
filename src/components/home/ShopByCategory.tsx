@@ -176,7 +176,7 @@ export async function ShopByCategory() {
               Shop by Category
             </h2>
           </div>
-          <p className="max-w-sm text-[15px] text-taupe md:text-right">From the proposal to the anniversary and every everyday moment between — find the silhouette made for yours.</p>
+          <p className="max-w-sm text-[17px] text-taupe md:text-right">From the proposal to the anniversary and every everyday moment between — find the silhouette made for yours.</p>
         </div>
 
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-5">
@@ -202,10 +202,10 @@ export async function ShopByCategory() {
                       />
                     </span>
                     <span className={cn('relative block px-3 pb-3.5 xs:px-4 xs:pb-4 sm:px-5 sm:pb-5', feature ? 'lg:px-8 lg:pb-8' : 'lg:px-6 lg:pb-6')}>
-                      <span className="block text-[10px] font-medium uppercase tracking-[0.2em] text-taupe">{pluralize(counts[i], 'design')}</span>
+                      <span className="block text-[12px] font-medium uppercase tracking-[0.2em] text-taupe">{pluralize(counts[i], 'design')}</span>
                       <span className={cn('mt-1.5 block font-serif leading-[1.15] text-ink', feature ? 'text-[1.6rem] sm:text-3xl lg:text-[2.6rem]' : 'text-[1rem] xs:text-[1.1rem] sm:text-xl lg:text-[1.45rem]')}>{t.title}</span>
-                      {feature && t.blurb && <span className="mt-3 hidden max-w-sm text-[14px] leading-relaxed text-charcoal/75 sm:block">{t.blurb}</span>}
-                      <span className="label-caps mt-2.5 inline-flex items-center gap-2 whitespace-nowrap text-[10px] tracking-[0.08em] text-ink xs:mt-3 xs:tracking-[0.16em] sm:text-[11px]">
+                      {feature && t.blurb && <span className="mt-3 hidden max-w-sm text-[16px] leading-relaxed text-charcoal/75 sm:block">{t.blurb}</span>}
+                      <span className="label-caps mt-2.5 inline-flex items-center gap-2 whitespace-nowrap text-[12px] tracking-[0.08em] text-ink xs:mt-3 xs:tracking-[0.16em] sm:text-[13px]">
                         <span className="link-underline group-hover:[background-size:100%_1px]">View collection</span>
                         <ArrowRight className="hidden h-3 w-3 transition-transform duration-300 group-hover:translate-x-1 xs:block" strokeWidth={1.5} aria-hidden />
                       </span>

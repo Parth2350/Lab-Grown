@@ -34,7 +34,7 @@ export function PageHeader({
         )}
         {eyebrow && <p className="eyebrow mb-1">{eyebrow}</p>}
         <h1 className="font-serif text-[1.9rem] leading-tight text-ink">{title}</h1>
-        {description && <p className="mt-1 max-w-2xl text-[13px] text-taupe">{description}</p>}
+        {description && <p className="mt-1 max-w-2xl text-[15px] text-taupe">{description}</p>}
       </div>
       {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
     </header>
@@ -65,7 +65,7 @@ export function Panel({
       {(title || actions) && (
         <div className="flex flex-wrap items-start justify-between gap-3 border-b border-line px-5 py-3.5">
           <div className="min-w-0">
-            {title && <h2 className="font-sans text-[13px] font-medium uppercase tracking-[0.12em] text-ink">{title}</h2>}
+            {title && <h2 className="font-sans text-[15px] font-medium uppercase tracking-[0.12em] text-ink">{title}</h2>}
             {description && <p className="mt-0.5 text-xs text-taupe">{description}</p>}
           </div>
           {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
@@ -79,7 +79,7 @@ export function Panel({
 
 export function DescList({ items, className }: { items: [ReactNode, ReactNode][]; className?: string }) {
   return (
-    <dl className={cn('grid grid-cols-[minmax(110px,auto)_1fr] gap-x-4 gap-y-2 text-[13px]', className)}>
+    <dl className={cn('grid grid-cols-[minmax(110px,auto)_1fr] gap-x-4 gap-y-2 text-[15px]', className)}>
       {items.map(([k, v], i) => (
         <div key={i} className="contents">
           <dt className="text-taupe">{k}</dt>
@@ -114,7 +114,7 @@ const DOTS: Record<Tone, string> = {
 
 export function Badge({ tone = 'neutral', children, dot, className, title }: { tone?: Tone; children: ReactNode; dot?: boolean; className?: string; title?: string }) {
   return (
-    <span title={title} className={cn('inline-flex items-center gap-1.5 whitespace-nowrap border px-2 py-0.5 text-[11px] font-medium leading-4', TONES[tone], className)}>
+    <span title={title} className={cn('inline-flex items-center gap-1.5 whitespace-nowrap border px-2 py-0.5 text-[13px] font-medium leading-4', TONES[tone], className)}>
       {dot && <span className={cn('h-1.5 w-1.5 rounded-full', DOTS[tone])} aria-hidden />}
       {children}
     </span>
@@ -177,7 +177,7 @@ export function EmptyState({ icon, title, description, action, className }: { ic
     <div className={cn('flex flex-col items-center justify-center px-6 py-14 text-center', className)}>
       {icon && <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-full border border-line bg-ivory text-taupe">{icon}</div>}
       <p className="font-serif text-xl text-ink">{title}</p>
-      {description && <p className="mt-1 max-w-sm text-[13px] text-taupe">{description}</p>}
+      {description && <p className="mt-1 max-w-sm text-[15px] text-taupe">{description}</p>}
       {action && <div className="mt-5">{action}</div>}
     </div>
   );
@@ -190,10 +190,10 @@ export function TableWrap({ children, className }: { children: ReactNode; classN
 
 /** Shared table class names so every list looks the same. */
 export const table = {
-  base: 'w-full min-w-[720px] border-collapse text-left text-[13px] tabular-nums',
+  base: 'w-full min-w-[720px] border-collapse text-left text-[15px] tabular-nums',
   head: 'border-b border-line bg-ivory/70',
-  th: 'whitespace-nowrap px-4 py-2.5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe',
-  thRight: 'whitespace-nowrap px-4 py-2.5 text-right text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe',
+  th: 'whitespace-nowrap px-4 py-2.5 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe',
+  thRight: 'whitespace-nowrap px-4 py-2.5 text-right text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe',
   row: 'border-b border-line/70 last:border-0 transition-colors hover:bg-ivory',
   td: 'px-4 py-3 align-middle text-ink',
   tdRight: 'px-4 py-3 text-right align-middle text-ink',
@@ -301,13 +301,13 @@ export function Tabs({
             aria-selected={isActive}
             href={withParams(basePath, params, { [param]: t.value || undefined })}
             className={cn(
-              '-mb-px inline-flex shrink-0 items-center gap-2 border-b-2 px-3 py-2.5 text-[12.5px] transition-colors',
+              '-mb-px inline-flex shrink-0 items-center gap-2 border-b-2 px-3 py-2.5 text-[14.5px] transition-colors',
               isActive ? 'border-ink text-ink' : 'border-transparent text-taupe hover:text-ink',
             )}
           >
             {t.label}
             {t.count != null && (
-              <span className={cn('min-w-5 px-1.5 text-center text-[10.5px] leading-[18px] tabular-nums', isActive ? 'bg-ink text-ivory' : 'bg-porcelain text-charcoal')}>
+              <span className={cn('min-w-5 px-1.5 text-center text-[12.5px] leading-[18px] tabular-nums', isActive ? 'bg-ink text-ivory' : 'bg-porcelain text-charcoal')}>
                 {formatNumber(t.count)}
               </span>
             )}
@@ -328,8 +328,8 @@ export function FilterBar({ children, action, className }: { children: ReactNode
 }
 
 /** Small admin-density input classes (pair with the global `field` utility). */
-export const fieldSm = 'field h-9 px-3 py-0 text-[13px]';
-export const selectSm = 'field h-9 cursor-pointer appearance-none py-0 pl-3 pr-8 text-[13px]';
+export const fieldSm = 'field h-9 px-3 py-0 text-[15px]';
+export const selectSm = 'field h-9 cursor-pointer appearance-none py-0 pl-3 pr-8 text-[15px]';
 export const selectChevron = {
   backgroundImage:
     "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23141311' stroke-width='1.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E\")",
@@ -340,7 +340,7 @@ export const selectChevron = {
 
 export function FilterLabel({ htmlFor, children }: { htmlFor: string; children: ReactNode }) {
   return (
-    <label htmlFor={htmlFor} className="mb-1 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+    <label htmlFor={htmlFor} className="mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
       {children}
     </label>
   );
@@ -350,7 +350,7 @@ export function FilterLabel({ htmlFor, children }: { htmlFor: string; children: 
 export function MiniStat({ label, value, hint }: { label: string; value: ReactNode; hint?: ReactNode }) {
   return (
     <div>
-      <p className="text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">{label}</p>
+      <p className="text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">{label}</p>
       <p className="mt-1 text-lg font-normal text-ink">{value}</p>
       {hint && <p className="text-xs text-taupe">{hint}</p>}
     </div>

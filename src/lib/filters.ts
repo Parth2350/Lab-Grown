@@ -253,7 +253,7 @@ export function matchesScope(r: IndexRow, s: Scope) {
 export function matchesQuery(r: IndexRow, pq: ParsedQuery) {
   if (pq.sku) {
     const norm = pq.sku.replace(/^SKU-?/, '');
-    if (/^(AUR|LGD)-/.test(norm)) return r.sku.toUpperCase().includes(norm);
+    if (/^(TVJ|AUR|LGD)-/.test(norm)) return r.sku.toUpperCase().includes(norm);
     const digits = norm.replace(/\D/g, '');
     return digits.length >= 3 && r.sku.includes(digits);
   }

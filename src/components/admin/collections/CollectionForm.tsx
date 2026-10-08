@@ -79,7 +79,7 @@ export function CollectionForm({ collection, nextPosition = 0 }: { collection?: 
           </div>
           <p className={`${hintCls} sm:pt-6`}>Lower numbers appear first wherever collections are listed.</p>
         </div>
-        <label className="flex cursor-pointer items-start gap-3 border border-line bg-ivory/60 px-4 py-3 text-[13px]">
+        <label className="flex cursor-pointer items-start gap-3 border border-line bg-ivory/60 px-4 py-3 text-[15px]">
           <input type="checkbox" name="isFeatured" defaultChecked={collection?.isFeatured ?? false} className="mt-0.5 h-4 w-4 accent-ink" />
           <span>
             <span className="font-medium text-ink">Featured</span>

@@ -30,7 +30,7 @@ export function PageIntro({
       <div className={cn('mt-10 max-w-3xl md:mt-14', align === 'center' && 'mx-auto text-center')}>
         {eyebrow && <p className="eyebrow mb-4">{eyebrow}</p>}
         <h1 className="h-display text-balance">{title}</h1>
-        {intro && <div className={cn('mt-6 max-w-2xl text-[16px] leading-relaxed text-taupe md:text-[17px]', align === 'center' && 'mx-auto')}>{intro}</div>}
+        {intro && <div className={cn('mt-6 max-w-2xl text-[18px] leading-relaxed text-taupe md:text-[19px]', align === 'center' && 'mx-auto')}>{intro}</div>}
         {children}
       </div>
     </section>
@@ -77,7 +77,7 @@ export function ArtPanel({
         )}
       </div>
       {caption && (
-        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 text-[11px] uppercase tracking-[0.16em] text-taupe sm:p-6">
+        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 text-[13px] uppercase tracking-[0.16em] text-taupe sm:p-6">
           {caption}
         </figcaption>
       )}
@@ -126,7 +126,7 @@ export function NumberedSteps({ steps, className, columns = 4 }: { steps: Step[]
             {s.icon && <span className="text-taupe">{s.icon}</span>}
           </div>
           <h3 className="mt-8 font-serif text-[1.45rem] leading-snug">{s.title}</h3>
-          <p className="mt-3 text-[14px] leading-relaxed text-taupe">{s.text}</p>
+          <p className="mt-3 text-[16px] leading-relaxed text-taupe">{s.text}</p>
         </li>
       ))}
     </ol>
@@ -155,7 +155,7 @@ export function CtaBand({
       <div className="container-x flex flex-col items-center py-16 text-center md:py-24">
         {eyebrow && <p className={cn('eyebrow mb-4', dark && 'text-gold-light')}>{eyebrow}</p>}
         <h2 className={cn('h-section max-w-3xl text-balance', dark && 'text-ivory')}>{title}</h2>
-        {text && <p className={cn('mt-5 max-w-xl text-[15px] leading-relaxed', dark ? 'text-ivory/70' : 'text-taupe')}>{text}</p>}
+        {text && <p className={cn('mt-5 max-w-xl text-[17px] leading-relaxed', dark ? 'text-ivory/70' : 'text-taupe')}>{text}</p>}
         {children && <div className="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">{children}</div>}
       </div>
     </section>
@@ -169,7 +169,7 @@ export function MetaList({ items, className }: { items: { label: string; value: 
       {items.map((it) => (
         <div key={it.label} className="flex flex-col gap-1 py-4 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
           <dt className="label-caps text-taupe">{it.label}</dt>
-          <dd className="text-[14px] text-ink sm:text-right">{it.value}</dd>
+          <dd className="text-[16px] text-ink sm:text-right">{it.value}</dd>
         </div>
       ))}
     </dl>

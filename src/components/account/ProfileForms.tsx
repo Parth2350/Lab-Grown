@@ -10,7 +10,7 @@ import { PasswordInput } from './PasswordInput';
 
 function Status({ ok, error }: { ok?: string | null; error?: string | null }) {
   return (
-    <p className="min-h-[1.25rem] text-[13px]" role="status" aria-live="polite">
+    <p className="min-h-[1.25rem] text-[15px]" role="status" aria-live="polite">
       {error ? (
         <span className="flex items-center gap-1.5 text-danger">
           <AlertCircle className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> {error}

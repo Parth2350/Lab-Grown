@@ -38,7 +38,7 @@ export function OrderTimeline({
               )}
               <span
                 className={cn(
-                  'relative z-[1] flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[10px]',
+                  'relative z-[1] flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[12px]',
                   done ? 'border-ink bg-ink text-ivory' : 'border-stone bg-ivory text-taupe',
                   isCurrent && 'ring-4 ring-gold-pale',
                 )}
@@ -47,8 +47,8 @@ export function OrderTimeline({
                 {done ? <Check className="h-3 w-3" strokeWidth={2} /> : i + 1}
               </span>
               <div className="sm:mt-3">
-                <p className={cn('text-[13px]', done ? 'text-ink' : 'text-taupe')}>{s.label}</p>
-                {date && done && <p className="text-[12px] text-taupe">{formatDate(date, { month: 'short', day: 'numeric' })}</p>}
+                <p className={cn('text-[15px]', done ? 'text-ink' : 'text-taupe')}>{s.label}</p>
+                {date && done && <p className="text-[14px] text-taupe">{formatDate(date, { month: 'short', day: 'numeric' })}</p>}
                 <span className="sr-only">{done ? (isCurrent ? '(current)' : '(complete)') : '(upcoming)'}</span>
               </div>
             </li>
@@ -56,7 +56,7 @@ export function OrderTimeline({
         })}
       </ol>
       {terminal && (
-        <p className="mt-6 flex items-center gap-2 border border-danger/20 bg-danger/5 px-4 py-3 text-[13px] text-danger">
+        <p className="mt-6 flex items-center gap-2 border border-danger/20 bg-danger/5 px-4 py-3 text-[15px] text-danger">
           <X className="h-4 w-4" strokeWidth={1.5} aria-hidden />
           {status === 'CANCELLED' ? 'This order was cancelled. No payment was taken, or it has been released.' : 'This order has been refunded to the original payment method.'}
         </p>

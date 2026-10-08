@@ -5,7 +5,7 @@ import { assertSameOrigin, clientIp, errorResponse, finalizeDemo, rateLimit, rea
 
 export const dynamic = 'force-dynamic';
 
-const schema = z.object({ orderNumber: z.string().trim().regex(/^AUR-\d{6}$/), token: z.string().max(64).nullish() });
+const schema = z.object({ orderNumber: z.string().trim().regex(/^[A-Z]{3}-\d{6}$/), token: z.string().max(64).nullish() });
 
 /** Test-mode payment confirmation. Disabled automatically when Razorpay keys are configured. */
 export async function POST(req: Request) {

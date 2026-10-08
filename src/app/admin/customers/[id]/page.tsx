@@ -108,18 +108,18 @@ export default async function CustomerDetailPage({ params }: Props) {
 
           <Panel title="Addresses" description={c.addresses.length ? `${c.addresses.length} saved` : undefined}>
             {c.addresses.length === 0 ? (
-              <p className="flex items-center gap-2 text-[13px] text-taupe">
+              <p className="flex items-center gap-2 text-[15px] text-taupe">
                 <MapPin className="h-4 w-4" strokeWidth={1.25} aria-hidden /> No saved addresses.
               </p>
             ) : (
               <ul className="grid gap-4 sm:grid-cols-2">
                 {c.addresses.map((a) => (
                   <li key={a.id} className="border border-line p-4">
-                    <p className="mb-2 flex flex-wrap items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                    <p className="mb-2 flex flex-wrap items-center gap-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                       {a.label || 'Address'}
                       {a.isDefault && <Badge tone="gold">Default</Badge>}
                     </p>
-                    <address className="text-[13px] not-italic leading-relaxed text-ink">
+                    <address className="text-[15px] not-italic leading-relaxed text-ink">
                       <span className="block font-medium">
                         {a.firstName} {a.lastName}
                       </span>
@@ -167,7 +167,7 @@ export default async function CustomerDetailPage({ params }: Props) {
 
           <Panel title="Access" description="Administrators can open this admin panel.">
             <div className="space-y-3">
-              <p className="text-[13px] text-charcoal">
+              <p className="text-[15px] text-charcoal">
                 {who} is {c.role === 'ADMIN' ? 'an administrator' : 'a customer'}.
               </p>
               <ActionButton
@@ -188,7 +188,7 @@ export default async function CustomerDetailPage({ params }: Props) {
               >
                 {nextRole === 'ADMIN' ? 'Make administrator' : 'Remove admin access'}
               </ActionButton>
-              <p className="text-[11.5px] leading-relaxed text-taupe">{roleBlocked ?? 'Role changes take effect on the user’s next sign-in.'}</p>
+              <p className="text-[13.5px] leading-relaxed text-taupe">{roleBlocked ?? 'Role changes take effect on the user’s next sign-in.'}</p>
             </div>
           </Panel>
         </aside>

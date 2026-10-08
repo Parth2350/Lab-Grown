@@ -61,7 +61,7 @@ export function PopularSearchesForm({ initial }: { initial: string[] }) {
         {list.items.length ? (
           <ul className="flex flex-wrap gap-2" aria-label="Popular searches, in display order">
             {list.items.map((item, i) => (
-              <li key={item.key} className={cn('inline-flex items-stretch border bg-ivory text-[13px] text-ink', errors.at(i) ? 'border-danger' : 'border-line')}>
+              <li key={item.key} className={cn('inline-flex items-stretch border bg-ivory text-[15px] text-ink', errors.at(i) ? 'border-danger' : 'border-line')}>
                 <input type="hidden" name="items" value={item.text} />
                 <button
                   type="button"

@@ -1,8 +1,8 @@
-# Aurevia — Lab-Grown Diamond Fine Jewelry
+# The V Jewels — Lab-Grown Diamond Fine Jewelry
 
 A production-grade luxury jewelry storefront and admin, built with **Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS · PostgreSQL · Prisma · NextAuth · Zustand · Framer Motion**.
 
-The brand ("Aurevia") is fictional. Change it in one place: `src/config/site.ts`.
+Brand name, contact details and copy live in `src/config/site.ts`; logo files (cut from the master artwork, transparent PNGs in dark and light versions) are in `public/brand/`, and the favicon / app icons in `src/app/`.
 
 ---
 
@@ -54,7 +54,7 @@ Change or remove these before going live (`prisma/seed.ts`).
 
 **Storefront** — sticky header with mega-menus, search overlay (recent + popular searches, live results across products, categories, collections and shapes), cart drawer, account menu, mobile navigation, marquee announcement bar, editorial homepage, collection pages with faceted filtering (price, metal type, purity, shape, centre and total carat, setting, style, collection), smart search ("2ct oval halo", SKUs), sort, load-more and infinite scroll, mobile bottom-sheet filters.
 
-**Product pages** — gallery with hover zoom, fullscreen, swipe, a drag-to-rotate 360° view and video support; live pricing as purity, metal colour, diamond and ring size change; a **diamond configurator** that searches certified loose diamonds by carat, colour, clarity, cut, lab and price; quick view; wishlist, compare, share; reviews with moderation; related and recently viewed products.
+**Product pages** — gallery with hover zoom, fullscreen, swipe and video support; live pricing as purity, metal colour, diamond and ring size change; a **three-step centre-diamond chooser** (shape → carat size → Good / Better / Best quality) that picks the best-value certified stone automatically, with a full loose-diamond search (carat, colour, clarity, cut, lab, price) for shoppers who want a specific stone; quick view; wishlist, compare, share; reviews with moderation; related and recently viewed products.
 
 **Commerce** — persistent cart and wishlist (localStorage, synced to the database when signed in), compare up to four pieces, coupon codes, server-side re-pricing of every line at checkout, Razorpay (or demo) payments, stock and diamond allocation on payment, order confirmation.
 
@@ -118,9 +118,9 @@ What keeps it fast: server components by default; product art below the fold mou
 
 ## Deploying
 
-1. Provision PostgreSQL (Neon, Supabase, RDS…) and set the env vars above.
-2. `npx prisma migrate deploy` (and `npm run db:seed` for demo data).
-3. `npm run build && npm start`, or deploy to Vercel (build command `npm run build`).
+Live on Vercel, built from the `main` branch on GitHub — every push redeploys. Vercel runs `npm run vercel-build` (`scripts/vercel-build.mjs`): it applies pending migrations, loads the demo catalogue only when the database is empty, then builds. Needed env vars: a Postgres connection (the Neon integration provides it), `NEXTAUTH_SECRET`, and `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` for the first deploy's admin account. `BLOB_READ_WRITE_TOKEN` (Vercel Blob) stores admin uploads.
+
+Elsewhere: provision PostgreSQL, set the env vars above, run `npx prisma migrate deploy`, then `npm run build && npm start`.
 
 ## Scripts
 

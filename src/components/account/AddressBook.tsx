@@ -76,13 +76,13 @@ function AddressEditor({
         withLabel
       />
       {allowDefault && (
-        <label className="mt-6 flex cursor-pointer items-center gap-3 text-[13.5px] text-charcoal">
+        <label className="mt-6 flex cursor-pointer items-center gap-3 text-[15.5px] text-charcoal">
           <input type="checkbox" checked={makeDefault} disabled={!!initial?.isDefault} onChange={(e) => setMakeDefault(e.target.checked)} className="h-4 w-4 accent-ink" />
           Use as my default shipping address
         </label>
       )}
       {error && (
-        <p role="alert" className="mt-5 flex items-start gap-2 text-[13px] text-danger">
+        <p role="alert" className="mt-5 flex items-start gap-2 text-[15px] text-danger">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden /> {error}
         </p>
       )}
@@ -194,11 +194,11 @@ export function AddressBook({ initial }: { initial: BookAddress[] }) {
             ) : (
               <li key={a.id} className={a.isDefault ? 'flex flex-col border border-ink/70 p-5 sm:p-6' : 'flex flex-col border border-line p-5 sm:p-6'}>
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-charcoal">{a.label || 'Address'}</p>
-                  {a.isDefault && <span className="border border-gold/40 px-1.5 py-0.5 text-[9.5px] uppercase tracking-[0.16em] text-gold-deep">Default</span>}
+                  <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-charcoal">{a.label || 'Address'}</p>
+                  {a.isDefault && <span className="border border-gold/40 px-1.5 py-0.5 text-[11.5px] uppercase tracking-[0.16em] text-gold-deep">Default</span>}
                 </div>
                 <AddressBlock address={a} />
-                <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-5 text-[11px] uppercase tracking-[0.14em]">
+                <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-5 text-[13px] uppercase tracking-[0.14em]">
                   <button type="button" onClick={() => setEditing(a.id)} className="text-ink underline-offset-4 hover:underline">
                     Edit
                   </button>
@@ -209,7 +209,7 @@ export function AddressBook({ initial }: { initial: BookAddress[] }) {
                   )}
                   {confirming === a.id ? (
                     <span className="flex items-center gap-3" role="group" aria-label="Confirm removal">
-                      <span className="normal-case tracking-normal text-[12.5px] text-charcoal">Remove this address?</span>
+                      <span className="normal-case tracking-normal text-[14.5px] text-charcoal">Remove this address?</span>
                       <button type="button" onClick={() => remove(a.id)} disabled={busyId === a.id} className="text-danger underline-offset-4 hover:underline">
                         Remove
                       </button>

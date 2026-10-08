@@ -15,7 +15,7 @@ function Group({ title, active, defaultOpen, children }: { title: string; active
       <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="flex w-full items-center justify-between py-4 text-left">
         <span className="label-caps flex items-center gap-2 text-ink">
           {title}
-          {active > 0 && <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[9px] text-ivory">{active}</span>}
+          {active > 0 && <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[11px] text-ivory">{active}</span>}
         </span>
         {open ? <Minus className="h-3.5 w-3.5 text-taupe" strokeWidth={1.25} /> : <Plus className="h-3.5 w-3.5 text-taupe" strokeWidth={1.25} />}
       </button>
@@ -46,12 +46,12 @@ function PriceInputs() {
       <label className="sr-only" htmlFor="price-min">
         Minimum price
       </label>
-      <input id="price-min" inputMode="numeric" placeholder="$ Min" value={lo} onChange={(e) => setLo(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[13px]" />
+      <input id="price-min" inputMode="numeric" placeholder="$ Min" value={lo} onChange={(e) => setLo(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
       <span className="text-taupe">–</span>
       <label className="sr-only" htmlFor="price-max">
         Maximum price
       </label>
-      <input id="price-max" inputMode="numeric" placeholder="$ Max" value={hi} onChange={(e) => setHi(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[13px]" />
+      <input id="price-max" inputMode="numeric" placeholder="$ Max" value={hi} onChange={(e) => setHi(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
       <button type="submit" className="label-caps h-9 shrink-0 border border-ink px-3 transition-colors hover:bg-ink hover:text-ivory">
         Go
       </button>
@@ -82,7 +82,7 @@ export function FilterPanel({ facets, className }: { facets: Facets; className?:
                       aria-pressed={isOn(o.value)}
                       disabled={!o.count && !isOn(o.value)}
                       className={cn(
-                        'flex w-full flex-col items-center gap-1 border px-1 py-2.5 text-[11px] transition-colors disabled:opacity-30',
+                        'flex w-full flex-col items-center gap-1 border px-1 py-2.5 text-[13px] transition-colors disabled:opacity-30',
                         isOn(o.value) ? 'border-ink bg-white text-ink' : 'border-line text-taupe hover:border-stone hover:text-ink',
                       )}
                     >
@@ -108,7 +108,7 @@ export function FilterPanel({ facets, className }: { facets: Facets; className?:
                       type="button"
                       onClick={() => toggle('purity', o.value)}
                       aria-pressed={isOn(o.value)}
-                      className={cn('h-9 min-w-[52px] border px-3 text-[12px] transition-colors', isOn(o.value) ? 'border-ink bg-ink text-ivory' : 'border-line hover:border-ink')}
+                      className={cn('h-9 min-w-[52px] border px-3 text-[14px] transition-colors', isOn(o.value) ? 'border-ink bg-ink text-ivory' : 'border-line hover:border-ink')}
                     >
                       {o.label}
                     </button>
@@ -132,14 +132,14 @@ export function FilterPanel({ facets, className }: { facets: Facets; className?:
                       aria-checked={isOn(o.value)}
                       onClick={() => toggle(g.key as FilterKey, o.value)}
                       disabled={!o.count && !isOn(o.value)}
-                      className="group flex w-full items-center gap-3 py-1.5 text-left text-[13.5px] text-charcoal transition-colors hover:text-ink disabled:opacity-40"
+                      className="group flex w-full items-center gap-3 py-1.5 text-left text-[15.5px] text-charcoal transition-colors hover:text-ink disabled:opacity-40"
                     >
                       <span className={cn('flex h-4 w-4 shrink-0 items-center justify-center border transition-colors', isOn(o.value) ? 'border-ink bg-ink' : 'border-stone group-hover:border-ink')}>
                         {isOn(o.value) && <Check className="h-3 w-3 text-ivory" strokeWidth={2} />}
                       </span>
                       {swatch && <span className="h-4 w-4 shrink-0 rounded-full ring-1 ring-line" style={{ background: swatch }} />}
                       <span className="flex-1">{o.label}</span>
-                      <span className="text-[11px] text-taupe">{o.count}</span>
+                      <span className="text-[13px] text-taupe">{o.count}</span>
                     </button>
                   </li>
                 );

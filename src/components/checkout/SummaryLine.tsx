@@ -32,22 +32,22 @@ export function SummaryLine({ line, issue }: { line: SummaryLineData; issue?: st
           carat={line.carat}
           sizes="80px"
         />
-        <span className="absolute -right-2 -top-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-charcoal px-1 text-[10px] font-medium text-ivory" aria-label={`Quantity ${line.quantity}`}>
+        <span className="absolute -right-2 -top-2 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-charcoal px-1 text-[12px] font-medium text-ivory" aria-label={`Quantity ${line.quantity}`}>
           {line.quantity}
         </span>
       </div>
       <div className="min-w-0 flex-1">
-        <p className="font-serif text-[16px] leading-snug">{line.name}</p>
-        <p className="mt-0.5 text-[12px] text-taupe">
+        <p className="font-serif text-[18px] leading-snug">{line.name}</p>
+        <p className="mt-0.5 text-[14px] text-taupe">
           {line.purity} {label.metal(line.metalColor)}
         </p>
         {line.details.filter(Boolean).map((d) => (
-          <p key={d} className="text-[12px] leading-snug text-taupe">
+          <p key={d} className="text-[14px] leading-snug text-taupe">
             {d}
           </p>
         ))}
         {issue && (
-          <p className="mt-1.5 flex items-start gap-1.5 text-[12px] text-danger" role="alert">
+          <p className="mt-1.5 flex items-start gap-1.5 text-[14px] text-danger" role="alert">
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={1.5} aria-hidden />
             {issue}
           </p>

@@ -64,14 +64,14 @@ export function ReturnsPanel({ eligible, requests, returnsDays, preselect }: { e
       </div>
 
       {done && (
-        <p role="status" className="flex items-start gap-3 border border-success/30 bg-success/5 px-4 py-3 text-[13px] text-success">
+        <p role="status" className="flex items-start gap-3 border border-success/30 bg-success/5 px-4 py-3 text-[15px] text-success">
           <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
           Your return request for order {done} has been received. Our concierge will be in touch within one business day with next steps.
         </p>
       )}
 
       {preselectMissing && !done && (
-        <p className="flex items-start gap-3 border border-line bg-porcelain px-4 py-3 text-[13px] text-charcoal">
+        <p className="flex items-start gap-3 border border-line bg-porcelain px-4 py-3 text-[15px] text-charcoal">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} aria-hidden />
           Order {preselect} isn’t eligible for a new return — it may already have a request open, or be outside the {returnsDays}-day window.
         </p>
@@ -93,7 +93,7 @@ export function ReturnsPanel({ eligible, requests, returnsDays, preselect }: { e
         ) : (
           <form onSubmit={submit} noValidate className="mt-5 space-y-6">
             <fieldset>
-              <legend className="mb-3 text-[11px] font-medium uppercase tracking-[0.14em] text-charcoal">Choose an order</legend>
+              <legend className="mb-3 text-[13px] font-medium uppercase tracking-[0.14em] text-charcoal">Choose an order</legend>
               <div className="grid gap-3 md:grid-cols-2">
                 {eligible.map((o) => {
                   const checked = orderNumber === o.number;
@@ -106,13 +106,13 @@ export function ReturnsPanel({ eligible, requests, returnsDays, preselect }: { e
                       <span className={cn('mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border', checked ? 'border-ink' : 'border-stone')} aria-hidden>
                         <span className={cn('h-2 w-2 rounded-full bg-ink transition-transform', checked ? 'scale-100' : 'scale-0')} />
                       </span>
-                      <span className="min-w-0 text-[13px]">
+                      <span className="min-w-0 text-[15px]">
                         <span className="flex flex-wrap items-baseline justify-between gap-2">
                           <span className="text-ink">{o.number}</span>
                           <span className="tabular-nums text-charcoal">{formatMoney(o.total, { exact: true })}</span>
                         </span>
                         <span className="block truncate text-taupe">{o.items.join(', ')}</span>
-                        <span className="mt-1 block text-[12px] text-taupe">
+                        <span className="mt-1 block text-[14px] text-taupe">
                           Delivered {formatDate(o.deliveredAt)} · return by <span className="text-charcoal">{formatDate(o.deadline)}</span>
                         </span>
                       </span>
@@ -163,12 +163,12 @@ export function ReturnsPanel({ eligible, requests, returnsDays, preselect }: { e
                   maxLength={1000}
                   placeholder="Tell us a little more — if it’s a sizing issue, we may be able to resize instead."
                 />
-                <p className="mt-1 text-right text-[11px] text-taupe">{details.length}/1000</p>
+                <p className="mt-1 text-right text-[13px] text-taupe">{details.length}/1000</p>
               </div>
             </div>
 
             {error && (
-              <p role="alert" className="flex items-start gap-2 text-[13px] text-danger">
+              <p role="alert" className="flex items-start gap-2 text-[15px] text-danger">
                 <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden /> {error}
               </p>
             )}
@@ -190,14 +190,14 @@ export function ReturnsPanel({ eligible, requests, returnsDays, preselect }: { e
             {requests.map((r) => (
               <li key={r.id} className="flex flex-wrap items-start justify-between gap-4 py-4">
                 <div className="min-w-0">
-                  <p className="text-[14px] text-ink">
+                  <p className="text-[16px] text-ink">
                     <Link href={`/account/orders/${r.orderNumber}`} className="underline-offset-4 hover:underline">
                       {r.orderNumber}
                     </Link>{' '}
                     <span className="text-taupe">· requested {formatDate(r.createdAt)}</span>
                   </p>
-                  <p className="text-[13px] text-charcoal">{r.reason}</p>
-                  {r.details && <p className="mt-1 max-w-xl text-[12.5px] text-taupe">{r.details}</p>}
+                  <p className="text-[15px] text-charcoal">{r.reason}</p>
+                  {r.details && <p className="mt-1 max-w-xl text-[14.5px] text-taupe">{r.details}</p>}
                 </div>
                 <StatusBadge status={r.status} />
               </li>

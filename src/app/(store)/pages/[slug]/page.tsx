@@ -61,7 +61,7 @@ export default async function ContentPage({ params }: Props) {
       <>
         <nav aria-label="FAQ topics" className="mb-12 flex flex-wrap gap-2">
           {FAQ_GROUPS.map((g) => (
-            <a key={g.id} href={`#${g.id}`} className="inline-flex h-10 items-center border border-line bg-white px-4 text-[11px] uppercase tracking-[0.14em] text-charcoal transition-colors hover:border-ink">
+            <a key={g.id} href={`#${g.id}`} className="inline-flex h-10 items-center border border-line bg-white px-4 text-[13px] uppercase tracking-[0.14em] text-charcoal transition-colors hover:border-ink">
               {g.title}
             </a>
           ))}
@@ -80,7 +80,7 @@ export default async function ContentPage({ params }: Props) {
       </>
     );
   } else if (page.slug === 'manufacturing') {
-    intro = `Every ${site.name} piece is created by our own artisans, in our own workshop — from the first pencil sketch to the moment it is placed in its box.`;
+    intro = `Every piece at ${site.name} is created by our own artisans, in our own workshop — from the first pencil sketch to the moment it is placed in its box.`;
     hero = <ManufacturingHero />;
     body = <ManufacturingBody />;
   }

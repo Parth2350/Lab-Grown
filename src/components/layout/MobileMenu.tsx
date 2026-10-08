@@ -32,7 +32,7 @@ export function MobileMenu() {
                     <button
                       onClick={() => setExpanded(isOpen ? null : item.href)}
                       aria-expanded={isOpen}
-                      className="flex w-full items-center justify-between py-4 text-left text-[12px] font-medium uppercase tracking-[0.16em]"
+                      className="flex w-full items-center justify-between py-4 text-left text-[14px] font-medium uppercase tracking-[0.16em]"
                     >
                       {item.label}
                       <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', isOpen && 'rotate-180')} strokeWidth={1.25} />
@@ -52,8 +52,8 @@ export function MobileMenu() {
                                     href={l.href}
                                     onClick={close}
                                     className={cn(
-                                      'flex items-center gap-2 text-[14px] text-charcoal',
-                                      col.kind === 'shapes' && 'flex-col gap-1 border border-line py-2.5 text-[12px]',
+                                      'flex items-center gap-2 text-[16px] text-charcoal',
+                                      col.kind === 'shapes' && 'flex-col gap-1 border border-line py-2.5 text-[14px]',
                                     )}
                                   >
                                     {l.shape && <ShapeIcon shape={l.shape} size={26} className="text-taupe" />}
@@ -68,7 +68,7 @@ export function MobileMenu() {
                     </div>
                   </>
                 ) : (
-                  <Link href={item.href} onClick={close} className={cn('block py-4 text-[12px] font-medium uppercase tracking-[0.16em]', item.label === 'Find Your Match' && 'text-gold-deep')}>
+                  <Link href={item.href} onClick={close} className={cn('block py-4 text-[14px] font-medium uppercase tracking-[0.16em]', item.label === 'Find Your Match' && 'text-gold-deep')}>
                     {item.label}
                   </Link>
                 )}

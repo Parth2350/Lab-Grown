@@ -52,7 +52,7 @@ export function LabGrownEducation() {
             <h2 id="labgrown-title" className="h-section">
               Why Choose Lab-Grown Diamonds?
             </h2>
-            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-charcoal/85 sm:text-base">
+            <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-charcoal/85 sm:text-base">
               A lab-grown diamond is a real diamond — the same crystal of carbon, formed under the same intense heat and pressure, simply grown in a controlled environment
               rather than mined from the earth. The result is a stone with all of the brilliance and none of the compromise.
             </p>
@@ -77,7 +77,7 @@ export function LabGrownEducation() {
               {FACTS.map((f) => (
                 <div key={f.label} className={cn('absolute', f.pos)}>
                   <p className="font-serif text-xl leading-none text-ink sm:text-2xl">{f.value}</p>
-                  <p className="mt-1.5 text-[9.5px] font-medium uppercase tracking-[0.18em] text-taupe sm:text-[10px]">{f.label}</p>
+                  <p className="mt-1.5 text-[11.5px] font-medium uppercase tracking-[0.18em] text-taupe sm:text-[12px]">{f.label}</p>
                 </div>
               ))}
             </figure>
@@ -91,7 +91,7 @@ export function LabGrownEducation() {
                 <Icon className="mt-0.5 h-6 w-6 shrink-0 text-gold transition-transform duration-500 ease-luxe group-hover:-translate-y-0.5" strokeWidth={1} aria-hidden />
                 <div>
                   <h3 className="font-serif text-[1.3rem] leading-tight text-ink sm:mt-6 sm:text-[1.35rem]">{title}</h3>
-                  <p className="mt-1.5 text-[14px] leading-relaxed text-taupe sm:mt-2.5">{text}</p>
+                  <p className="mt-1.5 text-[16px] leading-relaxed text-taupe sm:mt-2.5">{text}</p>
                 </div>
               </Reveal>
             </li>

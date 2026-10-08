@@ -9,7 +9,7 @@ import { ArrowLink, PageIntro } from '@/components/content/ui';
 
 export const metadata = pageMeta({
   title: 'Contact Us',
-  description: `Speak with the ${site.name} client care team by WhatsApp, phone or email, or send us a message. Visit our ${site.contact.address.city} atelier by appointment.`,
+  description: `Speak with the client care team at ${site.name} by WhatsApp, phone or email, or send us a message. Visit our ${site.contact.address.city} atelier by appointment.`,
   path: '/contact',
 });
 
@@ -56,7 +56,7 @@ export default function ContactPage() {
           <div className="lg:col-span-7">
             <div className="border border-line bg-porcelain/50 p-5 sm:p-8 lg:p-10">
               <h2 className="font-serif text-[1.9rem] font-light leading-tight">Send us a message</h2>
-              <p className="mb-8 mt-2 text-[14px] text-taupe">Fill in the form and a member of our team will be in touch.</p>
+              <p className="mb-8 mt-2 text-[16px] text-taupe">Fill in the form and a member of our team will be in touch.</p>
               <ContactForm />
             </div>
           </div>
@@ -78,9 +78,9 @@ export default function ContactPage() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="label-caps block text-taupe">{label}</span>
-                        <span className="mt-0.5 block break-words text-[15px] text-ink group-hover:underline group-hover:underline-offset-4">{value}</span>
+                        <span className="mt-0.5 block break-words text-[17px] text-ink group-hover:underline group-hover:underline-offset-4">{value}</span>
                       </span>
-                      <span className="hidden text-right text-[12px] text-taupe sm:block">{note}</span>
+                      <span className="hidden text-right text-[14px] text-taupe sm:block">{note}</span>
                     </a>
                   </li>
                 ))}
@@ -95,7 +95,7 @@ export default function ContactPage() {
               <h2 className="eyebrow font-sans mb-5 flex items-center gap-2">
                 <Clock className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Studio hours
               </h2>
-              <dl className="divide-y divide-line border-y border-line text-[14px]">
+              <dl className="divide-y divide-line border-y border-line text-[16px]">
                 {c.hours.map((h) => (
                   <div key={h.days} className="flex items-baseline justify-between gap-4 py-3">
                     <dt className="text-charcoal">{h.days}</dt>
@@ -130,7 +130,7 @@ export default function ContactPage() {
               <br />
               {a.country}
             </address>
-            <p className="mt-6 max-w-sm text-[14px] leading-relaxed text-taupe">
+            <p className="mt-6 max-w-sm text-[16px] leading-relaxed text-taupe">
               Private appointments let you see diamonds side by side, try on settings and meet the artisans who will make your piece.
             </p>
             <ArrowLink href="/bespoke" className="mt-6">
@@ -148,7 +148,7 @@ export default function ContactPage() {
             <h2 id="contact-faq-title" className="h-section">
               Before you write
             </h2>
-            <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-taupe">The questions our concierge hears most often.</p>
+            <p className="mt-4 max-w-sm text-[17px] leading-relaxed text-taupe">The questions our concierge hears most often.</p>
             <ArrowLink href="/pages/faq" className="mt-6">
               Visit the full FAQ
             </ArrowLink>

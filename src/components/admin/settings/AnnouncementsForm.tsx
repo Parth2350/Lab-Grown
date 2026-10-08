@@ -21,7 +21,7 @@ function AnnouncementPreview({ messages }: { messages: string[] }) {
         <div className="no-scrollbar overflow-x-auto bg-ink" role="img" aria-label={`Announcement bar preview: ${messages.join(', ')}`}>
           <ul className="flex w-max items-center px-5 py-2.5" aria-hidden>
             {messages.map((m, i) => (
-              <li key={i} className="flex items-center whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.22em] text-ivory">
+              <li key={i} className="flex items-center whitespace-nowrap text-[12px] font-medium uppercase tracking-[0.22em] text-ivory">
                 {i > 0 && <span className="mx-6 h-1 w-1 rotate-45 bg-gold-light" />}
                 {m}
               </li>
@@ -79,7 +79,7 @@ export function AnnouncementsForm({ initial }: { initial: string[] }) {
               return (
                 <li key={item.key}>
                   <div className="flex items-center gap-1.5 sm:gap-2">
-                    <span className="w-5 shrink-0 text-right text-[11px] tabular-nums text-taupe" aria-hidden>
+                    <span className="w-5 shrink-0 text-right text-[13px] tabular-nums text-taupe" aria-hidden>
                       {i + 1}
                     </span>
                     <input

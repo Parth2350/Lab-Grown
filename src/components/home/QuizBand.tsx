@@ -26,7 +26,7 @@ export function QuizBand() {
             <h2 id="quiz-title" className="h-section">
               Find Your Match
             </h2>
-            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-charcoal/85">
+            <p className="mt-4 max-w-md text-[17px] leading-relaxed text-charcoal/85">
               Answer {count} quick questions about the moment, their style and your budget, and we will curate a shortlist of pieces chosen just for you.
             </p>
             <ButtonLink href="/find-your-match" size="lg" className="group mt-8 w-full sm:w-auto">

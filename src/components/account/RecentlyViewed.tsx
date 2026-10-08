@@ -19,7 +19,7 @@ export function RecentlyViewed() {
           <p className="mt-1 text-sm text-taupe">{mounted && items.length ? `${pluralize(items.length, 'piece')} you’ve looked at on this device` : 'Pieces you browse will appear here.'}</p>
         </div>
         {mounted && items.length > 0 && (
-          <button type="button" onClick={clear} className="text-[12px] uppercase tracking-[0.14em] text-taupe underline-offset-4 hover:text-ink hover:underline">
+          <button type="button" onClick={clear} className="text-[14px] uppercase tracking-[0.14em] text-taupe underline-offset-4 hover:text-ink hover:underline">
             Clear history
           </button>
         )}

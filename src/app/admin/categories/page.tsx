@@ -94,7 +94,7 @@ export default async function CategoriesPage() {
                       <td className={table.tdMuted}>{c.position}</td>
                       <td className={table.td}>
                         <p className="font-medium">{c.name}</p>
-                        <p className="font-mono text-[11.5px] text-taupe">/{c.slug}</p>
+                        <p className="font-mono text-[13.5px] text-taupe">/{c.slug}</p>
                       </td>
                       <td className={table.tdRight}>
                         <p>{formatNumber(c.productCount)}</p>

@@ -69,12 +69,12 @@ export function CartLineItem({ line, compact, onNavigate }: { line: CartLine; co
       </Link>
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="flex items-start justify-between gap-3">
-          <Link href={href} onClick={onNavigate} className="font-serif text-[17px] leading-snug hover:text-gold-deep">
+          <Link href={href} onClick={onNavigate} className="font-serif text-[19px] leading-snug hover:text-gold-deep">
             {line.name}
           </Link>
           <p className="shrink-0 text-sm tabular-nums">{formatMoney(line.unitPrice * line.quantity)}</p>
         </div>
-        <dl className="mt-1.5 space-y-0.5 text-[12.5px] text-taupe">
+        <dl className="mt-1.5 space-y-0.5 text-[14.5px] text-taupe">
           <div>
             <dt className="sr-only">Metal</dt>
             <dd>
@@ -103,7 +103,7 @@ export function CartLineItem({ line, compact, onNavigate }: { line: CartLine; co
         </dl>
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">
           <QtyStepper value={line.quantity} onChange={(n) => setQty(line.key, n)} />
-          <div className="flex items-center gap-4 text-[11px] uppercase tracking-[0.12em] text-taupe">
+          <div className="flex items-center gap-4 text-[13px] uppercase tracking-[0.12em] text-taupe">
             <button
               type="button"
               onClick={() => {

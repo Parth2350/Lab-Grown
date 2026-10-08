@@ -34,7 +34,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
     } catch {
       /* storage unavailable */
     }
-    if (!/^AUR-\d{6}$/.test(number)) {
+    if (!/^[A-Z]{3}-\d{6}$/.test(number)) {
       setState({ status: 'missing' });
       return;
     }
@@ -69,7 +69,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
       <div className="container-x flex min-h-[60vh] flex-col items-center justify-center py-24 text-center">
         <Package className="h-10 w-10 text-gold" strokeWidth={1} aria-hidden />
         <h1 className="mt-6 font-serif text-4xl font-light">We can’t show this order here</h1>
-        <p className="mt-3 max-w-md text-[15px] text-taupe">
+        <p className="mt-3 max-w-md text-[17px] text-taupe">
           For your privacy, order details are only visible in the browser that placed the order or to the account holder. Sign in to see your order history, or contact our concierge.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -102,13 +102,13 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
         </span>
         <p className="eyebrow mt-6">{pending ? 'Awaiting payment' : 'Order confirmed'}</p>
         <h1 className="mt-3 font-serif text-4xl font-light leading-tight sm:text-5xl">{pending ? 'Your order is on hold' : `Thank you, ${firstName}.`}</h1>
-        <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-taupe">
+        <p className="mx-auto mt-4 max-w-lg text-[17px] leading-relaxed text-taupe">
           {pending
             ? 'We haven’t received payment for this order yet, so nothing has been charged. Return to checkout to complete your purchase.'
             : `Your order is confirmed and already on its way to our workshop. We’ll keep you updated at ${order.email}.`}
         </p>
         <p className="mt-6 inline-flex items-center gap-3 border border-line bg-white px-4 py-2 text-sm">
-          <span className="text-[11px] uppercase tracking-[0.16em] text-taupe">Order number</span>
+          <span className="text-[13px] uppercase tracking-[0.16em] text-taupe">Order number</span>
           <span className="font-medium tracking-wide">{order.number}</span>
         </p>
         {pending && (
@@ -129,11 +129,11 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
                 {steps.map((s, i) => (
                   <li key={s.title} className="border-t border-line pt-5">
                     <div className="flex items-center gap-3">
-                      <span className="font-sans text-[11px] font-medium tracking-[0.18em] text-gold">{String(i + 1).padStart(2, '0')}</span>
+                      <span className="font-sans text-[13px] font-medium tracking-[0.18em] text-gold">{String(i + 1).padStart(2, '0')}</span>
                       <s.icon className="h-4 w-4 text-charcoal" strokeWidth={1.25} aria-hidden />
                     </div>
-                    <p className="mt-3 text-[14px] text-ink">{s.title}</p>
-                    <p className="mt-1 text-[13px] leading-relaxed text-taupe">{s.text}</p>
+                    <p className="mt-3 text-[16px] text-ink">{s.title}</p>
+                    <p className="mt-1 text-[15px] leading-relaxed text-taupe">{s.text}</p>
                   </li>
                 ))}
               </ol>
@@ -173,14 +173,14 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
             </div>
             <div>
               <h3 className="label-caps text-taupe">Delivery</h3>
-              <p className="mt-3 text-[13.5px] text-ink">{order.delivery.label}</p>
-              {order.delivery.eta && <p className="text-[13px] text-taupe">{order.delivery.eta} after dispatch</p>}
-              {arrival && !pending && <p className="mt-2 text-[13px] text-charcoal">Estimated arrival from {arrival}</p>}
+              <p className="mt-3 text-[15.5px] text-ink">{order.delivery.label}</p>
+              {order.delivery.eta && <p className="text-[15px] text-taupe">{order.delivery.eta} after dispatch</p>}
+              {arrival && !pending && <p className="mt-2 text-[15px] text-charcoal">Estimated arrival from {arrival}</p>}
             </div>
             <div>
               <h3 className="label-caps text-taupe">Payment</h3>
-              <p className="mt-3 text-[13.5px] text-ink">{pending ? 'Not completed' : paymentLabel(payment)}</p>
-              <p className="text-[13px] text-taupe">Placed {formatDate(order.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</p>
+              <p className="mt-3 text-[15.5px] text-ink">{pending ? 'Not completed' : paymentLabel(payment)}</p>
+              <p className="text-[15px] text-taupe">Placed {formatDate(order.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</p>
             </div>
           </section>
         </div>
@@ -195,7 +195,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
             <div className="mt-6 bg-porcelain p-6 sm:p-8">
               <UserPlus className="h-5 w-5 text-gold" strokeWidth={1.25} aria-hidden />
               <p className="mt-4 font-serif text-xl">Save this order to an account</p>
-              <p className="mt-2 text-[13px] leading-relaxed text-taupe">Track delivery, request returns and check out faster next time. We’ll attach order {order.number} to your new account.</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-taupe">Track delivery, request returns and check out faster next time. We’ll attach order {order.number} to your new account.</p>
               <ButtonLink href={`/account/register?claim=${encodeURIComponent(order.number)}`} variant="outline" className="mt-5 w-full">
                 Create Account
               </ButtonLink>
@@ -210,7 +210,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
             <ButtonLink href="/collections/all" variant="link">
               Continue Shopping
             </ButtonLink>
-            <p className="text-[12.5px] text-taupe">
+            <p className="text-[14.5px] text-taupe">
               Questions? Call{' '}
               <a href={site.contact.phoneHref} className="text-ink underline-offset-4 hover:underline">
                 {site.contact.phone}

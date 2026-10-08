@@ -16,7 +16,7 @@ function NavList({ counts, pathname, onNavigate }: { counts: NavCounts; pathname
     <nav aria-label="Admin" className="flex-1 overflow-y-auto px-3 pb-6">
       {ADMIN_NAV.map((group) => (
         <div key={group.label} className="mt-5 first:mt-2">
-          <p className="mb-1.5 px-3 text-[10px] font-medium uppercase tracking-[0.2em] text-taupe/80">{group.label}</p>
+          <p className="mb-1.5 px-3 text-[12px] font-medium uppercase tracking-[0.2em] text-taupe/80">{group.label}</p>
           <ul className="space-y-px">
             {group.items.map((item) => {
               const active = isActive(pathname, item);
@@ -29,7 +29,7 @@ function NavList({ counts, pathname, onNavigate }: { counts: NavCounts; pathname
                     onClick={onNavigate}
                     aria-current={active ? 'page' : undefined}
                     className={cn(
-                      'group relative flex items-center gap-3 px-3 py-2 text-[13px] transition-colors',
+                      'group relative flex items-center gap-3 px-3 py-2 text-[15px] transition-colors',
                       active ? 'bg-ink text-ivory' : 'text-charcoal hover:bg-porcelain hover:text-ink',
                     )}
                   >
@@ -38,7 +38,7 @@ function NavList({ counts, pathname, onNavigate }: { counts: NavCounts; pathname
                     <span className="flex-1 truncate">{item.label}</span>
                     {count > 0 && item.count && (
                       <span
-                        className={cn('min-w-5 px-1.5 text-center text-[10.5px] font-medium leading-[18px] tabular-nums', active ? 'bg-gold-light text-ink' : 'bg-gold-pale text-gold-deep')}
+                        className={cn('min-w-5 px-1.5 text-center text-[12.5px] font-medium leading-[18px] tabular-nums', active ? 'bg-gold-light text-ink' : 'bg-gold-pale text-gold-deep')}
                         title={`${count} ${COUNT_HINTS[item.count]}`}
                       >
                         {count > 99 ? '99+' : count}
@@ -60,7 +60,7 @@ function Brand() {
   return (
     <Link href="/admin" className="flex items-baseline gap-2 px-6 py-5">
       <span className="font-serif text-2xl tracking-[0.08em] text-ink">{site.name}</span>
-      <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-gold">Admin</span>
+      <span className="text-[12px] font-medium uppercase tracking-[0.22em] text-gold">Admin</span>
     </Link>
   );
 }
@@ -80,7 +80,7 @@ export function AdminShell({ user, counts, children }: { user: AdminUser; counts
     .toUpperCase();
 
   return (
-    <div className="min-h-screen bg-[#F7F4EE] text-[14px] font-normal leading-normal text-ink lg:grid lg:grid-cols-[252px_minmax(0,1fr)]">
+    <div className="min-h-screen bg-[#F7F4EE] text-[16px] font-normal leading-normal text-ink lg:grid lg:grid-cols-[252px_minmax(0,1fr)]">
       <a href="#admin-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:text-ivory">
         Skip to content
       </a>
@@ -100,7 +100,7 @@ export function AdminShell({ user, counts, children }: { user: AdminUser; counts
           <button type="button" onClick={() => setOpen(true)} className="-ml-1 inline-flex h-9 w-9 items-center justify-center text-ink hover:bg-porcelain lg:hidden" aria-label="Open navigation">
             <Menu className="h-5 w-5" strokeWidth={1.4} />
           </button>
-          <div className="min-w-0 flex-1 truncate text-[13px]">
+          <div className="min-w-0 flex-1 truncate text-[15px]">
             {section ? (
               <>
                 <span className="text-taupe">{section.group}</span>
@@ -120,12 +120,12 @@ export function AdminShell({ user, counts, children }: { user: AdminUser; counts
           </a>
           <div className="hidden h-6 w-px bg-line sm:block" aria-hidden />
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-[11px] font-medium tracking-wider text-gold-light" aria-hidden>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-[13px] font-medium tracking-wider text-gold-light" aria-hidden>
               {initials}
             </span>
             <div className="hidden min-w-0 leading-tight md:block">
-              <p className="max-w-[160px] truncate text-[13px] text-ink">{user.name ?? 'Administrator'}</p>
-              <p className="max-w-[160px] truncate text-[11px] text-taupe">{user.email}</p>
+              <p className="max-w-[160px] truncate text-[15px] text-ink">{user.name ?? 'Administrator'}</p>
+              <p className="max-w-[160px] truncate text-[13px] text-taupe">{user.email}</p>
             </div>
           </div>
           <button

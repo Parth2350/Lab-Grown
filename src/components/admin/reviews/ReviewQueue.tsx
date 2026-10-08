@@ -29,10 +29,10 @@ const MAX_BULK = 100;
 /** Long bodies are clamped to three lines; <details> expands them without JS. */
 function ReviewBody({ body }: { body: string }) {
   const long = body.length > 240 || body.split('\n').length > 3;
-  if (!long) return <p className="mt-1 whitespace-pre-line break-words text-[13px] leading-relaxed text-charcoal">{body}</p>;
+  if (!long) return <p className="mt-1 whitespace-pre-line break-words text-[15px] leading-relaxed text-charcoal">{body}</p>;
   return (
     <details className="group mt-1">
-      <summary className="cursor-pointer list-none text-[13px] leading-relaxed text-charcoal [&::-webkit-details-marker]:hidden">
+      <summary className="cursor-pointer list-none text-[15px] leading-relaxed text-charcoal [&::-webkit-details-marker]:hidden">
         <span className="line-clamp-3 whitespace-pre-line break-words group-open:line-clamp-none">{body}</span>
         <span className="mt-1 inline-block text-xs text-taupe underline underline-offset-4 transition-colors hover:text-ink">
           <span className="group-open:hidden">Read full review</span>
@@ -68,7 +68,7 @@ function ReviewRow({ review, selected, onSelect }: { review: ReviewItem; selecte
               </Badge>
             )}
           </div>
-          <h3 className="mt-2 break-words text-[14px] font-medium leading-snug text-ink">{r.title}</h3>
+          <h3 className="mt-2 break-words text-[16px] font-medium leading-snug text-ink">{r.title}</h3>
           <ReviewBody body={r.body} />
           <p className="mt-2.5 text-xs text-taupe">
             <span className="font-medium text-charcoal">{r.authorName}</span>

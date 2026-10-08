@@ -39,7 +39,7 @@ export function ArtPreview({ spec, metal, shape, carat, name, views = [0, 1], cl
           <div className="art-tile aspect-square w-full overflow-hidden border border-line">
             <JewelryArt spec={spec} metal={metal} shape={shape} carat={carat} view={view} title={`${name || 'Product'} — ${view === 0 ? 'primary' : 'hover'} view`} className="h-full w-full" />
           </div>
-          {views.length > 1 && <figcaption className="mt-1 text-center text-[10.5px] uppercase tracking-[0.14em] text-taupe">{view === 0 ? 'Primary view' : 'Hover view'}</figcaption>}
+          {views.length > 1 && <figcaption className="mt-1 text-center text-[12.5px] uppercase tracking-[0.14em] text-taupe">{view === 0 ? 'Primary view' : 'Hover view'}</figcaption>}
         </figure>
       ))}
     </div>

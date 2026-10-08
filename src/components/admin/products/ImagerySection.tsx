@@ -73,7 +73,7 @@ export function ImagerySection({
 
         <div className="min-w-0 xl:max-w-[520px] 2xl:max-w-none">
           <div className="mb-2 flex items-center justify-between gap-2">
-            <p className="text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal">Live preview</p>
+            <p className="text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal">Live preview</p>
             <MetalSwitcher metals={draft.metalColors} value={previewMetal} onChange={setPreviewMetal} />
           </div>
           <ArtPreview spec={toArtSpec(art)} metal={previewMetal} shape={previewShape} carat={previewCarat} name={draft.name} />

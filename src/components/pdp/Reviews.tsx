@@ -28,14 +28,14 @@ export function Reviews({ productId, productName, rating, count, reviews, distri
                 <span className="font-serif text-5xl font-light leading-none">{rating.toFixed(1)}</span>
                 <div className="pb-1">
                   <Stars rating={rating} size={14} />
-                  <p className="mt-1 text-[12px] text-taupe">Based on {count} reviews</p>
+                  <p className="mt-1 text-[14px] text-taupe">Based on {count} reviews</p>
                 </div>
               </div>
               <ul className="mt-6 space-y-2">
                 {[5, 4, 3, 2, 1].map((star) => {
                   const n = distribution[star] ?? 0;
                   return (
-                    <li key={star} className="flex items-center gap-3 text-[12px] text-taupe">
+                    <li key={star} className="flex items-center gap-3 text-[14px] text-taupe">
                       <span className="w-10">{star} star</span>
                       <span className="h-1 flex-1 bg-line">
                         <span className="block h-1 bg-gold" style={{ width: `${count ? (n / count) * 100 : 0}%` }} />
@@ -56,13 +56,13 @@ export function Reviews({ productId, productName, rating, count, reviews, distri
                 <li key={r.id} className="py-7">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <Stars rating={r.rating} />
-                    <time className="text-[12px] text-taupe" dateTime={r.createdAt}>
+                    <time className="text-[14px] text-taupe" dateTime={r.createdAt}>
                       {formatDate(r.createdAt)}
                     </time>
                   </div>
                   <h3 className="mt-3 font-serif text-xl">{r.title}</h3>
-                  <p className="mt-2 text-[14.5px] leading-relaxed text-charcoal">{r.body}</p>
-                  <p className="mt-3 flex items-center gap-2 text-[12px] text-taupe">
+                  <p className="mt-2 text-[16.5px] leading-relaxed text-charcoal">{r.body}</p>
+                  <p className="mt-3 flex items-center gap-2 text-[14px] text-taupe">
                     {r.authorName}
                     {r.location && <span>· {r.location}</span>}
                     {r.isVerified && (

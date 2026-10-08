@@ -21,7 +21,7 @@ const schema = z.object({
   maxPrice: num,
   sort: z.enum(['price-asc', 'price-desc', 'carat-asc', 'carat-desc']).optional(),
   page: z.coerce.number().int().min(1).max(200).optional(),
-  pageSize: z.coerce.number().int().min(1).max(60).optional(),
+  pageSize: z.coerce.number().int().min(1).max(200).optional(),
 });
 
 /** Certified loose diamond search for the diamond configurator. Prices in cents. */

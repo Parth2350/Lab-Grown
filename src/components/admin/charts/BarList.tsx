@@ -13,7 +13,7 @@ export function BarList({ items, format, ariaLabel, emptyLabel = 'No data for th
   const [active, setActive] = useState<string | null>(null);
   const total = items.reduce((s, i) => s + i.value, 0);
   const max = maxProp ?? Math.max(0, ...items.map((i) => i.value));
-  if (!items.length || max <= 0) return <p className="py-8 text-center text-[13px] text-taupe">{emptyLabel}</p>;
+  if (!items.length || max <= 0) return <p className="py-8 text-center text-[15px] text-taupe">{emptyLabel}</p>;
   return (
     <ul className="space-y-2.5" aria-label={ariaLabel}>
       {items.map((item) => {
@@ -30,7 +30,7 @@ export function BarList({ items, format, ariaLabel, emptyLabel = 'No data for th
         return (
           <li
             key={item.key}
-            className="group grid grid-cols-[minmax(84px,34%)_1fr] items-center gap-3 text-[12.5px] outline-none"
+            className="group grid grid-cols-[minmax(84px,34%)_1fr] items-center gap-3 text-[14.5px] outline-none"
             tabIndex={0}
             aria-label={`${item.label}: ${fmtValue(item.value, format)}, ${(share * 100).toFixed(1)}% of total${item.hint ? `, ${item.hint}` : ''}`}
             onPointerEnter={() => setActive(item.key)}
@@ -46,7 +46,7 @@ export function BarList({ items, format, ariaLabel, emptyLabel = 'No data for th
               />
               <span className="shrink-0 tabular-nums text-ink">{fmtTick(item.value, format)}</span>
               {isActive && (
-                <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-1.5 whitespace-nowrap border border-line bg-white px-2.5 py-1.5 text-[11.5px] shadow-soft" role="presentation">
+                <div className="pointer-events-none absolute bottom-full left-0 z-10 mb-1.5 whitespace-nowrap border border-line bg-white px-2.5 py-1.5 text-[13.5px] shadow-soft" role="presentation">
                   <span className="font-medium tabular-nums text-ink">{fmtValue(item.value, format)}</span>
                   <span className="text-taupe"> · {(share * 100).toFixed(1)}% of total</span>
                   {item.hint && <span className="text-taupe"> · {item.hint}</span>}

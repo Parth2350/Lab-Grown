@@ -113,7 +113,7 @@ export function ProcessStory() {
             <h2 id="process-title" className="h-section">
               From Rough Stone to Heirloom
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-taupe">Six stages, one roof. Follow a piece from the first line on paper to the moment it reaches you.</p>
+            <p className="mt-4 text-[17px] leading-relaxed text-taupe">Six stages, one roof. Follow a piece from the first line on paper to the moment it reaches you.</p>
           </div>
           <div className="flex flex-col gap-4 lg:w-[340px] lg:items-end">
             {pinned && (
@@ -156,7 +156,7 @@ export function ProcessStory() {
                   <span className="font-serif text-[2rem] font-light leading-none text-gold">{pad(i + 1)}</span>
                   <div>
                     <h3 className="font-serif text-[1.45rem] leading-tight text-ink">{step.title}</h3>
-                    <p className="mt-2 text-[14px] leading-relaxed text-taupe">{step.text}</p>
+                    <p className="mt-2 text-[16px] leading-relaxed text-taupe">{step.text}</p>
                   </div>
                 </div>
               </li>

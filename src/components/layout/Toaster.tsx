@@ -21,8 +21,8 @@ export function Toaster() {
             className="pointer-events-auto flex w-full max-w-sm items-start gap-4 bg-ink px-5 py-4 text-ivory shadow-lift"
           >
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium">{t.title}</p>
-              {t.description && <p className="mt-0.5 truncate text-[12px] text-ivory/60">{t.description}</p>}
+              <p className="text-[15px] font-medium">{t.title}</p>
+              {t.description && <p className="mt-0.5 truncate text-[14px] text-ivory/60">{t.description}</p>}
             </div>
             {t.href && (
               <Link href={t.href} onClick={() => dismiss(t.id)} className="label-caps shrink-0 border-b border-gold-light pb-0.5 text-gold-light">

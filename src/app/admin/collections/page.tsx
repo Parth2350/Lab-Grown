@@ -79,7 +79,7 @@ export default async function CollectionsPage() {
                         <Link href={`/admin/collections/${c.id}`} className="font-medium underline-offset-4 hover:underline">
                           {c.name}
                         </Link>
-                        <p className="font-mono text-[11.5px] text-taupe">/collections/{c.slug}</p>
+                        <p className="font-mono text-[13.5px] text-taupe">/collections/{c.slug}</p>
                       </td>
                       <td className={table.tdRight}>{count ? formatNumber(count) : <Badge tone="warning">Empty</Badge>}</td>
                       <td className={table.td}>

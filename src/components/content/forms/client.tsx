@@ -60,7 +60,7 @@ export function TextareaField({ label, name, error, hint, className, required, i
         hint={hint}
         extra={
           counter && rest.maxLength ? (
-            <span className="ml-auto shrink-0 text-[11px] text-taupe" aria-hidden>
+            <span className="ml-auto shrink-0 text-[13px] text-taupe" aria-hidden>
               {len.toLocaleString('en-US')}/{rest.maxLength.toLocaleString('en-US')}
             </span>
           ) : undefined
@@ -164,7 +164,7 @@ export function FormAlert({ children, className }: { children?: ReactNode; class
   return (
     <div role="alert" aria-live="assertive" className={cn(children ? 'block' : 'hidden', className)}>
       {children && (
-        <p className="flex items-start gap-3 border border-danger/30 bg-danger/[0.04] px-4 py-3 text-[13px] leading-relaxed text-danger">
+        <p className="flex items-start gap-3 border border-danger/30 bg-danger/[0.04] px-4 py-3 text-[15px] leading-relaxed text-danger">
           <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
           <span>{children}</span>
         </p>

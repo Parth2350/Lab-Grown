@@ -89,10 +89,10 @@ export function RegisterForm({ callbackUrl, claim }: { callbackUrl: string; clai
     <div>
       <p className="eyebrow">Join {site.name}</p>
       <h1 className="mt-3 font-serif text-4xl font-light sm:text-5xl">Create an account</h1>
-      <p className="mt-3 text-[15px] text-taupe">Track every order, keep your wishlist across devices and check out in moments.</p>
+      <p className="mt-3 text-[17px] text-taupe">Track every order, keep your wishlist across devices and check out in moments.</p>
 
       {claim && (
-        <p className="mt-6 flex items-start gap-3 bg-porcelain px-4 py-3 text-[13px] text-charcoal">
+        <p className="mt-6 flex items-start gap-3 bg-porcelain px-4 py-3 text-[15px] text-charcoal">
           <Package className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.25} aria-hidden />
           {claimToken ? `Order ${claim} will be saved to your new account.` : `Create your account to track future orders. (Order ${claim} can be linked by our concierge.)`}
         </p>
@@ -118,7 +118,7 @@ export function RegisterForm({ callbackUrl, claim }: { callbackUrl: string; clai
           <PasswordInput id="register-password" label="Password" autoComplete="new-password" required value={form.password} onChange={set('password')} error={errors.password} />
           <ul className="mt-2.5 flex flex-wrap gap-x-4 gap-y-1" aria-label="Password requirements">
             {rules.map((r) => (
-              <li key={r.text} className={cn('flex items-center gap-1.5 text-[12px] transition-colors', r.ok ? 'text-success' : 'text-taupe')}>
+              <li key={r.text} className={cn('flex items-center gap-1.5 text-[14px] transition-colors', r.ok ? 'text-success' : 'text-taupe')}>
                 <Check className={cn('h-3 w-3', r.ok ? 'opacity-100' : 'opacity-30')} strokeWidth={2} aria-hidden />
                 {r.text}
                 <span className="sr-only">{r.ok ? '(met)' : '(not yet met)'}</span>
@@ -128,7 +128,7 @@ export function RegisterForm({ callbackUrl, claim }: { callbackUrl: string; clai
         </div>
         <div aria-live="assertive">
           {error && (
-            <p className="flex items-start gap-2 border border-danger/30 bg-danger/5 px-4 py-3 text-[13px] text-danger">
+            <p className="flex items-start gap-2 border border-danger/30 bg-danger/5 px-4 py-3 text-[15px] text-danger">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
               <span>
                 {error}{' '}
@@ -144,7 +144,7 @@ export function RegisterForm({ callbackUrl, claim }: { callbackUrl: string; clai
         <Button type="submit" size="lg" className="w-full" loading={busy}>
           Create Account
         </Button>
-        <p className="text-center text-[12px] leading-relaxed text-taupe">
+        <p className="text-center text-[14px] leading-relaxed text-taupe">
           By creating an account you agree to our{' '}
           <Link href="/pages/terms" className="underline underline-offset-2 hover:text-ink">
             Terms
@@ -157,7 +157,7 @@ export function RegisterForm({ callbackUrl, claim }: { callbackUrl: string; clai
         </p>
       </form>
 
-      <p className="mt-8 border-t border-line pt-6 text-center text-[14px] text-taupe">
+      <p className="mt-8 border-t border-line pt-6 text-center text-[16px] text-taupe">
         Already have an account?{' '}
         <Link href={`/account/login${callbackUrl !== '/account' ? `?callbackUrl=${encodeURIComponent(callbackUrl)}` : ''}`} className="text-ink underline underline-offset-4 hover:text-gold-deep">
           Sign in

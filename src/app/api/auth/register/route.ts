@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 
 const schema = registerSchema.extend({
   /** Optional: attach the guest order just placed in this browser (proved by its receipt token). */
-  claim: z.object({ orderNumber: z.string().regex(/^AUR-\d{6}$/), token: z.string().max(64) }).nullish(),
+  claim: z.object({ orderNumber: z.string().regex(/^[A-Z]{3}-\d{6}$/), token: z.string().max(64) }).nullish(),
 });
 
 const exists = () =>

@@ -12,7 +12,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
           <p className="eyebrow">My account</p>
           <h1 className="mt-2 font-serif text-4xl font-light sm:text-5xl">Hello, {first}</h1>
         </div>
-        <p className="hidden text-[13px] text-taupe sm:block">{user.email}</p>
+        <p className="hidden text-[15px] text-taupe sm:block">{user.email}</p>
       </header>
       <div className="lg:mt-12 lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16 xl:gap-20">
         <AccountNav isAdmin={user.role === 'ADMIN'} />

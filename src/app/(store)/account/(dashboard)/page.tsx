@@ -40,7 +40,7 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
   return (
     <div className="space-y-14">
       {sp.error === 'forbidden' && (
-        <p role="alert" className="flex items-start gap-3 border border-gold/40 bg-gold-pale/40 px-4 py-3 text-[13px] text-charcoal">
+        <p role="alert" className="flex items-start gap-3 border border-gold/40 bg-gold-pale/40 px-4 py-3 text-[15px] text-charcoal">
           <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" strokeWidth={1.5} aria-hidden />
           That area is reserved for store administrators. You’ve been brought back to your account.
         </p>
@@ -54,7 +54,7 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
           { label: 'Default address', value: defaultAddress ? defaultAddress.city : '—' },
         ].map((s) => (
           <div key={s.label} className="bg-ivory px-5 py-5">
-            <p className="text-[10.5px] uppercase tracking-[0.16em] text-taupe">{s.label}</p>
+            <p className="text-[12.5px] uppercase tracking-[0.16em] text-taupe">{s.label}</p>
             <p className="mt-2 truncate font-serif text-2xl">{s.value}</p>
           </div>
         ))}
@@ -78,16 +78,16 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
               <li key={o.number}>
                 <Link href={`/account/orders/${o.number}`} className="group flex flex-wrap items-center gap-x-6 gap-y-2 py-4 transition-colors hover:bg-porcelain/50 sm:px-2">
                   <div className="min-w-0 flex-1">
-                    <p className="text-[14px] text-ink">
+                    <p className="text-[16px] text-ink">
                       {o.number} <span className="text-taupe">· {formatDate(o.createdAt)}</span>
                     </p>
-                    <p className="truncate text-[12.5px] text-taupe">
+                    <p className="truncate text-[14.5px] text-taupe">
                       {o.items[0]?.name}
                       {o.items.length > 1 ? ` + ${pluralize(o.items.length - 1, 'more piece')}` : ''}
                     </p>
                   </div>
                   <StatusBadge status={o.status} />
-                  <p className="w-24 text-right text-[14px] tabular-nums">{formatMoney(o.total, { exact: true })}</p>
+                  <p className="w-24 text-right text-[16px] tabular-nums">{formatMoney(o.total, { exact: true })}</p>
                   <ArrowRight className="hidden h-4 w-4 text-stone transition-colors group-hover:text-ink sm:block" strokeWidth={1.25} aria-hidden />
                 </Link>
               </li>
@@ -113,8 +113,8 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
             <li key={q.href}>
               <Link href={q.href} className="group flex h-full flex-col border border-line p-5 transition-colors hover:border-ink">
                 <q.icon className="h-5 w-5 text-gold" strokeWidth={1.1} aria-hidden />
-                <span className="mt-4 text-[14px] text-ink">{q.label}</span>
-                <span className="mt-1 text-[12px] leading-snug text-taupe">{q.text}</span>
+                <span className="mt-4 text-[16px] text-ink">{q.label}</span>
+                <span className="mt-1 text-[14px] leading-snug text-taupe">{q.text}</span>
               </Link>
             </li>
           ))}

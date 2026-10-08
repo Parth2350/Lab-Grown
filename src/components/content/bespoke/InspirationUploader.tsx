@@ -144,7 +144,7 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
           <ImagePlus className="h-6 w-6" strokeWidth={1} aria-hidden />
         </span>
         <span className="mt-5 font-serif text-xl">{dragging ? 'Drop your images here' : 'Drag & drop images, or click to browse'}</span>
-        <span id="bespoke-files-help" className="mt-2 max-w-sm text-[13px] text-taupe">
+        <span id="bespoke-files-help" className="mt-2 max-w-sm text-[15px] text-taupe">
           Up to {MAX_INSPIRATION_IMAGES} images · JPG, PNG, WebP, AVIF or GIF · 8 MB each. Screenshots, sketches and heirloom photos are all welcome.
         </span>
       </label>
@@ -154,7 +154,7 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
       </p>
       <div role="alert">
         {warning && (
-          <p className="mt-3 flex items-start gap-2 text-[13px] text-danger">
+          <p className="mt-3 flex items-start gap-2 text-[15px] text-danger">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
             {warning}
           </p>
@@ -175,7 +175,7 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
                 <button
                   type="button"
                   onClick={() => void upload(it.key, it.file)}
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-ivory/80 px-2 text-center text-[10px] uppercase tracking-[0.12em] text-danger"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-ivory/80 px-2 text-center text-[12px] uppercase tracking-[0.12em] text-danger"
                   title={it.error}
                 >
                   <RotateCcw className="h-4 w-4" strokeWidth={1.5} aria-hidden />

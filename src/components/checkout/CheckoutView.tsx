@@ -77,7 +77,7 @@ function Section({ step, title, aside, children, id }: { step: number; title: st
     <section aria-labelledby={`${id}-title`} className="border-t border-line pt-8 first:border-t-0 first:pt-0">
       <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
         <h2 id={`${id}-title`} className="flex items-baseline gap-3 font-serif text-[26px] font-light leading-none">
-          <span className="font-sans text-[11px] font-medium tracking-[0.18em] text-gold">{String(step).padStart(2, '0')}</span>
+          <span className="font-sans text-[13px] font-medium tracking-[0.18em] text-gold">{String(step).padStart(2, '0')}</span>
           {title}
         </h2>
         {aside}
@@ -371,7 +371,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
         ))}
       </ul>
       {issues.size > 0 && (
-        <p className="mb-4 text-[12.5px] text-taupe">
+        <p className="mb-4 text-[14.5px] text-taupe">
           <Link href="/cart" className="text-ink underline underline-offset-4">
             Review your bag
           </Link>{' '}
@@ -415,7 +415,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
           <Link href="/cart" className="label-caps group flex items-center gap-2 text-charcoal hover:text-ink">
             <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" strokeWidth={1.5} aria-hidden /> Back to bag
           </Link>
-          <p className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-taupe">
+          <p className="flex items-center gap-2 text-[13px] uppercase tracking-[0.16em] text-taupe">
             <Lock className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} aria-hidden /> Secure checkout
           </p>
         </div>
@@ -430,7 +430,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
           aria-controls="mobile-summary"
           className="container-x flex h-14 w-full items-center justify-between gap-4"
         >
-          <span className="flex items-center gap-2 text-[13px] text-charcoal">
+          <span className="flex items-center gap-2 text-[15px] text-charcoal">
             <ShoppingBag className="h-4 w-4 text-gold" strokeWidth={1.25} aria-hidden />
             {summaryOpen ? 'Hide' : 'Show'} order summary
             <ChevronDown className={cn('h-4 w-4 transition-transform duration-300', summaryOpen && 'rotate-180')} strokeWidth={1.25} aria-hidden />
@@ -470,11 +470,11 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
               title="Customer information"
               aside={
                 user ? (
-                  <p className="text-[12.5px] text-taupe">
+                  <p className="text-[14.5px] text-taupe">
                     Signed in as <span className="text-ink">{user.email}</span>
                   </p>
                 ) : (
-                  <p className="text-[12.5px] text-taupe">
+                  <p className="text-[14.5px] text-taupe">
                     Have an account?{' '}
                     <Link href="/account/login?callbackUrl=%2Fcheckout" className="text-ink underline underline-offset-4 hover:text-gold-deep">
                       Sign in for faster checkout
@@ -557,7 +557,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
               title="Shipping address"
               aside={
                 user && addresses.length > 0 ? (
-                  <Link href="/account/addresses" className="text-[12.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+                  <Link href="/account/addresses" className="text-[14.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
                     Manage address book
                   </Link>
                 ) : undefined
@@ -589,10 +589,10 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                             className="sr-only"
                           />
                           <RadioDot checked={checked} />
-                          <span className="min-w-0 text-[13px] leading-relaxed">
+                          <span className="min-w-0 text-[15px] leading-relaxed">
                             <span className="flex items-center gap-2">
                               <span className="font-medium text-ink">{a.label || `${a.firstName} ${a.lastName}`}</span>
-                              {a.isDefault && <span className="border border-gold/40 px-1.5 text-[9.5px] uppercase tracking-[0.16em] text-gold-deep">Default</span>}
+                              {a.isDefault && <span className="border border-gold/40 px-1.5 text-[11.5px] uppercase tracking-[0.16em] text-gold-deep">Default</span>}
                             </span>
                             <span className="block text-taupe">
                               {a.firstName} {a.lastName}
@@ -616,7 +616,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                     >
                       <input type="radio" name="saved-address" value="new" checked={addressMode === 'new'} onChange={() => setAddressMode('new')} className="sr-only" />
                       <RadioDot checked={addressMode === 'new'} />
-                      <span className="text-[13px] text-ink">Ship to a new address</span>
+                      <span className="text-[15px] text-ink">Ship to a new address</span>
                     </label>
                   </div>
                   {errors.addressId && <p className="mt-2 text-xs text-danger">{errors.addressId}</p>}
@@ -633,13 +633,13 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                     className="overflow-hidden"
                   >
                     <div className="space-y-6 p-px">
-                      <label className="flex cursor-pointer items-start gap-3 text-[13.5px] text-charcoal">
+                      <label className="flex cursor-pointer items-start gap-3 text-[15.5px] text-charcoal">
                         <input type="checkbox" checked={gift} onChange={(e) => setGift(e.target.checked)} className="mt-1 h-4 w-4 accent-ink" />
                         <span>
                           <span className="flex items-center gap-1.5 text-ink">
                             <Gift className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} aria-hidden /> Sending a gift?
                           </span>
-                          <span className="text-[12.5px] text-taupe">Ship to someone else — prices are never included in the parcel.</span>
+                          <span className="text-[14.5px] text-taupe">Ship to someone else — prices are never included in the parcel.</span>
                         </span>
                       </label>
                       <AddressFields
@@ -654,7 +654,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                         withContact={gift}
                       />
                       {user && (
-                        <label className="flex cursor-pointer items-center gap-3 text-[13.5px] text-charcoal">
+                        <label className="flex cursor-pointer items-center gap-3 text-[15.5px] text-charcoal">
                           <input type="checkbox" checked={saveAddress} onChange={(e) => setSaveAddress(e.target.checked)} className="h-4 w-4 accent-ink" />
                           Save this address to my account
                         </label>
@@ -667,14 +667,14 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
               <div className="mt-6">
                 {showNote ? (
                   <div>
-                    <label htmlFor="order-note" className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-charcoal">
+                    <label htmlFor="order-note" className="mb-2 block text-[13px] font-medium uppercase tracking-[0.14em] text-charcoal">
                       Gift message or delivery note <span className="normal-case tracking-normal text-taupe">(optional)</span>
                     </label>
                     <Textarea id="order-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} className="min-h-[96px]" placeholder="A few words for the card, or instructions for our courier" />
-                    <p className="mt-1 text-right text-[11px] text-taupe">{note.length}/500</p>
+                    <p className="mt-1 text-right text-[13px] text-taupe">{note.length}/500</p>
                   </div>
                 ) : (
-                  <button type="button" onClick={() => setShowNote(true)} className="text-[12.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+                  <button type="button" onClick={() => setShowNote(true)} className="text-[14.5px] text-taupe underline-offset-4 hover:text-ink hover:underline">
                     + Add a gift message or delivery note
                   </button>
                 )}
@@ -698,25 +698,25 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                         <input type="radio" name="delivery" value={m.id} checked={checked} onChange={() => setDeliveryMethod(m.id)} className="sr-only" />
                         <RadioDot checked={checked} />
                         <span className="min-w-0 flex-1">
-                          <span className="block text-[14px] text-ink">{m.label}</span>
-                          <span className="block text-[12.5px] text-taupe">{m.description}</span>
+                          <span className="block text-[16px] text-ink">{m.label}</span>
+                          <span className="block text-[14.5px] text-taupe">{m.description}</span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className="block text-[14px] tabular-nums">{m.price ? formatMoney(m.price) : 'Complimentary'}</span>
-                          <span className="block text-[12px] text-taupe">{m.eta}</span>
+                          <span className="block text-[16px] tabular-nums">{m.price ? formatMoney(m.price) : 'Complimentary'}</span>
+                          <span className="block text-[14px] text-taupe">{m.eta}</span>
                         </span>
                       </label>
                     );
                   })}
                 </div>
               </fieldset>
-              <p className="mt-4 flex items-start gap-2 text-[12.5px] text-taupe">
+              <p className="mt-4 flex items-start gap-2 text-[14.5px] text-taupe">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.25} aria-hidden />
                 Every parcel is fully insured, discreetly packaged and requires a signature on delivery. Made-to-order pieces ship once crafted and quality checked.
               </p>
             </Section>
 
-            <Section step={4} id="payment" title="Payment" aside={paymentMode === 'demo' ? <span className="border border-gold/50 bg-gold-pale/60 px-2 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-gold-deep">Test mode</span> : undefined}>
+            <Section step={4} id="payment" title="Payment" aside={paymentMode === 'demo' ? <span className="border border-gold/50 bg-gold-pale/60 px-2 py-1 text-[12px] font-medium uppercase tracking-[0.16em] text-gold-deep">Test mode</span> : undefined}>
               <fieldset>
                 <legend className="sr-only">Payment method</legend>
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -735,11 +735,11 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                         <input type="radio" name="payment" value={m.id} checked={checked} onChange={() => setPaymentMethod(m.id)} className="sr-only" />
                         <RadioDot checked={checked} />
                         <span className="min-w-0 flex-1">
-                          <span className="flex items-center gap-2 text-[14px] text-ink">
+                          <span className="flex items-center gap-2 text-[16px] text-ink">
                             {m.label}
-                            {i === 0 && <span className="text-[10px] uppercase tracking-[0.16em] text-gold-deep">Recommended</span>}
+                            {i === 0 && <span className="text-[12px] uppercase tracking-[0.16em] text-gold-deep">Recommended</span>}
                           </span>
-                          <span className="block text-[12.5px] text-taupe">{m.description}</span>
+                          <span className="block text-[14.5px] text-taupe">{m.description}</span>
                         </span>
                         <Icon className={cn('h-5 w-5 shrink-0', checked ? 'text-gold' : 'text-stone')} strokeWidth={1.1} aria-hidden />
                       </label>
@@ -749,11 +749,11 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
               </fieldset>
               <div className="mt-5 space-y-3 bg-porcelain px-4 py-4 sm:px-5">
                 <SecureNote />
-                <p className="text-[12px] text-taupe">
+                <p className="text-[14px] text-taupe">
                   You’ll complete payment in Razorpay’s secure window. {site.name} never sees or stores your card details.
                 </p>
                 {paymentMode === 'demo' && (
-                  <p className="border-t border-line pt-3 text-[12px] text-charcoal">
+                  <p className="border-t border-line pt-3 text-[14px] text-charcoal">
                     <span className="font-medium">Demo store:</span> live payment keys aren’t configured, so you’ll confirm a simulated payment — no real charge is made.
                   </p>
                 )}
@@ -769,7 +769,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     role="alert"
-                    className="flex items-start gap-3 border border-danger/30 bg-danger/5 px-4 py-3 text-[13px] text-danger"
+                    className="flex items-start gap-3 border border-danger/30 bg-danger/5 px-4 py-3 text-[15px] text-danger"
                   >
                     <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
                     <div>
@@ -783,7 +783,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
                 {!busy && <Lock className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />}
                 {ctaLabel}
               </Button>
-              <p className="text-center text-[12px] leading-relaxed text-taupe">
+              <p className="text-center text-[14px] leading-relaxed text-taupe">
                 By placing your order you agree to our{' '}
                 <Link href="/pages/terms" className="underline underline-offset-2 hover:text-ink">
                   Terms
@@ -801,7 +801,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
             <div className="border border-line bg-white/70 p-6 xl:p-8">
               <div className="flex items-baseline justify-between">
                 <h2 className="font-serif text-2xl">Order Summary</h2>
-                <Link href="/cart" className="text-[12px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+                <Link href="/cart" className="text-[14px] text-taupe underline-offset-4 hover:text-ink hover:underline">
                   Edit bag ({pluralize(count, 'piece')})
                 </Link>
               </div>
@@ -821,7 +821,7 @@ export function CheckoutView({ user, addresses, paymentMode }: { user: { name: s
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ivory/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md lg:hidden">
         <div className="flex items-center gap-4">
           <button type="button" onClick={() => setSummaryOpen(true)} className="min-w-0 flex-1 text-left" aria-label="Show order summary">
-            <span className="block text-[11px] uppercase tracking-[0.14em] text-taupe">Total · {pluralize(count, 'piece')}</span>
+            <span className="block text-[13px] uppercase tracking-[0.14em] text-taupe">Total · {pluralize(count, 'piece')}</span>
             <span className="block text-lg tabular-nums">{formatMoney(totals.total, { exact: true })}</span>
           </button>
           <Button type="submit" form="checkout-form" className="h-12 flex-[1.4] px-3" loading={busy} disabled={busy}>

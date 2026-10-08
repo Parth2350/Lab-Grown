@@ -52,7 +52,7 @@ export function CollectionProductPicker({ collectionId, collectionName, memberCo
 
   return (
     <div>
-      <label htmlFor="collection-product-search" className="mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal">
+      <label htmlFor="collection-product-search" className="mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal">
         Find products to add
       </label>
       <div className="relative">
@@ -64,7 +64,7 @@ export function CollectionProductPicker({ collectionId, collectionName, memberCo
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search by name or SKU…"
           autoComplete="off"
-          className="field h-10 py-0 pl-9 text-[13px]"
+          className="field h-10 py-0 pl-9 text-[15px]"
           aria-controls="collection-product-results"
           aria-describedby="collection-product-search-hint"
         />
@@ -84,8 +84,8 @@ export function CollectionProductPicker({ collectionId, collectionName, memberCo
               <li key={p.id} className="flex items-center gap-3 border-b border-line/70 px-3 py-2 last:border-0">
                 <ProductThumb product={p} size={40} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] text-ink">{p.name}</p>
-                  <p className="truncate text-[11.5px] text-taupe">
+                  <p className="truncate text-[15px] text-ink">{p.name}</p>
+                  <p className="truncate text-[13.5px] text-taupe">
                     {p.sku} · {p.categoryName}
                   </p>
                 </div>
@@ -95,7 +95,7 @@ export function CollectionProductPicker({ collectionId, collectionName, memberCo
                   onClick={() => add(p)}
                   disabled={addingId !== null}
                   aria-label={`Add ${p.name} to ${collectionName}`}
-                  className="inline-flex h-8 shrink-0 items-center gap-1.5 border border-ink/80 px-3 text-[10.5px] font-medium uppercase tracking-[0.14em] text-ink transition-colors hover:bg-ink hover:text-ivory disabled:opacity-40"
+                  className="inline-flex h-8 shrink-0 items-center gap-1.5 border border-ink/80 px-3 text-[12.5px] font-medium uppercase tracking-[0.14em] text-ink transition-colors hover:bg-ink hover:text-ivory disabled:opacity-40"
                 >
                   {addingId === p.id ? (
                     <span className="h-3 w-3 animate-spin rounded-full border border-current border-t-transparent" aria-hidden />

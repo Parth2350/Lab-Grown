@@ -145,9 +145,9 @@ export function ManufacturingHero() {
 export function ManufacturingBody() {
   return (
     <div>
-      <div className="max-w-3xl text-[16px] leading-relaxed text-charcoal/90">
+      <div className="max-w-3xl text-[18px] leading-relaxed text-charcoal/90">
         <p>
-          Most jewelry passes through many hands in many places before it reaches yours. Ours does not. Every {site.name} piece is designed, modelled, cast, set,
+          Most jewelry passes through many hands in many places before it reaches yours. Ours does not. Every piece at {site.name} is designed, modelled, cast, set,
           inspected and finished under one roof in {site.contact.address.city}, by a team of {site.stats.artisans} artisans — many of whom learned their craft
           from parents and grandparents who worked at the same benches.
         </p>
@@ -171,15 +171,15 @@ export function ManufacturingBody() {
                 </p>
                 <h2 className="mt-5 font-serif text-[2rem] font-light leading-tight">{s.title}</h2>
                 {s.text.map((t) => (
-                  <p key={t.slice(0, 24)} className="mt-4 text-[15px] leading-relaxed text-charcoal/90">
+                  <p key={t.slice(0, 24)} className="mt-4 text-[17px] leading-relaxed text-charcoal/90">
                     {t}
                   </p>
                 ))}
                 <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-line pt-5">
                   {s.facts.map((f) => (
                     <div key={f.label}>
-                      <dt className="text-[10.5px] uppercase tracking-[0.16em] text-taupe">{f.label}</dt>
-                      <dd className="mt-1 text-[14px] text-ink">{f.value}</dd>
+                      <dt className="text-[12.5px] uppercase tracking-[0.16em] text-taupe">{f.label}</dt>
+                      <dd className="mt-1 text-[16px] text-ink">{f.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -201,7 +201,7 @@ export function ManufacturingBody() {
             { v: site.stats.countries, l: 'Countries delivered' },
           ].map((s) => (
             <div key={s.l} className="flex flex-col-reverse">
-              <dt className="mt-2 text-[11px] uppercase tracking-[0.16em] text-taupe">{s.l}</dt>
+              <dt className="mt-2 text-[13px] uppercase tracking-[0.16em] text-taupe">{s.l}</dt>
               <dd className="font-serif text-[2.6rem] font-light leading-none">{s.v}</dd>
             </div>
           ))}

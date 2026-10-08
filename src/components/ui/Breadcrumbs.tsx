@@ -9,7 +9,7 @@ export function Breadcrumbs({ items, className }: { items: Crumb[]; className?: 
   const all = [{ label: 'Home', href: '/' }, ...items];
   return (
     <>
-      <nav aria-label="Breadcrumb" className={cn('text-[11px] uppercase tracking-[0.14em] text-taupe', className)}>
+      <nav aria-label="Breadcrumb" className={cn('text-[13px] uppercase tracking-[0.14em] text-taupe', className)}>
         <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
           {all.map((c, i) => (
             <li key={`${c.label}-${i}`} className="flex items-center gap-2">

@@ -47,7 +47,7 @@ export function BrandStory() {
         <Reveal className="mx-auto w-full max-w-[560px] lg:col-span-6 lg:max-w-none">
           <figure className="art-tile-warm relative">
             <LazyEditorialArt scene="workshop" className="block aspect-[4/5] w-full" />
-            <figcaption className="absolute bottom-4 left-4 bg-ivory/90 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-charcoal backdrop-blur-sm sm:bottom-6 sm:left-6">
+            <figcaption className="absolute bottom-4 left-4 bg-ivory/90 px-3 py-2 text-[12px] font-medium uppercase tracking-[0.2em] text-charcoal backdrop-blur-sm sm:bottom-6 sm:left-6">
               Our workshop · {site.contact.address.city}
             </figcaption>
           </figure>
@@ -62,7 +62,7 @@ export function BrandStory() {
             <h2 id="story-title" className="h-section">
               Crafted by Experts. <span className="italic text-gold-deep">Worn for Life’s Most Meaningful Moments</span>
             </h2>
-            <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-charcoal/85 sm:text-base">
+            <div className="mt-6 space-y-4 text-[17px] leading-relaxed text-charcoal/85 sm:text-base">
               <p>
                 {site.name} is not a reseller. Every ring, earring and bracelet is designed, cast, set and polished under one roof — in our own fine jewelry manufacturing
                 workshop in {site.contact.address.city}, where we have been perfecting our craft since {site.foundedYear}.
@@ -78,7 +78,7 @@ export function BrandStory() {
             <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8 sm:grid-cols-4">
               {STATS.map((s) => (
                 <div key={s.label} className="flex flex-col-reverse gap-1.5">
-                  <dt className="text-[10.5px] font-medium uppercase leading-snug tracking-[0.16em] text-taupe">{s.label}</dt>
+                  <dt className="text-[12.5px] font-medium uppercase leading-snug tracking-[0.16em] text-taupe">{s.label}</dt>
                   <dd className="font-serif text-[2.5rem] font-light leading-none text-ink lg:text-[2.85rem]">{s.value}</dd>
                 </div>
               ))}
@@ -100,7 +100,7 @@ export function BrandStory() {
                 </span>
                 <div>
                   <h3 className="font-serif text-[1.3rem] leading-tight text-ink sm:mt-5 sm:text-[1.35rem]">{title}</h3>
-                  <p className="mt-1.5 text-[14px] leading-relaxed text-taupe sm:mt-2">{text}</p>
+                  <p className="mt-1.5 text-[16px] leading-relaxed text-taupe sm:mt-2">{text}</p>
                 </div>
               </Reveal>
             </li>

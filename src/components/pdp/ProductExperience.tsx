@@ -56,9 +56,10 @@ export function ProductExperience({ p, init, configure, compact }: { p: ProductD
     const u = new URL(window.location.href);
     u.searchParams.set('metal', c.metal);
     u.searchParams.set('purity', c.purity);
+    if (c.centerOption) u.searchParams.set('shape', c.shape);
     u.searchParams.delete('configure');
     window.history.replaceState(window.history.state, '', u.toString());
-  }, [c.metal, c.purity, compact]);
+  }, [c.metal, c.purity, c.shape, c.centerOption, compact]);
 
   const purity = PURITIES.find((x) => x.slug === c.purity);
 

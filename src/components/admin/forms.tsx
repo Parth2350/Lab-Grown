@@ -59,7 +59,7 @@ export function FormBanner({ state, className }: { state: FormState | undefined;
     <div
       role={state.ok ? 'status' : 'alert'}
       className={cn(
-        'flex items-start gap-2 border px-3 py-2 text-[13px]',
+        'flex items-start gap-2 border px-3 py-2 text-[15px]',
         state.ok ? 'border-success/30 bg-success/[0.06] text-success' : 'border-danger/30 bg-danger/[0.05] text-danger',
         className,
       )}
@@ -122,7 +122,7 @@ export function ConfirmDialog({
   return (
     <Sheet open={open} onClose={onClose} side="center" label={title} hideClose className="top-[20vh] max-w-md border border-line" bodyClassName="p-6">
       <h2 className="font-serif text-2xl text-ink">{title}</h2>
-      {description && <div className="mt-2 text-[13px] leading-relaxed text-charcoal">{description}</div>}
+      {description && <div className="mt-2 text-[15px] leading-relaxed text-charcoal">{description}</div>}
       <div className="mt-6 flex justify-end gap-2">
         <Button type="button" size="sm" variant="ghost" onClick={onClose} data-autofocus>
           Cancel
@@ -219,7 +219,7 @@ export function ActionButton({
     );
   } else {
     button = (
-      <Button type="button" size="sm" variant={variant} loading={pending} disabled={disabled} onClick={onClick} title={title} className={cn(size === 'xs' && 'h-7 px-3 text-[10px]', className)}>
+      <Button type="button" size="sm" variant={variant} loading={pending} disabled={disabled} onClick={onClick} title={title} className={cn(size === 'xs' && 'h-7 px-3 text-[12px]', className)}>
         {!pending && icon}
         {children}
       </Button>
@@ -289,7 +289,7 @@ export function CharCount({ value, ideal, max }: { value: string; ideal: [number
   const n = value.length;
   const tone = n === 0 ? 'text-taupe' : n > max ? 'text-danger' : n >= ideal[0] && n <= ideal[1] ? 'text-success' : 'text-[#7A5718]';
   return (
-    <span className={cn('text-[11px] tabular-nums', tone)} aria-live="polite">
+    <span className={cn('text-[13px] tabular-nums', tone)} aria-live="polite">
       {n}/{max}
       {n > max ? ' — will be truncated' : n >= ideal[0] && n <= ideal[1] ? ' — good length' : ''}
     </span>

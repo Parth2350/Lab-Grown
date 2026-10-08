@@ -71,17 +71,17 @@ export default async function OrdersPage() {
                     )}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[14px] text-ink">{o.number}</p>
-                    <p className="truncate text-[12.5px] text-taupe">
+                    <p className="text-[16px] text-ink">{o.number}</p>
+                    <p className="truncate text-[14.5px] text-taupe">
                       {first?.name}
                       {o.items.length > 1 ? ` + ${o.items.length - 1} more` : ''}
                     </p>
-                    <p className="text-[12px] text-taupe">
+                    <p className="text-[14px] text-taupe">
                       {formatDate(o.createdAt)} · {pluralize(qty, 'piece')}
                     </p>
                   </div>
                   <div className="text-right sm:order-none">
-                    <p className="text-[14px] tabular-nums">{formatMoney(o.total, { exact: true })}</p>
+                    <p className="text-[16px] tabular-nums">{formatMoney(o.total, { exact: true })}</p>
                     <StatusBadge status={o.status} className="mt-1.5 sm:hidden" />
                   </div>
                   <StatusBadge status={o.status} className="hidden justify-self-end sm:inline-flex" />

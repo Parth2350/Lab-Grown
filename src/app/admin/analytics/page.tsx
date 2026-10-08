@@ -30,7 +30,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
 
       {/* One filter row above everything it scopes */}
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <span className="text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe" id="range-label">
+        <span className="text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe" id="range-label">
           Period
         </span>
         <div className="inline-flex border border-line bg-white" role="group" aria-labelledby="range-label">
@@ -39,7 +39,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
               key={r.value}
               href={r.value === '12m' ? '/admin/analytics' : `/admin/analytics?range=${r.value}`}
               aria-current={r.value === range ? 'true' : undefined}
-              className={cn('px-3.5 py-1.5 text-[12.5px] transition-colors', r.value === range ? 'bg-ink text-ivory' : 'text-charcoal hover:bg-porcelain')}
+              className={cn('px-3.5 py-1.5 text-[14.5px] transition-colors', r.value === range ? 'bg-ink text-ivory' : 'text-charcoal hover:bg-porcelain')}
             >
               Last {r.label}
             </Link>
@@ -105,16 +105,16 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
 
         <section className="border border-line bg-white">
           <header className="px-5 pt-4">
-            <h2 className="font-sans text-[13px] font-medium tracking-normal text-ink">Coupon usage</h2>
+            <h2 className="font-sans text-[15px] font-medium tracking-normal text-ink">Coupon usage</h2>
             <p className="mt-0.5 text-xs text-taupe">Paid orders that redeemed a code in the period</p>
           </header>
           {a.coupons.length === 0 ? (
             <EmptyState title="No coupons redeemed" description="No paid order used a discount code in this period." />
           ) : (
             <div className="overflow-x-auto px-5 pb-4 pt-3">
-              <table className="w-full min-w-[480px] text-left text-[12.5px] tabular-nums">
+              <table className="w-full min-w-[480px] text-left text-[14.5px] tabular-nums">
                 <thead>
-                  <tr className="border-b border-line text-[10.5px] uppercase tracking-[0.14em] text-taupe">
+                  <tr className="border-b border-line text-[12.5px] uppercase tracking-[0.14em] text-taupe">
                     <th className="py-2 pr-3 font-medium">Code</th>
                     <th className="py-2 pr-3 text-right font-medium">Orders</th>
                     <th className="py-2 pr-3 text-right font-medium">Discount</th>
@@ -150,7 +150,7 @@ export default async function AnalyticsPage({ searchParams }: { searchParams: Pr
       </div>
 
       <section className="mt-4">
-        <h2 className="mb-2 font-sans text-[13px] font-medium tracking-normal text-ink">Top products</h2>
+        <h2 className="mb-2 font-sans text-[15px] font-medium tracking-normal text-ink">Top products</h2>
         {a.topProducts.length === 0 ? (
           <div className="border border-line bg-white">
             <EmptyState title="No sales in this period" />

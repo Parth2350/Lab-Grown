@@ -8,7 +8,7 @@ import { ConfirmDialog, FormBanner, SubmitButton, useAdminForm } from '../forms'
 import { selectChevron, selectSm } from '../ui';
 import { ORDER_STATUSES, ORDER_STATUS_HINT, STOCK_HELD_STATUSES, isStandardTransition, transitionNeedsConfirmation } from './status';
 
-const lbl = 'mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
+const lbl = 'mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
 
 export function OrderStatusForm({
   orderId,
@@ -132,7 +132,7 @@ export function OrderStatusForm({
       </div>
 
       {canRestock && (
-        <label className="flex cursor-pointer items-start gap-2.5 text-[12.5px] text-charcoal">
+        <label className="flex cursor-pointer items-start gap-2.5 text-[14.5px] text-charcoal">
           <input type="checkbox" name="restock" checked={restock} onChange={(e) => setRestock(e.target.checked)} className="mt-0.5 h-4 w-4 accent-ink" />
           <span>Return items to inventory (restock variants and release reserved diamonds)</span>
         </label>

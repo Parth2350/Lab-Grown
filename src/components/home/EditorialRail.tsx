@@ -35,7 +35,7 @@ export function EditorialRail({ id, eyebrow, title, text, href, cta, art, produc
             <h2 id={id} className="font-serif text-[2rem] font-light leading-[1.08] text-ink sm:text-[2.4rem]">
               {title}
             </h2>
-            <p className="mt-3 max-w-sm text-[14.5px] leading-relaxed text-charcoal/80">{text}</p>
+            <p className="mt-3 max-w-sm text-[16.5px] leading-relaxed text-charcoal/80">{text}</p>
             <Link href={href} className="label-caps group mt-6 inline-flex items-center gap-2 text-ink">
               <span className="link-underline group-hover:[background-size:100%_1px]">{cta}</span>
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.5} aria-hidden />

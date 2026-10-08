@@ -11,7 +11,7 @@ import type { ArtSpec } from '@/components/art/JewelryArt';
 
 export const metadata = pageMeta({
   title: 'Bespoke Design',
-  description: `Create a one-of-a-kind engagement ring or fine jewelry piece with ${site.name}'s designers and master jewelers. Share your vision and start your bespoke request today.`,
+  description: `Create a one-of-a-kind engagement ring or fine jewelry piece with the designers and master jewelers at ${site.name}. Share your vision and start your bespoke request today.`,
   path: '/bespoke',
 });
 
@@ -112,7 +112,7 @@ export default function BespokePage() {
           <div className="lg:col-span-5">
             <p className="eyebrow mb-4">Bespoke Design</p>
             <h1 className="h-display text-balance">Your idea, made by hand</h1>
-            <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-taupe md:text-[17px]">
+            <p className="mt-6 max-w-lg text-[18px] leading-relaxed text-taupe md:text-[19px]">
               Work one-to-one with our designers and master jewelers to create an engagement ring or fine jewelry piece that exists nowhere else — crafted in
               our own workshop with certified lab-grown diamonds.
             </p>
@@ -124,7 +124,7 @@ export default function BespokePage() {
                 How It Works
               </ButtonLink>
             </div>
-            <ul className="mt-10 grid grid-cols-3 gap-4 border-t border-line pt-6 text-[12px] leading-snug text-taupe">
+            <ul className="mt-10 grid grid-cols-3 gap-4 border-t border-line pt-6 text-[14px] leading-snug text-taupe">
               <li>
                 <span className="block font-serif text-2xl text-ink">Free</span>consultation &amp; CAD
               </li>
@@ -167,7 +167,7 @@ export default function BespokePage() {
           <h2 id="how-title" className="h-section">
             How bespoke works
           </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-taupe">Four considered steps, guided from start to finish by your personal design consultant.</p>
+          <p className="mt-4 text-[17px] leading-relaxed text-taupe">Four considered steps, guided from start to finish by your personal design consultant.</p>
         </div>
         <NumberedSteps steps={STEPS} />
       </section>
@@ -180,7 +180,7 @@ export default function BespokePage() {
             <h2 id="showcase-title" className="h-section">
               Designs we have brought to life
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-taupe">A few examples of the kinds of commissions our designers create.</p>
+            <p className="mt-4 text-[17px] leading-relaxed text-taupe">A few examples of the kinds of commissions our designers create.</p>
           </div>
           <ul className="grid gap-x-4 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-6">
             {SHOWCASE.map((s, i) => (
@@ -188,7 +188,7 @@ export default function BespokePage() {
                 <Reveal delay={i * 0.08}>
                   <ArtPanel spec={s.spec} shape={s.shape} metal={s.metal} carat={s.carat ?? 1} tone={s.tone} className="aspect-[4/5] bg-white" inset="p-6" title={s.title} />
                   <h3 className="mt-5 font-serif text-[1.5rem] leading-tight">{s.title}</h3>
-                  <p className="mt-2 text-[14px] leading-relaxed text-taupe">{s.text}</p>
+                  <p className="mt-2 text-[16px] leading-relaxed text-taupe">{s.text}</p>
                 </Reveal>
               </li>
             ))}
@@ -204,11 +204,11 @@ export default function BespokePage() {
             <h2 id="start-title" className="h-section">
               Start your bespoke request
             </h2>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-taupe">
+            <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-taupe">
               It takes about three minutes. There is no obligation — just the beginning of a conversation with your designer.
             </p>
           </div>
-          <p className="text-[14px] leading-relaxed text-taupe lg:col-span-5 lg:text-right">
+          <p className="text-[16px] leading-relaxed text-taupe lg:col-span-5 lg:text-right">
             Prefer to talk first?{' '}
             <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-stone underline-offset-4 hover:decoration-ink">
               Message us on WhatsApp

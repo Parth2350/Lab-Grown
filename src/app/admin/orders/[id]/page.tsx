@@ -128,9 +128,9 @@ export default async function OrderDetailPage({ params }: Props) {
                         ) : (
                           <span className="font-medium">{it.name}</span>
                         )}
-                        <p className="font-mono text-[11px] text-taupe">{it.sku}</p>
+                        <p className="font-mono text-[13px] text-taupe">{it.sku}</p>
                       </td>
-                      <td className={`${table.td} text-[12.5px]`}>
+                      <td className={`${table.td} text-[14.5px]`}>
                         <p>
                           {it.purity} {label.metal(it.metalColor)}
                         </p>
@@ -145,7 +145,7 @@ export default async function OrderDetailPage({ params }: Props) {
                 </tbody>
               </table>
             </div>
-            <dl className="ml-auto grid max-w-xs grid-cols-[1fr_auto] gap-x-6 gap-y-1.5 border-t border-line px-5 py-4 text-[13px] tabular-nums">
+            <dl className="ml-auto grid max-w-xs grid-cols-[1fr_auto] gap-x-6 gap-y-1.5 border-t border-line px-5 py-4 text-[15px] tabular-nums">
               <dt className="text-taupe">Subtotal</dt>
               <dd className="text-right">{money(order.subtotal)}</dd>
               {order.discount > 0 && (
@@ -162,7 +162,7 @@ export default async function OrderDetailPage({ params }: Props) {
               <dd className="text-right">{money(order.tax)}</dd>
               <dt className="border-t border-line pt-2 font-medium text-ink">Total</dt>
               <dd className="border-t border-line pt-2 text-right font-medium text-ink">
-                {money(order.total)} <span className="text-[11px] font-normal text-taupe">{order.currency}</span>
+                {money(order.total)} <span className="text-[13px] font-normal text-taupe">{order.currency}</span>
               </dd>
             </dl>
           </Panel>
@@ -170,7 +170,7 @@ export default async function OrderDetailPage({ params }: Props) {
           {/* Payments */}
           <Panel title="Payments" bodyClassName="p-0">
             {order.payments.length === 0 ? (
-              <p className="flex items-center gap-2 px-5 py-6 text-[13px] text-taupe">
+              <p className="flex items-center gap-2 px-5 py-6 text-[15px] text-taupe">
                 <CreditCard className="h-4 w-4" strokeWidth={1.25} aria-hidden /> No payment attempts recorded.
               </p>
             ) : (
@@ -194,7 +194,7 @@ export default async function OrderDetailPage({ params }: Props) {
                           {p.method && <span className="text-taupe"> · {p.method}</span>}
                         </td>
                         <td className={table.tdRight}>
-                          {money(p.amount)} <span className="text-[11px] text-taupe">{p.currency}</span>
+                          {money(p.amount)} <span className="text-[13px] text-taupe">{p.currency}</span>
                         </td>
                         <td className={table.td}>
                           <StatusBadge status={p.status} />
@@ -225,14 +225,14 @@ export default async function OrderDetailPage({ params }: Props) {
             bodyClassName="p-0"
           >
             {order.shipments.length === 0 ? (
-              <p className="flex items-center gap-2 px-5 py-6 text-[13px] text-taupe">
+              <p className="flex items-center gap-2 px-5 py-6 text-[15px] text-taupe">
                 <Truck className="h-4 w-4" strokeWidth={1.25} aria-hidden /> Nothing shipped yet.
               </p>
             ) : (
               <ul className="divide-y divide-line">
                 {order.shipments.map((s) => (
                   <li key={s.id} className="flex flex-wrap items-start justify-between gap-4 px-5 py-4">
-                    <div className="min-w-0 space-y-1 text-[13px]">
+                    <div className="min-w-0 space-y-1 text-[15px]">
                       <p className="flex flex-wrap items-center gap-2">
                         <span className="font-medium">{s.carrier}</span>
                         <span className="text-taupe">· {methodLabel(s.method)}</span>
@@ -240,7 +240,7 @@ export default async function OrderDetailPage({ params }: Props) {
                       </p>
                       <p className="text-xs text-taupe">
                         Tracking{' '}
-                        {s.trackingNumber ? <span className="select-all font-mono text-[12px] text-ink">{s.trackingNumber}</span> : <span>not added</span>}
+                        {s.trackingNumber ? <span className="select-all font-mono text-[14px] text-ink">{s.trackingNumber}</span> : <span>not added</span>}
                       </p>
                       <p className="text-xs text-taupe">
                         {s.shippedAt ? `Shipped ${formatDate(s.shippedAt)}` : `Created ${formatDate(s.createdAt)}`}
@@ -263,14 +263,14 @@ export default async function OrderDetailPage({ params }: Props) {
           {/* Returns */}
           <Panel title="Return requests" bodyClassName="p-0">
             {order.returns.length === 0 ? (
-              <p className="flex items-center gap-2 px-5 py-6 text-[13px] text-taupe">
+              <p className="flex items-center gap-2 px-5 py-6 text-[15px] text-taupe">
                 <PackageOpen className="h-4 w-4" strokeWidth={1.25} aria-hidden /> No return requests for this order.
               </p>
             ) : (
               <ul className="divide-y divide-line">
                 {order.returns.map((r) => (
                   <li key={r.id} className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0 text-[13px]">
+                    <div className="min-w-0 text-[15px]">
                       <p className="flex flex-wrap items-center gap-2">
                         <span className="font-medium">{r.reason}</span>
                         <StatusBadge status={r.status} />
@@ -299,7 +299,7 @@ export default async function OrderDetailPage({ params }: Props) {
           </Panel>
 
           <Panel title="Customer">
-            <div className="space-y-3 text-[13px]">
+            <div className="space-y-3 text-[15px]">
               <div>
                 <p className="font-medium text-ink">{order.customerName}</p>
                 <a href={`mailto:${order.email}`} className="block break-all text-charcoal underline-offset-4 hover:underline">
@@ -333,20 +333,20 @@ export default async function OrderDetailPage({ params }: Props) {
             <div className="space-y-4">
               <DescList items={[['Method', delivery ? `${delivery.label}${delivery.eta ? ` · ${delivery.eta}` : ''}` : order.deliveryMethod]]} />
               <div>
-                <p className="mb-1.5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">Ship to</p>
+                <p className="mb-1.5 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Ship to</p>
                 <AddressBlock value={order.shippingAddress} />
               </div>
               <div>
-                <p className="mb-1.5 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">Bill to</p>
-                {billingSame ? <p className="text-[13px] text-taupe">Same as shipping address</p> : <AddressBlock value={order.billingAddress} />}
+                <p className="mb-1.5 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Bill to</p>
+                {billingSame ? <p className="text-[15px] text-taupe">Same as shipping address</p> : <AddressBlock value={order.billingAddress} />}
               </div>
             </div>
           </Panel>
 
           <Panel title="Order notes (internal)" description="Workshop, team and system notes — never shown to the customer.">
             {order.notes && (
-              <div className="mb-4 border-l-2 border-gold bg-porcelain px-4 py-3 text-[13px] text-charcoal">
-                <p className="mb-1 text-[10px] font-medium uppercase tracking-[0.14em] text-taupe">Customer note</p>
+              <div className="mb-4 border-l-2 border-gold bg-porcelain px-4 py-3 text-[15px] text-charcoal">
+                <p className="mb-1 text-[12px] font-medium uppercase tracking-[0.14em] text-taupe">Customer note</p>
                 <p className="whitespace-pre-line">{order.notes}</p>
               </div>
             )}

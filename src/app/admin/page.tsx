@@ -135,7 +135,7 @@ export default async function AdminDashboard() {
       <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-3">
         <section className="xl:col-span-2">
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="font-sans text-[13px] font-medium tracking-normal text-ink">Recent orders</h2>
+            <h2 className="font-sans text-[15px] font-medium tracking-normal text-ink">Recent orders</h2>
             <Link href="/admin/orders" className="text-xs text-taupe underline-offset-4 hover:text-ink hover:underline">
               All orders
             </Link>
@@ -180,12 +180,12 @@ export default async function AdminDashboard() {
         </section>
 
         <section aria-labelledby="attention-title">
-          <h2 id="attention-title" className="mb-2 font-sans text-[13px] font-medium tracking-normal text-ink">
+          <h2 id="attention-title" className="mb-2 font-sans text-[15px] font-medium tracking-normal text-ink">
             Needs attention
           </h2>
           <div className="border border-line bg-white">
             {attention.length === 0 ? (
-              <div className="flex items-center gap-3 px-5 py-6 text-[13px] text-success">
+              <div className="flex items-center gap-3 px-5 py-6 text-[15px] text-success">
                 <CircleCheck className="h-5 w-5" strokeWidth={1.4} aria-hidden />
                 All caught up — nothing needs your attention.
               </div>
@@ -197,8 +197,8 @@ export default async function AdminDashboard() {
                       <span className={a.tone === 'danger' ? 'text-danger' : 'text-gold-deep'} aria-hidden>
                         {a.icon}
                       </span>
-                      <span className="flex-1 text-[13px] text-charcoal group-hover:text-ink">{a.label}</span>
-                      <span className={`min-w-7 px-1.5 text-center text-[12px] font-medium tabular-nums leading-6 ${a.tone === 'danger' ? 'bg-danger/[0.08] text-danger' : 'bg-gold-pale text-gold-deep'}`}>
+                      <span className="flex-1 text-[15px] text-charcoal group-hover:text-ink">{a.label}</span>
+                      <span className={`min-w-7 px-1.5 text-center text-[14px] font-medium tabular-nums leading-6 ${a.tone === 'danger' ? 'bg-danger/[0.08] text-danger' : 'bg-gold-pale text-gold-deep'}`}>
                         {formatCompact(a.count)}
                       </span>
                     </Link>

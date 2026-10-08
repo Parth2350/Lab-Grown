@@ -15,8 +15,8 @@ export function TrustBadges({ returnsDays = 30, className, compact }: { returnsD
         <li key={title} className="flex items-start gap-3">
           <Icon className="mt-0.5 h-[18px] w-[18px] shrink-0 text-gold" strokeWidth={1.1} aria-hidden />
           <div className="min-w-0">
-            <p className="text-[12.5px] font-normal text-ink">{title}</p>
-            <p className="text-[11.5px] leading-snug text-taupe">{text}</p>
+            <p className="text-[14.5px] font-normal text-ink">{title}</p>
+            <p className="text-[13.5px] leading-snug text-taupe">{text}</p>
           </div>
         </li>
       ))}
@@ -31,7 +31,7 @@ export function PaymentMarks({ className }: { className?: string }) {
   return (
     <ul className={cn('flex flex-wrap gap-1.5', className)} aria-label="Accepted payment methods">
       {MARKS.map((m) => (
-        <li key={m} className="border border-line bg-white px-2 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-charcoal/80">
+        <li key={m} className="border border-line bg-white px-2 py-1 text-[12px] font-medium uppercase tracking-[0.12em] text-charcoal/80">
           {m}
         </li>
       ))}
@@ -41,7 +41,7 @@ export function PaymentMarks({ className }: { className?: string }) {
 
 export function SecureNote({ className }: { className?: string }) {
   return (
-    <p className={cn('flex items-center gap-2 text-[12px] text-taupe', className)}>
+    <p className={cn('flex items-center gap-2 text-[14px] text-taupe', className)}>
       <Lock className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} aria-hidden />
       <span>
         <span className="text-charcoal">256-bit SSL encrypted.</span> Payments processed securely by Razorpay.

@@ -13,7 +13,7 @@ export function FaqList({ items, className, withSchema = true }: { items: Faq[];
       <div className={cn('border-t border-line', className)}>
         {items.map((f, i) => (
           <AccordionItem key={f.q} title={f.q} defaultOpen={i === 0}>
-            <p className="max-w-2xl text-[15px] leading-relaxed">{f.a}</p>
+            <p className="max-w-2xl text-[17px] leading-relaxed">{f.a}</p>
           </AccordionItem>
         ))}
       </div>
@@ -48,7 +48,7 @@ export function FaqSection({
           <h2 id={`${id}-title`} className="h-section">
             {title}
           </h2>
-          {intro && <div className="mt-4 max-w-sm text-[15px] leading-relaxed text-taupe">{intro}</div>}
+          {intro && <div className="mt-4 max-w-sm text-[17px] leading-relaxed text-taupe">{intro}</div>}
           {footer && <div className="mt-6">{footer}</div>}
         </div>
         <div className="lg:col-span-8">

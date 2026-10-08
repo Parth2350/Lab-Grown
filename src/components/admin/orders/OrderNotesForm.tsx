@@ -22,13 +22,13 @@ export function OrderNotesForm({ orderId, notes }: { orderId: string; notes: str
         onChange={(e) => setValue(e.target.value)}
         maxLength={MAX}
         rows={5}
-        className="field min-h-[110px] resize-y px-3 py-2 text-[13px] leading-relaxed"
+        className="field min-h-[110px] resize-y px-3 py-2 text-[15px] leading-relaxed"
         placeholder="Workshop instructions, follow-ups, gift messages…"
         aria-describedby="order-notes-hint"
       />
       <FieldMsg state={state} name="notes" />
       <div className="flex items-center justify-between gap-3">
-        <p id="order-notes-hint" className="text-[11px] text-taupe">
+        <p id="order-notes-hint" className="text-[13px] text-taupe">
           Never shown to the customer. {value.length}/{MAX}
         </p>
         <SubmitButton pending={pending} disabled={!dirty} variant="outline">

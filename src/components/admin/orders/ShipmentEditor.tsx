@@ -20,7 +20,7 @@ export type ShipmentFormValue = {
 
 export type MethodOption = { id: string; label: string };
 
-const lbl = 'mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
+const lbl = 'mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
 
 function ShipmentForm({
   orderId,
@@ -89,7 +89,7 @@ function ShipmentForm({
             autoComplete="off"
             spellCheck={false}
             aria-invalid={err('trackingNumber')}
-            className="field py-2.5 font-mono text-[13px]"
+            className="field py-2.5 font-mono text-[15px]"
           />
           <FieldMsg state={state} name="trackingNumber" />
         </div>

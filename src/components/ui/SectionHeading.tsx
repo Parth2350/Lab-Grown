@@ -19,7 +19,7 @@ export function SectionHeading({ eyebrow, title, subtitle, align = 'left', actio
       <div className={cn('max-w-2xl', align === 'center' && 'mx-auto')}>
         {eyebrow && <p className={cn('eyebrow mb-3', tone === 'light' && 'text-gold-light')}>{eyebrow}</p>}
         <Tag className={cn('h-section', tone === 'light' && 'text-ivory')}>{title}</Tag>
-        {subtitle && <p className={cn('mt-3 text-[15px] text-taupe', tone === 'light' && 'text-ivory/70')}>{subtitle}</p>}
+        {subtitle && <p className={cn('mt-3 text-[17px] text-taupe', tone === 'light' && 'text-ivory/70')}>{subtitle}</p>}
       </div>
       {action && (
         <Link

@@ -197,7 +197,8 @@ export async function priceLines(inputs: LineInput[], opts: { checkStock?: boole
       const d = dMap.get(l.diamondId);
       if (!center) return fail('diamond_mismatch', `${p.name} is not set with a loose diamond.`);
       if (!d) return fail('diamond_sold', `The diamond selected for ${p.name} is no longer available.`);
-      const fits = (!center.shape || d.shape === center.shape) && d.carat >= (center.minCarat ?? 0) - 1e-6 && d.carat <= (center.maxCarat ?? 99) + 1e-6;
+      // any diamond shape can be set — the customer picks it on the product page; only the carat range is fixed by the setting
+      const fits = d.carat >= (center.minCarat ?? 0) - 1e-6 && d.carat <= (center.maxCarat ?? 99) + 1e-6;
       if (!fits) return fail('diamond_mismatch', `The selected diamond does not fit the ${p.name} setting.`);
       diamond = d;
       if (!d.isAvailable) issue = ['diamond_sold', `The ${d.carat.toFixed(2)} ct ${label.shape(d.shape).toLowerCase()} diamond for ${p.name} has just been reserved by another client. Please choose another stone.`];
@@ -312,7 +313,7 @@ export async function quote(input: { lines: LineInput[]; couponCode?: string | n
 
 // ───────────────────────────── receipt tokens ─────────────────────────────
 
-const secret = () => process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || 'aurevia-development-secret';
+const secret = () => process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET || 'tvj-development-secret';
 
 /** Capability token handed to the browser that placed the order (lets guests view their confirmation). */
 export function receiptToken(orderNumber: string) {
@@ -397,7 +398,7 @@ const snapshot = (a: AddressSnapshot): AddressSnapshot => ({
   country: a.country,
 });
 
-const orderNumber = () => `AUR-${crypto.randomInt(100000, 1000000)}`;
+const orderNumber = () => `TVJ-${crypto.randomInt(100000, 1000000)}`;
 
 type Viewer = { id: string; email?: string | null } | null;
 

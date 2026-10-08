@@ -41,7 +41,7 @@ export function Bespoke() {
               Create Your Dream Jewelry
             </h2>
             <p className="mt-3 font-serif text-[1.5rem] font-light italic leading-snug text-gold-light sm:text-[1.75rem]">Bespoke Jewelry, Made Just For You</p>
-            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-ivory/70 sm:text-base">
+            <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-ivory/70 sm:text-base">
               Some pieces cannot be found — only imagined. Our bespoke atelier turns your story into a one-of-a-kind jewel, guided by the same designers and master
               craftspeople who make every piece we sell.
             </p>
@@ -54,7 +54,7 @@ export function Bespoke() {
                   <span className="pt-0.5 font-serif text-xl leading-none text-gold-light">{String(i + 1).padStart(2, '0')}</span>
                   <div>
                     <h3 className="font-serif text-[1.3rem] leading-tight text-ivory">{step.title}</h3>
-                    <p className="mt-1.5 text-[14px] leading-relaxed text-ivory/60">{step.text}</p>
+                    <p className="mt-1.5 text-[16px] leading-relaxed text-ivory/60">{step.text}</p>
                   </div>
                 </Reveal>
               </li>

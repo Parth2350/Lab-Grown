@@ -31,7 +31,7 @@ export function CollectionSearch({ placeholder = 'Try ‘2ct oval halo’, a sha
         value={q}
         onChange={(e) => setQ(e.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full border-b border-line bg-transparent pl-7 pr-8 text-[14px] text-ink placeholder:text-taupe/70 focus:border-ink focus:outline-none"
+        className="h-11 w-full border-b border-line bg-transparent pl-7 pr-8 text-[16px] text-ink placeholder:text-taupe/70 focus:border-ink focus:outline-none"
       />
       {q && (
         <button
@@ -58,7 +58,7 @@ export function SortSelect({ className }: { className?: string }) {
       <select
         value={filters.sort}
         onChange={(e) => navigate({ sort: e.target.value as SortSlug })}
-        className="h-10 cursor-pointer border-0 border-b border-line bg-transparent pr-6 text-[13px] text-ink focus:border-ink focus:outline-none"
+        className="h-10 cursor-pointer border-0 border-b border-line bg-transparent pr-6 text-[15px] text-ink focus:border-ink focus:outline-none"
         aria-label="Sort products"
       >
         {SORT_OPTIONS.map((o) => (
@@ -79,21 +79,21 @@ export function ActiveChips() {
     <ul className="flex flex-wrap items-center gap-2" aria-label="Active filters">
       {filters.q && (
         <li>
-          <button onClick={() => navigate({ q: '' })} className="flex h-8 items-center gap-2 border border-ink/20 bg-white px-3 text-[12px] hover:border-ink">
+          <button onClick={() => navigate({ q: '' })} className="flex h-8 items-center gap-2 border border-ink/20 bg-white px-3 text-[14px] hover:border-ink">
             “{filters.q}” <X className="h-3 w-3" strokeWidth={1.5} />
           </button>
         </li>
       )}
       {chips.map(({ k, v }) => (
         <li key={`${k}-${v}`}>
-          <button onClick={() => toggle(k, v)} className="flex h-8 items-center gap-2 border border-ink/20 bg-white px-3 text-[12px] hover:border-ink" aria-label={`Remove filter ${rangeLabel(k, v)}`}>
+          <button onClick={() => toggle(k, v)} className="flex h-8 items-center gap-2 border border-ink/20 bg-white px-3 text-[14px] hover:border-ink" aria-label={`Remove filter ${rangeLabel(k, v)}`}>
             {rangeLabel(k, v)} <X className="h-3 w-3" strokeWidth={1.5} />
           </button>
         </li>
       ))}
       {chips.length > 0 && (
         <li>
-          <button onClick={clearAll} className="ml-1 text-[12px] text-taupe underline underline-offset-4 hover:text-ink">
+          <button onClick={clearAll} className="ml-1 text-[14px] text-taupe underline underline-offset-4 hover:text-ink">
             Clear all
           </button>
         </li>

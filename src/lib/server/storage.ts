@@ -50,13 +50,13 @@ export async function saveUpload(file: File, folder = 'misc'): Promise<{ url: st
   const { CLOUDINARY_CLOUD_NAME: cloud, CLOUDINARY_API_KEY: key, CLOUDINARY_API_SECRET: secret } = process.env;
   if (cloud && key && secret) {
     const timestamp = Math.floor(Date.now() / 1000);
-    const params = `folder=aurevia/${safeFolder}&timestamp=${timestamp}`;
+    const params = `folder=thevjewels/${safeFolder}&timestamp=${timestamp}`;
     const signature = crypto.createHash('sha1').update(params + secret).digest('hex');
     const form = new FormData();
     form.append('file', file);
     form.append('api_key', key);
     form.append('timestamp', String(timestamp));
-    form.append('folder', `aurevia/${safeFolder}`);
+    form.append('folder', `thevjewels/${safeFolder}`);
     form.append('signature', signature);
     const res = await fetch(`https://api.cloudinary.com/v1_1/${cloud}/${kind}/upload`, { method: 'POST', body: form });
     if (!res.ok) throw new UploadError('Upload to image storage failed.');

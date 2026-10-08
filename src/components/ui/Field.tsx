@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 export function Label({ children, htmlFor, required }: { children: ReactNode; htmlFor?: string; required?: boolean }) {
   return (
-    <label htmlFor={htmlFor} className="mb-2 block text-[11px] font-medium uppercase tracking-[0.14em] text-charcoal">
+    <label htmlFor={htmlFor} className="mb-2 block text-[13px] font-medium uppercase tracking-[0.14em] text-charcoal">
       {children}
       {required && <span className="ml-0.5 text-gold">*</span>}
     </label>

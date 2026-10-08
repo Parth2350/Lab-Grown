@@ -7,7 +7,7 @@ const Mail = () => <TextLink href={`mailto:${email}`}>{email}</TextLink>;
 
 // ───────────────────────────── shipping ─────────────────────────────
 
-export const shippingIntro = `Every ${site.name} piece travels fully insured, from our workshop bench to your door — and standard delivery is always on us.`;
+export const shippingIntro = `Every piece from ${site.name} travels fully insured, from our workshop bench to your door — and standard delivery is always on us.`;
 
 export const shippingSections: DocSection[] = [
   {
@@ -37,7 +37,7 @@ export const shippingSections: DocSection[] = [
             ['Priority Overnight', '$75', '1–2 business days (major cities only)'],
           ]}
         />
-        <p className="text-[13px]">
+        <p className="text-[15px]">
           *Delivery times are counted from dispatch, not from the date of your order, and exclude weekends and public holidays. Remote areas may take a little
           longer.
         </p>
@@ -340,7 +340,7 @@ export const warrantySections: DocSection[] = [
     title: 'Our lifetime manufacturing warranty',
     body: (
       <p>
-        Every {site.name} piece is covered against defects in materials and workmanship for its lifetime. If something goes wrong because of the way it was
+        Every piece from {site.name} is covered against defects in materials and workmanship for its lifetime. If something goes wrong because of the way it was
         made, we will repair it — or, if a repair is not possible, replace it with an identical or equivalent piece — at no cost to you, including insured
         shipping both ways.
       </p>

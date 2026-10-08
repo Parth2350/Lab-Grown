@@ -65,7 +65,7 @@ function StockCell({ id, sku, stock }: { id: string; sku: string; stock: number 
           if (e.key === 'Escape') setValue(String(stock));
         }}
         aria-invalid={!valid || undefined}
-        className={cn('field h-8 w-20 px-2 text-right text-[13px] tabular-nums', !valid && 'border-danger', dirty && 'border-gold')}
+        className={cn('field h-8 w-20 px-2 text-right text-[15px] tabular-nums', !valid && 'border-danger', dirty && 'border-gold')}
       />
       <button
         type="submit"
@@ -113,7 +113,7 @@ function BulkBar({ ids, onDone, onClear }: { ids: string[]; onDone: () => void; 
   };
 
   return (
-    <div className={cn('mb-3 flex min-h-[52px] flex-wrap items-center gap-3 border px-4 py-2 text-[13px] transition-colors', count ? 'border-ink bg-ink text-ivory' : 'border-line bg-white text-taupe')} aria-live="polite">
+    <div className={cn('mb-3 flex min-h-[52px] flex-wrap items-center gap-3 border px-4 py-2 text-[15px] transition-colors', count ? 'border-ink bg-ink text-ivory' : 'border-line bg-white text-taupe')} aria-live="polite">
       {count === 0 ? (
         <p className="text-xs">Select variants with the checkboxes to add or set stock in bulk (up to 200 at a time).</p>
       ) : (
@@ -152,12 +152,12 @@ function BulkBar({ ids, onDone, onClear }: { ids: string[]; onDone: () => void; 
               onChange={(e) => setAmount(e.target.value)}
               placeholder={mode === 'add' ? '+N' : 'N'}
               aria-invalid={amount !== '' && !valid ? true : undefined}
-              className="field h-8 w-24 border-ivory/30 bg-ink px-2 text-right text-[13px] text-ivory placeholder:text-ivory/40 focus:border-ivory"
+              className="field h-8 w-24 border-ivory/30 bg-ink px-2 text-right text-[15px] text-ivory placeholder:text-ivory/40 focus:border-ivory"
             />
             <button
               type="submit"
               disabled={!valid || pending}
-              className="inline-flex h-8 items-center gap-2 border border-ivory bg-ivory px-4 text-[10.5px] font-medium uppercase tracking-[0.16em] text-ink transition-colors hover:bg-transparent hover:text-ivory disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-8 items-center gap-2 border border-ivory bg-ivory px-4 text-[12.5px] font-medium uppercase tracking-[0.16em] text-ink transition-colors hover:bg-transparent hover:text-ivory disabled:cursor-not-allowed disabled:opacity-40"
             >
               {pending && <span className="h-3 w-3 animate-spin rounded-full border border-current border-t-transparent" aria-hidden />}
               Apply to {formatNumber(count)}
@@ -257,11 +257,11 @@ export function InventoryGrid({ rows, threshold }: { rows: InventoryRow[]; thres
                     <Link href={`/admin/products/${r.productId}`} className="block max-w-[280px] truncate underline-offset-4 hover:underline">
                       {r.productName}
                     </Link>
-                    <p className="text-[11.5px] text-taupe">
+                    <p className="text-[13.5px] text-taupe">
                       {r.categoryName} · <span className="font-mono">{r.productSku}</span>
                     </p>
                   </td>
-                  <td className={cn(table.td, 'whitespace-nowrap font-mono text-[12px]')}>{r.sku}</td>
+                  <td className={cn(table.td, 'whitespace-nowrap font-mono text-[14px]')}>{r.sku}</td>
                   <td className={table.td}>{r.purity}</td>
                   <td className={cn(table.td, 'whitespace-nowrap')}>{r.metal}</td>
                   <td className={cn(table.tdRight, 'whitespace-nowrap')}>{formatMoney(r.price)}</td>

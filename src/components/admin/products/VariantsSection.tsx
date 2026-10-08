@@ -8,7 +8,7 @@ import { toast } from '../toast';
 import { EditorSection, ErrorText, labelCls, type SectionProps } from './editor-ui';
 import { centsToDollarInput, gridVariants, orphanVariants, parseMoneyInput, suggestedVariantPrice, variantErrKey, variantKey, type VariantDraft } from './shared';
 
-const cell = 'field h-9 px-2.5 py-0 text-[12.5px] tabular-nums';
+const cell = 'field h-9 px-2.5 py-0 text-[14.5px] tabular-nums';
 const metalOf = (slug: string) => METAL_COLORS.find((m) => m.slug === slug);
 
 export function VariantsSection({ draft, update, errors, lowStock }: SectionProps & { lowStock: number }) {
@@ -66,29 +66,29 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
     >
       {errors.variants && <ErrorText msg={errors.variants} />}
       {rows.length === 0 ? (
-        <p className="border border-dashed border-line px-4 py-6 text-center text-[13px] text-taupe">Choose at least one metal colour and one purity under Attributes to create variants.</p>
+        <p className="border border-dashed border-line px-4 py-6 text-center text-[15px] text-taupe">Choose at least one metal colour and one purity under Attributes to create variants.</p>
       ) : (
         <>
           <p className="mb-3 text-xs text-taupe">
             Suggested price = base × purity multiplier (+5% for two-tone), rounded to a retail price. Prices follow the base price until you edit them.
           </p>
           <div className="overflow-x-auto border border-line">
-            <table className="w-full min-w-[640px] border-collapse text-left text-[13px] tabular-nums">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[15px] tabular-nums">
               <thead className="border-b border-line bg-ivory/70">
                 <tr>
-                  <th scope="col" className="px-3 py-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                  <th scope="col" className="px-3 py-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                     Variant
                   </th>
-                  <th scope="col" className="px-3 py-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                  <th scope="col" className="px-3 py-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                     SKU
                   </th>
-                  <th scope="col" className="w-[150px] px-3 py-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                  <th scope="col" className="w-[150px] px-3 py-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                     Price ($)
                   </th>
-                  <th scope="col" className="w-[100px] px-3 py-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                  <th scope="col" className="w-[100px] px-3 py-2 text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                     Stock
                   </th>
-                  <th scope="col" className="w-[70px] px-3 py-2 text-center text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">
+                  <th scope="col" className="w-[70px] px-3 py-2 text-center text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">
                     Active
                   </th>
                 </tr>
@@ -114,7 +114,7 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
                           <span className={cn('whitespace-nowrap', !v.isActive && 'text-taupe')}>
                             <span className="font-medium">{purity?.label ?? v.purity}</span> {metal?.short ?? v.metalColor}
                           </span>
-                          {!v.id && <span className="border border-gold/30 bg-gold-pale px-1 text-[10px] uppercase tracking-wider text-gold-deep">New</span>}
+                          {!v.id && <span className="border border-gold/30 bg-gold-pale px-1 text-[12px] uppercase tracking-wider text-gold-deep">New</span>}
                         </div>
                       </th>
                       <td className="px-3 py-2 align-top">
@@ -128,7 +128,7 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
                           maxLength={48}
                           spellCheck={false}
                           aria-invalid={errSku ? true : undefined}
-                          className={cn(cell, 'min-w-[190px] font-mono text-[11.5px] uppercase')}
+                          className={cn(cell, 'min-w-[190px] font-mono text-[13.5px] uppercase')}
                         />
                         <ErrorText msg={errSku} />
                       </td>
@@ -148,7 +148,7 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
                         {errPrice ? (
                           <ErrorText msg={errPrice} />
                         ) : suggested != null && current !== suggested ? (
-                          <button type="button" onClick={() => patchVariant(v, { price: centsToDollarInput(suggested), priceAuto: true })} className="mt-1 text-[11px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+                          <button type="button" onClick={() => patchVariant(v, { price: centsToDollarInput(suggested), priceAuto: true })} className="mt-1 text-[13px] text-taupe underline-offset-4 hover:text-ink hover:underline">
                             Use {formatMoney(suggested)}
                           </button>
                         ) : null}
@@ -165,7 +165,7 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
                           aria-invalid={errStock ? true : undefined}
                           className={cn(cell, v.isActive && v.stock !== '' && stock === 0 && 'border-danger/50 text-danger', v.isActive && stock > 0 && stock <= lowStock && 'border-[#E6CF9E]')}
                         />
-                        {errStock ? <ErrorText msg={errStock} /> : v.isActive && v.stock !== '' && stock <= lowStock ? <p className={cn('mt-1 text-[11px]', stock === 0 ? 'text-danger' : 'text-[#7A5718]')}>{stock === 0 ? 'Sold out' : 'Low stock'}</p> : null}
+                        {errStock ? <ErrorText msg={errStock} /> : v.isActive && v.stock !== '' && stock <= lowStock ? <p className={cn('mt-1 text-[13px]', stock === 0 ? 'text-danger' : 'text-[#7A5718]')}>{stock === 0 ? 'Sold out' : 'Low stock'}</p> : null}
                       </td>
                       <td className="px-3 py-2 text-center align-top">
                         <label className="inline-flex h-9 cursor-pointer items-center justify-center">
@@ -196,7 +196,7 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
                     applyBulkStock();
                   }
                 }}
-                className="field h-9 w-28 px-3 py-0 text-[13px] tabular-nums"
+                className="field h-9 w-28 px-3 py-0 text-[15px] tabular-nums"
                 placeholder="e.g. 10"
               />
             </div>
@@ -209,17 +209,17 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
 
       {orphans.length > 0 && (
         <div className="mt-5 border border-[#E6CF9E] bg-[#FBF3E1]/60 p-4">
-          <p className="text-[12px] font-medium uppercase tracking-[0.12em] text-[#7A5718]">Retired combinations</p>
+          <p className="text-[14px] font-medium uppercase tracking-[0.12em] text-[#7A5718]">Retired combinations</p>
           <p className="mt-1 text-xs text-charcoal">These saved variants are no longer in the purities × metals you offer. On save, variants used by orders or carts are kept but deactivated; the rest are deleted.</p>
           <ul className="mt-3 divide-y divide-[#E6CF9E]/70">
             {orphans.map((v) => {
               const keep = v.orderCount + v.cartCount > 0;
               return (
-                <li key={variantKey(v.purity, v.metalColor)} className="flex flex-wrap items-center justify-between gap-2 py-2 text-[13px]">
+                <li key={variantKey(v.purity, v.metalColor)} className="flex flex-wrap items-center justify-between gap-2 py-2 text-[15px]">
                   <span className="flex items-center gap-2">
                     <span className="h-3 w-3 rounded-full border border-black/10" style={{ background: metalOf(v.metalColor)?.swatch }} aria-hidden />
                     {v.purity} {metalOf(v.metalColor)?.short ?? v.metalColor}
-                    <span className="font-mono text-[11px] text-taupe">{v.sku}</span>
+                    <span className="font-mono text-[13px] text-taupe">{v.sku}</span>
                   </span>
                   <span className={cn('inline-flex items-center gap-1.5 text-xs', keep ? 'text-[#7A5718]' : 'text-danger')}>
                     {keep ? <Archive className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> : <Trash className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />}

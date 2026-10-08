@@ -25,8 +25,8 @@ export async function Testimonials() {
               <span className="font-serif text-[2.75rem] font-light leading-none text-ink">{average.toFixed(1)}</span>
               <div>
                 <Stars rating={average} size={13} />
-                <p className="mt-1 text-[12px] text-taupe">
-                  Average from {pluralize(count, 'review')} of {site.name} pieces
+                <p className="mt-1 text-[14px] text-taupe">
+                  Average from {pluralize(count, 'review')} of our pieces
                 </p>
               </div>
             </div>
@@ -42,10 +42,10 @@ export async function Testimonials() {
               </div>
               <blockquote className="mt-5 flex-1">
                 <p className="font-serif text-[1.3rem] leading-snug text-ink">{r.title}</p>
-                <p className="mt-3 line-clamp-5 text-[14px] leading-relaxed text-charcoal/80">{r.body}</p>
+                <p className="mt-3 line-clamp-5 text-[16px] leading-relaxed text-charcoal/80">{r.body}</p>
               </blockquote>
               <figcaption className="mt-6 border-t border-line pt-4">
-                <p className="flex items-center gap-1.5 text-[13px] font-normal text-ink">
+                <p className="flex items-center gap-1.5 text-[15px] font-normal text-ink">
                   {r.authorName}
                   {r.isVerified && (
                     <>
@@ -55,7 +55,7 @@ export async function Testimonials() {
                   )}
                   {r.location && <span className="font-light text-taupe">· {r.location}</span>}
                 </p>
-                <p className="mt-1 text-[12px] text-taupe">
+                <p className="mt-1 text-[14px] text-taupe">
                   On the{' '}
                   <Link href={`/products/${r.product.slug}`} className="text-charcoal underline decoration-line underline-offset-4 transition-colors hover:text-gold-deep hover:decoration-gold">
                     {r.product.name}

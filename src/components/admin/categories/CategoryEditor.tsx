@@ -48,7 +48,7 @@ function CategoryForm({ category, nextPosition, onDone }: { category?: CategoryF
 
         <fieldset className="space-y-5 border-t border-line pt-5">
           <legend className="sr-only">Search engine listing</legend>
-          <p className="text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe">Search engine listing</p>
+          <p className="text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Search engine listing</p>
           <SeoFields state={state} idPrefix="cat" seoTitle={category?.seoTitle ?? ''} seoDescription={category?.seoDescription ?? ''} />
         </fieldset>
 
@@ -75,7 +75,7 @@ function CategoryForm({ category, nextPosition, onDone }: { category?: CategoryF
         </div>
 
         <div className="border border-line bg-white px-4 py-3">
-          <label className="flex cursor-pointer items-start gap-3 text-[13px]">
+          <label className="flex cursor-pointer items-start gap-3 text-[15px]">
             <input type="checkbox" name="isActive" defaultChecked={category?.isActive ?? true} className="mt-0.5 h-4 w-4 accent-ink" />
             <span>
               <span className="font-medium text-ink">Active — visible in the store</span>

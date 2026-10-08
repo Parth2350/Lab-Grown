@@ -132,7 +132,7 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
                   {remove ? 'Image will be removed' : 'No image — the illustrated hero is shown'}
                 </div>
               )}
-              {preview && <span className="absolute left-2 top-2 bg-ink px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-ivory">New</span>}
+              {preview && <span className="absolute left-2 top-2 bg-ink px-2 py-0.5 text-[12px] uppercase tracking-[0.14em] text-ivory">New</span>}
             </div>
             <label htmlFor="hero-image" className="sr-only">
               Upload a new hero image
@@ -147,10 +147,10 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
               aria-describedby="hero-image-hint"
               className={cn(
                 'mt-3 block w-full text-xs text-taupe',
-                'file:mr-3 file:cursor-pointer file:border file:border-ink/80 file:bg-white file:px-3 file:py-2 file:text-[10.5px] file:font-medium file:uppercase file:tracking-[0.14em] file:text-ink file:transition-colors hover:file:bg-ink hover:file:text-ivory',
+                'file:mr-3 file:cursor-pointer file:border file:border-ink/80 file:bg-white file:px-3 file:py-2 file:text-[12.5px] file:font-medium file:uppercase file:tracking-[0.14em] file:text-ink file:transition-colors hover:file:bg-ink hover:file:text-ivory',
               )}
             />
-            <p id="hero-image-hint" className="mt-1.5 text-[11px] text-taupe">
+            <p id="hero-image-hint" className="mt-1.5 text-[13px] text-taupe">
               JPG, PNG, WebP, AVIF or GIF up to 8 MB. Landscape, at least 2000 px wide works best.
             </p>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">

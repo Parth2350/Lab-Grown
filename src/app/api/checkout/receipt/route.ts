@@ -5,7 +5,7 @@ import { clientIp, errorResponse, getReceipt, rateLimit, readJson, tooMany } fro
 
 export const dynamic = 'force-dynamic';
 
-const schema = z.object({ orderNumber: z.string().trim().regex(/^AUR-\d{6}$/), token: z.string().max(64).nullish() });
+const schema = z.object({ orderNumber: z.string().trim().regex(/^[A-Z]{3}-\d{6}$/), token: z.string().max(64).nullish() });
 
 /** Order confirmation data — only for the owner or the browser that placed the order (receipt token). */
 export async function POST(req: Request) {

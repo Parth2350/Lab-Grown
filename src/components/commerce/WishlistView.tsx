@@ -32,7 +32,7 @@ function WishCard({ card, onRemove, onMove, readOnly, saved, onSave }: { card: P
         <Link href={href} className="absolute inset-[7%] transition-transform duration-700 ease-luxe group-hover:scale-[1.03]" aria-label={card.name}>
           <ProductMedia name={card.name} art={card.art} images={card.images} shape={card.shapes[0]} metal={card.defaultMetalColor} carat={card.centerCarat ?? card.totalCarat ?? 1} sizes="(min-width:1024px) 25vw, 50vw" />
         </Link>
-        {!card.inStock && <span className="pointer-events-none absolute left-3 top-3 bg-ivory/90 px-2 py-1 text-[9.5px] font-medium uppercase tracking-[0.2em] text-ink">Made to order</span>}
+        {!card.inStock && <span className="pointer-events-none absolute left-3 top-3 bg-ivory/90 px-2 py-1 text-[11.5px] font-medium uppercase tracking-[0.2em] text-ink">Made to order</span>}
         {readOnly ? (
           <button
             type="button"
@@ -55,15 +55,15 @@ function WishCard({ card, onRemove, onMove, readOnly, saved, onSave }: { card: P
         )}
       </div>
       <div className="flex flex-1 flex-col pt-4">
-        <p className="text-[10.5px] uppercase tracking-[0.16em] text-taupe">{card.category.name || label.style(card.category.slug)}</p>
+        <p className="text-[12.5px] uppercase tracking-[0.16em] text-taupe">{card.category.name || label.style(card.category.slug)}</p>
         <Link href={href} className="mt-1 block">
-          <h3 className="font-serif text-[17px] leading-snug transition-colors group-hover:text-gold-deep md:text-lg">{card.name}</h3>
+          <h3 className="font-serif text-[19px] leading-snug transition-colors group-hover:text-gold-deep md:text-lg">{card.name}</h3>
         </Link>
         <p className="mt-1 text-sm text-charcoal">
           <span className="text-taupe">From </span>
           {formatMoney(card.fromPrice)}
         </p>
-        <p className="mt-1 text-[12px] text-taupe">{card.metalColors.map((m) => label.metal(m).replace(' Gold', '')).join(' · ')} gold</p>
+        <p className="mt-1 text-[14px] text-taupe">{card.metalColors.map((m) => label.metal(m).replace(' Gold', '')).join(' · ')} gold</p>
         <div className="mt-auto flex gap-2 pt-4">
           <button
             type="button"
@@ -244,7 +244,7 @@ export function WishlistView({ variant = 'page' }: { variant?: 'page' | 'account
             <Heart className="h-8 w-8 text-gold" strokeWidth={1} aria-hidden />
           </span>
           <h2 className="mt-8 font-serif text-3xl font-light sm:text-4xl">Nothing saved — yet</h2>
-          <p className="mt-3 max-w-md text-[15px] text-taupe">
+          <p className="mt-3 max-w-md text-[17px] text-taupe">
             Tap the heart on any piece to keep it here. It’s the easiest way to compare favourites, or to share a not-so-subtle hint.
           </p>
           <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
@@ -254,7 +254,7 @@ export function WishlistView({ variant = 'page' }: { variant?: 'page' | 'account
             </ButtonLink>
           </div>
           {status === 'unauthenticated' && (
-            <p className="mt-6 text-[13px] text-taupe">
+            <p className="mt-6 text-[15px] text-taupe">
               <Link href="/account/login?callbackUrl=%2Fwishlist" className="text-ink underline underline-offset-4">
                 Sign in
               </Link>{' '}
@@ -283,7 +283,7 @@ export function WishlistView({ variant = 'page' }: { variant?: 'page' | 'account
             </AnimatePresence>
           </m.div>
           {status === 'unauthenticated' && (
-            <p className="mt-12 border-t border-line pt-6 text-center text-[13px] text-taupe">
+            <p className="mt-12 border-t border-line pt-6 text-center text-[15px] text-taupe">
               Your wishlist is saved on this device.{' '}
               <Link href="/account/login?callbackUrl=%2Fwishlist" className="text-ink underline underline-offset-4">
                 Sign in

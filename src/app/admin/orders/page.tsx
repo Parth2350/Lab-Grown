@@ -68,7 +68,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
       </FilterBar>
 
       {filters.returns === 'requested' && (
-        <div className="mb-4 flex flex-wrap items-center gap-2 border border-[#E6CF9E] bg-[#FBF3E1] px-3 py-2 text-[12.5px] text-[#7A5718]" role="status">
+        <div className="mb-4 flex flex-wrap items-center gap-2 border border-[#E6CF9E] bg-[#FBF3E1] px-3 py-2 text-[14.5px] text-[#7A5718]" role="status">
           <Undo2 className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />
           Showing orders with open return requests
           <span aria-hidden>·</span>

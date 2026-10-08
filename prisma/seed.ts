@@ -222,7 +222,7 @@ async function main() {
   for (const [index, p] of PRODUCTS.entries()) {
     const code = CAT_CODE[p.cat];
     counters[code] = (counters[code] ?? 1000) + 1;
-    const sku = `AUR-${code}-${counters[code]}`;
+    const sku = `TVJ-${code}-${counters[code]}`;
     const slug = slugify(p.name);
     const metals = p.metals ?? ['yellow', 'white', 'rose'];
     const purities = p.purities ?? ['9K', '10K', '14K', '18K'];
@@ -449,7 +449,7 @@ async function main() {
     const paid = status !== 'PENDING' && status !== 'CANCELLED';
     await prisma.order.create({
       data: {
-        number: `AUR-${100100 + i}`,
+        number: `TVJ-${100100 + i}`,
         userId: customer.id,
         email: customer.email,
         phone: customer.phone,

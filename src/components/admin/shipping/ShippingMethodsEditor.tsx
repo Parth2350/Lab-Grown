@@ -22,7 +22,7 @@ function toRows(methods: ShippingMethod[]): Row[] {
 
 const serialize = (rows: Row[]) => JSON.stringify(rows.map(({ id, label, description, eta, price }) => ({ id: id.trim(), label: label.trim(), description: description.trim(), eta: eta.trim(), price: price.trim() })));
 
-const lbl = 'mb-1 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-taupe';
+const lbl = 'mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe';
 
 export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMethod[]; usage: Record<string, number> }) {
   const sourceKey = JSON.stringify(methods);
@@ -88,13 +88,13 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
           return (
             <li key={r.key} className="border border-line bg-white p-4">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line/70 pb-3">
-                <p className="text-[12.5px] text-charcoal">
-                  <span className="mr-2 inline-flex h-5 min-w-5 items-center justify-center bg-porcelain px-1 text-[11px] tabular-nums">{i + 1}</span>
+                <p className="text-[14.5px] text-charcoal">
+                  <span className="mr-2 inline-flex h-5 min-w-5 items-center justify-center bg-porcelain px-1 text-[13px] tabular-nums">{i + 1}</span>
                   {r.label || <span className="text-taupe">New method</span>}
                   {r.isNew ? (
-                    <span className="ml-2 text-[11px] text-gold-deep">Unsaved</span>
+                    <span className="ml-2 text-[13px] text-gold-deep">Unsaved</span>
                   ) : (
-                    <span className="ml-2 text-[11px] text-taupe">
+                    <span className="ml-2 text-[13px] text-taupe">
                       {used ? `Used by ${formatNumber(used)} order${used === 1 ? '' : 's'}` : 'Not used yet'}
                     </span>
                   )}
@@ -125,10 +125,10 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
                     spellCheck={false}
                     aria-invalid={fieldError(i, 'id') ? true : undefined}
                     aria-describedby={fid('id-hint')}
-                    className={cn(fieldSm, 'font-mono text-[12px]', !r.isNew && 'cursor-not-allowed bg-ivory text-charcoal')}
+                    className={cn(fieldSm, 'font-mono text-[14px]', !r.isNew && 'cursor-not-allowed bg-ivory text-charcoal')}
                     placeholder="express"
                   />
-                  <p id={fid('id-hint')} className={cn('mt-1 text-[11px]', fieldError(i, 'id') ? 'text-danger' : 'text-taupe')}>
+                  <p id={fid('id-hint')} className={cn('mt-1 text-[13px]', fieldError(i, 'id') ? 'text-danger' : 'text-taupe')}>
                     {fieldError(i, 'id') ?? (r.isNew ? 'Lowercase letters, numbers, hyphens' : 'Fixed — orders reference it')}
                   </p>
                 </div>
@@ -145,14 +145,14 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
                     className={fieldSm}
                     placeholder="Insured Express"
                   />
-                  {fieldError(i, 'label') && <p className="mt-1 text-[11px] text-danger">{fieldError(i, 'label')}</p>}
+                  {fieldError(i, 'label') && <p className="mt-1 text-[13px] text-danger">{fieldError(i, 'label')}</p>}
                 </div>
                 <div>
                   <label htmlFor={fid('eta')} className={lbl}>
                     Delivery estimate
                   </label>
                   <input id={fid('eta')} value={r.eta} onChange={(e) => update(r.key, { eta: e.target.value })} maxLength={80} aria-invalid={fieldError(i, 'eta') ? true : undefined} className={fieldSm} placeholder="3–5 business days" />
-                  {fieldError(i, 'eta') && <p className="mt-1 text-[11px] text-danger">{fieldError(i, 'eta')}</p>}
+                  {fieldError(i, 'eta') && <p className="mt-1 text-[13px] text-danger">{fieldError(i, 'eta')}</p>}
                 </div>
                 <div>
                   <label htmlFor={fid('price')} className={lbl}>
@@ -167,7 +167,7 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
                     aria-describedby={fid('price-hint')}
                     className={cn(fieldSm, 'tabular-nums')}
                   />
-                  <p id={fid('price-hint')} className={cn('mt-1 text-[11px]', fieldError(i, 'price') ? 'text-danger' : 'text-taupe')}>
+                  <p id={fid('price-hint')} className={cn('mt-1 text-[13px]', fieldError(i, 'price') ? 'text-danger' : 'text-taupe')}>
                     {fieldError(i, 'price') ?? '0 = free'}
                   </p>
                 </div>
@@ -184,7 +184,7 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
                     className={fieldSm}
                     placeholder="Shown under the option at checkout"
                   />
-                  {fieldError(i, 'description') && <p className="mt-1 text-[11px] text-danger">{fieldError(i, 'description')}</p>}
+                  {fieldError(i, 'description') && <p className="mt-1 text-[13px] text-danger">{fieldError(i, 'description')}</p>}
                 </div>
               </div>
             </li>
@@ -220,7 +220,7 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
           pendingRemoval && (
             <>
               {formatNumber(usage[pendingRemoval.id] ?? 0)} existing order{(usage[pendingRemoval.id] ?? 0) === 1 ? '' : 's'} used this method. They keep the ID
-              <span className="mx-1 font-mono text-[12px]">{pendingRemoval.id}</span>
+              <span className="mx-1 font-mono text-[14px]">{pendingRemoval.id}</span>
               and will show it instead of the label. Customers can no longer choose it at checkout once you save.
             </>
           )

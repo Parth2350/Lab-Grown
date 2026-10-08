@@ -29,7 +29,7 @@ export function PartnerProgram() {
             Sales Partner Program
           </p>
           <h2 id="partner-title" className="h-section">{`Partner With ${site.name}`}</h2>
-          <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-charcoal/85 sm:text-base">
+          <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-charcoal/85 sm:text-base">
             Love fine jewelry and know people who do? Our partner program lets stylists, creators, wedding planners and jewelry lovers recommend {site.name} and earn
             rewards on every sale — while we take care of the craftsmanship, certification and delivery.
           </p>
@@ -50,7 +50,7 @@ export function PartnerProgram() {
                   </span>
                   <div className="sm:mt-5">
                     <p className="font-serif text-[1.3rem] leading-tight text-ink">{step.title}</p>
-                    <p className="mt-1.5 text-[13.5px] leading-relaxed text-taupe">{step.text}</p>
+                    <p className="mt-1.5 text-[15.5px] leading-relaxed text-taupe">{step.text}</p>
                   </div>
                 </li>
               ))}
@@ -65,7 +65,7 @@ export function PartnerProgram() {
                   <Icon className="mt-0.5 h-5 w-5 shrink-0 text-gold" strokeWidth={1.1} aria-hidden />
                   <div>
                     <p className="font-serif text-[1.2rem] leading-tight text-ink sm:mt-4">{title}</p>
-                    <p className="mt-1.5 text-[13.5px] leading-relaxed text-taupe">{text}</p>
+                    <p className="mt-1.5 text-[15.5px] leading-relaxed text-taupe">{text}</p>
                   </div>
                 </Reveal>
               </li>

@@ -28,11 +28,11 @@ export function BespokeNotesForm({ id, notes }: { id: string; notes: string | nu
         placeholder="Quotes sent, design decisions, follow-ups… Only visible to the admin team."
         aria-invalid={form.state && !form.state.ok && form.state.fieldErrors?.adminNotes ? true : undefined}
         aria-describedby="bespoke-admin-notes-count"
-        className="field min-h-[140px] resize-y px-3 py-2.5 text-[13px] leading-relaxed"
+        className="field min-h-[140px] resize-y px-3 py-2.5 text-[15px] leading-relaxed"
       />
       <FieldMsg state={form.state} name="adminNotes" />
       <div className="mt-3 flex items-center justify-between gap-3">
-        <span id="bespoke-admin-notes-count" className={cn('text-[11px] tabular-nums', value.length > MAX * 0.95 ? 'text-[#7A5718]' : 'text-taupe')}>
+        <span id="bespoke-admin-notes-count" className={cn('text-[13px] tabular-nums', value.length > MAX * 0.95 ? 'text-[#7A5718]' : 'text-taupe')}>
           {formatNumber(value.length)}/{formatNumber(MAX)}
           {dirty && <span className="ml-2 text-gold-deep">· Unsaved changes</span>}
         </span>

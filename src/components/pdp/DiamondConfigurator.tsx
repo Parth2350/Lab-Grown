@@ -28,7 +28,7 @@ function Chips({ label: title, values, active, onToggle }: { label: string; valu
         {values.map((v) => {
           const on = active.includes(v);
           return (
-            <button key={v} type="button" aria-pressed={on} onClick={() => onToggle(v)} className={cn('h-8 min-w-[40px] border px-2.5 text-[12px] transition-colors', on ? 'border-ink bg-ink text-ivory' : 'border-line bg-white hover:border-ink')}>
+            <button key={v} type="button" aria-pressed={on} onClick={() => onToggle(v)} className={cn('h-8 min-w-[40px] border px-2.5 text-[14px] transition-colors', on ? 'border-ink bg-ink text-ivory' : 'border-line bg-white hover:border-ink')}>
               {v}
             </button>
           );
@@ -63,7 +63,7 @@ function CaratRange({ min, max, value, onChange }: { min: number; max: number; v
 
 function Spec({ k, v }: { k: string; v: React.ReactNode }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-line py-2 text-[13px]">
+    <div className="flex justify-between gap-4 border-b border-line py-2 text-[15px]">
       <dt className="text-taupe">{k}</dt>
       <dd className="text-right text-ink">{v}</dd>
     </div>
@@ -86,7 +86,7 @@ export function DiamondDetail({ d }: { d: DiamondData }) {
             <path d="M0-10L2-2L10 0L2 2L0 10L-2 2L-10 0L-2-2Z" fill="currentColor" />
           </svg>
         ))}
-        <span className="absolute bottom-2 left-2 bg-ivory/90 px-2 py-1 text-[9px] uppercase tracking-[0.18em] text-taupe">Diamond view</span>
+        <span className="absolute bottom-2 left-2 bg-ivory/90 px-2 py-1 text-[11px] uppercase tracking-[0.18em] text-taupe">Diamond view</span>
       </div>
       <dl>
         <Spec k="Shape" v={label.shape(d.shape)} />
@@ -191,7 +191,7 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
           <input inputMode="numeric" placeholder="$ Min" aria-label="Minimum diamond price" value={q.minPrice} onChange={(e) => setQ((s) => ({ ...s, minPrice: e.target.value.replace(/\D/g, '') }))} className="field h-10 py-1" />
           <span className="text-taupe">–</span>
           <input inputMode="numeric" placeholder="$ Max" aria-label="Maximum diamond price" value={q.maxPrice} onChange={(e) => setQ((s) => ({ ...s, maxPrice: e.target.value.replace(/\D/g, '') }))} className="field h-10 py-1" />
-          <button type="button" onClick={() => setQ(initial)} className="ml-2 shrink-0 text-[12px] text-taupe underline underline-offset-4 hover:text-ink">
+          <button type="button" onClick={() => setQ(initial)} className="ml-2 shrink-0 text-[14px] text-taupe underline underline-offset-4 hover:text-ink">
             Reset
           </button>
         </div>
@@ -214,7 +214,7 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
       bodyClassName="px-5 pb-6 sm:px-7"
       footer={
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="text-[13px] text-taupe">
+          <div className="text-[15px] text-taupe">
             Setting {formatMoney(settingPrice)} + Diamond {formatMoney(selected?.price ?? 0)} ={' '}
             <span className="font-serif text-xl text-ink">{formatMoney(settingPrice + (selected?.price ?? 0))}</span>
           </div>
@@ -225,7 +225,7 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
       }
     >
       <div className="py-5">
-        <p className="text-[13px] text-taupe">
+        <p className="text-[15px] text-taupe">
           Every diamond below is lab-grown, conflict-free and independently graded by IGI or GIA. This setting accepts {shapeLabel.toLowerCase()} diamonds from {minC.toFixed(2)} to {maxC.toFixed(2)} ct.
         </p>
         <button type="button" onClick={() => setShowFilters((v) => !v)} className="label-caps mt-4 flex items-center gap-2 sm:hidden" aria-expanded={showFilters}>
@@ -234,10 +234,10 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
         <div className={cn('mt-5 border border-line bg-white/60 p-5', !showFilters && 'hidden sm:block')}>{filters}</div>
 
         <div className="mt-6 flex items-center justify-between">
-          <p className="text-[12px] uppercase tracking-[0.14em] text-charcoal" aria-live="polite">
+          <p className="text-[14px] uppercase tracking-[0.14em] text-charcoal" aria-live="polite">
             {loading ? 'Searching…' : `${total} certified diamonds`}
           </p>
-          <select value={q.sort} onChange={(e) => setQ((s) => ({ ...s, sort: e.target.value as Q['sort'] }))} className="h-9 border-0 border-b border-line bg-transparent text-[13px] focus:outline-none" aria-label="Sort diamonds">
+          <select value={q.sort} onChange={(e) => setQ((s) => ({ ...s, sort: e.target.value as Q['sort'] }))} className="h-9 border-0 border-b border-line bg-transparent text-[15px] focus:outline-none" aria-label="Sort diamonds">
             <option value="price-asc">Price: Low to High</option>
             <option value="price-desc">Price: High to Low</option>
             <option value="carat-desc">Carat: High to Low</option>
@@ -245,7 +245,7 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
           </select>
         </div>
 
-        <div className="mt-3 hidden grid-cols-[48px_1fr_60px_70px_90px_70px_100px] gap-3 border-b border-line px-3 pb-2 text-[10px] uppercase tracking-[0.16em] text-taupe md:grid">
+        <div className="mt-3 hidden grid-cols-[48px_1fr_60px_70px_90px_70px_100px] gap-3 border-b border-line px-3 pb-2 text-[12px] uppercase tracking-[0.16em] text-taupe md:grid">
           <span />
           <span>Carat</span>
           <span>Colour</span>
@@ -264,14 +264,14 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
                   type="button"
                   onClick={() => setExpanded(isOpen ? null : d.id)}
                   aria-expanded={isOpen}
-                  className="grid w-full grid-cols-[48px_1fr_auto] items-center gap-3 px-3 py-3 text-left text-[13.5px] transition-colors hover:bg-white md:grid-cols-[48px_1fr_60px_70px_90px_70px_100px]"
+                  className="grid w-full grid-cols-[48px_1fr_auto] items-center gap-3 px-3 py-3 text-left text-[15.5px] transition-colors hover:bg-white md:grid-cols-[48px_1fr_60px_70px_90px_70px_100px]"
                 >
                   <span className="art-tile flex h-12 w-12 items-center justify-center">
                     <ShapeIcon shape={d.shape} size={30} className="text-taupe" />
                   </span>
                   <span>
                     <span className="font-medium text-ink">{d.carat.toFixed(2)} ct</span>
-                    <span className="block text-[12px] text-taupe md:hidden">
+                    <span className="block text-[14px] text-taupe md:hidden">
                       {d.color} · {d.clarity} · {d.cut} · {d.certificate?.lab}
                     </span>
                   </span>
@@ -289,7 +289,7 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
                   <div className="px-3 pb-5 pt-1">
                     <DiamondDetail d={d} />
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-                      <p className="text-[13px] text-taupe">
+                      <p className="text-[15px] text-taupe">
                         With this diamond: <span className="font-serif text-lg text-ink">{formatMoney(settingPrice + d.price)}</span>
                       </p>
                       <button

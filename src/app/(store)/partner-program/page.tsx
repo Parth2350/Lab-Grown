@@ -74,7 +74,7 @@ export default function PartnerProgramPage() {
           <div className="lg:col-span-6">
             <p className="eyebrow mb-4">Partner Program</p>
             <h1 className="h-display text-balance">Partner With {site.name}</h1>
-            <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-taupe md:text-[17px]">
+            <p className="mt-6 max-w-xl text-[18px] leading-relaxed text-taupe md:text-[19px]">
               Share certified lab-grown diamond jewelry with the people who trust your taste — and be rewarded for every piece they fall in love with. No stock,
               no shipping, no fuss.
             </p>
@@ -107,9 +107,9 @@ export default function PartnerProgramPage() {
               A partnership built on taste and trust
             </h2>
           </div>
-          <div className="space-y-4 text-[16px] leading-relaxed text-charcoal/90 lg:col-span-7">
+          <div className="space-y-4 text-[18px] leading-relaxed text-charcoal/90 lg:col-span-7">
             <p>
-              The {site.name} Partner Program is a referral partnership for creators, stylists, planners and independent boutiques. When someone discovers our jewelry
+              {site.name} Partner Program is a referral partnership for creators, stylists, planners and independent boutiques. When someone discovers our jewelry
               through your personal link or code and places an order, you earn a reward — while we take care of everything else, from crafting each piece to
               delivering it fully insured.
             </p>
@@ -147,7 +147,7 @@ export default function PartnerProgramPage() {
                 <Reveal delay={(i % 3) * 0.08} className="border-t border-ink/80 pt-6">
                   <Icon className="h-6 w-6 text-gold" strokeWidth={1} aria-hidden />
                   <h3 className="mt-5 font-serif text-[1.6rem] leading-tight">{t}</h3>
-                  <p className="mt-3 text-[14px] leading-relaxed text-taupe">{d}</p>
+                  <p className="mt-3 text-[16px] leading-relaxed text-taupe">{d}</p>
                 </Reveal>
               </li>
             ))}
@@ -163,7 +163,7 @@ export default function PartnerProgramPage() {
             <h2 id="audience-title" className="h-section">
               Made for people with a point of view
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-taupe">If your recommendations matter to the people around you, we would love to hear from you.</p>
+            <p className="mt-4 text-[17px] leading-relaxed text-taupe">If your recommendations matter to the people around you, we would love to hear from you.</p>
           </div>
           <ul className="grid gap-px border border-line bg-line sm:grid-cols-2 lg:col-span-8">
             {AUDIENCES.map(({ icon: Icon, t, d }) => (
@@ -173,7 +173,7 @@ export default function PartnerProgramPage() {
                 </span>
                 <div>
                   <h3 className="font-serif text-xl">{t}</h3>
-                  <p className="mt-1.5 text-[14px] leading-relaxed text-taupe">{d}</p>
+                  <p className="mt-1.5 text-[16px] leading-relaxed text-taupe">{d}</p>
                 </div>
               </li>
             ))}
@@ -189,10 +189,10 @@ export default function PartnerProgramPage() {
             <h2 id="apply-title" className="h-section">
               Join the program
             </h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-taupe">
+            <p className="mt-4 text-[17px] leading-relaxed text-taupe">
               Tell us a little about yourself. We review every application personally and reply within five business days.
             </p>
-            <ul className="mt-8 space-y-3 border-t border-line pt-6 text-[14px] text-charcoal">
+            <ul className="mt-8 space-y-3 border-t border-line pt-6 text-[16px] text-charcoal">
               {['Free to join', 'No minimum sales', 'Dedicated partner manager'].map((x) => (
                 <li key={x} className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rotate-45 bg-gold" aria-hidden />

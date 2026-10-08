@@ -89,7 +89,7 @@ export function PartnerForm({ brand }: { brand: string }) {
               <Check className="h-6 w-6" strokeWidth={1.25} aria-hidden />
             </span>
             <h3 className="mt-6 font-serif text-3xl font-light">Application received{firstName ? `, ${firstName}` : ''}</h3>
-            <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-taupe">
+            <p className="mx-auto mt-4 max-w-md text-[17px] leading-relaxed text-taupe">
               Thank you for your interest in partnering with {brand}. Our partnerships team reviews every application personally and will be in touch within five
               business days.
             </p>
@@ -149,7 +149,7 @@ export function PartnerForm({ brand }: { brand: string }) {
             </fieldset>
 
             <div className="mt-8">
-              <label className="group flex cursor-pointer items-start gap-3 text-[14px] leading-relaxed text-charcoal">
+              <label className="group flex cursor-pointer items-start gap-3 text-[16px] leading-relaxed text-charcoal">
                 <input
                   type="checkbox"
                   name="consent"
@@ -179,7 +179,7 @@ export function PartnerForm({ brand }: { brand: string }) {
 
             <FormAlert className="mt-6">{alert}</FormAlert>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[12px] text-taupe">
+              <p className="text-[14px] text-taupe">
                 <span className="text-gold">*</span> Required fields
               </p>
               <Button type="submit" size="lg" loading={status === 'submitting'} className="w-full sm:w-auto">

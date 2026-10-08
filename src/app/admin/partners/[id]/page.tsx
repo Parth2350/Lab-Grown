@@ -34,7 +34,7 @@ export default async function PartnerApplicationPage({ params }: Props) {
   const a = await getPartnerApplication(id);
   if (!a) notFound();
 
-  const mailto = mailtoHref(a.email, `Your ${site.name} partner application`);
+  const mailto = mailtoHref(a.email, `Your partner application — ${site.name}`);
   const tel = telHref(a.phone);
   const website = safeWebsite(a.website);
   const icon = 'h-3.5 w-3.5';
@@ -94,17 +94,17 @@ export default async function PartnerApplicationPage({ params }: Props) {
 
           <Panel title="Experience">
             {a.experience ? (
-              <p className="whitespace-pre-wrap break-words text-[13px] leading-relaxed text-charcoal">{a.experience}</p>
+              <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed text-charcoal">{a.experience}</p>
             ) : (
-              <p className="text-[13px] text-taupe">Not provided.</p>
+              <p className="text-[15px] text-taupe">Not provided.</p>
             )}
           </Panel>
 
           <Panel title="Message">
             {a.message ? (
-              <p className="whitespace-pre-wrap break-words text-[13px] leading-relaxed text-charcoal">{a.message}</p>
+              <p className="whitespace-pre-wrap break-words text-[15px] leading-relaxed text-charcoal">{a.message}</p>
             ) : (
-              <p className="text-[13px] text-taupe">The applicant didn’t include a message.</p>
+              <p className="text-[15px] text-taupe">The applicant didn’t include a message.</p>
             )}
           </Panel>
         </div>

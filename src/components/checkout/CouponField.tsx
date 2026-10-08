@@ -57,11 +57,11 @@ export function CouponField({
             <Tag className={cn('h-4 w-4 shrink-0', applied.ok ? 'text-success' : 'text-taupe')} strokeWidth={1.25} aria-hidden />
             <span className="font-medium uppercase tracking-[0.12em]">{applied.code}</span>
           </p>
-          <button type="button" onClick={onRemove} className="flex items-center gap-1 text-[11px] uppercase tracking-[0.14em] text-taupe hover:text-ink" aria-label={`Remove code ${applied.code}`}>
+          <button type="button" onClick={onRemove} className="flex items-center gap-1 text-[13px] uppercase tracking-[0.14em] text-taupe hover:text-ink" aria-label={`Remove code ${applied.code}`}>
             <X className="h-3.5 w-3.5" strokeWidth={1.5} /> Remove
           </button>
         </div>
-        <p className={cn('mt-1 flex items-center gap-1.5 text-[12px]', applied.ok ? 'text-success' : 'text-danger')} role="status" aria-live="polite">
+        <p className={cn('mt-1 flex items-center gap-1.5 text-[14px]', applied.ok ? 'text-success' : 'text-danger')} role="status" aria-live="polite">
           {applied.ok && <Check className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />}
           {applied.message}
         </p>
@@ -76,7 +76,7 @@ export function CouponField({
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={`${id}-panel`}
-        className="flex w-full items-center justify-between py-1 text-[12px] uppercase tracking-[0.14em] text-charcoal hover:text-ink"
+        className="flex w-full items-center justify-between py-1 text-[14px] uppercase tracking-[0.14em] text-charcoal hover:text-ink"
       >
         <span className="flex items-center gap-2">
           <Tag className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} aria-hidden /> Promo code
@@ -129,7 +129,7 @@ export function CouponField({
                 {busy ? <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border border-current border-t-transparent" aria-label="Checking" /> : 'Apply'}
               </button>
             </div>
-            <p id={`${id}-msg`} className="min-h-[1.25rem] pt-1.5 text-[12px] text-danger" role="status" aria-live="polite">
+            <p id={`${id}-msg`} className="min-h-[1.25rem] pt-1.5 text-[14px] text-danger" role="status" aria-live="polite">
               {message}
             </p>
           </m.div>

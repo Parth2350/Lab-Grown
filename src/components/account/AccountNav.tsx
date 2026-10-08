@@ -52,7 +52,7 @@ export function AccountNav({ isAdmin }: { isAdmin?: boolean }) {
                 href={n.href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'flex h-12 items-center whitespace-nowrap border-b-2 px-3 text-[12px] uppercase tracking-[0.14em] transition-colors',
+                  'flex h-12 items-center whitespace-nowrap border-b-2 px-3 text-[14px] uppercase tracking-[0.14em] transition-colors',
                   active ? 'border-ink text-ink' : 'border-transparent text-taupe hover:text-ink',
                 )}
               >
@@ -62,7 +62,7 @@ export function AccountNav({ isAdmin }: { isAdmin?: boolean }) {
           );
         })}
         <li className="shrink-0">
-          <button type="button" onClick={() => signOut({ callbackUrl: '/' })} className="flex h-12 items-center whitespace-nowrap px-3 text-[12px] uppercase tracking-[0.14em] text-taupe hover:text-ink">
+          <button type="button" onClick={() => signOut({ callbackUrl: '/' })} className="flex h-12 items-center whitespace-nowrap px-3 text-[14px] uppercase tracking-[0.14em] text-taupe hover:text-ink">
             Sign out
           </button>
         </li>
@@ -78,7 +78,7 @@ export function AccountNav({ isAdmin }: { isAdmin?: boolean }) {
                 href={n.href}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'flex items-center gap-3 border-l py-2.5 pl-4 text-[14px] transition-colors',
+                  'flex items-center gap-3 border-l py-2.5 pl-4 text-[16px] transition-colors',
                   active ? 'border-ink text-ink' : 'border-line text-taupe hover:border-stone hover:text-ink',
                 )}
               >
@@ -90,7 +90,7 @@ export function AccountNav({ isAdmin }: { isAdmin?: boolean }) {
         })}
         {isAdmin && (
           <li className="pt-4">
-            <Link href="/admin" className="flex items-center gap-3 border-l border-gold py-2.5 pl-4 text-[14px] text-gold-deep hover:text-ink">
+            <Link href="/admin" className="flex items-center gap-3 border-l border-gold py-2.5 pl-4 text-[16px] text-gold-deep hover:text-ink">
               <Shield className="h-4 w-4" strokeWidth={1.25} aria-hidden /> Admin dashboard
             </Link>
           </li>

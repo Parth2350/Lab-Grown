@@ -53,7 +53,7 @@ export default async function SettingsPage() {
         ))}
       </nav>
 
-      <div className="mb-6 flex flex-wrap items-center gap-3 border border-line bg-ivory px-4 py-3 text-[13px] text-charcoal">
+      <div className="mb-6 flex flex-wrap items-center gap-3 border border-line bg-ivory px-4 py-3 text-[15px] text-charcoal">
         <Truck className="h-4 w-4 shrink-0 text-gold" strokeWidth={1.4} aria-hidden />
         <p className="min-w-0 flex-1">Shipping methods, rates and delivery estimates are edited on the Shipping page.</p>
         <Link href="/admin/shipping" className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-[0.14em] text-ink underline-offset-4 hover:underline">

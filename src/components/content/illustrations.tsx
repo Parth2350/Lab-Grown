@@ -156,7 +156,7 @@ export function CutDiagram({ className }: { className?: string }) {
             <CutProfile depth={it.depth} variant={it.variant} />
           </div>
           <p className={cn('label-caps mt-4', it.variant === 'ideal' ? 'text-gold' : 'text-ink')}>{it.title}</p>
-          <p className="mt-2 max-w-[220px] text-[13px] leading-relaxed text-taupe">{it.text}</p>
+          <p className="mt-2 max-w-[220px] text-[15px] leading-relaxed text-taupe">{it.text}</p>
         </li>
       ))}
     </ul>
@@ -191,7 +191,7 @@ export function ColorScale({ className }: { className?: string }) {
           </li>
         ))}
       </ol>
-      <div className="mt-5 grid grid-cols-8 gap-x-1 text-[9px] uppercase leading-snug tracking-[0.12em] text-taupe sm:gap-x-2 sm:text-[10px] sm:tracking-[0.14em]" aria-hidden>
+      <div className="mt-5 grid grid-cols-8 gap-x-1 text-[11px] uppercase leading-snug tracking-[0.12em] text-taupe sm:gap-x-2 sm:text-[12px] sm:tracking-[0.14em]" aria-hidden>
         <span className="col-span-3 border-t border-ink pt-2">Colourless</span>
         <span className="col-span-4 border-t border-stone pt-2">Near colourless</span>
         <span className="col-span-1 border-t border-line pt-2">Faint</span>
@@ -223,7 +223,7 @@ export function ClarityScale({ className }: { className?: string }) {
             </svg>
           </span>
           <span className="label-caps mt-4 text-ink">{c.grade}</span>
-          <span className="mt-1 text-[12px] leading-snug text-taupe">{c.name}</span>
+          <span className="mt-1 text-[14px] leading-snug text-taupe">{c.name}</span>
         </li>
       ))}
     </ol>
@@ -248,7 +248,7 @@ export function CaratScale({ className }: { className?: string }) {
           <li key={c.ct} className="flex flex-col items-center gap-3">
             <ShapeIcon shape="round" size={px} className="text-charcoal" strokeWidth={0.9} />
             <span className="font-serif text-lg leading-none">{c.ct} ct</span>
-            <span className="text-[11px] uppercase tracking-[0.14em] text-taupe">≈ {c.mm} mm</span>
+            <span className="text-[13px] uppercase tracking-[0.14em] text-taupe">≈ {c.mm} mm</span>
           </li>
         );
       })}

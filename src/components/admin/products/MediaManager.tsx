@@ -13,7 +13,7 @@ import type { MediaItem } from './shared';
 
 const ACCEPT = 'image/jpeg,image/png,image/webp,image/avif,image/gif,video/mp4,video/webm';
 const MAX_BYTES = 8 * 1024 * 1024;
-const smallSelect = 'field h-9 cursor-pointer appearance-none py-0 pl-3 pr-8 text-[12.5px]';
+const smallSelect = 'field h-9 cursor-pointer appearance-none py-0 pl-3 pr-8 text-[14.5px]';
 
 type MediaResult = ActionResult<{ items: MediaItem[] }>;
 
@@ -54,7 +54,7 @@ function MediaRow({
         ) : (
           <img src={item.url} alt={item.alt ?? productName} loading="lazy" className="h-full w-full object-cover" />
         )}
-        <span className="absolute left-1 top-1 bg-ink/80 px-1.5 text-[10px] leading-4 text-ivory">{index === 0 ? 'Primary' : `#${index + 1}`}</span>
+        <span className="absolute left-1 top-1 bg-ink/80 px-1.5 text-[12px] leading-4 text-ivory">{index === 0 ? 'Primary' : `#${index + 1}`}</span>
         {isVideo && <Film className="absolute bottom-1 right-1 h-3.5 w-3.5 text-ivory drop-shadow" strokeWidth={1.6} aria-hidden />}
       </div>
 
@@ -76,10 +76,10 @@ function MediaRow({
                 }
               }}
               placeholder={`Defaults to “${productName || 'product name'}”`}
-              className="field h-9 min-w-0 px-3 py-0 text-[12.5px]"
+              className="field h-9 min-w-0 px-3 py-0 text-[14.5px]"
             />
             {altChanged && (
-              <button type="button" onClick={() => void saveAlt()} disabled={busy} className="h-9 shrink-0 border border-l-0 border-ink bg-ink px-3 text-[11px] font-medium uppercase tracking-[0.14em] text-ivory hover:bg-charcoal disabled:opacity-50">
+              <button type="button" onClick={() => void saveAlt()} disabled={busy} className="h-9 shrink-0 border border-l-0 border-ink bg-ink px-3 text-[13px] font-medium uppercase tracking-[0.14em] text-ivory hover:bg-charcoal disabled:opacity-50">
                 Save
               </button>
             )}
@@ -238,7 +238,7 @@ export function MediaManager({
     <div>
       <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h3 className="text-[12px] font-medium uppercase tracking-[0.12em] text-ink">Photos &amp; video</h3>
+          <h3 className="text-[14px] font-medium uppercase tracking-[0.12em] text-ink">Photos &amp; video</h3>
           <p className="mt-0.5 text-xs text-taupe">
             Uploaded photos replace the illustration on the storefront. Tag a photo with a metal to show it only for that metal.
           </p>
@@ -262,13 +262,13 @@ export function MediaManager({
             <ImagePlus className="h-[18px] w-[18px]" strokeWidth={1.3} />
           </span>
           <div>
-            <p className="text-[13px] text-ink">{progress ? `Uploading ${Math.min(progress.done + 1, progress.total)} of ${progress.total}…` : 'Drop files here or choose from your computer'}</p>
+            <p className="text-[15px] text-ink">{progress ? `Uploading ${Math.min(progress.done + 1, progress.total)} of ${progress.total}…` : 'Drop files here or choose from your computer'}</p>
             <p className="text-xs text-taupe">JPG, PNG, WebP, AVIF, GIF, MP4 or WebM · up to 8 MB each</p>
           </div>
         </div>
         <div className="flex flex-wrap items-end justify-center gap-2">
           <div className="text-left">
-            <label htmlFor="upload-metal" className="mb-1 block text-[10px] font-medium uppercase tracking-[0.14em] text-taupe">
+            <label htmlFor="upload-metal" className="mb-1 block text-[12px] font-medium uppercase tracking-[0.14em] text-taupe">
               Tag uploads for
             </label>
             <select id="upload-metal" value={uploadMetal} onChange={(e) => setUploadMetal(e.target.value)} className={smallSelect} style={chevronStyle}>

@@ -199,7 +199,7 @@ export function BespokeWizard() {
             <h3 ref={headingRef} tabIndex={-1} className="mt-6 font-serif text-[2.2rem] font-light leading-tight focus:outline-none">
               Thank you{done.name ? `, ${done.name}` : ''}. Your design journey has begun.
             </h3>
-            <p className="mt-4 text-[15px] leading-relaxed text-taupe">
+            <p className="mt-4 text-[17px] leading-relaxed text-taupe">
               Your brief is now with our design studio. Your personal design consultant will be in touch at{' '}
               <span className="break-all text-ink">{done.email}</span> — please quote your reference in any message to us.
             </p>
@@ -217,7 +217,7 @@ export function BespokeWizard() {
               <li key={s.t} className="bg-ivory p-6">
                 <span className="font-serif text-2xl text-gold">{String(i + 1).padStart(2, '0')}</span>
                 <p className="label-caps mt-4 text-ink">{s.t}</p>
-                <p className="mt-2 text-[14px] leading-relaxed text-taupe">{s.d}</p>
+                <p className="mt-2 text-[16px] leading-relaxed text-taupe">{s.d}</p>
               </li>
             ))}
           </ol>
@@ -258,7 +258,7 @@ export function BespokeWizard() {
                   )}
                 >
                   <span className={cn('h-px w-full transition-colors duration-500', state === 'todo' ? 'bg-line' : 'bg-ink')} />
-                  <span className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-[0.14em]">
+                  <span className="flex items-center gap-1.5 text-[12.5px] font-medium uppercase tracking-[0.14em]">
                     {state === 'done' ? <Check className="h-3 w-3 text-gold" strokeWidth={2} aria-hidden /> : <span className="tabular-nums">{i + 1}</span>}
                     <span className={cn(state === 'done' && 'group-hover:underline group-hover:underline-offset-4')}>{s.label}</span>
                     {state === 'done' && <span className="sr-only">(completed — edit)</span>}
@@ -299,7 +299,7 @@ export function BespokeWizard() {
               <h3 ref={headingRef} tabIndex={-1} className="font-serif text-[1.9rem] font-light leading-tight focus:outline-none sm:text-[2.3rem]">
                 {current.title}
               </h3>
-              <p className="mt-2 text-[14px] text-taupe">{current.subtitle}</p>
+              <p className="mt-2 text-[16px] text-taupe">{current.subtitle}</p>
             </div>
 
             {step === 0 && (
@@ -318,7 +318,7 @@ export function BespokeWizard() {
                             </span>
                           )}
                         </span>
-                        <span className="px-3 py-3 text-center text-[13px] font-normal text-ink">{t.label}</span>
+                        <span className="px-3 py-3 text-center text-[15px] font-normal text-ink">{t.label}</span>
                       </OptionCard>
                     );
                   })}
@@ -337,7 +337,7 @@ export function BespokeWizard() {
                         ) : (
                           <ShapeIcon shape={s.value} size={44} className={data.shape === s.value ? 'text-gold' : 'text-charcoal'} />
                         )}
-                        <span className="text-[12px] uppercase tracking-[0.12em] text-ink">{s.label}</span>
+                        <span className="text-[14px] uppercase tracking-[0.12em] text-ink">{s.label}</span>
                       </span>
                     </OptionCard>
                   ))}
@@ -359,7 +359,7 @@ export function BespokeWizard() {
                           )}
                         </span>
                         <span className="font-serif text-xl leading-none text-ink">{c.label}</span>
-                        <span className="text-[12px] text-taupe">{c.hint}</span>
+                        <span className="text-[14px] text-taupe">{c.hint}</span>
                       </span>
                     </OptionCard>
                   ))}
@@ -374,7 +374,7 @@ export function BespokeWizard() {
                     <OptionCard key={m.value} name="metal" value={m.value} checked={data.metal === m.value} onSelect={set('metal')} describedBy={errors.metal ? 'err-metal' : undefined}>
                       <span className="flex items-center gap-4 px-4 py-5">
                         <span className="h-10 w-10 shrink-0 rounded-full ring-1 ring-line" style={{ background: m.swatch }} aria-hidden />
-                        <span className="text-[14px] leading-snug text-ink">{m.label}</span>
+                        <span className="text-[16px] leading-snug text-ink">{m.label}</span>
                       </span>
                     </OptionCard>
                   ))}
@@ -516,11 +516,11 @@ function Review({ data, uploads, onEdit }: { data: Data; uploads: UploadItem[]; 
       {rows.map((r) => (
         <div key={r.label} className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1 py-3 sm:grid-cols-[180px_1fr_auto] sm:py-4">
           <dt className="label-caps text-taupe">{r.label}</dt>
-          <dd className="col-span-2 row-start-2 text-[14px] text-ink sm:col-span-1 sm:row-start-auto sm:text-right">{r.value}</dd>
+          <dd className="col-span-2 row-start-2 text-[16px] text-ink sm:col-span-1 sm:row-start-auto sm:text-right">{r.value}</dd>
           <button
             type="button"
             onClick={() => onEdit(r.step)}
-            className="col-start-2 row-start-1 inline-flex min-h-10 items-center gap-1.5 text-[11px] uppercase tracking-[0.14em] text-taupe transition-colors hover:text-ink sm:col-start-3"
+            className="col-start-2 row-start-1 inline-flex min-h-10 items-center gap-1.5 text-[13px] uppercase tracking-[0.14em] text-taupe transition-colors hover:text-ink sm:col-start-3"
           >
             <Pencil className="h-3 w-3" strokeWidth={1.5} aria-hidden />
             Edit<span className="sr-only"> {r.label.toLowerCase()}</span>

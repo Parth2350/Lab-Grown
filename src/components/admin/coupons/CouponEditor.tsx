@@ -21,7 +21,7 @@ export type CouponRow = {
   isActive: boolean;
 };
 
-const lbl = 'mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
+const lbl = 'mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
 
 function CouponForm({ coupon, onDone }: { coupon?: CouponRow; onDone: () => void }) {
   const { state, pending, onSubmit } = useAdminForm(saveCoupon, { onSuccess: onDone });
@@ -104,7 +104,7 @@ function CouponForm({ coupon, onDone }: { coupon?: CouponRow; onDone: () => void
             <FieldMsg state={state} name="endsAt" />
           </div>
         </div>
-        <label className="flex cursor-pointer items-center gap-3 text-[13px]">
+        <label className="flex cursor-pointer items-center gap-3 text-[15px]">
           <input type="checkbox" name="isActive" defaultChecked={coupon?.isActive ?? true} className="h-4 w-4 accent-ink" />
           Active — customers can redeem this code
         </label>

@@ -106,7 +106,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
           )}
         </Link>
 
-        {product.isNew && <span className="pointer-events-none absolute left-3 top-3 bg-ivory/90 px-2 py-1 text-[9.5px] font-medium uppercase tracking-[0.2em] text-ink">New</span>}
+        {product.isNew && <span className="pointer-events-none absolute left-3 top-3 bg-ivory/90 px-2 py-1 text-[11.5px] font-medium uppercase tracking-[0.2em] text-ink">New</span>}
 
         <div className="absolute right-2 top-2 flex flex-col gap-1">
           <WishlistButton product={product} className="flex h-9 w-9 items-center justify-center rounded-full bg-ivory/80 backdrop-blur-sm transition-colors hover:bg-ivory" />
@@ -145,7 +145,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
               );
             })}
           </div>
-          <div className="flex items-center text-[10.5px] tracking-wide" role="radiogroup" aria-label="Metal purity">
+          <div className="flex items-center text-[12.5px] tracking-wide" role="radiogroup" aria-label="Metal purity">
             {PURITIES.filter((p) => product.purities.includes(p.slug)).map((p, i) => (
               <span key={p.slug} className="flex items-center">
                 {i > 0 && <span className="px-1 text-stone">|</span>}
@@ -164,7 +164,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
         </div>
 
         <Link href={href} className="block">
-          <h3 className="font-serif text-[17px] leading-snug text-ink transition-colors group-hover:text-gold-deep md:text-lg">{product.name}</h3>
+          <h3 className="font-serif text-[19px] leading-snug text-ink transition-colors group-hover:text-gold-deep md:text-lg">{product.name}</h3>
         </Link>
         <div className="mt-1.5 flex items-center justify-between gap-2">
           <p className="text-sm text-charcoal">
@@ -172,7 +172,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
             <span className="font-normal">{formatMoney(price)}</span>
           </p>
           {product.reviewCount > 0 && (
-            <span className="flex items-center gap-1.5 text-[11px] text-taupe">
+            <span className="flex items-center gap-1.5 text-[13px] text-taupe">
               <Stars rating={product.rating} size={10} /> ({product.reviewCount})
             </span>
           )}

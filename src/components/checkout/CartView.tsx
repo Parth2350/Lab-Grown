@@ -73,8 +73,8 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
             <ShoppingBag className="h-8 w-8 text-gold" strokeWidth={1} aria-hidden />
           </span>
           <h1 className="mt-8 font-serif text-4xl font-light sm:text-5xl">Your bag is empty</h1>
-          <p className="mt-4 max-w-md text-[15px] text-taupe">
-            Every {site.name} piece is crafted to order in our own workshop, set with a certified lab-grown diamond. Begin with an engagement ring, or explore the full collection.
+          <p className="mt-4 max-w-md text-[17px] text-taupe">
+            Every piece at {site.name} is crafted to order in our own workshop, set with a certified lab-grown diamond. Begin with an engagement ring, or explore the full collection.
           </p>
           <div className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
             <ButtonLink href="/engagement-rings">Shop Engagement Rings</ButtonLink>
@@ -82,7 +82,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
               Explore All Jewelry
             </ButtonLink>
           </div>
-          <Link href="/wishlist" className="mt-6 text-[13px] text-taupe underline-offset-4 hover:text-ink hover:underline">
+          <Link href="/wishlist" className="mt-6 text-[15px] text-taupe underline-offset-4 hover:text-ink hover:underline">
             View your wishlist
           </Link>
         </div>
@@ -120,7 +120,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
                   <li key={l.key}>
                     <CartLineItem line={l} />
                     {issue && (
-                      <p role="alert" className="-mt-1 mb-5 flex items-start gap-2 bg-danger/5 px-3 py-2.5 text-[12.5px] text-danger">
+                      <p role="alert" className="-mt-1 mb-5 flex items-start gap-2 bg-danger/5 px-3 py-2.5 text-[14.5px] text-danger">
                         <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
                         <span>
                           {issue.message}{' '}
@@ -141,7 +141,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
                 <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-1" strokeWidth={1.5} aria-hidden />
                 <span className="link-underline">Continue Shopping</span>
               </Link>
-              {error && <p className="text-[12px] text-taupe">{error}</p>}
+              {error && <p className="text-[14px] text-taupe">{error}</p>}
             </div>
 
             <div className="mt-12 grid gap-6 bg-porcelain p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:p-8">
@@ -200,7 +200,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
               <ButtonLink href="/collections/all" variant="outline" className="mt-2 w-full">
                 Continue Shopping
               </ButtonLink>
-              <p className="mt-4 text-center text-[12px] text-taupe">Delivery options and final taxes are confirmed at checkout.</p>
+              <p className="mt-4 text-center text-[14px] text-taupe">Delivery options and final taxes are confirmed at checkout.</p>
               <PaymentMarks className="mt-5 justify-center" />
             </div>
             <TrustBadges compact returnsDays={settings.returnsDays} className="mt-8 px-1" />
@@ -222,7 +222,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ivory/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md lg:hidden">
         <div className="flex items-center gap-4">
           <div className="min-w-0 flex-1">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-taupe">Estimated total</p>
+            <p className="text-[13px] uppercase tracking-[0.14em] text-taupe">Estimated total</p>
             <p className="text-lg tabular-nums" aria-live="polite">
               {formatMoney(totals.total, { exact: true })}
             </p>

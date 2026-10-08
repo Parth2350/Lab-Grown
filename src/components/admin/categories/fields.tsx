@@ -6,7 +6,7 @@ import { slugify } from '@/lib/utils';
 import { CharCount, FieldMsg } from '../forms';
 
 /** Shared label / hint classes for catalog editor forms. */
-export const lbl = 'mb-1.5 block text-[10.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
+export const lbl = 'mb-1.5 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-charcoal';
 export const hintCls = 'mt-1 text-xs text-taupe';
 
 /** slugify, but "Men’s" → "mens" rather than "men-s". */
@@ -75,7 +75,7 @@ export function NameSlugFields({
                 setSlug(autoSlug);
                 setTouched(false);
               }}
-              className="mb-1.5 inline-flex items-center gap-1 text-[11px] text-taupe underline-offset-4 hover:text-ink hover:underline"
+              className="mb-1.5 inline-flex items-center gap-1 text-[13px] text-taupe underline-offset-4 hover:text-ink hover:underline"
             >
               <RefreshCw className="h-3 w-3" strokeWidth={1.5} aria-hidden />
               Use “{autoSlug}”
@@ -97,7 +97,7 @@ export function NameSlugFields({
             spellCheck={false}
             aria-invalid={invalid(state, 'slug')}
             aria-describedby={`${idPrefix}-slug-hint`}
-            className="field py-2.5 font-mono text-[13px]"
+            className="field py-2.5 font-mono text-[15px]"
             placeholder={autoSlug || 'my-slug'}
           />
         </div>
@@ -207,7 +207,7 @@ export function ImageUrlField({ state, idPrefix, value: initial = '' }: { state:
           <FieldMsg state={state} name="image" />
         </div>
         {showPreview && (
-          <div className="art-tile flex h-[46px] w-[46px] shrink-0 items-center justify-center overflow-hidden border border-line text-[9px] text-taupe">
+          <div className="art-tile flex h-[46px] w-[46px] shrink-0 items-center justify-center overflow-hidden border border-line text-[11px] text-taupe">
             {broken ? (
               'No preview'
             ) : (
