@@ -15,9 +15,9 @@ export type DiamondFilters = {
   cut?: string;
   lab?: string;
   available?: 'yes' | 'no';
-  /** dollars */
+  /** rupees */
   priceMin?: number;
-  /** dollars */
+  /** rupees */
   priceMax?: number;
   sort: DiamondSort;
 };

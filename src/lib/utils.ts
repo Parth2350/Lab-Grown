@@ -18,7 +18,7 @@ const moneyFmtCents = new Intl.NumberFormat(site.locale, {
   maximumFractionDigits: 2,
 });
 
-/** Format integer cents as currency. Whole amounts drop the decimals ($1,299). */
+/** Format integer minor units (paise) as currency. Whole amounts drop the decimals (₹1,29,900). */
 export function formatMoney(cents: number, opts: { exact?: boolean } = {}) {
   const v = cents / 100;
   if (opts.exact || !Number.isInteger(v)) return moneyFmtCents.format(v);
@@ -53,9 +53,9 @@ export function pluralize(n: number, one: string, many = `${one}s`) {
   return `${n.toLocaleString(site.locale)} ${n === 1 ? one : many}`;
 }
 
-/** Round cents to the nearest $10 for "retail" looking prices */
-export function retailRound(cents: number) {
-  return Math.round(cents / 1000) * 1000 - 100 * (cents > 5000 ? 1 : 0);
+/** Round to the nearest ₹100 for "retail" looking prices */
+export function retailRound(paise: number) {
+  return Math.round(paise / 10000) * 10000;
 }
 
 export function clamp(n: number, min: number, max: number) {

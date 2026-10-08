@@ -247,7 +247,7 @@ export function DiamondSection({ draft, update, errors, eligible, setEligible }:
                         <ErrorText msg={err('clarity')} />
                       </td>
                       <td className="px-3 py-2 align-top">
-                        <MoneyInput id={`o-${o.key}-price`} value={o.priceDelta} onChange={(v) => setOption(o.key, { priceDelta: v })} invalid={!!err('priceDelta')} label={`Price add-on for ${rowLabel} in dollars`} placeholder="0" />
+                        <MoneyInput id={`o-${o.key}-price`} value={o.priceDelta} onChange={(v) => setOption(o.key, { priceDelta: v })} invalid={!!err('priceDelta')} label={`Price add-on for ${rowLabel} in rupees`} placeholder="0" />
                         <ErrorText msg={err('priceDelta')} />
                       </td>
                       <td className="px-3 py-2 align-top">

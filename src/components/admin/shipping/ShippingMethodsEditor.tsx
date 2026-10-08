@@ -156,7 +156,7 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
                 </div>
                 <div>
                   <label htmlFor={fid('price')} className={lbl}>
-                    Price ($)
+                    Price (₹)
                   </label>
                   <input
                     id={fid('price')}

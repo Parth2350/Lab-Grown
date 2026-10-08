@@ -430,7 +430,7 @@ model Order {
   billingAddress  Json?
   deliveryMethod  String
   status          OrderStatus     @default(PENDING)
-  currency        String          @default("USD")
+  currency        String          @default("INR")
   subtotal        Int
   discount        Int             @default(0)
   shipping        Int             @default(0)
@@ -490,7 +490,7 @@ model Payment {
   provider          String // razorpay | stripe | demo
   method            String? // upi | card | netbanking | wallet
   amount            Int
-  currency          String        @default("USD")
+  currency          String        @default("INR")
   status            PaymentStatus @default(PENDING)
   providerOrderId   String?
   providerPaymentId String?

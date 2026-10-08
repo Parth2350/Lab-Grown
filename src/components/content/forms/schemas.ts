@@ -123,11 +123,11 @@ export const BESPOKE_METALS = [
 ] as const;
 
 export const BESPOKE_BUDGETS = [
-  { value: 'under-1000', label: 'Under $1,000' },
-  { value: '1000-2500', label: '$1,000 – $2,500' },
-  { value: '2500-5000', label: '$2,500 – $5,000' },
-  { value: '5000-10000', label: '$5,000 – $10,000' },
-  { value: '10000-plus', label: '$10,000 +' },
+  { value: 'under-100000', label: 'Under ₹1,00,000' },
+  { value: '100000-250000', label: '₹1,00,000 – ₹2,50,000' },
+  { value: '250000-500000', label: '₹2,50,000 – ₹5,00,000' },
+  { value: '500000-1000000', label: '₹5,00,000 – ₹10,00,000' },
+  { value: '1000000-plus', label: '₹10,00,000 +' },
   { value: 'not-sure', label: 'I would like guidance' },
 ] as const;
 

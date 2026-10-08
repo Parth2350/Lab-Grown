@@ -57,7 +57,8 @@ export const useCart = create<CartState>()(
       clear: () => set({ lines: [] }),
       replace: (lines) => set({ lines }),
     }),
-    { name: 'aurevia-cart', storage: createJSONStorage(() => localStorage), version: 1 },
+    // v2: prices moved from USD to INR — carts saved before that are dropped
+    { name: 'aurevia-cart', storage: createJSONStorage(() => localStorage), version: 2, migrate: () => ({ lines: [] }) },
   ),
 );
 

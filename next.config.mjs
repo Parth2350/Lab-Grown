@@ -26,6 +26,13 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
     serverActions: { bodySizeLimit: '10mb' },
   },
+  async redirects() {
+    return [
+      { source: '/collections/gifts-under-250', destination: '/collections/gifts-under-25000', permanent: true },
+      { source: '/collections/gifts-under-500', destination: '/collections/gifts-under-50000', permanent: true },
+      { source: '/collections/gifts-under-1000', destination: '/collections/gifts-under-100000', permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: '/fonts/:file*', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },

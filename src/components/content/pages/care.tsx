@@ -33,8 +33,8 @@ export const shippingSections: DocSection[] = [
           head={['Service', 'Cost', 'Delivery time*']}
           rows={[
             ['Insured Standard', 'Complimentary', '7–10 business days'],
-            ['Insured Express', '$35', '3–5 business days'],
-            ['Priority Overnight', '$75', '1–2 business days (major cities only)'],
+            ['Insured Express', '₹1,500', '3–5 business days'],
+            ['Priority Overnight', '₹3,000', '1–2 business days (major cities only)'],
           ]}
         />
         <p className="text-[15px]">

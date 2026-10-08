@@ -212,7 +212,7 @@ export const termsSections: DocSection[] = [
     body: (
       <>
         <p>
-          Prices are shown in US dollars and include any applicable discounts. Estimated taxes and any delivery charges are shown before you pay. Payments are
+          Prices are shown in Indian rupees (INR) and include any applicable discounts. GST and any delivery charges are shown before you pay. Payments are
           processed securely by our payment partner, and we do not store your card details.
         </p>
         <p>

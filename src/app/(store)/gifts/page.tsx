@@ -19,7 +19,7 @@ export const revalidate = 3600;
 
 export const metadata = pageMeta({
   title: 'Gift Guide',
-  description: `Lab-grown diamond gifts for every occasion and budget — under $250, $500 and $1,000, plus anniversary, birthday, wedding and personalised jewelry. Beautifully wrapped by ${site.name}.`,
+  description: `Lab-grown diamond gifts for every occasion and budget — under ₹25,000, ₹50,000 and ₹1,00,000, plus anniversary, birthday, wedding and personalised jewelry. Beautifully wrapped by ${site.name}.`,
   path: '/gifts',
 });
 
@@ -29,28 +29,28 @@ const vc = (slug: string) => VIRTUAL_COLLECTIONS[slug]!;
 
 const PRICE_TILES: Tile[] = [
   {
-    slug: 'gifts-under-250',
-    title: vc('gifts-under-250').title,
+    slug: 'gifts-under-25000',
+    title: vc('gifts-under-25000').title,
     blurb: 'Petite studs, dainty pendants and stacking rings.',
     art: { spec: { kind: 'studs', head: 'bezel' }, shape: 'round', metal: 'yellow', carat: 0.5 },
     tone: 'art-tile-warm',
-    scope: { maxPrice: vc('gifts-under-250').maxPrice },
+    scope: { maxPrice: vc('gifts-under-25000').maxPrice },
   },
   {
-    slug: 'gifts-under-500',
-    title: vc('gifts-under-500').title,
+    slug: 'gifts-under-50000',
+    title: vc('gifts-under-50000').title,
     blurb: 'Solitaire pendants, huggies and halo studs.',
     art: { spec: { kind: 'pendant', head: 'solitaire' }, shape: 'pear', metal: 'rose', carat: 0.75 },
     tone: 'art-tile',
-    scope: { maxPrice: vc('gifts-under-500').maxPrice },
+    scope: { maxPrice: vc('gifts-under-50000').maxPrice },
   },
   {
-    slug: 'gifts-under-1000',
-    title: vc('gifts-under-1000').title,
+    slug: 'gifts-under-100000',
+    title: vc('gifts-under-100000').title,
     blurb: 'Hoops, eternity bands and statement drops.',
     art: { spec: { kind: 'hoops', size: 'medium' }, shape: 'round', metal: 'white' },
     tone: 'art-tile-cool',
-    scope: { maxPrice: vc('gifts-under-1000').maxPrice },
+    scope: { maxPrice: vc('gifts-under-100000').maxPrice },
   },
 ];
 
@@ -154,9 +154,9 @@ export default async function GiftsPage() {
   const tiles = [...PRICE_TILES, ...OCCASION_TILES];
   const [counts, under500, anniversary, everyday] = await Promise.all([
     Promise.all(tiles.map((t) => countProducts(t.scope))),
-    getProductsWhere({ maxPrice: 50000 }, {}, 10, 'featured'),
+    getProductsWhere({ maxPrice: 5000000 }, {}, 10, 'featured'),
     getProductsWhere({ collection: 'anniversary-gifts' }, {}, 10, 'featured'),
-    getProductsWhere({ maxPrice: 100000 }, { style: ['stud', 'hoop', 'drop', 'layering'] }, 10, 'featured'),
+    getProductsWhere({ maxPrice: 10000000 }, { style: ['stud', 'hoop', 'drop', 'layering'] }, 10, 'featured'),
   ]);
   const countFor = (slug: string) => counts[tiles.findIndex((t) => t.slug === slug)] ?? 0;
   const quizArt = QUIZ_TYPE_ART.earrings!;
@@ -223,10 +223,10 @@ export default async function GiftsPage() {
       <ProductRail
         id="under-500"
         eyebrow="Most gifted"
-        title="Favourites under $500"
+        title="Favourites under ₹50,000"
         subtitle="Small in price, never in meaning."
         products={under500}
-        href="/collections/gifts-under-500"
+        href="/collections/gifts-under-50000"
       />
       <ProductRail
         id="anniversary"

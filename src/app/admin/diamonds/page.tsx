@@ -150,17 +150,17 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
           </AutoSubmitSelect>
         </div>
         <fieldset>
-          <legend className="mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Price ($)</legend>
+          <legend className="mb-1 block text-[12.5px] font-medium uppercase tracking-[0.14em] text-taupe">Price (₹)</legend>
           <div className="flex items-center gap-1">
             <label htmlFor="f-pmin" className="sr-only">
-              Minimum price in dollars
+              Minimum price in rupees
             </label>
             <input id="f-pmin" name="priceMin" type="number" inputMode="numeric" min={0} step={1} defaultValue={f.priceMin ?? ''} placeholder="Min" className={cn(fieldSm, 'w-[84px] px-2')} />
             <span className="text-taupe" aria-hidden>
               –
             </span>
             <label htmlFor="f-pmax" className="sr-only">
-              Maximum price in dollars
+              Maximum price in rupees
             </label>
             <input id="f-pmax" name="priceMax" type="number" inputMode="numeric" min={0} step={1} defaultValue={f.priceMax ?? ''} placeholder="Max" className={cn(fieldSm, 'w-[84px] px-2')} />
           </div>

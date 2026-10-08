@@ -63,7 +63,7 @@ export type VariantDraft = {
   purity: string;
   metalColor: string;
   sku: string;
-  /** dollars, as typed */
+  /** rupees, as typed */
   price: string;
   stock: string;
   isActive: boolean;
@@ -85,7 +85,7 @@ export type OptionDraft = {
   totalCarat: string;
   color: string;
   clarity: string;
-  /** dollars, as typed */
+  /** rupees, as typed */
   priceDelta: string;
   isDefault: boolean;
 };
@@ -116,7 +116,7 @@ export type ProductDraft = {
   hasCenterStone: boolean;
   requiresSize: boolean;
   tags: string[];
-  /** dollars, as typed */
+  /** rupees, as typed */
   basePrice: string;
   art: ArtDraft;
   variants: VariantDraft[];
@@ -172,9 +172,9 @@ export function suggestedVariantPrice(baseCents: number, purity: string, metal: 
   return Math.max(0, retailRound(raw));
 }
 
-/** "1,299.50" / "$1299" → cents (null when blank or invalid) */
+/** "1,29,999.50" / "₹1299" → paise (null when blank or invalid) */
 export function parseMoneyInput(s: string): number | null {
-  const clean = s.replace(/[$,\s]/g, '');
+  const clean = s.replace(/[$₹,\s]/g, '');
   if (clean === '') return null;
   const n = Number(clean);
   if (!Number.isFinite(n) || n < 0) return null;

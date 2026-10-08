@@ -1,4 +1,5 @@
 'use client';
+import { site } from '@/config/site';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { ProductDraft } from './shared';
@@ -136,12 +137,12 @@ export function toggleIn<T>(list: T[], value: T) {
   return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 }
 
-/** "$" prefixed money input wrapper */
+/** Currency-symbol prefixed money input wrapper */
 export function MoneyInput({ id, value, onChange, invalid, describedBy, className, placeholder, label }: { id: string; value: string; onChange: (v: string) => void; invalid?: boolean; describedBy?: string; className?: string; placeholder?: string; label?: string }) {
   return (
     <div className={cn('relative', className)}>
       <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-[15px] text-taupe" aria-hidden>
-        $
+        {site.currencySymbol}
       </span>
       <input
         id={id}

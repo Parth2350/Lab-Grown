@@ -30,7 +30,7 @@ Change or remove these before going live (`prisma/seed.ts`).
 
 ### Coupons in the seed
 
-`WELCOME10` (10% off) · `LUXE150` ($150 off orders over $1,500) · `BRIDAL15` (15% off over $2,000) · `SUMMER20` (expired — shows the error state).
+`WELCOME10` (10% off) · `LUXE150` (₹14,500 off orders over ₹1,40,000) · `BRIDAL15` (15% off over ₹1,90,000) · `SUMMER20` (expired — shows the error state).
 
 ---
 
@@ -85,7 +85,7 @@ src/lib/server/         Prisma client, auth, catalog queries, cache, storage, re
 src/store/              Zustand stores (cart, wishlist, compare, recently viewed, UI)
 ```
 
-- **Money** is stored as integer cents everywhere.
+- **Money** is in Indian rupees (`site.currency` = INR, `en-IN` formatting such as ₹2,61,900), stored as integer paise (₹1 = 100) everywhere. GST is 3% (Admin → Settings). The demo catalogue is authored in US dollars and converted at ₹95 = $1 by the seed and by the `prices_in_inr` migration.
 - **Pricing**: `variant price (purity × colour)` + `selected diamond` or `total-weight package`. `Product.fromPrice` is denormalised for fast sorting and filtering and recomputed whenever variants, options or diamond inventory change.
 - **Filtering**: one predicate (`src/lib/filters.ts`) drives both listings and disjunctive facet counts, so counts and results always agree. The catalog index is cached with the `products` tag and revalidated by admin writes.
 - **Caching**: Next.js data cache with tags (`products`, `categories`, `collections`, `settings`) + optional Redis for API responses.

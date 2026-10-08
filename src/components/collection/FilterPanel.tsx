@@ -1,4 +1,5 @@
 'use client';
+import { site } from '@/config/site';
 import { Check, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { METAL_COLORS } from '@/lib/catalog';
@@ -46,12 +47,12 @@ function PriceInputs() {
       <label className="sr-only" htmlFor="price-min">
         Minimum price
       </label>
-      <input id="price-min" inputMode="numeric" placeholder="$ Min" value={lo} onChange={(e) => setLo(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
+      <input id="price-min" inputMode="numeric" placeholder={`${site.currencySymbol} Min`} value={lo} onChange={(e) => setLo(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
       <span className="text-taupe">–</span>
       <label className="sr-only" htmlFor="price-max">
         Maximum price
       </label>
-      <input id="price-max" inputMode="numeric" placeholder="$ Max" value={hi} onChange={(e) => setHi(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
+      <input id="price-max" inputMode="numeric" placeholder={`${site.currencySymbol} Max`} value={hi} onChange={(e) => setHi(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
       <button type="submit" className="label-caps h-9 shrink-0 border border-ink px-3 transition-colors hover:bg-ink hover:text-ivory">
         Go
       </button>

@@ -62,11 +62,11 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     id: 'budget',
     title: 'What is your budget?',
     options: [
-      { value: '0-500', label: 'Under $500' },
-      { value: '500-1000', label: '$500 – $1,000' },
-      { value: '1000-2500', label: '$1,000 – $2,500' },
-      { value: '2500-5000', label: '$2,500 – $5,000' },
-      { value: '5000-', label: '$5,000+' },
+      { value: '0-50000', label: 'Under ₹50,000' },
+      { value: '50000-100000', label: '₹50,000 – ₹1,00,000' },
+      { value: '100000-250000', label: '₹1,00,000 – ₹2,50,000' },
+      { value: '250000-500000', label: '₹2,50,000 – ₹5,00,000' },
+      { value: '500000-', label: '₹5,00,000+' },
     ],
   },
   {

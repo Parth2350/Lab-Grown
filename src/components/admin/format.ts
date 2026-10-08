@@ -16,7 +16,7 @@ export function formatCompact(n: number) {
   return Math.abs(n) < 10_000 ? num.format(Math.round(n)) : compactNum.format(n);
 }
 
-/** $1.2M / $48.5K / $940 — for chart axes & stat tiles */
+/** ₹1.2Cr / ₹48.5L / ₹940 — for chart axes & stat tiles */
 export function formatMoneyCompact(cents: number) {
   const v = cents / 100;
   return Math.abs(v) < 10_000 ? moneyNoCents.format(Math.round(v)) : compactMoneyFmt.format(v);

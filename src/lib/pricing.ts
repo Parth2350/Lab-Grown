@@ -1,7 +1,9 @@
 /**
  * Pricing & totals — pure functions shared by the client (live estimates) and the
- * server (authoritative order totals). All values are integer cents.
+ * server (authoritative order totals). All values are integer paise (₹1 = 100).
  */
+
+import { formatMoney } from './utils';
 
 export type ShippingMethod = {
   id: string;
@@ -32,11 +34,11 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     'Lifetime Warranty on Every Piece',
   ],
   taxRate: 0.03,
-  taxLabel: 'Estimated taxes',
+  taxLabel: 'GST',
   shippingMethods: [
     { id: 'standard', label: 'Insured Standard', description: 'Fully insured, signature on delivery', eta: '7–10 business days', price: 0 },
-    { id: 'express', label: 'Insured Express', description: 'Priority handling & tracking', eta: '3–5 business days', price: 3500 },
-    { id: 'priority', label: 'Priority Overnight', description: 'Major metros only', eta: '1–2 business days', price: 7500 },
+    { id: 'express', label: 'Insured Express', description: 'Priority handling & tracking', eta: '3–5 business days', price: 150000 },
+    { id: 'priority', label: 'Priority Overnight', description: 'Major metros only', eta: '1–2 business days', price: 300000 },
   ],
   returnsDays: 30,
   hero: {
@@ -77,7 +79,7 @@ export function evaluateCoupon(coupon: CouponLike | null | undefined, subtotal: 
     return {
       ok: false as const,
       discount: 0,
-      message: `Spend ${(coupon.minSubtotal / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })} or more to use this code`,
+      message: `Spend ${formatMoney(coupon.minSubtotal)} or more to use this code`,
     };
   const raw = coupon.type === 'PERCENT' ? Math.round((subtotal * coupon.value) / 100) : coupon.value;
   const discount = Math.min(subtotal, Math.max(0, raw));

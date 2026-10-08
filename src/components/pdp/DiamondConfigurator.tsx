@@ -1,4 +1,5 @@
 'use client';
+import { site } from '@/config/site';
 import { Check, ChevronDown, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { CERT_LABS, DIAMOND_CLARITIES, DIAMOND_COLORS, DIAMOND_CUTS, label } from '@/lib/catalog';
@@ -188,9 +189,9 @@ export function DiamondConfigurator({ open, onClose, option, selected, settingPr
       <fieldset className="sm:col-span-2">
         <legend className="label-caps mb-2 text-charcoal">Diamond price</legend>
         <div className="flex items-center gap-2">
-          <input inputMode="numeric" placeholder="$ Min" aria-label="Minimum diamond price" value={q.minPrice} onChange={(e) => setQ((s) => ({ ...s, minPrice: e.target.value.replace(/\D/g, '') }))} className="field h-10 py-1" />
+          <input inputMode="numeric" placeholder={`${site.currencySymbol} Min`} aria-label="Minimum diamond price" value={q.minPrice} onChange={(e) => setQ((s) => ({ ...s, minPrice: e.target.value.replace(/\D/g, '') }))} className="field h-10 py-1" />
           <span className="text-taupe">–</span>
-          <input inputMode="numeric" placeholder="$ Max" aria-label="Maximum diamond price" value={q.maxPrice} onChange={(e) => setQ((s) => ({ ...s, maxPrice: e.target.value.replace(/\D/g, '') }))} className="field h-10 py-1" />
+          <input inputMode="numeric" placeholder={`${site.currencySymbol} Max`} aria-label="Maximum diamond price" value={q.maxPrice} onChange={(e) => setQ((s) => ({ ...s, maxPrice: e.target.value.replace(/\D/g, '') }))} className="field h-10 py-1" />
           <button type="button" onClick={() => setQ(initial)} className="ml-2 shrink-0 text-[14px] text-taupe underline underline-offset-4 hover:text-ink">
             Reset
           </button>

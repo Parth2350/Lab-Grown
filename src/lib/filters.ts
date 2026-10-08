@@ -2,6 +2,7 @@
  * Collection filters: URL <-> state, plus the single matching predicate used for
  * listings AND facet counts so the two can never disagree.
  */
+import { formatMoney } from './utils';
 import {
   CARAT_RANGES,
   FILTER_COLLECTIONS,
@@ -85,9 +86,9 @@ export function rangeLabel(key: FilterKey, slug: string) {
   if (known) return known.label;
   if (key === 'price') {
     const [min, max] = parseRange(slug);
-    if (!min) return `Under $${max.toLocaleString()}`;
-    if (max === Infinity) return `$${min.toLocaleString()}+`;
-    return `$${min.toLocaleString()} – $${max.toLocaleString()}`;
+    if (!min) return `Under ${formatMoney(max * 100)}`;
+    if (max === Infinity) return `${formatMoney(min * 100)}+`;
+    return `${formatMoney(min * 100)} – ${formatMoney(max * 100)}`;
   }
   if (key === 'center' || key === 'total') {
     const [min, max] = parseRange(slug);

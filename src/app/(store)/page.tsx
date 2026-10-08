@@ -30,7 +30,7 @@ export default async function HomePage() {
   const [settings, trending, yellowRings, earrings] = await Promise.all([
     getSettings(),
     getTrending(8),
-    getProductsWhere({ category: 'engagement-rings', maxPrice: 250000 }, { metal: ['yellow'] }, 8, 'price-asc'),
+    getProductsWhere({ category: 'engagement-rings', maxPrice: 25000000 }, { metal: ['yellow'] }, 8, 'price-asc'),
     getProductsWhere({ category: 'earrings' }, { style: ['stud', 'hoop'] }, 8),
   ]);
 
@@ -48,9 +48,9 @@ export default async function HomePage() {
 
       <ProductRail
         eyebrow="The Golden Edit"
-        title="Yellow Gold Engagement Rings Under $2,500"
+        title="Yellow Gold Engagement Rings Under ₹2,50,000"
         subtitle="Warm, timeless and thoughtfully priced — certified diamonds set in solid yellow gold."
-        href="/engagement-rings?metal=yellow&price=0-2500"
+        href="/engagement-rings?metal=yellow&price=0-250000"
         products={yellowRings}
         className="pb-8 md:pb-12"
       />

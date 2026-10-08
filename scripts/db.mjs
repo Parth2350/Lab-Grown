@@ -21,6 +21,8 @@ const pg = new EmbeddedPostgres({
   password: 'postgres',
   port,
   persistent: true,
+  // UTF-8 regardless of the Windows locale (the default WIN1252 cannot store ₹)
+  initdbFlags: ['--encoding=UTF8', '--locale=C'],
   onLog: () => {},
   onError: (e) => console.error(String(e)),
 });
@@ -31,12 +33,14 @@ if (fresh) {
   await pg.initialise();
 }
 await pg.start();
-try {
-  await pg.createDatabase(dbName);
+const admin = pg.getPgClient();
+await admin.connect();
+const { rowCount } = await admin.query('SELECT 1 FROM pg_database WHERE datname = $1', [dbName]);
+if (!rowCount) {
+  await admin.query(`CREATE DATABASE "${dbName}" ENCODING 'UTF8' LC_COLLATE 'C' LC_CTYPE 'C' TEMPLATE template0`);
   console.log(`Created database "${dbName}".`);
-} catch {
-  /* already exists */
 }
+await admin.end();
 
 console.log(`\n  PostgreSQL ready → postgresql://postgres:postgres@localhost:${port}/${dbName}\n  Press Ctrl+C to stop.\n`);
 

@@ -80,10 +80,11 @@ export const FILTER_COLLECTIONS = [
 
 /** Price buckets in whole currency units; `max` null = open-ended */
 export const PRICE_RANGES = [
-  { slug: '0-200', label: 'Under $200', min: 0, max: 200 },
-  { slug: '200-500', label: '$200 – $500', min: 200, max: 500 },
-  { slug: '500-1000', label: '$500 – $1,000', min: 500, max: 1000 },
-  { slug: '1000-', label: '$1,000+', min: 1000, max: null },
+  { slug: '0-50000', label: 'Under ₹50,000', min: 0, max: 50000 },
+  { slug: '50000-100000', label: '₹50,000 – ₹1,00,000', min: 50000, max: 100000 },
+  { slug: '100000-200000', label: '₹1,00,000 – ₹2,00,000', min: 100000, max: 200000 },
+  { slug: '200000-500000', label: '₹2,00,000 – ₹5,00,000', min: 200000, max: 500000 },
+  { slug: '500000-', label: '₹5,00,000+', min: 500000, max: null },
 ] as const;
 
 export const CARAT_RANGES = [

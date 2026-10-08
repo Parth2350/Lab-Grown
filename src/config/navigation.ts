@@ -192,9 +192,9 @@ export const MAIN_NAV: NavItem[] = [
         {
           title: 'By Price',
           links: [
-            { label: 'Gifts Under $250', href: '/collections/gifts-under-250' },
-            { label: 'Gifts Under $500', href: '/collections/gifts-under-500' },
-            { label: 'Gifts Under $1,000', href: '/collections/gifts-under-1000' },
+            { label: 'Gifts Under ₹25,000', href: '/collections/gifts-under-25000' },
+            { label: 'Gifts Under ₹50,000', href: '/collections/gifts-under-50000' },
+            { label: 'Gifts Under ₹1,00,000', href: '/collections/gifts-under-100000' },
           ],
         },
         {
@@ -224,9 +224,9 @@ export const MAIN_NAV: NavItem[] = [
 
 /** Virtual (rule-based) collections, resolved in /collections/[slug] */
 export const VIRTUAL_COLLECTIONS: Record<string, { title: string; description: string; maxPrice?: number; minPrice?: number; isNew?: boolean }> = {
-  'gifts-under-250': { title: 'Gifts Under $250', description: 'Thoughtful lab-grown diamond gifts, all under $250 — beautifully boxed and ready to give.', maxPrice: 25000 },
-  'gifts-under-500': { title: 'Gifts Under $500', description: 'Studs, pendants and stacking rings under $500 that feel far more precious.', maxPrice: 50000 },
-  'gifts-under-1000': { title: 'Gifts Under $1,000', description: 'Considered fine jewelry gifts under $1,000 — made to be treasured for a lifetime.', maxPrice: 100000 },
+  'gifts-under-25000': { title: 'Gifts Under ₹25,000', description: 'Thoughtful lab-grown diamond gifts, all under ₹25,000 — beautifully boxed and ready to give.', maxPrice: 2500000 },
+  'gifts-under-50000': { title: 'Gifts Under ₹50,000', description: 'Studs, pendants and stacking rings under ₹50,000 that feel far more precious.', maxPrice: 5000000 },
+  'gifts-under-100000': { title: 'Gifts Under ₹1,00,000', description: 'Considered fine jewelry gifts under ₹1,00,000 — made to be treasured for a lifetime.', maxPrice: 10000000 },
   all: { title: 'All Jewelry', description: `Explore every ${site.name} design — certified lab-grown diamonds in solid gold, crafted in our own workshop.` },
 };
 

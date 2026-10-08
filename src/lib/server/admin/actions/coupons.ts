@@ -38,7 +38,7 @@ const couponSchema = z
   })
   .transform((d) => ({
     ...d,
-    // PERCENT: whole percent; FIXED: dollars → cents
+    // PERCENT: whole percent; FIXED: rupees → paise
     value: d.type === 'PERCENT' ? Math.round(d.value) : Math.round(d.value * 100),
     // inclusive end date: end of that day
     endsAt: d.endsAt ? new Date(d.endsAt.getTime() + 86_399_999) : null,

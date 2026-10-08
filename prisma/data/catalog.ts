@@ -1,4 +1,4 @@
-/* Demo catalog for Aurevia — all names and copy are original. Prices in whole dollars. */
+/* Demo catalog for Aurevia — all names and copy are original. Prices in whole US dollars — the seed converts them to rupees. */
 
 export type SeedArt = {
   kind: string;

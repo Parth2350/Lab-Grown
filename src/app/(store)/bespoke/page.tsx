@@ -78,7 +78,7 @@ const SHOWCASE: { title: string; text: string; spec: ArtSpec; shape: string; met
 const FAQS: Faq[] = [
   {
     q: 'How much does a bespoke piece cost?',
-    a: 'The price depends mainly on the diamond and the amount of gold. Many of our commissions begin at around $1,000, and we always design to the budget you share with us. Your proposal is itemised, so you can see exactly where your money goes.',
+    a: 'The price depends mainly on the diamond and the amount of gold. Many of our commissions begin at around ₹1,00,000, and we always design to the budget you share with us. Your proposal is itemised, so you can see exactly where your money goes.',
   },
   {
     q: 'Is there a charge for the design consultation?',

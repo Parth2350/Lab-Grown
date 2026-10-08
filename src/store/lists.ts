@@ -13,7 +13,7 @@ type ListState = {
   replace: (items: ProductCard[]) => void;
 };
 
-function makeList(name: string, max: number) {
+function makeList(name: string, max: number, version = 1) {
   return create<ListState>()(
     persist(
       (set, get) => ({
@@ -30,14 +30,15 @@ function makeList(name: string, max: number) {
         clear: () => set({ items: [] }),
         replace: (items) => set({ items: items.slice(0, max) }),
       }),
-      { name, storage: createJSONStorage(() => localStorage), version: 1 },
+      { name, storage: createJSONStorage(() => localStorage), version, migrate: () => ({ items: [] }) },
     ),
   );
 }
 
 export const useWishlist = makeList('aurevia-wishlist', 100);
 export const useCompare = makeList('aurevia-compare', 4);
-export const useRecentlyViewed = makeList('aurevia-recent', 12);
+// v2: cards saved before the switch to INR carried dollar prices
+export const useRecentlyViewed = makeList('aurevia-recent', 12, 2);
 export const COMPARE_MAX = 4;
 
 type SearchHistory = { terms: string[]; push: (t: string) => void; clear: () => void };

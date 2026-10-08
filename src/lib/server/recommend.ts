@@ -51,7 +51,7 @@ export const getQuizDefinition = unstable_cache(
     }
     return { id: null, title: DEFAULT_TITLE, questions: QUIZ_QUESTIONS };
   },
-  ['quiz-definition', QUIZ_SLUG],
+  ['quiz-definition', QUIZ_SLUG, 'inr'],
   { tags: ['quiz'], revalidate: 3600 },
 );
 
@@ -272,9 +272,9 @@ export function buildLinks(a: QuizAnswers): QuizLink[] {
   if (style) links.push(style.link);
   if (c.budget && Number.isFinite(c.budget[1])) {
     const max = c.budget[1];
-    if (max <= 25000) links.push({ label: 'Gifts Under $250', href: '/collections/gifts-under-250' });
-    else if (max <= 50000) links.push({ label: 'Gifts Under $500', href: '/collections/gifts-under-500' });
-    else if (max <= 100000) links.push({ label: 'Gifts Under $1,000', href: '/collections/gifts-under-1000' });
+    if (max <= 2500000) links.push({ label: 'Gifts Under ₹25,000', href: '/collections/gifts-under-25000' });
+    else if (max <= 5000000) links.push({ label: 'Gifts Under ₹50,000', href: '/collections/gifts-under-50000' });
+    else if (max <= 10000000) links.push({ label: 'Gifts Under ₹1,00,000', href: '/collections/gifts-under-100000' });
   }
   if (c.shape) links.push({ label: `${label.shape(c.shape)} Diamonds`, href: `/collections/shape/${c.shape}` });
   const seen = new Set<string>();

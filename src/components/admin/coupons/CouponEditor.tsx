@@ -58,7 +58,7 @@ function CouponForm({ coupon, onDone }: { coupon?: CouponRow; onDone: () => void
           </div>
           <div>
             <label htmlFor="c-value" className={lbl}>
-              {type === 'PERCENT' ? 'Percent (%)' : 'Amount ($)'} <span className="text-gold">*</span>
+              {type === 'PERCENT' ? 'Percent (%)' : 'Amount (₹)'} <span className="text-gold">*</span>
             </label>
             <input
               id="c-value"
@@ -75,7 +75,7 @@ function CouponForm({ coupon, onDone }: { coupon?: CouponRow; onDone: () => void
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label htmlFor="c-min" className={lbl}>
-              Minimum subtotal ($)
+              Minimum subtotal (₹)
             </label>
             <input id="c-min" name="minSubtotal" inputMode="decimal" defaultValue={coupon ? centsToInput(coupon.minSubtotal) : '0'} aria-invalid={err('minSubtotal')} className="field py-2.5" />
             <FieldMsg state={state} name="minSubtotal" />

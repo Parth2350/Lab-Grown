@@ -38,7 +38,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       },
       {
         q: 'In which currency are prices shown?',
-        a: 'All prices are in US dollars. If your card is in another currency, your bank converts the amount at its own exchange rate.',
+        a: 'All prices are in Indian rupees (₹). GST of 3% is added at checkout. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
       },
     ],
   },

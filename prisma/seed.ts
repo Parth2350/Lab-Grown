@@ -44,8 +44,9 @@ const CAT_CODE: Record<string, string> = {
 };
 const RING_CATS = new Set(['engagement-rings', 'wedding-bands', 'rings']);
 
-/** $1,298.40 → 129900 cents ($1,299) */
-const retail = (dollars: number) => Math.max(1, Math.round(dollars / 10)) * 1000 - (dollars > 50 ? 100 : 0);
+/** Catalogue prices are authored in US dollars and sold in rupees: $1,298.40 → ₹1,23,300 (paise, nearest ₹100) */
+const USD_TO_INR = 95;
+const retail = (dollars: number) => Math.max(1, Math.round((dollars * USD_TO_INR) / 100)) * 10000;
 
 const slugify = (s: string) =>
   s
@@ -487,17 +488,17 @@ async function main() {
   await prisma.coupon.createMany({
     data: [
       { code: 'WELCOME10', description: '10% off your first order', type: 'PERCENT', value: 10, minSubtotal: 0, usedCount: 11 },
-      { code: 'LUXE150', description: '$150 off orders over $1,500', type: 'FIXED', value: 15000, minSubtotal: 150000, usedCount: 4 },
-      { code: 'BRIDAL15', description: '15% off bridal orders over $2,000', type: 'PERCENT', value: 15, minSubtotal: 200000, maxUses: 100, usedCount: 7, endsAt: new Date(now + 120 * 86400000) },
+      { code: 'LUXE150', description: '₹14,500 off orders over ₹1,40,000', type: 'FIXED', value: 1450000, minSubtotal: 14000000, usedCount: 4 },
+      { code: 'BRIDAL15', description: '15% off bridal orders over ₹1,90,000', type: 'PERCENT', value: 15, minSubtotal: 19000000, maxUses: 100, usedCount: 7, endsAt: new Date(now + 120 * 86400000) },
       { code: 'SUMMER20', description: 'Expired summer promotion', type: 'PERCENT', value: 20, minSubtotal: 0, isActive: false, endsAt: new Date(now - 30 * 86400000) },
     ],
   });
   await prisma.bespokeRequest.createMany({
     data: [
-      { jewelryType: 'Engagement ring', shape: 'oval', carat: '2 – 3 ct', metal: '18K Yellow Gold', budget: '$2,500 – $5,000', notes: 'Looking for a low-set oval with a very thin band and a hidden halo in white gold.', name: 'Hannah Wright', email: 'hannah.w@example.com', phone: '+1 555 0177', country: 'United States', status: 'NEW', inspirationUrls: [] },
-      { jewelryType: 'Necklace', shape: 'emerald', carat: '5 ct +', metal: '14K White Gold', budget: '$5,000+', notes: 'Emerald-cut rivière for my wedding day, around 16 inches.', name: 'Ishita Rao', email: 'ishita.rao@example.com', country: 'India', status: 'IN_REVIEW', inspirationUrls: [] },
-      { jewelryType: 'Wedding band', shape: 'marquise', carat: '1 – 2 ct', metal: '14K Rose Gold', budget: '$1,000 – $2,500', notes: 'Contoured band to fit around a pear engagement ring.', name: 'Grace Lee', email: 'grace.lee@example.com', country: 'Singapore', status: 'QUOTED', inspirationUrls: [] },
-      { jewelryType: 'Earrings', shape: 'pear', carat: '2 – 3 ct', metal: '18K White Gold', budget: '$2,500 – $5,000', notes: 'Chandelier-style drop earrings for a gala.', name: 'Mei Chen', email: 'mei.chen@example.com', country: 'Singapore', status: 'IN_PRODUCTION', inspirationUrls: [] },
+      { jewelryType: 'Engagement ring', shape: 'oval', carat: '2 – 3 ct', metal: '18K Yellow Gold', budget: '₹2,50,000 – ₹5,00,000', notes: 'Looking for a low-set oval with a very thin band and a hidden halo in white gold.', name: 'Hannah Wright', email: 'hannah.w@example.com', phone: '+1 555 0177', country: 'United States', status: 'NEW', inspirationUrls: [] },
+      { jewelryType: 'Necklace', shape: 'emerald', carat: '5 ct +', metal: '14K White Gold', budget: '₹5,00,000 – ₹10,00,000', notes: 'Emerald-cut rivière for my wedding day, around 16 inches.', name: 'Ishita Rao', email: 'ishita.rao@example.com', country: 'India', status: 'IN_REVIEW', inspirationUrls: [] },
+      { jewelryType: 'Wedding band', shape: 'marquise', carat: '1 – 2 ct', metal: '14K Rose Gold', budget: '₹1,00,000 – ₹2,50,000', notes: 'Contoured band to fit around a pear engagement ring.', name: 'Grace Lee', email: 'grace.lee@example.com', country: 'Singapore', status: 'QUOTED', inspirationUrls: [] },
+      { jewelryType: 'Earrings', shape: 'pear', carat: '2 – 3 ct', metal: '18K White Gold', budget: '₹2,50,000 – ₹5,00,000', notes: 'Chandelier-style drop earrings for a gala.', name: 'Mei Chen', email: 'mei.chen@example.com', country: 'Singapore', status: 'IN_PRODUCTION', inspirationUrls: [] },
     ],
   });
   await prisma.partnerApplication.createMany({

@@ -134,7 +134,7 @@ export function VariantsSection({ draft, update, errors, lowStock }: SectionProp
                       </td>
                       <td className="px-3 py-2 align-top">
                         <label htmlFor={`${id}-price`} className="sr-only">
-                          Price for {label} in dollars
+                          Price for {label} in rupees
                         </label>
                         <input
                           id={`${id}-price`}
