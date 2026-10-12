@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 const schema = z.object({
   code: z.string().trim().min(1, 'Enter a code').max(40),
-  subtotal: z.number().int().min(0).max(1_000_000_000),
+  subtotal: z.number().int().min(0).max(100_000_000_000),
 });
 
 /** { code, subtotal } → { ok, discount, message, code }. Never exposes coupon internals. */

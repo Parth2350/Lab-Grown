@@ -4,6 +4,7 @@ import { AlertCircle, ImagePlus, RotateCcw, X } from 'lucide-react';
 import { useCallback, useRef, useState, type DragEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { MAX_INSPIRATION_IMAGES } from '../forms/schemas';
+import { IMAGE_ACCEPT, prepareUpload, UploadPrepError, WEB_IMAGE_TYPES } from '@/lib/image-upload';
 
 export type UploadItem = {
   key: string;
@@ -16,8 +17,6 @@ export type UploadItem = {
   file?: File;
 };
 
-const ACCEPT = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
-const MAX_BYTES = 8 * 1024 * 1024;
 
 let seq = 0;
 
@@ -39,8 +38,10 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
       if (!file) return;
       patch(key, { status: 'uploading', error: undefined });
       try {
+        // resized in the browser so large phone photos stay under the hosting upload limit
+        const prepared = await prepareUpload(file);
         const fd = new FormData();
-        fd.append('file', file);
+        fd.append('file', prepared);
         fd.append('folder', 'bespoke');
         const res = await fetch('/api/upload', { method: 'POST', body: fd });
         const json = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
@@ -49,8 +50,8 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
         } else {
           patch(key, { status: 'error', error: json.error ?? 'Upload failed. Please try again.' });
         }
-      } catch {
-        patch(key, { status: 'error', error: 'Upload failed — please check your connection.' });
+      } catch (e) {
+        patch(key, { status: 'error', error: e instanceof UploadPrepError ? e.message : 'Upload failed — please check your connection.' });
       }
     },
     [patch],
@@ -71,12 +72,8 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
         messages.push(`Only ${MAX_INSPIRATION_IMAGES} images can be shared — some were not added.`);
         break;
       }
-      if (!ACCEPT.includes(file.type)) {
-        messages.push(`“${file.name}” is not a supported image (JPG, PNG, WebP, AVIF or GIF).`);
-        continue;
-      }
-      if (file.size > MAX_BYTES) {
-        messages.push(`“${file.name}” is larger than 8 MB.`);
+      if (!WEB_IMAGE_TYPES.includes(file.type) && !/^image\/hei[cf]$/.test(file.type) && !/\.(heic|heif)$/i.test(file.name)) {
+        messages.push(`“${file.name}” is not a supported image (JPG, PNG, WebP, AVIF, HEIC or GIF).`);
         continue;
       }
       const key = `u${Date.now()}-${seq++}`;
@@ -130,7 +127,7 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
           ref={inputRef}
           id="bespoke-files"
           type="file"
-          accept={ACCEPT.join(',')}
+          accept={IMAGE_ACCEPT}
           multiple
           disabled={full}
           className="sr-only"
@@ -145,7 +142,7 @@ export function InspirationUploader({ items, onChange }: { items: UploadItem[]; 
         </span>
         <span className="mt-5 font-serif text-xl">{dragging ? 'Drop your images here' : 'Drag & drop images, or click to browse'}</span>
         <span id="bespoke-files-help" className="mt-2 max-w-sm text-[15px] text-taupe">
-          Up to {MAX_INSPIRATION_IMAGES} images · JPG, PNG, WebP, AVIF or GIF · 8 MB each. Screenshots, sketches and heirloom photos are all welcome.
+          Up to {MAX_INSPIRATION_IMAGES} images · JPG, PNG, WebP, AVIF, HEIC or GIF — large photos are resized automatically. Screenshots, sketches and heirloom photos are all welcome.
         </span>
       </label>
 

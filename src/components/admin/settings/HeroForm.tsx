@@ -4,14 +4,13 @@ import { ImageIcon } from 'lucide-react';
 import { saveHeroSettings } from '@/lib/server/admin/actions/settings';
 import type { StoreSettings } from '@/lib/pricing';
 import { cn } from '@/lib/utils';
+import { IMAGE_ACCEPT, prepareUpload, UploadPrepError } from '@/lib/image-upload';
 import { safeUrl } from '../bespoke/links';
 import { FieldMsg, FormBanner, SubmitButton, useAdminForm } from '../forms';
 import { toast } from '../toast';
 import { Panel } from '../ui';
 import { Counter, PanelFooter, settingsLabel } from './shared';
 
-const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
-const MAX_BYTES = 8 * 1024 * 1024;
 const LIMITS = { eyebrow: 60, title: 120, subtitle: 300 } as const;
 
 export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
@@ -23,6 +22,7 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
   const [preview, setPreview] = useState<string | null>(null);
   const [fileName, setFileName] = useState('');
   const [remove, setRemove] = useState(false);
+  const [preparing, setPreparing] = useState(false);
 
   // Release the object URL of a previously chosen file.
   useEffect(() => {
@@ -40,24 +40,29 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
     setFileName('');
   };
 
-  const onFile = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return clearFile();
-    if (file.type.startsWith('video/')) {
-      toast.error('Videos aren’t supported for the hero', 'Please choose a still image — JPG, PNG, WebP, AVIF or GIF.');
-      return clearFile();
+  const onFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    const input = e.target;
+    const picked = input.files?.[0];
+    if (!picked) return clearFile();
+    setPreparing(true);
+    try {
+      // resize in the browser so the upload stays under the hosting limit, then put the
+      // prepared file back into the input — that is what the form submits
+      const file = await prepareUpload(picked);
+      if (file !== picked) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+      }
+      setPreview(URL.createObjectURL(file));
+      setFileName(picked.name);
+      setRemove(false);
+    } catch (err) {
+      toast.error('This image can’t be used', err instanceof UploadPrepError ? err.message : 'Please try a different JPG or PNG.');
+      clearFile();
+    } finally {
+      setPreparing(false);
     }
-    if (!IMAGE_TYPES.includes(file.type)) {
-      toast.error('Unsupported file type', 'Please choose a JPG, PNG, WebP, AVIF or GIF image.');
-      return clearFile();
-    }
-    if (file.size > MAX_BYTES) {
-      toast.error('Image is too large', 'Please choose an image under 8 MB.');
-      return clearFile();
-    }
-    setPreview(URL.createObjectURL(file));
-    setFileName(file.name);
-    setRemove(false);
   };
 
   return (
@@ -68,7 +73,7 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
         description="The headline block at the top of the homepage. Without an image, the illustrated hero is shown."
         footer={
           <PanelFooter note={fileName ? `New image: ${fileName} — uploaded when you save` : remove ? 'The current image will be removed when you save' : undefined}>
-            <SubmitButton pending={form.pending} pendingLabel={fileName ? 'Uploading…' : 'Saving…'}>
+            <SubmitButton pending={form.pending || preparing} pendingLabel={preparing ? 'Preparing image…' : fileName ? 'Uploading…' : 'Saving…'}>
               Save hero
             </SubmitButton>
           </PanelFooter>
@@ -142,8 +147,8 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
               id="hero-image"
               type="file"
               name="image"
-              accept={IMAGE_TYPES.join(',')}
-              onChange={onFile}
+              accept={IMAGE_ACCEPT}
+              onChange={(e) => void onFile(e)}
               aria-describedby="hero-image-hint"
               className={cn(
                 'mt-3 block w-full text-xs text-taupe',
@@ -151,7 +156,7 @@ export function HeroForm({ hero }: { hero: StoreSettings['hero'] }) {
               )}
             />
             <p id="hero-image-hint" className="mt-1.5 text-[13px] text-taupe">
-              JPG, PNG, WebP, AVIF or GIF up to 8 MB. Landscape, at least 2000 px wide works best.
+              JPG, PNG, WebP, AVIF, HEIC or GIF — large photos are resized automatically. Landscape, at least 2000 px wide works best.
             </p>
             <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
               {preview && (

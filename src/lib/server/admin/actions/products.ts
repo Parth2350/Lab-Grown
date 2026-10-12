@@ -38,13 +38,13 @@ const oneOf = (list: readonly string[], message: string) => z.string({ required_
 const optOneOf = (list: readonly string[], message: string) =>
   z.preprocess((v) => (v === '' || v == null ? undefined : v), oneOf(list, message).optional());
 
-/** Dollars (string) → cents; required */
-const zDollars = (label: string, max = 1_000_000) =>
+/** Rupees (string, e.g. "1,23,400" or "₹1,23,400") → paise; required */
+const zDollars = (label: string, max = 10_000_000) =>
   z
     .preprocess(
       (v) => {
         if (typeof v !== 'string') return v;
-        const c = v.replace(/[$,\s]/g, '');
+        const c = v.replace(/[$₹,\s]/g, '');
         return c === '' ? undefined : Number(c);
       },
       z
@@ -55,13 +55,13 @@ const zDollars = (label: string, max = 1_000_000) =>
     )
     .transform((d) => Math.round(d * 100));
 
-/** Dollars (string) → cents | null when blank */
-const zOptDollars = (label: string, max = 1_000_000) =>
+/** Rupees (string) → paise | null when blank */
+const zOptDollars = (label: string, max = 10_000_000) =>
   z
     .preprocess(
       (v) => {
         if (typeof v !== 'string') return v;
-        const c = v.replace(/[$,\s]/g, '');
+        const c = v.replace(/[$₹,\s]/g, '');
         return c === '' ? undefined : Number(c);
       },
       z
@@ -134,7 +134,7 @@ const optionSchema = z.object({
   totalCarat: zCarat('Total carat', 0.01, 100),
   color: oneOf(COLOR_GRADES, 'Choose a colour grade'),
   clarity: oneOf(CLARITY_GRADES, 'Choose a clarity grade'),
-  priceDelta: zDollars('Price', 1_000_000),
+  priceDelta: zDollars('Price'),
   isDefault: z.boolean(),
 });
 

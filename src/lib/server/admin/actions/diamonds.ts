@@ -1,6 +1,5 @@
 'use server';
 import 'server-only';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { db } from '@/lib/server/db';
 import { recomputeFromPrice } from '@/lib/server/product-pricing';
@@ -43,7 +42,7 @@ const diamondSchema = z
     depthPct: zOptFloat('Depth %', { min: 40, max: 90 }),
     ratio: zOptFloat('Length-to-width ratio', { min: 0.8, max: 3 }),
     growth: z.enum(GROWTH_METHODS, choose('growth method')),
-    price: zMoney('Price', { min: 1, max: 1_000_000 }),
+    price: zMoney('Price', { min: 1, max: 10_000_000 }),
     isAvailable: zCheckbox,
     certLab: z.enum(CERT_LABS, choose('grading lab')),
     certNumber: z
@@ -129,7 +128,7 @@ export async function setDiamondAvailable(id: string, isAvailable: boolean): Pro
   });
 }
 
-export async function deleteDiamond(id: string, redirectToList?: boolean): Promise<ActionResult> {
+export async function deleteDiamond(id: string): Promise<ActionResult> {
   return adminAction(async () => {
     const diamond = await db.diamond.findUnique({ where: { id: parse(zCuid, id) }, select: { id: true, sku: true, shape: true } });
     if (!diamond) throw new ActionError('This diamond no longer exists — it may already have been deleted.');
@@ -144,7 +143,6 @@ export async function deleteDiamond(id: string, redirectToList?: boolean): Promi
     await recomputeForShapes([diamond.shape]);
     await revalidateCatalog();
     revalidateAdmin();
-    if (parse(z.boolean().optional(), redirectToList)) redirect('/admin/diamonds');
     return ok(`${diamond.sku} deleted`);
   });
 }

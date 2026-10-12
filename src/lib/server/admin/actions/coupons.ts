@@ -20,7 +20,7 @@ const couponSchema = z
     value: z.preprocess(
       (v) => {
         if (typeof v !== 'string') return v;
-        const t = v.replace(/[$,%\s]/g, '');
+        const t = v.replace(/[$₹,%\s]/g, '');
         return t === '' ? undefined : Number(t);
       },
       z.number({ required_error: 'Value is required', invalid_type_error: 'Value must be a number' }).positive('Value must be greater than 0'),

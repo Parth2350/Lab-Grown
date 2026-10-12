@@ -151,10 +151,10 @@ export const zText = (label: string, max = 200) => z.string({ required_error: `$
 /** Checkbox → boolean */
 export const zCheckbox = z.preprocess((v) => v === 'on' || v === 'true' || v === '1' || v === true, z.boolean());
 
-/** Dollars (string/number) → integer cents */
+/** Rupees (string/number, ₹ and commas allowed) → integer paise */
 export const zMoney = (label = 'Amount', { min = 0, max = 10_000_000 } = {}) =>
   z.preprocess(
-    (v) => (typeof v === 'string' ? v.replace(/[$,\s]/g, '') : v),
+    (v) => (typeof v === 'string' ? v.replace(/[$₹,\s]/g, '') : v),
     z.coerce
       .number({ invalid_type_error: `${label} must be a number` })
       .min(min, `${label} must be at least ${min}`)
@@ -162,7 +162,7 @@ export const zMoney = (label = 'Amount', { min = 0, max = 10_000_000 } = {}) =>
   ).transform((d) => Math.round(d * 100));
 
 export const zOptMoney = (label = 'Amount') =>
-  z.preprocess((v) => (typeof v === 'string' ? (v.replace(/[$,\s]/g, '') === '' ? undefined : v.replace(/[$,\s]/g, '')) : v), z.coerce.number({ invalid_type_error: `${label} must be a number` }).min(0, `${label} cannot be negative`).max(10_000_000).optional()).transform((d) => (d == null ? null : Math.round(d * 100)));
+  z.preprocess((v) => (typeof v === 'string' ? (v.replace(/[$₹,\s]/g, '') === '' ? undefined : v.replace(/[$₹,\s]/g, '')) : v), z.coerce.number({ invalid_type_error: `${label} must be a number` }).min(0, `${label} cannot be negative`).max(10_000_000).optional()).transform((d) => (d == null ? null : Math.round(d * 100)));
 
 export const zInt = (label: string, { min = 0, max = 1_000_000 } = {}) =>
   z.preprocess(emptyToUndefined, z.coerce.number({ required_error: `${label} is required`, invalid_type_error: `${label} must be a number` }).int(`${label} must be a whole number`).min(min, `${label} must be at least ${min}`).max(max, `${label} must be at most ${max}`));

@@ -50,7 +50,8 @@ export default async function DiamondDetailPage({ params }: Props) {
             <ActionButton
               variant="outline"
               icon={<Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />}
-              action={deleteDiamond.bind(null, d.id, true)}
+              action={deleteDiamond.bind(null, d.id)}
+              redirectTo="/admin/diamonds"
               className="border-danger/60 text-danger hover:border-danger hover:bg-danger hover:text-white"
               confirm={
                 usage.orderCount

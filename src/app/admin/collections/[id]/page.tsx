@@ -59,7 +59,8 @@ export default async function CollectionDetailPage({ params }: Props) {
             <ActionButton
               variant="outline"
               icon={<Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />}
-              action={deleteCollection.bind(null, collection.id, true)}
+              action={deleteCollection.bind(null, collection.id)}
+              redirectTo="/admin/collections"
               className="border-danger/60 text-danger hover:border-danger hover:bg-danger hover:text-white"
               confirm={{
                 title: `Delete ${collection.name}?`,

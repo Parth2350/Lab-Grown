@@ -1,6 +1,7 @@
 'use client';
 import { useActionState, useEffect, useRef, useState, useTransition, type FormEvent, type ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
+import { unstable_rethrow, useRouter } from 'next/navigation';
 import { CircleAlert, CircleCheck } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Sheet } from '@/components/ui/Sheet';
@@ -19,7 +20,16 @@ type ButtonVariant = 'primary' | 'outline' | 'ghost' | 'gold' | 'link';
  *   <SubmitButton pending={form.pending}>Save</SubmitButton>
  */
 export function useAdminForm<T = unknown>(action: FormAction<T>, opts: { onSuccess?: (res: ActionResult<T>) => void; successMessage?: string; silent?: boolean } = {}) {
-  const [state, dispatch, pending] = useActionState<FormState<T>, FormData>(action, null);
+  // A request that never reaches the server (connection drop, request rejected by the host)
+  // becomes an error message instead of crashing the page into the error screen.
+  const [state, dispatch, pending] = useActionState<FormState<T>, FormData>(async (prev, fd) => {
+    try {
+      return await action(prev, fd);
+    } catch (e) {
+      unstable_rethrow(e);
+      return { ok: false, message: 'We couldn’t reach the server. Please check your connection and try again.' };
+    }
+  }, null);
   const [, startTransition] = useTransition();
   const optsRef = useRef(opts);
   optsRef.current = opts;
@@ -154,6 +164,7 @@ export function ActionButton({
   className,
   successMessage,
   onDone,
+  redirectTo,
   title,
   icon,
   disabled,
@@ -166,6 +177,8 @@ export function ActionButton({
   className?: string;
   successMessage?: string;
   onDone?: (res: ActionResult) => void;
+  /** Navigate here after a successful run (e.g. back to the list after deleting) */
+  redirectTo?: string;
   title?: string;
   icon?: ReactNode;
   disabled?: boolean;
@@ -173,6 +186,7 @@ export function ActionButton({
 }) {
   const [pending, start] = useTransition();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const run = () =>
     start(async () => {
@@ -181,6 +195,7 @@ export function ActionButton({
         toast.result(res, successMessage);
         setOpen(false);
         onDone?.(res);
+        if (res.ok && redirectTo) router.push(redirectTo);
       } catch {
         toast.error('Something went wrong. Please try again.');
       }

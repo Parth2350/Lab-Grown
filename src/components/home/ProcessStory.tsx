@@ -90,10 +90,16 @@ export function ProcessStory() {
     };
   }, [reduce, dist]);
 
+  // framer-motion can emit this while it is rendering, so the state update waits for the next frame
+  const raf = useRef(0);
+  useEffect(() => () => cancelAnimationFrame(raf.current), []);
   useMotionValueEvent(scrollYProgress, 'change', (p) => {
     if (!pinned) return;
-    const i = Math.min(STEPS.length - 1, Math.max(0, Math.round(p * (STEPS.length - 1))));
-    setActive((prev) => (prev === i ? prev : i));
+    cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(() => {
+      const i = Math.min(STEPS.length - 1, Math.max(0, Math.round(p * (STEPS.length - 1))));
+      setActive((prev) => (prev === i ? prev : i));
+    });
   });
 
   return (

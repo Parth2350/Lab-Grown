@@ -297,7 +297,7 @@ export default async function DiamondsPage({ searchParams }: { searchParams: Pro
                           variant="icon"
                           title={`Delete ${d.sku}`}
                           icon={<Trash2 className="h-4 w-4" strokeWidth={1.4} />}
-                          action={deleteDiamond.bind(null, d.id, false)}
+                          action={deleteDiamond.bind(null, d.id)}
                           confirm={
                             ordered
                               ? undefined

@@ -1,6 +1,5 @@
 'use server';
 import 'server-only';
-import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { db } from '@/lib/server/db';
 import { revalidateCatalog } from '@/lib/server/revalidate';
@@ -77,14 +76,13 @@ export async function setCollectionFeatured(id: string, isFeatured: boolean): Pr
 }
 
 /** Deleting a collection only removes the grouping — products are untouched (implicit m2m rows go with it). */
-export async function deleteCollection(id: string, redirectToList?: boolean): Promise<ActionResult> {
+export async function deleteCollection(id: string): Promise<ActionResult> {
   return adminAction(async () => {
     const collection = await db.collection.findUnique({ where: { id: parse(zCuid, id) }, select: { id: true, name: true } });
     if (!collection) throw new ActionError('This collection no longer exists — it may already have been deleted.');
     await db.collection.delete({ where: { id: collection.id } });
     await revalidateCatalog();
     revalidateAdmin();
-    if (parse(z.boolean().optional(), redirectToList)) redirect('/admin/collections');
     return ok(`${collection.name} deleted`);
   });
 }

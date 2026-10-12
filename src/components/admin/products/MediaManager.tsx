@@ -6,13 +6,13 @@ import { METAL_COLORS } from '@/lib/catalog';
 import { deleteProductMedia, moveProductMedia, updateProductMedia, uploadProductMedia } from '@/lib/server/admin/actions/product-media';
 import type { ActionResult } from '@/lib/server/admin/types';
 import { cn } from '@/lib/utils';
+import { IMAGE_ACCEPT, prepareUpload, UPLOAD_LIMIT_LABEL, UploadPrepError, VIDEO_TYPES } from '@/lib/image-upload';
 import { ConfirmDialog } from '../forms';
 import { toast } from '../toast';
 import { chevronStyle, labelCls } from './editor-ui';
 import type { MediaItem } from './shared';
 
-const ACCEPT = 'image/jpeg,image/png,image/webp,image/avif,image/gif,video/mp4,video/webm';
-const MAX_BYTES = 8 * 1024 * 1024;
+const ACCEPT = [IMAGE_ACCEPT, ...VIDEO_TYPES].join(',');
 const smallSelect = 'field h-9 cursor-pointer appearance-none py-0 pl-3 pr-8 text-[14.5px]';
 
 type MediaResult = ActionResult<{ items: MediaItem[] }>;
@@ -196,33 +196,29 @@ export function MediaManager({
 
   const upload = async (list: FileList | File[]) => {
     const files = Array.from(list);
+    if (inputRef.current) inputRef.current.value = '';
     if (!files.length || progress) return;
-    const tooBig = files.filter((f) => f.size > MAX_BYTES);
-    const unsupported = files.filter((f) => !ACCEPT.split(',').includes(f.type));
-    for (const f of tooBig) toast.error(`${f.name} is larger than 8 MB`);
-    for (const f of unsupported) if (!tooBig.includes(f)) toast.error(`${f.name}: unsupported file type`);
-    const ok = files.filter((f) => !tooBig.includes(f) && !unsupported.includes(f));
-    if (!ok.length) return;
-    setProgress({ done: 0, total: ok.length });
+    setProgress({ done: 0, total: files.length });
     let uploaded = 0;
-    // One request per file keeps every request under the server-action body limit.
-    for (const [i, file] of ok.entries()) {
-      const fd = new FormData();
-      fd.append('files', file);
-      fd.append('metalColor', uploadMetal);
+    // One request per file, each resized in the browser first, keeps every request under
+    // the hosting limit (Vercel rejects request bodies over 4.5 MB).
+    for (const [i, original] of files.entries()) {
       try {
+        const file = await prepareUpload(original, { allowVideo: true });
+        const fd = new FormData();
+        fd.append('files', file);
+        fd.append('metalColor', uploadMetal);
         const res = await uploadProductMedia(productId, fd);
         if (res.ok) {
           uploaded++;
           if (res.data) setItems(res.data.items);
-        } else toast.error(`${file.name}: ${res.message}`);
-      } catch {
-        toast.error(`${file.name}: upload failed`);
+        } else toast.error(`${original.name}: ${res.message}`);
+      } catch (e) {
+        toast.error(e instanceof UploadPrepError ? e.message : `${original.name}: upload failed — please check your connection and try again.`);
       }
-      setProgress({ done: i + 1, total: ok.length });
+      setProgress({ done: i + 1, total: files.length });
     }
     setProgress(null);
-    if (inputRef.current) inputRef.current.value = '';
     if (uploaded) toast.success(`Uploaded ${uploaded} file${uploaded === 1 ? '' : 's'}`);
   };
 
@@ -263,7 +259,7 @@ export function MediaManager({
           </span>
           <div>
             <p className="text-[15px] text-ink">{progress ? `Uploading ${Math.min(progress.done + 1, progress.total)} of ${progress.total}…` : 'Drop files here or choose from your computer'}</p>
-            <p className="text-xs text-taupe">JPG, PNG, WebP, AVIF, GIF, MP4 or WebM · up to 8 MB each</p>
+            <p className="text-xs text-taupe">JPG, PNG, WebP, AVIF, HEIC or GIF photos (large photos are resized automatically) · MP4 or WebM video up to {UPLOAD_LIMIT_LABEL}</p>
           </div>
         </div>
         <div className="flex flex-wrap items-end justify-center gap-2">

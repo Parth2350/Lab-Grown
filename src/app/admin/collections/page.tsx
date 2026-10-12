@@ -104,7 +104,7 @@ export default async function CollectionsPage() {
                           variant="icon"
                           title={`Delete ${c.name}`}
                           icon={<Trash2 className="h-4 w-4" strokeWidth={1.4} />}
-                          action={deleteCollection.bind(null, c.id, false)}
+                          action={deleteCollection.bind(null, c.id)}
                           confirm={{
                             title: `Delete ${c.name}?`,
                             description: count
