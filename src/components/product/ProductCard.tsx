@@ -96,7 +96,8 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
     <article className={cn('group relative flex h-full flex-col', className)} onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}>
       <div className="art-tile relative aspect-square overflow-hidden">
         <Link href={href} className="absolute inset-0" aria-label={product.name}>
-          <LazyMount eager={priority} className="absolute inset-[6%] transition-all duration-700 ease-luxe group-hover:scale-[1.04] group-hover:opacity-0">
+          {/* the main view only fades out once the alternate view exists, so the tile can never go blank */}
+          <LazyMount eager={priority} className={cn('absolute inset-[6%] transition-all duration-700 ease-luxe', hovered && 'group-hover:scale-[1.04] group-hover:opacity-0')}>
             <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} priority={priority} sizes={sizes} />
           </LazyMount>
           {hovered && (
