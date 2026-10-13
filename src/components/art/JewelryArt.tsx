@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import { useId, type ReactNode, type SVGProps } from 'react';
 import {
   facetPaths,
   perimeter,
@@ -73,10 +73,15 @@ const r2 = (n: number) => Math.round(n * 100) / 100;
 const clampN = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
 
 const STONE_STROKE = '#8E99A5';
+const paint = (gradientId: string, stroke: string) => ({ fill: `url(#${gradientId})`, stroke, strokeWidth: 0.35 });
 const FACET_STROKE = '#A9B3BE';
 
 type Ids = { mb: string; mh: string; sv: string; d: string; dr: string; blur: string; fade: string };
-type Ctx = { ids: Ids; band: string[]; head: string[]; mc: string; pc: string };
+/** Paint for melee stones (mc) and prongs (pc). Set as attributes rather than a <style> block:
+ * the ids come from useId(), and an id inside text content turns any server/client id
+ * difference into a hydration error, while attribute differences are tolerated. */
+type Paint = Pick<SVGProps<SVGCircleElement>, 'fill' | 'stroke' | 'strokeWidth'>;
+type Ctx = { ids: Ids; band: string[]; head: string[]; mc: Paint; pc: Paint };
 
 function metalPalettes(metal = 'yellow') {
   const [primary, secondary] = metal.split('-');
@@ -85,7 +90,7 @@ function metalPalettes(metal = 'yellow') {
   return { band, head };
 }
 
-function Defs({ ids, band, head, mc, pc }: Ctx) {
+function Defs({ ids, band, head }: Ctx) {
   const metalGrad = (id: string, p: string[]) => (
     <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stopColor={p[1]} />
@@ -97,7 +102,6 @@ function Defs({ ids, band, head, mc, pc }: Ctx) {
   );
   return (
     <defs>
-      <style>{`.${mc}{fill:url(#${ids.dr});stroke:${STONE_STROKE};stroke-width:.35}.${pc}{fill:url(#${ids.mh});stroke:${head[4]};stroke-width:.35}`}</style>
       {metalGrad(ids.mb, band)}
       {metalGrad(ids.mh, head)}
       <linearGradient id={ids.sv} x1="0" y1="0" x2="0" y2="1">
@@ -168,7 +172,7 @@ function stone(c: Ctx, o: StoneOpts): ReactNode {
       const pts = scalePts(poly, 1 + (2 * off) / w, 1 + (2 * off) / h);
       const n = Math.max(8, Math.floor(perimeter(pts) / (2 * mr + 0.7)));
       resample(pts, n).forEach(([px, py], i) =>
-        out.push(<circle key={`h${ring}-${i}`} cx={r1(px)} cy={r1(py)} r={r1(mr)} className={c.mc} />),
+        out.push(<circle key={`h${ring}-${i}`} cx={r1(px)} cy={r1(py)} r={r1(mr)} {...c.mc} />),
       );
     }
   }
@@ -177,7 +181,7 @@ function stone(c: Ctx, o: StoneOpts): ReactNode {
     const pts = scalePts(poly, 1 + (2 * off) / w, 1 + (2 * off) / h);
     const n = Math.max(8, Math.floor(perimeter(pts) / (1.6 * mr)));
     resample(pts, n).forEach(([px, py], i) =>
-      out.push(<circle key={`hh${i}`} cx={r1(px)} cy={r1(py)} r={r1(mr * 0.8)} className={c.mc} />),
+      out.push(<circle key={`hh${i}`} cx={r1(px)} cy={r1(py)} r={r1(mr * 0.8)} {...c.mc} />),
     );
   }
   if (bezel) {
@@ -198,7 +202,7 @@ function stone(c: Ctx, o: StoneOpts): ReactNode {
   if (!bezel && prongs > 0) {
     const pr = Math.max(1.4, w * 0.056);
     prongPoints(shape, w, h, prongs).forEach(([px, py], i) =>
-      out.push(<circle key={`p${i}`} cx={r1(px)} cy={r1(py)} r={r1(pr)} className={c.pc} />),
+      out.push(<circle key={`p${i}`} cx={r1(px)} cy={r1(py)} r={r1(pr)} {...c.pc} />),
     );
   }
   if (sparkle && w > 14) {
@@ -212,7 +216,7 @@ function stone(c: Ctx, o: StoneOpts): ReactNode {
 }
 
 function melee(c: Ctx, x: number, y: number, r: number, k: string | number, opacity = 1) {
-  return <circle key={k} cx={r1(x)} cy={r1(y)} r={r1(r)} className={c.mc} opacity={opacity < 1 ? r2(opacity) : undefined} />;
+  return <circle key={k} cx={r1(x)} cy={r1(y)} r={r1(r)} {...c.mc} opacity={opacity < 1 ? r2(opacity) : undefined} />;
 }
 
 function shadow(c: Ctx, cx: number, cy: number, rx: number, ry: number, k = 'sh', opacity = 0.12) {
@@ -845,7 +849,7 @@ export function JewelryArt({ spec, shape = 'round', metal = 'yellow', carat = 1,
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const ids: Ids = { mb: `${uid}mb`, mh: `${uid}mh`, sv: `${uid}sv`, d: `${uid}d`, dr: `${uid}dr`, blur: `${uid}bl`, fade: `${uid}fd` };
   const { band, head } = metalPalettes(metal);
-  const c: Ctx = { ids, band, head, mc: `${uid}m`, pc: `${uid}p` };
+  const c: Ctx = { ids, band, head, mc: paint(ids.dr, STONE_STROKE), pc: paint(ids.mh, head[4]) };
   const alt = view > 0;
   const kind = spec?.kind ?? 'ring';
 
@@ -902,7 +906,7 @@ export function LooseDiamond({ shape = 'round', className, title, shadow: withSh
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '');
   const ids: Ids = { mb: `${uid}mb`, mh: `${uid}mh`, sv: `${uid}sv`, d: `${uid}d`, dr: `${uid}dr`, blur: `${uid}bl`, fade: `${uid}fd` };
   const { band, head } = metalPalettes('white');
-  const c: Ctx = { ids, band, head, mc: `${uid}m`, pc: `${uid}p` };
+  const c: Ctx = { ids, band, head, mc: paint(ids.dr, STONE_STROKE), pc: paint(ids.mh, head[4]) };
   const aspect = SHAPE_ASPECT[shape] ?? 1;
   const w = 210 / Math.max(1, aspect * 0.95);
   const h = w * aspect;
