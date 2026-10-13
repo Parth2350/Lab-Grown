@@ -35,10 +35,14 @@ export async function launch({ port = 9333, profile, width = 1366, height = 900,
   const api = {
     send,
     consoleErrors,
+    /** subscribe to raw DevTools events, e.g. Network.responseReceived */
+    on: (fn) => listeners.push(fn),
     async goto(url, settle = 1500) {
       const loaded = new Promise((r) => { const l = (m) => { if (m.method === 'Page.loadEventFired') { listeners.splice(listeners.indexOf(l), 1); r(); } }; listeners.push(l); });
       await send('Page.navigate', { url });
-      await loaded; await sleep(settle);
+      // don't hang forever if a page never fires "load" (e.g. a stalled third-party request)
+      await Promise.race([loaded, sleep(30000)]);
+      await sleep(settle);
     },
     async eval(expr) {
       const r = await send('Runtime.evaluate', { expression: `(async () => { ${expr} })()`, awaitPromise: true, returnByValue: true });
