@@ -43,8 +43,8 @@ export function EditorialRail({ id, eyebrow, title, text, href, cta, art, produc
           </div>
         </div>
         <div className="min-w-0 lg:col-span-8 lg:self-center">
-          <LazyMount className="block" rootMargin="300px" fallback={<RailSkeleton itemClassName="w-[72%] xs:w-[46%] md:w-[31%] lg:w-[47%] xl:w-[31.2%]" count={3} />}>
-            <Carousel label={title} itemClassName="w-[72%] xs:w-[46%] md:w-[31%] lg:w-[47%] xl:w-[31.2%]">
+          <LazyMount className="block" rootMargin="300px" fallback={<RailSkeleton itemClassName="w-[88%] sm:w-[46%] md:w-[31%] lg:w-[47%] xl:w-[31.2%]" count={3} />}>
+            <Carousel label={title} itemClassName="w-[88%] sm:w-[46%] md:w-[31%] lg:w-[47%] xl:w-[31.2%]">
               {products.map((p) => (
                 <ProductCard key={p.id} product={p} sizes="(min-width:1200px) 20vw, (min-width:1024px) 30vw, (min-width:768px) 31vw, (min-width:420px) 46vw, 72vw" />
               ))}

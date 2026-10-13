@@ -91,18 +91,37 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
   const hasOptions = product.hasCenterStone || product.totalCarat != null;
   // the alternate (hover) view is only rendered once the shopper actually hovers
   const [hovered, setHovered] = useState(false);
+  // phones show two pictures side by side (front + side view of the illustration, or the first two
+  // photos for this metal); a product with exactly one photo keeps a single square picture
+  const photos = product.images.filter((i) => i.kind === 'image');
+  const metalPhotos = photos.filter((i) => !i.metalColor || i.metalColor === metal);
+  const twoUp = (metalPhotos.length ? metalPhotos : photos).length !== 1;
 
   return (
-    <article className={cn('group relative flex h-full flex-col', className)} onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}>
-      <div className="art-tile relative aspect-square overflow-hidden">
-        <Link href={href} className="absolute inset-0" aria-label={product.name}>
-          {/* the main view only fades out once the alternate view exists, so the tile can never go blank */}
-          <LazyMount eager={priority} className={cn('absolute inset-[6%] transition-all duration-700 ease-luxe', hovered && 'group-hover:scale-[1.04] group-hover:opacity-0')}>
-            <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} priority={priority} sizes={sizes} />
-          </LazyMount>
-          {hovered && (
-            <span className="absolute inset-[6%] scale-[0.98] opacity-0 transition-all duration-700 ease-luxe group-hover:scale-100 group-hover:opacity-100">
-              <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} view={1} sizes={sizes} />
+    // the whole card is one box: picture on top, details and the call to action inside the same border
+    <article
+      className={cn('group relative flex h-full flex-col overflow-hidden border border-line bg-white transition-shadow duration-500 hover:shadow-soft', className)}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}
+    >
+      <div className={cn('art-tile relative overflow-hidden', twoUp ? 'aspect-[2/1] sm:aspect-square' : 'aspect-square')}>
+        <Link href={href} className="absolute inset-0 flex" aria-label={product.name}>
+          <span className="relative block h-full flex-1">
+            {/* the main view only fades out once the alternate view exists, so the tile can never go blank */}
+            <LazyMount eager={priority} className={cn('absolute inset-[6%] transition-all duration-700 ease-luxe', hovered && 'group-hover:scale-[1.04] group-hover:opacity-0')}>
+              <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} priority={priority} sizes={sizes} />
+            </LazyMount>
+            {hovered && (
+              <span className="absolute inset-[6%] scale-[0.98] opacity-0 transition-all duration-700 ease-luxe group-hover:scale-100 group-hover:opacity-100">
+                <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} view={1} sizes={sizes} />
+              </span>
+            )}
+          </span>
+          {/* phones only: the second picture beside the first (never mounted on larger screens) */}
+          {twoUp && (
+            <span className="relative block h-full flex-1 sm:hidden">
+              <LazyMount className="absolute inset-[6%]">
+                <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} view={1} sizes="50vw" />
+              </LazyMount>
             </span>
           )}
         </Link>
@@ -126,8 +145,23 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
         </button>
       </div>
 
-      <div className="flex flex-1 flex-col pt-4">
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
+      <div className="flex flex-1 flex-col px-3 pt-3.5 sm:px-4">
+        <Link href={href} className="block">
+          <h3 className="font-serif text-[19px] leading-snug text-ink transition-colors group-hover:text-gold-deep md:text-lg">{product.name}</h3>
+        </Link>
+        <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+          <p className="text-sm text-charcoal">
+            <span className="text-taupe">From </span>
+            <span className="font-medium text-ink">{formatMoney(price)}</span>
+          </p>
+          {product.reviewCount > 0 && (
+            <span className="flex items-center gap-1.5 text-[13px] text-taupe">
+              <Stars rating={product.rating} size={10} /> ({product.reviewCount})
+            </span>
+          )}
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
           <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Metal colour">
             {product.metalColors.map((m) => {
               const mc = METAL_COLORS.find((x) => x.slug === m);
@@ -146,43 +180,29 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
               );
             })}
           </div>
-          <div className="flex items-center text-[12.5px] tracking-wide" role="radiogroup" aria-label="Metal purity">
-            {PURITIES.filter((p) => product.purities.includes(p.slug)).map((p, i) => (
-              <span key={p.slug} className="flex items-center">
-                {i > 0 && <span className="px-1 text-stone">|</span>}
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked={purity === p.slug}
-                  onClick={() => setPurity(p.slug)}
-                  className={cn('transition-colors', purity === p.slug ? 'font-medium text-ink underline underline-offset-4' : 'text-taupe hover:text-ink')}
-                >
-                  {p.label}
-                </button>
-              </span>
+          <div className="flex items-center gap-1" role="radiogroup" aria-label="Metal purity">
+            {PURITIES.filter((p) => product.purities.includes(p.slug)).map((p) => (
+              <button
+                key={p.slug}
+                type="button"
+                role="radio"
+                aria-checked={purity === p.slug}
+                onClick={() => setPurity(p.slug)}
+                className={cn(
+                  'h-7 min-w-[30px] border px-1 text-[12.5px] tracking-wide transition-colors sm:min-w-[34px] sm:px-1.5',
+                  purity === p.slug ? 'border-ink bg-ink text-ivory' : 'border-line text-charcoal hover:border-ink',
+                )}
+              >
+                {p.label}
+              </button>
             ))}
           </div>
         </div>
 
-        <Link href={href} className="block">
-          <h3 className="font-serif text-[19px] leading-snug text-ink transition-colors group-hover:text-gold-deep md:text-lg">{product.name}</h3>
-        </Link>
-        <div className="mt-1.5 flex items-center justify-between gap-2">
-          <p className="text-sm text-charcoal">
-            <span className="text-taupe">From </span>
-            <span className="font-normal">{formatMoney(price)}</span>
-          </p>
-          {product.reviewCount > 0 && (
-            <span className="flex items-center gap-1.5 text-[13px] text-taupe">
-              <Stars rating={product.rating} size={10} /> ({product.reviewCount})
-            </span>
-          )}
-        </div>
-
-        <div className="mt-auto pt-4">
+        <div className="-mx-3 mt-auto pt-4 sm:-mx-4">
           <Link
             href={productHref(product, metal, purity, hasOptions)}
-            className="label-caps flex h-10 w-full items-center justify-center border border-ink/20 text-ink transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-ivory"
+            className="label-caps flex min-h-11 w-full items-center justify-center border-t border-line px-2 py-2 text-center text-[12px] leading-snug tracking-[0.1em] text-ink transition-colors duration-300 hover:bg-ink hover:text-ivory sm:text-[13px] sm:tracking-[0.16em]"
           >
             {product.hasCenterStone ? 'View Diamond Options' : hasOptions ? 'View Diamond Options' : 'View Details'}
           </Link>

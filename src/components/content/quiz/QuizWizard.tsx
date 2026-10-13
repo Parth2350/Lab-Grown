@@ -436,7 +436,7 @@ function Results({
       </div>
 
       {result.products.length > 0 ? (
-        <ul className="mt-12 grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-6 xl:grid-cols-4">
+        <ul className="mt-12 grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 sm:gap-y-10 md:grid-cols-3 md:gap-x-6 xl:grid-cols-4">
           {result.products.map((p, i) => (
             <m.li key={p.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: Math.min(i, 8) * 0.06, ease }}>
               <ProductCard product={p} priority={i < 4} />

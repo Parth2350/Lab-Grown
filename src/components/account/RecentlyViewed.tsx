@@ -40,7 +40,7 @@ export function RecentlyViewed() {
           </ButtonLink>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-x-4 gap-y-12 lg:gap-x-6 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 sm:gap-y-12 lg:gap-x-6 xl:grid-cols-3">
           {items.map((p) => (
             <ProductCard key={p.id} product={p} sizes="(min-width:1280px) 25vw, 50vw" />
           ))}

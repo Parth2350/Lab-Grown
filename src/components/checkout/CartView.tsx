@@ -89,7 +89,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
         {recommendations.length > 0 && (
           <section className="border-t border-line pt-16">
             <SectionHeading eyebrow="Most loved" title="Pieces Our Clients Adore" align="center" />
-            <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
+            <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-6">
               {recommendations.slice(0, 4).map((p) => (
                 <ProductCard key={p.id} product={p} sizes="(min-width:1024px) 25vw, 50vw" />
               ))}
@@ -210,7 +210,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
         {recs.length > 0 && (
           <section className="mt-24 border-t border-line pt-16" aria-label="You may also like">
             <SectionHeading eyebrow="Complete the look" title="You May Also Like" action={{ label: 'View all', href: '/collections/all' }} />
-            <div className="grid grid-cols-2 gap-x-4 gap-y-10 lg:grid-cols-4 lg:gap-x-6">
+            <div className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4 lg:gap-x-6">
               {recs.map((p) => (
                 <ProductCard key={p.id} product={p} sizes="(min-width:1024px) 25vw, 50vw" />
               ))}

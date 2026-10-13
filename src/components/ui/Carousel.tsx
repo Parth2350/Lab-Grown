@@ -12,7 +12,7 @@ type Props = {
 };
 
 /** Native scroll-snap carousel — touch friendly, keyboard accessible, no layout shift. */
-export function Carousel({ children, itemClassName = 'w-[72%] xs:w-[46%] md:w-[31%] xl:w-[23.5%]', className, label = 'Carousel' }: Props) {
+export function Carousel({ children, itemClassName = 'w-[88%] sm:w-[46%] md:w-[31%] xl:w-[23.5%]', className, label = 'Carousel' }: Props) {
   const track = useRef<HTMLDivElement>(null);
   const [edge, setEdge] = useState({ start: true, end: false });
 
@@ -66,7 +66,7 @@ export function Carousel({ children, itemClassName = 'w-[72%] xs:w-[46%] md:w-[3
 }
 
 /** Same footprint as a row of product cards — the placeholder for a deferred carousel. */
-export function RailSkeleton({ itemClassName = 'w-[72%] xs:w-[46%] md:w-[31%] xl:w-[23.5%]', count = 4 }: { itemClassName?: string; count?: number }) {
+export function RailSkeleton({ itemClassName = 'w-[88%] sm:w-[46%] md:w-[31%] xl:w-[23.5%]', count = 4 }: { itemClassName?: string; count?: number }) {
   return (
     <div className="-mx-4 flex gap-4 overflow-hidden px-4 pb-2 sm:-mx-6 sm:px-6 md:gap-6 lg:mx-0 lg:px-0" aria-hidden>
       {Array.from({ length: count }).map((_, i) => (

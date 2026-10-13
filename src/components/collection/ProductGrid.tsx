@@ -55,7 +55,7 @@ export function ProductGrid({ initial, total, page, pageCount, apiQuery, nextHre
 
   return (
     <div className={cn('transition-opacity duration-300', pending && 'pointer-events-none opacity-50')} aria-busy={pending || loading}>
-      <ul className="grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-5 md:grid-cols-3 2xl:grid-cols-4">
+      <ul className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 md:grid-cols-3 2xl:grid-cols-4">
         {items.map((p, i) => (
           <li key={p.id}>
             <ProductCard product={p} priority={i < 4} sizes="(min-width:1440px) 22vw, (min-width:768px) 28vw, 48vw" />

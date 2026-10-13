@@ -119,6 +119,9 @@ try {
     const img = sAfter.value.hero?.image;
     const size = img && fs.existsSync(ROOT + 'public' + img) ? fs.statSync(ROOT + 'public' + img).size : 0;
     check('uploads: hero image 4.8 MB → saved', img && img !== sBefore.value.hero?.image && size > 0, `sent=${prepared} saved=${img} ${(size / 1048576).toFixed(2)} MB error="${await anyError()}"`);
+    // restore the store's real hero and remove the test file, so the test leaves no trace
+    await db.setting.update({ where: { key: 'store' }, data: { value: sBefore.value } });
+    if (img && img.startsWith('/uploads/')) try { fs.unlinkSync(ROOT + 'public' + img); } catch {}
   });
 
   // ───────────── CATEGORIES ─────────────
@@ -360,10 +363,14 @@ try {
     const s = await db.setting.findUnique({ where: { key: 'store' } });
     await db.setting.update({ where: { key: 'store' }, data: { value: { ...s.value, shippingMethods: before } } });
     await go('/admin/shipping');
-    const ship = await b.eval(`const f = document.querySelector('form [name=trackingNumber]').form; const id = f.querySelector('[name=id]').value; window.__set(f.querySelector('[name=trackingNumber]'), 'QA-TRACK-1'); [...f.querySelectorAll('button[type=submit]')].pop().click(); return id;`);
+    const ship = await b.eval(`return document.querySelector('form [name=trackingNumber]').form.querySelector('[name=id]').value;`);
+    const original = await db.shipment.findUnique({ where: { id: ship } });
+    await b.eval(`const f = document.querySelector('form [name=trackingNumber]').form; window.__set(f.querySelector('[name=trackingNumber]'), 'QA-TRACK-1'); [...f.querySelectorAll('button[type=submit]')].pop().click();`);
     await sleep(2500);
     const sh = await db.shipment.findUnique({ where: { id: ship } });
     check('shipping: save shipment row', sh?.trackingNumber === 'QA-TRACK-1', `tracking=${sh?.trackingNumber}`);
+    // put the real tracking number back
+    if (original && original.trackingNumber !== 'QA-TRACK-1') await db.shipment.update({ where: { id: ship }, data: { trackingNumber: original.trackingNumber, status: original.status } });
   });
 
   // ───────────── SETTINGS ─────────────
@@ -382,6 +389,19 @@ try {
   });
 
   console.log('\nconsole errors seen:', b.consoleErrors.length ? b.consoleErrors.slice(0, 15) : 'none');
+
+  // Several tests restore data straight in the database, which bypasses the storefront caches.
+  // Save once through the real admin so the settings and catalogue caches are refreshed and the
+  // local shop shows the true data again (no test banner, prices or descriptions left behind).
+  await go('/admin/settings');
+  await b.eval(`window.__btn('Save hero').click();`);
+  const settingsRefreshed = await waitToast(/saved|updated|hero/i, 15000);
+  await go('/admin/categories');
+  await b.eval(`window.__btn('Edit Pendants').click();`);
+  await sleep(900);
+  await b.eval(`const d = window.__dialog() || document; [...d.querySelectorAll('button[type=submit]')].pop().click();`);
+  const catalogRefreshed = await waitToast(/saved|updated/i, 15000);
+  check('cleanup: storefront caches refreshed', !!settingsRefreshed && !!catalogRefreshed, `settings="${settingsRefreshed}" catalogue="${catalogRefreshed}"`);
 } finally {
   await b.close();
   await db.$disconnect();
