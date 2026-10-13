@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { listProducts } from '@/lib/server/catalog';
+import { listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters } from '@/lib/filters';
 import { pageMeta } from '@/lib/seo';
 import { SHAPES } from '@/lib/catalog';
@@ -25,7 +25,7 @@ export default async function ShapePage({ params, searchParams }: Props) {
   const s = SHAPES.find((x) => x.slug === shape);
   if (!s) notFound();
   const filters = parseFilters(sp);
-  const listing = await listProducts({ shape: s.slug }, filters, 24, { cumulative: true });
+  const listing = await listProducts({ shape: s.slug }, filters, LISTING_PAGE_SIZE, { cumulative: true });
   return (
     <CollectionView
       title={`${s.label} Diamonds`}

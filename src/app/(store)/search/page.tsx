@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { listProducts } from '@/lib/server/catalog';
+import { listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters } from '@/lib/filters';
 import { pageMeta } from '@/lib/seo';
 import { CollectionView } from '@/components/collection/CollectionView';
@@ -20,7 +20,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function SearchPage({ searchParams }: Props) {
   const sp = await searchParams;
   const filters = parseFilters(sp);
-  const listing = await listProducts({}, filters, 24, { cumulative: true });
+  const listing = await listProducts({}, filters, LISTING_PAGE_SIZE, { cumulative: true });
   return (
     <CollectionView
       title={filters.q ? `“${filters.q}”` : 'Search our jewelry'}

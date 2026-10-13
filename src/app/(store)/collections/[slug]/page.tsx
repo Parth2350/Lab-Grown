@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCollection, listProducts } from '@/lib/server/catalog';
+import { getCollection, listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters, type Scope } from '@/lib/filters';
 import { pageMeta } from '@/lib/seo';
 import { SHAPES } from '@/lib/catalog';
@@ -71,7 +71,7 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   const r = await resolve(slug);
   if (!r) notFound();
   const filters = parseFilters(sp);
-  const listing = await listProducts(r.scope, filters, 24, { cumulative: true });
+  const listing = await listProducts(r.scope, filters, LISTING_PAGE_SIZE, { cumulative: true });
   return (
     <CollectionView
       title={r.title}

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getCardsByIds, listProducts } from '@/lib/server/catalog';
+import { getCardsByIds, listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters } from '@/lib/filters';
 import { VIRTUAL_COLLECTIONS } from '@/config/navigation';
 
@@ -25,7 +25,7 @@ export async function GET(req: Request) {
       minPrice: virtual?.minPrice,
     },
     filters,
-    Number(sp.get('pageSize') ?? 24),
+    Number(sp.get('pageSize') ?? LISTING_PAGE_SIZE),
   );
   return NextResponse.json(listing, { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=600' } });
 }

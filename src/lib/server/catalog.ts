@@ -167,7 +167,14 @@ export type Listing = {
   facets: ReturnType<typeof computeFacets>;
 };
 
-export async function listProducts(scope: Scope, filters: Filters, pageSize = 24, opts: { cumulative?: boolean } = {}): Promise<Listing> {
+/**
+ * Products per listing page. Kept small so collection pages stay light: very large HTML lets the
+ * browser start hydrating before the page has fully arrived (an intermittent hydration warning).
+ * "Load more" / infinite scroll fetch the next pages from /api/products with the same size.
+ */
+export const LISTING_PAGE_SIZE = 12;
+
+export async function listProducts(scope: Scope, filters: Filters, pageSize = LISTING_PAGE_SIZE, opts: { cumulative?: boolean } = {}): Promise<Listing> {
   const index = await getCatalogIndex();
   let rows = index.filter((r) => matchesScope(r, scope));
   const scopeTotal = rows.length;

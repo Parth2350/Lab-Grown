@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getCategory, listProducts } from '@/lib/server/catalog';
+import { getCategory, listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters } from '@/lib/filters';
 import { pageMeta } from '@/lib/seo';
 import { CollectionView } from '@/components/collection/CollectionView';
@@ -25,7 +25,7 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const c = await getCategory(category);
   if (!c) notFound();
   const filters = parseFilters(sp);
-  const listing = await listProducts({ category: c.slug }, filters, 24, { cumulative: true });
+  const listing = await listProducts({ category: c.slug }, filters, LISTING_PAGE_SIZE, { cumulative: true });
   return (
     <CollectionView
       title={c.name}
