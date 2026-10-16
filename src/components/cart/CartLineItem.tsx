@@ -99,6 +99,12 @@ export function CartLineItem({ line, compact, onNavigate }: { line: CartLine; co
               <dd>Ring size {line.ringSize}</dd>
             </div>
           )}
+          {line.engraving && (
+            <div>
+              <dt className="sr-only">Engraving</dt>
+              <dd>Engraving “{line.engraving}”</dd>
+            </div>
+          )}
           {line.quantity > 1 && <dd>{formatMoney(line.unitPrice)} each</dd>}
         </dl>
         <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">

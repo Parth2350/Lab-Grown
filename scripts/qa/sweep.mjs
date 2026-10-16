@@ -28,7 +28,7 @@ const admin = [
 ];
 const store = [
   '/', '/engagement-rings', '/wedding-bands', '/necklaces', '/collections/all?shape=round', '/collections/gifts-under-50000',
-  `/products/${productSlug}`, '/search?q=oval', '/cart', '/checkout', '/wishlist', '/compare', '/gifts', '/bespoke', '/find-your-match',
+  `/products/${productSlug}`, '/search?q=oval', '/cart', '/wishlist', '/compare', '/gifts', '/bespoke', '/find-your-match',
   '/about', '/contact', '/partner-program', '/pages/faq', '/pages/lab-grown-diamonds', '/account',
 ];
 

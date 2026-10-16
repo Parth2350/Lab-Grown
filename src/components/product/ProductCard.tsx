@@ -147,12 +147,12 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
 
       <div className="flex flex-1 flex-col px-3 pt-3.5 sm:px-4">
         <Link href={href} className="block">
-          <h3 className="font-serif text-[19px] leading-snug text-ink transition-colors group-hover:text-gold-deep md:text-lg">{product.name}</h3>
+          <h3 className="font-sans text-[16px] leading-snug text-ink transition-colors group-hover:text-gold-deep">{product.name}</h3>
         </Link>
         <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
           <p className="text-sm text-charcoal">
             <span className="text-taupe">From </span>
-            <span className="font-medium text-ink">{formatMoney(price)}</span>
+            <span className="font-serif text-lg font-bold text-ink">{formatMoney(price)}</span>
           </p>
           {product.reviewCount > 0 && (
             <span className="flex items-center gap-1.5 text-[13px] text-taupe">

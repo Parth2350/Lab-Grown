@@ -10,6 +10,8 @@ import { ButtonLink } from '@/components/ui/Button';
 import { useStoreSettings } from '@/components/providers/SettingsProvider';
 import { CartLineItem } from './CartLineItem';
 import { useMounted } from '@/hooks/use-mounted';
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+import { bagEnquiry, lineItem } from '@/lib/whatsapp';
 
 export function CartDrawer() {
   const open = useUI((s) => s.cartOpen);
@@ -56,13 +58,16 @@ export function CartDrawer() {
                 <dd className="font-medium tabular-nums">{formatMoney(totals.total, { exact: true })}</dd>
               </div>
             </dl>
-            <div className="mt-4 grid grid-cols-2 gap-2">
+            <div className="mt-4 grid gap-2">
+              <WhatsAppButton
+                className="h-12"
+                message={(origin) =>
+                  bagEnquiry(origin, lines.map(lineItem), totals, { taxLabel: settings.taxLabel, taxRate: settings.taxRate })
+                }
+              />
               <button onClick={close} className="label-caps h-12 border border-ink/30 transition-colors hover:border-ink">
                 Continue Shopping
               </button>
-              <ButtonLink href="/checkout" onClick={close}>
-                Checkout
-              </ButtonLink>
             </div>
             <Link href="/cart" onClick={close} className="mt-3 block text-center text-[14px] text-taupe underline-offset-4 hover:text-ink hover:underline">
               View full bag

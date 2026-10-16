@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Sen, Spectral } from 'next/font/google';
 import { site } from '@/config/site';
 import { Providers } from '@/components/providers/Providers';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -16,6 +17,10 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
+// Spectral for headings and prices, Sen for everything else (self-hosted by next/font at build time)
+const serif = Spectral({ subsets: ['latin'], weight: ['400', '500', '600', '700'], style: ['normal', 'italic'], display: 'swap', variable: '--font-serif' });
+const sans = Sen({ subsets: ['latin'], display: 'swap', variable: '--font-sans' });
+
 export const viewport: Viewport = {
   themeColor: '#FBF9F5',
   width: 'device-width',
@@ -24,12 +29,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        {/* fonts are self-hosted (public/fonts) and declared in globals.css */}
-        <link rel="preload" href="/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/jost-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-      </head>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>
         <Providers>{children}</Providers>
         <JsonLd data={[organizationLd(), websiteLd()]} />

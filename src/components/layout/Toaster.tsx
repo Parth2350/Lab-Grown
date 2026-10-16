@@ -8,7 +8,7 @@ export function Toaster() {
   const toasts = useUI((s) => s.toasts);
   const dismiss = useUI((s) => s.dismiss);
   return (
-    <div className="pointer-events-none fixed inset-x-4 bottom-4 z-[90] flex flex-col items-center gap-2 sm:inset-x-auto sm:right-6 sm:items-end" aria-live="polite" role="status">
+    <div data-toaster className="pointer-events-none fixed inset-x-4 bottom-4 z-[90] flex flex-col items-center gap-2 sm:inset-x-auto sm:right-6 sm:items-end" aria-live="polite" role="status">
       <AnimatePresence>
         {toasts.map((t) => (
           <m.div

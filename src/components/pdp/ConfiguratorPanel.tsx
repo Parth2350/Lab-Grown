@@ -1,18 +1,18 @@
 'use client';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Gem, RefreshCcw, Ruler, Share2, ShieldCheck, Truck } from 'lucide-react';
+import { Check, ChevronDown, Gem, RefreshCcw, Ruler, Share2, ShieldCheck, Truck } from 'lucide-react';
 import { useState } from 'react';
 import { METAL_COLORS, PURITIES, RING_SIZES, label } from '@/lib/catalog';
 import type { ProductCard, ProductDetail } from '@/lib/types';
 import { cn, formatMoney } from '@/lib/utils';
 import { useUI } from '@/store/ui';
-import { Stars } from '@/components/ui/Stars';
 import { Sheet } from '@/components/ui/Sheet';
-import { QtyStepper } from '@/components/cart/CartLineItem';
 import { CompareButton, WishlistButton } from '@/components/product/ProductCard';
+import { useStoreSettings } from '@/components/providers/SettingsProvider';
 import { CenterDiamondPicker } from './CenterDiamondPicker';
-import type { Configuration } from './useConfiguration';
+import { OptionGroup, optionBtn, optionLabel } from './Options';
+import { ENGRAVING_MAX, diamondSummary, type Configuration } from './useConfiguration';
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+import { productEnquiry } from '@/lib/whatsapp';
 
 const SIZE_CHART = [
   ['4', '14.9', '46.8'],
@@ -55,11 +55,25 @@ function SizeGuide({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
+/** "28 Oct": the latest dispatch date, counted in India time (weekends don't count for in-stock pieces) */
+function shipBy(inStock: boolean) {
+  const d = new Date(Date.now() + 5.5 * 36e5);
+  if (!inStock) d.setUTCDate(d.getUTCDate() + 21);
+  else
+    for (let n = 0; n < 5; ) {
+      d.setUTCDate(d.getUTCDate() + 1);
+      if (d.getUTCDay() % 6 !== 0) n++;
+    }
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+}
+
 export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p: ProductDetail; card: ProductCard; c: Configuration; compact?: boolean; initialConfigure?: boolean }) {
-  const router = useRouter();
   const toast = useUI((s) => s.toast);
+  const settings = useStoreSettings();
   const [sizeGuide, setSizeGuide] = useState(false);
+  const [sizePicker, setSizePicker] = useState(false);
   const settingPrice = c.variant?.price ?? 0;
+  const tagline = p.subtitle ? p.subtitle[0].toUpperCase() + p.subtitle.slice(1) : null;
 
   const share = async () => {
     const url = window.location.href;
@@ -76,58 +90,17 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
 
   return (
     <div>
-      <p className="eyebrow mb-3">
-        <Link href={`/${p.category.slug}`} className="hover:text-ink">
-          {p.category.name}
-        </Link>
-      </p>
-      {compact ? <h2 className="font-serif text-3xl font-light leading-tight">{p.name}</h2> : <h1 className="font-serif text-[2rem] font-light leading-[1.1] md:text-[2.5rem]">{p.name}</h1>}
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-[14px] text-taupe">
-        {p.reviewCount > 0 ? (
-          <a href="#reviews" className="flex items-center gap-2 hover:text-ink">
-            <Stars rating={p.rating} /> {p.rating.toFixed(1)} ({p.reviewCount} reviews)
-          </a>
-        ) : (
-          <span>New design</span>
-        )}
-        <span>SKU {c.variant?.sku ?? p.sku}</span>
-      </div>
-
-      <div className="mt-6 flex items-end gap-3">
-        <p className="font-serif text-[2rem] leading-none text-ink" aria-live="polite">
+      {compact ? <h2 className="font-serif text-2xl font-semibold leading-tight">{p.name}</h2> : <h1 className="font-serif text-2xl font-semibold leading-tight sm:text-[1.75rem]">{p.name}</h1>}
+      {tagline && <p className="mt-2 font-serif text-[17px] italic text-gold">{tagline}</p>}
+      <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-line pb-5 sm:pb-6">
+        <p className="font-serif text-[1.75rem] font-semibold leading-none text-ink sm:text-[2rem]" aria-live="polite">
           {formatMoney(c.price)}
         </p>
-        <p className="pb-1 text-[14px] text-taupe">From {formatMoney(p.fromPrice)}</p>
+        <p className="text-[14px] text-taupe">{c.centerOption ? 'Setting + centre diamond · ' : ''}Taxes extra</p>
       </div>
-      <p className="mt-1.5 text-[14px] text-taupe">{c.centerOption ? 'Setting + centre diamond. ' : ''}Taxes calculated at checkout · Complimentary insured shipping</p>
 
-      {/* metal purity */}
-      <fieldset className="mt-8">
-        <legend className="label-caps mb-3 flex w-full justify-between">
-          <span>Metal purity</span>
-          <span className="font-normal normal-case tracking-normal text-taupe">{PURITIES.find((x) => x.slug === c.purity)?.fineness}</span>
-        </legend>
-        <div className="grid grid-cols-4 gap-2">
-          {PURITIES.filter((x) => p.purities.includes(x.slug)).map((x) => (
-            <button
-              key={x.slug}
-              type="button"
-              aria-pressed={c.purity === x.slug}
-              onClick={() => c.setPurity(x.slug)}
-              className={cn('h-11 border text-[15px] transition-colors', c.purity === x.slug ? 'border-ink bg-ink text-ivory' : 'border-line bg-white hover:border-ink')}
-            >
-              {x.label}
-            </button>
-          ))}
-        </div>
-      </fieldset>
-
-      {/* metal colour */}
-      <fieldset className="mt-6">
-        <legend className="label-caps mb-3">
-          Metal colour: <span className="font-normal normal-case tracking-normal text-taupe">{label.metal(c.metal)}</span>
-        </legend>
-        <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+        <OptionGroup label="Metal" value={label.metal(c.metal)}>
           {p.metalColors.map((m) => {
             const mc = METAL_COLORS.find((x) => x.slug === m);
             return (
@@ -138,130 +111,222 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
                 aria-label={mc?.label ?? m}
                 title={mc?.label ?? m}
                 onClick={() => c.setMetal(m)}
-                className={cn('h-10 w-10 rounded-full border-2 border-white ring-1 transition-all', c.metal === m ? 'ring-ink ring-offset-2' : 'ring-line hover:ring-stone')}
+                className={cn('h-9 w-9 rounded-full border-2 transition', c.metal === m ? 'border-ink ring-2 ring-gold' : 'border-line hover:border-gold')}
                 style={{ background: mc?.swatch }}
               />
             );
           })}
-        </div>
-      </fieldset>
+        </OptionGroup>
 
-      {/* ring size */}
+        <OptionGroup label="Gold Purity" value={c.purity}>
+          {PURITIES.filter((x) => p.purities.includes(x.slug)).map((x) => (
+            <button key={x.slug} type="button" aria-pressed={c.purity === x.slug} onClick={() => c.setPurity(x.slug)} className={optionBtn(c.purity === x.slug)}>
+              <span className="text-sm font-medium leading-none">{x.label}</span>
+            </button>
+          ))}
+        </OptionGroup>
+
+        {c.centerOption && (
+          <CenterDiamondPicker
+            option={c.centerOption}
+            shape={c.shape}
+            onShape={c.setShape}
+            diamond={c.diamond}
+            onDiamond={c.setDiamond}
+            settingPrice={settingPrice}
+            defaultCarat={p.centerCarat ?? 1}
+            scrollIntoView={initialConfigure}
+          />
+        )}
+
+        {!c.centerOption && c.totalWeightOptions.length > 0 && (
+          <OptionGroup
+            label="Diamond Weight"
+            value={c.option ? `${c.option.totalCarat != null ? `${c.option.totalCarat.toFixed(2)} ct` : c.option.label} · ${c.option.color} colour · ${c.option.clarity}+` : undefined}
+            className="sm:col-span-2 lg:col-span-1 xl:col-span-2"
+          >
+            {c.totalWeightOptions.map((o) => (
+              <button key={o.id} type="button" aria-pressed={c.option?.id === o.id} onClick={() => c.setOption(o)} className={optionBtn(c.option?.id === o.id)}>
+                <span className="text-sm font-medium leading-none">{o.totalCarat != null ? `${o.totalCarat} ct` : o.label}</span>
+              </button>
+            ))}
+          </OptionGroup>
+        )}
+      </div>
+
+      {/* ring size, picked from a side drawer */}
       {p.requiresSize && (
-        <div className="mt-7">
-          <div className="mb-3 flex items-center justify-between">
-            <label htmlFor={`ring-size-${p.id}`} className="label-caps">
-              Ring size (US)
-            </label>
-            <button type="button" onClick={() => setSizeGuide(true)} className="flex items-center gap-1.5 text-[14px] text-taupe underline-offset-4 hover:text-ink hover:underline">
-              <Ruler className="h-3.5 w-3.5" strokeWidth={1.25} /> Size guide
+        <div className="mt-6">
+          <div className="mb-2 flex items-center justify-between">
+            <span id={`ring-size-label-${p.id}`} className={optionLabel}>
+              Ring Size (US)
+            </span>
+            <button type="button" onClick={() => setSizeGuide(true)} className="flex items-center gap-1 text-xs font-medium text-ink hover:text-gold">
+              <Ruler className="h-3.5 w-3.5" strokeWidth={1.5} /> Size guide
             </button>
           </div>
-          <select
+          <button
             id={`ring-size-${p.id}`}
-            value={c.ringSize}
-            onChange={(e) => c.setRingSize(e.target.value)}
+            type="button"
+            aria-haspopup="dialog"
+            aria-labelledby={`ring-size-label-${p.id} ring-size-${p.id}`}
             aria-invalid={c.sizeError}
-            className={cn('field h-12 cursor-pointer py-0', c.sizeError && 'border-danger')}
+            onClick={() => setSizePicker(true)}
+            className={cn('flex w-full items-center justify-between rounded-xl border bg-white px-4 py-3 text-left text-sm transition-colors hover:border-gold', c.sizeError ? 'border-danger' : 'border-line')}
           >
-            <option value="">Select your size</option>
-            {RING_SIZES.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
+            <span className={c.ringSize ? 'font-medium text-ink' : 'text-taupe'}>{c.ringSize ? `Size ${c.ringSize}` : 'Select your size'}</span>
+            <ChevronDown className="h-4 w-4 text-taupe" strokeWidth={1.5} aria-hidden />
+          </button>
           {c.sizeError && <p className="mt-1.5 text-xs text-danger">Please choose a ring size — first resize within 60 days is complimentary.</p>}
+          <Sheet open={sizePicker} onClose={() => setSizePicker(false)} title="Select your size" label="Select your ring size" bodyClassName="px-3 py-3 sm:px-4">
+            <div className="flex items-center justify-between border-b border-line px-2 pb-3">
+              <span className="text-xs text-taupe">US sizing · made to order</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setSizePicker(false);
+                  setSizeGuide(true);
+                }}
+                className="flex items-center gap-1 text-xs font-medium text-ink hover:text-gold"
+              >
+                <Ruler className="h-3.5 w-3.5" strokeWidth={1.5} /> Size guide
+              </button>
+            </div>
+            <ul className="mt-2 space-y-1">
+              {RING_SIZES.map((s) => (
+                <li key={s}>
+                  <button
+                    type="button"
+                    aria-pressed={c.ringSize === s}
+                    onClick={() => {
+                      c.setRingSize(s);
+                      setSizePicker(false);
+                    }}
+                    className={cn(
+                      'flex w-full items-center gap-2 rounded-xl border px-4 py-3 text-left text-sm font-medium text-ink transition-colors',
+                      c.ringSize === s ? 'border-ink bg-ink/5' : 'border-transparent hover:border-gold',
+                    )}
+                  >
+                    {c.ringSize === s && <Check className="h-4 w-4 text-gold" strokeWidth={2} aria-hidden />}
+                    Size {s}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </Sheet>
           <SizeGuide open={sizeGuide} onClose={() => setSizeGuide(false)} />
         </div>
       )}
 
-      {/* centre diamond */}
-      {c.centerOption && (
-        <CenterDiamondPicker
-          option={c.centerOption}
-          shape={c.shape}
-          onShape={c.setShape}
-          diamond={c.diamond}
-          onDiamond={c.setDiamond}
-          settingPrice={settingPrice}
-          defaultCarat={p.centerCarat ?? 1}
-          scrollIntoView={initialConfigure}
-        />
-      )}
-      {!c.centerOption && c.totalWeightOptions.length > 0 && (
-        <fieldset className="mt-7">
-          <legend className="label-caps mb-3">Diamond weight & quality</legend>
-          <div className="space-y-2">
-            {c.totalWeightOptions.map((o) => {
-              const on = c.option?.id === o.id;
-              return (
-                <button
-                  key={o.id}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => c.setOption(o)}
-                  className={cn('flex w-full items-center justify-between gap-3 border px-4 py-3 text-left text-[15.5px] transition-colors', on ? 'border-ink bg-white' : 'border-line hover:border-stone')}
-                >
-                  <span>
-                    <span className="capitalize text-ink">{o.label}</span>
-                    <span className="block text-[14px] text-taupe">
-                      {o.color} colour · {o.clarity}+ clarity · {label.shape(p.shapes[0])} · IGI certified
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-taupe">{formatMoney((c.variant?.price ?? 0) + o.priceDelta)}</span>
-                </button>
-              );
-            })}
+      {/* free engraving (rings) */}
+      {p.requiresSize && (
+        <div className="mt-6">
+          <div className="flex items-baseline justify-between gap-3">
+            <label htmlFor={`engraving-${p.id}`} className="text-sm font-semibold text-ink">
+              Free engraving <span className="font-normal text-taupe">(optional)</span>
+            </label>
+            <span className="text-2xs text-taupe">
+              {c.engraving.length}/{ENGRAVING_MAX}
+            </span>
           </div>
-        </fieldset>
+          <input
+            id={`engraving-${p.id}`}
+            type="text"
+            maxLength={ENGRAVING_MAX}
+            value={c.engraving}
+            onChange={(e) => c.setEngraving(e.target.value)}
+            placeholder="Initials, a date, a few words…"
+            className="mt-2 w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-taupe/70 focus:border-gold"
+          />
+          <p className="mt-1.5 text-2xs text-taupe">Hand-engraved inside the band at no charge, up to {ENGRAVING_MAX} characters. Engraved pieces are final sale.</p>
+        </div>
       )}
 
-      {/* quantity + CTAs */}
-      <div className="mt-7 flex items-center gap-4">
-        <span className="label-caps">Quantity</span>
-        <QtyStepper value={c.quantity} onChange={(n) => c.setQuantity(Math.max(1, Math.min(10, n)))} size="md" />
-      </div>
-      <div className="mt-5 grid gap-2 sm:grid-cols-2">
-        <button type="button" onClick={() => c.addToCart()} disabled={c.needsDiamond} className="label-caps h-14 bg-ink text-ivory transition-colors hover:bg-charcoal disabled:opacity-50">
-          Add to Cart · {formatMoney(c.price * c.quantity)}
-        </button>
+      {/* CTAs, pinned to the bottom of the screen on phones */}
+      <div
+        data-mobile-bar={compact ? undefined : ''}
+        className={cn(
+          'mt-6 flex items-stretch gap-3',
+          !compact &&
+            'fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ivory/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none',
+        )}
+      >
+        {/* orders are placed over WhatsApp: the message carries this exact configuration */}
+        <WhatsAppButton
+          className="shrink-0 py-3.5"
+          message={(origin) =>
+            productEnquiry(origin, {
+              name: p.name,
+              slug: p.slug,
+              sku: c.variant?.sku ?? p.sku,
+              purity: c.purity,
+              metalColor: c.metal,
+              diamond: c.centerOption
+                ? c.diamond
+                  ? `${diamondSummary(c.diamond)}${c.diamond.certificate ? ` · ${c.diamond.certificate.lab} #${c.diamond.certificate.number}` : ''}`
+                  : 'to be chosen'
+                : null,
+              option: !c.centerOption ? c.option?.label ?? null : null,
+              shape: c.shape,
+              ringSize: c.ringSize || null,
+              requiresSize: p.requiresSize,
+              engraving: c.engraving.trim() || null,
+              quantity: c.quantity,
+              unitPrice: c.price,
+              priceNote: c.needsDiamond ? 'setting only, diamond extra' : null,
+            })
+          }
+        >
+          Enquire
+        </WhatsAppButton>
         <button
           type="button"
-          onClick={() => {
-            if (c.addToCart({ silent: true })) router.push('/checkout');
-          }}
+          onClick={() => c.addToCart()}
           disabled={c.needsDiamond}
-          className="label-caps h-14 border border-ink transition-colors hover:bg-ink hover:text-ivory disabled:opacity-50"
+          className="flex flex-1 items-center justify-center rounded-xl bg-ink px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-ivory transition-colors hover:bg-charcoal disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Buy It Now
+          Add to Cart
         </button>
       </div>
-      <div className="mt-5 flex flex-wrap items-center gap-6 border-b border-line pb-6">
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
         <WishlistButton product={card} withLabel />
         <CompareButton product={card} withLabel />
-        <button type="button" onClick={share} className="inline-flex items-center gap-2">
-          <Share2 className="h-4 w-4 text-ink/70" strokeWidth={1.25} /> <span className="label-caps">Share</span>
+        <button type="button" onClick={share} className="inline-flex items-center gap-1.5 rounded-full border border-line px-4 py-2 text-2xs font-semibold uppercase tracking-luxe text-ink transition-colors hover:border-ink">
+          <Share2 className="h-3.5 w-3.5" strokeWidth={1.5} /> Share
         </button>
       </div>
 
-      <p className={cn('mt-5 flex items-center gap-2 text-[15px]', c.inStock ? 'text-success' : 'text-charcoal')}>
-        <span className={cn('h-2 w-2 rounded-full', c.inStock ? 'bg-success' : 'bg-gold')} />
-        {c.inStock ? 'In stock — ready to ship in 3–5 business days' : 'Made to order — ships in 2–3 weeks'}
-      </p>
-      <ul className="mt-5 grid grid-cols-2 gap-3 text-[14px] text-charcoal">
-        <li className="flex items-center gap-2">
-          <ShieldCheck className="h-4 w-4 text-gold" strokeWidth={1.25} /> IGI / GIA Certified
-        </li>
-        <li className="flex items-center gap-2">
-          <Truck className="h-4 w-4 text-gold" strokeWidth={1.25} /> Free insured shipping
-        </li>
-        <li className="flex items-center gap-2">
-          <RefreshCcw className="h-4 w-4 text-gold" strokeWidth={1.25} /> 30-day easy returns
-        </li>
-        <li className="flex items-center gap-2">
-          <Gem className="h-4 w-4 text-gold" strokeWidth={1.25} /> Lifetime warranty
-        </li>
+      <div className="mt-5 flex items-start gap-3 rounded-xl bg-porcelain px-5 py-4">
+        <Truck className="mt-0.5 h-5 w-5 shrink-0 text-gold" strokeWidth={1.25} aria-hidden />
+        <p className="text-sm leading-relaxed text-ink">
+          <span className="font-semibold">
+            Ships by <span suppressHydrationWarning>{shipBy(c.inStock)}</span>
+          </span>
+          <br />
+          {c.inStock ? (
+            <>
+              <span className="font-semibold">In stock</span> — ready to ship in 3–5 business days.
+            </>
+          ) : (
+            <>
+              <span className="font-semibold">Made to order</span> — crafted for you by hand.
+            </>
+          )}
+        </p>
+      </div>
+
+      <ul className="mt-6 grid grid-cols-4 gap-2 border-y border-line py-5">
+        {[
+          { icon: ShieldCheck, text: 'IGI / GIA Certified' },
+          { icon: Truck, text: 'Free Insured Shipping' },
+          { icon: RefreshCcw, text: `${settings.returnsDays}-Day Returns` },
+          { icon: Gem, text: 'Lifetime Warranty' },
+        ].map(({ icon: Icon, text }) => (
+          <li key={text} className="flex flex-col items-center gap-1.5 text-center">
+            <Icon className="h-6 w-6 text-gold" strokeWidth={1.25} aria-hidden />
+            <span className="text-2xs font-medium leading-tight text-taupe">{text}</span>
+          </li>
+        ))}
       </ul>
     </div>
   );

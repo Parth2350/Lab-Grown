@@ -1,16 +1,16 @@
 'use client';
-import { Check, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { SHAPES, label } from '@/lib/catalog';
 import type { DiamondData, DiamondOptionData } from '@/lib/types';
 import { cn, formatMoney } from '@/lib/utils';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { DiamondConfigurator } from './DiamondConfigurator';
+import { OptionGroup, optionBtn } from './Options';
 
 /** Carat sizes shoppers think in; each covers stones up to the next size. */
 const SIZES = [0.3, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4];
 const sizeOf = (ct: number) => [...SIZES].reverse().find((s) => ct >= s - 1e-6) ?? SIZES[0];
-const sizeTop = (s: number) => (SIZES[SIZES.indexOf(s) + 1] ?? 5) - 0.01;
 
 const TIERS = [
   { id: 1, name: 'Good', blurb: 'Eye-clean, near-colourless. Best value.', grades: 'H colour or SI clarity' },
@@ -110,117 +110,68 @@ export function CenterDiamondPicker({ option, shape, onShape, diamond, onDiamond
 
   const sizes = list ? [...new Set(list.map((d) => sizeOf(d.carat)))].sort((a, b) => a - b) : [];
   const shapeLabel = label.shape(shape);
+  const currentTier = diamond && sizeOf(diamond.carat) === size ? TIERS.find((t) => t.id === tierOf(diamond)) : null;
 
+  // three cells of the product options grid: shape, centre carat, then quality across the full width
   return (
-    <div ref={root} className="mt-8 border border-line bg-white p-4 sm:p-5">
-      <p className="font-serif text-2xl leading-tight">Choose your centre diamond</p>
-      <p className="mt-1 text-[14px] text-taupe">Every diamond is lab-grown and independently certified by IGI or GIA.</p>
+    <>
+      <div ref={root}>
+        <OptionGroup label="Shape" value={shapeLabel}>
+          {SHAPES.map((s) => (
+            <button key={s.slug} type="button" title={s.label} aria-label={s.label} aria-pressed={s.slug === shape} onClick={() => chooseShape(s.slug)} className={optionBtn(s.slug === shape)}>
+              <ShapeIcon shape={s.slug} size={24} className={s.slug === shape ? 'text-ink' : 'text-charcoal/70'} />
+            </button>
+          ))}
+        </OptionGroup>
+      </div>
 
-      {/* 1 · shape */}
-      <fieldset className="mt-5">
-        <legend className="label-caps mb-3">
-          1 · Shape: <span className="font-normal normal-case tracking-normal text-taupe">{shapeLabel}</span>
-        </legend>
-        <div className="grid grid-cols-5 gap-1.5">
-          {SHAPES.map((s) => {
-            const on = s.slug === shape;
-            return (
-              <button
-                key={s.slug}
-                type="button"
-                aria-pressed={on}
-                onClick={() => chooseShape(s.slug)}
-                className={cn('flex flex-col items-center gap-1 border px-0.5 py-2 text-[12px] transition-colors', on ? 'border-ink bg-ivory text-ink' : 'border-line text-taupe hover:border-ink hover:text-ink')}
-              >
-                <ShapeIcon shape={s.slug} size={26} className={on ? 'text-gold' : 'text-charcoal/70'} />
-                {s.label}
-              </button>
-            );
-          })}
-        </div>
-      </fieldset>
+      <OptionGroup label="Center Carat" value={diamond ? `${diamond.carat.toFixed(2)} ct` : undefined}>
+        {!list ? (
+          <p className="animate-pulse text-[15px] text-taupe" aria-live="polite">
+            Finding {shapeLabel.toLowerCase()} diamonds…
+          </p>
+        ) : !sizes.length ? (
+          <p className="text-[15px] text-charcoal" aria-live="polite">
+            No {shapeLabel.toLowerCase()} diamonds are available for this setting right now — please choose another shape.
+          </p>
+        ) : (
+          sizes.map((s) => (
+            <button key={s} type="button" aria-pressed={s === size} onClick={() => chooseSize(s)} className={optionBtn(s === size)}>
+              <span className="text-sm font-medium leading-none">{s}</span>
+            </button>
+          ))
+        )}
+      </OptionGroup>
 
-      {!list ? (
-        <p className="mt-6 animate-pulse text-[15px] text-taupe" aria-live="polite">
-          Finding {shapeLabel.toLowerCase()} diamonds…
-        </p>
-      ) : !sizes.length ? (
-        <p className="mt-6 bg-porcelain p-4 text-[15px] text-charcoal" aria-live="polite">
-          No {shapeLabel.toLowerCase()} diamonds are available for this setting right now — please choose another shape.
-        </p>
-      ) : (
-        <>
-          {/* 2 · carat */}
-          <fieldset className="mt-6">
-            <legend className="label-caps mb-3">
-              2 · Carat size: <span className="font-normal normal-case tracking-normal text-taupe">{size} ct</span>
-            </legend>
-            <div className="flex flex-wrap gap-1.5">
-              {sizes.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  aria-pressed={s === size}
-                  onClick={() => chooseSize(s)}
-                  className={cn('h-10 min-w-[64px] border px-3 text-[15px] transition-colors', s === size ? 'border-ink bg-ink text-ivory' : 'border-line hover:border-ink')}
-                >
-                  {s} ct
+      {list && sizes.length > 0 && (
+        <div className="sm:col-span-2 lg:col-span-1 xl:col-span-2">
+          <OptionGroup label="Diamond Quality" value={currentTier?.name}>
+            {TIERS.map((t) => {
+              const d = pick(list, size, t.id);
+              return (
+                <button key={t.id} type="button" aria-pressed={currentTier?.id === t.id} disabled={!d} onClick={() => chooseTier(t.id)} className={cn(optionBtn(currentTier?.id === t.id), 'min-w-[6.5rem] gap-1.5')}>
+                  <span className="text-sm font-medium leading-none">{t.name}</span>
+                  <span className="text-[13px] leading-none text-taupe">{d ? formatMoney(settingPrice + d.price) : 'Unavailable'}</span>
                 </button>
-              ))}
-            </div>
+              );
+            })}
+          </OptionGroup>
+          {currentTier && (
             <p className="mt-2 text-[14px] text-taupe">
-              Diamonds from {size.toFixed(2)} to {sizeTop(size).toFixed(2)} ct. Bigger carat = bigger, more visible stone.
+              {currentTier.blurb} {currentTier.grades}.
             </p>
-          </fieldset>
-
-          {/* 3 · quality */}
-          <fieldset className="mt-6">
-            <legend className="label-caps mb-3">3 · Quality</legend>
-            <div className="grid gap-2 sm:grid-cols-3">
-              {TIERS.map((t) => {
-                const d = pick(list, size, t.id);
-                const on = !!diamond && tierOf(diamond) === t.id && sizeOf(diamond.carat) === size;
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    aria-pressed={on}
-                    disabled={!d}
-                    onClick={() => chooseTier(t.id)}
-                    className={cn(
-                      'relative flex flex-col border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-45',
-                      on ? 'border-ink bg-ivory' : 'border-line enabled:hover:border-ink',
-                    )}
-                  >
-                    {on && <Check className="absolute right-2.5 top-2.5 h-4 w-4 text-gold-deep" strokeWidth={2} aria-hidden />}
-                    <span className="font-serif text-xl leading-none text-ink">{t.name}</span>
-                    <span className="mt-1.5 text-[14px] leading-snug text-charcoal">{t.blurb}</span>
-                    <span className="mt-1 text-[13px] leading-snug text-taupe">{t.grades}</span>
-                    <span className="mt-2 text-[16px] text-ink">{d ? formatMoney(settingPrice + d.price) : `Not available in ${size} ct`}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </fieldset>
-
-          {/* result */}
-          {diamond && (
-            <div className="mt-5 flex items-start gap-3 bg-gold-pale/40 p-3">
-              <span className="art-tile flex h-12 w-12 shrink-0 items-center justify-center">
-                <ShapeIcon shape={diamond.shape} size={30} className="text-gold" />
-              </span>
-              <div className="min-w-0 text-[15px]">
-                <p className="text-ink">
-                  Your diamond: {diamond.carat.toFixed(2)} ct {label.shape(diamond.shape)} · Colour {diamond.color} · Clarity {diamond.clarity} · {diamond.cut} cut
-                </p>
-                <p className="mt-0.5 flex items-center gap-1.5 text-[14px] text-taupe">
-                  <ShieldCheck className="h-3.5 w-3.5 text-gold" strokeWidth={1.5} /> {diamond.certificate?.lab} certified #{diamond.certificate?.number} · Diamond {formatMoney(diamond.price)}
-                </p>
-              </div>
-            </div>
           )}
 
-          <button type="button" onClick={() => setBrowse(true)} className="mt-4 text-[14px] text-taupe underline underline-offset-4 hover:text-ink">
+          {diamond && (
+            <p className="mt-3 flex items-start gap-2 text-[14px] text-charcoal">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-gold" strokeWidth={1.5} aria-hidden />
+              <span>
+                Your diamond: {diamond.carat.toFixed(2)} ct {shapeLabel} · {diamond.color} · {diamond.clarity} · {diamond.cut} cut
+                {diamond.certificate && ` · ${diamond.certificate.lab} #${diamond.certificate.number}`}
+              </span>
+            </p>
+          )}
+          <button type="button" onClick={() => setBrowse(true)} className="mt-2 text-[14px] text-taupe underline underline-offset-4 hover:text-ink">
             Prefer to pick an exact stone? Browse all {list.length} {shapeLabel.toLowerCase()} diamonds
           </button>
           <DiamondConfigurator
@@ -235,8 +186,8 @@ export function CenterDiamondPicker({ option, shape, onShape, diamond, onDiamond
               onDiamond(d);
             }}
           />
-        </>
+        </div>
       )}
-    </div>
+    </>
   );
 }

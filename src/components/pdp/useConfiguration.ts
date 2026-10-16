@@ -6,6 +6,8 @@ import { useUI } from '@/store/ui';
 import { unitPrice } from '@/lib/pricing';
 import { SHAPE_SLUGS, type ShapeSlug } from '@/lib/catalog';
 
+export const ENGRAVING_MAX = 12;
+
 export type InitialConfig = { metal?: string; purity?: string; size?: string; shape?: string };
 
 export function diamondSummary(d: Pick<DiamondData, 'carat' | 'shape' | 'color' | 'clarity' | 'cut'>) {
@@ -24,6 +26,7 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
   const tw = p.diamondOptions.filter((o) => o.kind === 'TOTAL_WEIGHT');
   const [option, setOption] = useState<DiamondOptionData | null>(tw.find((o) => o.isDefault) ?? tw[0] ?? null);
   const [ringSize, setRingSize] = useState<string>(init.size ?? '');
+  const [engraving, setEngraving] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const add = useCart((s) => s.add);
@@ -60,6 +63,7 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
       diamond: centerOption && diamond ? { id: diamond.id, summary: diamondSummary(diamond), price: diamond.price, shape: diamond.shape, carat: diamond.carat } : null,
       option: !centerOption && option ? { id: option.id, label: option.label ?? `${option.totalCarat} ct total weight`, priceDelta: option.priceDelta } : null,
       ringSize: p.requiresSize ? ringSize : null,
+      engraving: p.requiresSize ? engraving.trim() || null : null,
       quantity,
       unitPrice: price,
       art: p.art,
@@ -90,6 +94,8 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
       setSizeError(false);
     },
     sizeError,
+    engraving,
+    setEngraving: (s: string) => setEngraving(s.slice(0, ENGRAVING_MAX)),
     quantity,
     setQuantity,
     variant,

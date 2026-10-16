@@ -21,8 +21,10 @@ export const site = {
     email: 'concierge@thevjewels.example',
     phone: '+1 (212) 555-0148',
     phoneHref: 'tel:+12125550148',
-    whatsapp: '+91 98200 00000',
-    whatsappHref: 'https://wa.me/919820000000',
+    whatsapp: '+91 98248 22200',
+    /** digits only (country code first), as wa.me expects */
+    whatsappNumber: '919824822200',
+    whatsappHref: 'https://wa.me/919824822200',
     address: {
       street: '14 Opera House Lane',
       city: 'Mumbai',

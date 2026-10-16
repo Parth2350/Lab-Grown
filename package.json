@@ -15,9 +15,10 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force",
     "db:studio": "prisma studio",
-    "qa": "node scripts/qa/admin.mjs && node scripts/qa/sweep.mjs",
+    "qa": "node scripts/qa/admin.mjs && node scripts/qa/sweep.mjs && node scripts/qa/whatsapp.mjs",
     "qa:admin": "node scripts/qa/admin.mjs",
-    "qa:sweep": "node scripts/qa/sweep.mjs"
+    "qa:sweep": "node scripts/qa/sweep.mjs",
+    "qa:whatsapp": "node scripts/qa/whatsapp.mjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

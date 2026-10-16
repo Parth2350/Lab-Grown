@@ -16,6 +16,8 @@ export type CartLine = {
   diamond?: { id: string; summary: string; price: number; shape: string; carat: number } | null;
   option?: { id: string; label: string; priceDelta: number } | null;
   ringSize?: string | null;
+  /** free engraving text (rings only) */
+  engraving?: string | null;
   quantity: number;
   /** Client-side estimate in cents. The server re-prices every line at checkout. */
   unitPrice: number;
@@ -26,8 +28,8 @@ export type CartLine = {
   addedAt: number;
 };
 
-export const lineKey = (l: Pick<CartLine, 'productId' | 'variantId' | 'ringSize'> & { diamondId?: string | null; optionId?: string | null }) =>
-  [l.productId, l.variantId, l.diamondId ?? '', l.optionId ?? '', l.ringSize ?? ''].join('|');
+export const lineKey = (l: Pick<CartLine, 'productId' | 'variantId' | 'ringSize' | 'engraving'> & { diamondId?: string | null; optionId?: string | null }) =>
+  [l.productId, l.variantId, l.diamondId ?? '', l.optionId ?? '', l.ringSize ?? '', l.engraving ?? ''].join('|');
 
 type CartState = {
   lines: CartLine[];

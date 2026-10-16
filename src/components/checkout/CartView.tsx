@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { AlertCircle, ArrowLeft, Lock, MessageCircle, Phone, ShoppingBag } from 'lucide-react';
+import { AlertCircle, ArrowLeft, MessageCircle, Phone, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
 import { site } from '@/config/site';
 import { computeTotals } from '@/lib/pricing';
@@ -12,6 +12,8 @@ import { useStoreSettings } from '@/components/providers/SettingsProvider';
 import { CartLineItem } from '@/components/cart/CartLineItem';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ButtonLink } from '@/components/ui/Button';
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+import { bagEnquiry, lineItem } from '@/lib/whatsapp';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { useCoupon } from '@/components/commerce/coupon-store';
@@ -39,6 +41,12 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
   const latest = quote?.coupon ?? last?.coupon ?? null;
   const coupon = code ? (latest && latest.code === code ? latest : justApplied?.code === code ? justApplied : null) : null;
   const totals = computeTotals({ lines, shippingPrice: standard?.price ?? 0, discount: coupon?.ok ? coupon.discount : 0, taxRate: settings.taxRate });
+  const enquiry = (origin: string) =>
+    bagEnquiry(origin, lines.map(lineItem), totals, {
+      taxLabel: settings.taxLabel,
+      taxRate: settings.taxRate,
+      couponCode: coupon?.ok ? coupon.code : null,
+    });
   const inBag = new Set(lines.map((l) => l.productId));
   const recs = recommendations.filter((p) => !inBag.has(p.id)).slice(0, 4);
 
@@ -194,13 +202,11 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
                 loading={loading}
                 totalLabel="Estimated total"
               />
-              <ButtonLink href="/checkout" size="lg" className="mt-6 w-full">
-                <Lock className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Checkout
-              </ButtonLink>
+              <WhatsAppButton className="mt-6 h-14 w-full" message={enquiry} />
               <ButtonLink href="/collections/all" variant="outline" className="mt-2 w-full">
                 Continue Shopping
               </ButtonLink>
-              <p className="mt-4 text-center text-[14px] text-taupe">Delivery options and final taxes are confirmed at checkout.</p>
+              <p className="mt-4 text-center text-[14px] text-taupe">Send us your bag on WhatsApp and our team will confirm availability, delivery and payment with you.</p>
               <PaymentMarks className="mt-5 justify-center" />
             </div>
             <TrustBadges compact returnsDays={settings.returnsDays} className="mt-8 px-1" />
@@ -227,9 +233,9 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
               {formatMoney(totals.total, { exact: true })}
             </p>
           </div>
-          <ButtonLink href="/checkout" className="h-12 flex-1 px-4">
-            <Lock className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden /> Checkout
-          </ButtonLink>
+          <WhatsAppButton className="h-12 flex-1 px-3" message={enquiry}>
+            Chat on WhatsApp
+          </WhatsAppButton>
         </div>
       </div>
     </>

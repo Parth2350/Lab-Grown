@@ -10,7 +10,15 @@ import { cn } from '@/lib/utils';
 import { useMounted } from '@/hooks/use-mounted';
 import { LazyMount } from '@/components/ui/LazyMount';
 
-type Slide = { id: string; label: string; kind: 'art' | 'image' | 'video'; view?: number; zoom?: number; url?: string; alt?: string };
+type Slide = {
+  id: string;
+  label: string;
+  kind: 'art' | 'image' | 'video';
+  view?: number;
+  zoom?: number;
+  url?: string;
+  alt?: string;
+};
 
 type Props = {
   name: string;
@@ -26,7 +34,13 @@ function buildSlides(images: MediaImage[], metal: string, name: string): Slide[]
   const media = images.filter((i) => !i.metalColor || i.metalColor === metal);
   const pool = media.length ? media : images;
   if (pool.length) {
-    return pool.map((m, i) => ({ id: `m${i}`, label: m.kind === 'video' ? 'Video' : `Photo ${i + 1}`, kind: (m.kind === 'video' ? 'video' : 'image') as Slide['kind'], url: m.url, alt: m.alt ?? name }));
+    return pool.map((m, i) => ({
+      id: `m${i}`,
+      label: m.kind === 'video' ? 'Video' : `Photo ${i + 1}`,
+      kind: (m.kind === 'video' ? 'video' : 'image') as Slide['kind'],
+      url: m.url,
+      alt: m.alt ?? name,
+    }));
   }
   return [
     { id: 'a0', label: 'Top view', kind: 'art', view: 0 },
@@ -48,12 +62,12 @@ function SlideView({ s, art, metal, shape, carat, name, sizes, priority }: { s: 
 export function Gallery({ name, art, images, metal, shape, carat, compact }: Props) {
   const slides = buildSlides(images, metal, name);
   const [index, setIndex] = useState(0);
-  const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
+  const [zoom, setZoom] = useState<{ i: number; x: number; y: number } | null>(null);
   const [full, setFull] = useState(false);
   const track = useRef<HTMLDivElement>(null);
   const mounted = useMounted();
   const current = slides[Math.min(index, slides.length - 1)];
-  const sizes = compact ? '(min-width:1024px) 40vw, 90vw' : '(min-width:1024px) 55vw, 100vw';
+  const sizes = '(min-width:1024px) 40vw, 90vw';
 
   const go = useCallback((i: number) => setIndex((i + slides.length) % slides.length), [slides.length]);
 
@@ -81,48 +95,91 @@ export function Gallery({ name, art, images, metal, shape, carat, compact }: Pro
     if (i !== index) setIndex(i);
   };
 
+  const openAt = (i: number) => {
+    setIndex(i);
+    setFull(true);
+  };
+
   return (
-    <div className={cn('flex flex-col gap-3', !compact && 'lg:flex-row-reverse lg:gap-4')}>
-      {/* main stage — desktop */}
-      <div className={cn('art-tile relative hidden aspect-square flex-1 overflow-hidden', compact ? 'block' : 'md:block')}>
-        <div
-          className={cn('absolute inset-0', current.kind === 'art' || current.kind === 'image' ? 'cursor-zoom-in' : '')}
-          onMouseMove={(e) => {
-            if (current.kind !== 'art' && current.kind !== 'image') return;
-            const r = e.currentTarget.getBoundingClientRect();
-            setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
-          }}
-          onMouseLeave={() => setZoom(null)}
-          onClick={() => current.kind !== 'video' && setFull(true)}
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            <m.div
-              key={`${current.id}-${metal}`}
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35 }}
-              style={zoom && !compact ? { transform: 'scale(2)', transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
+    <div className="flex flex-col gap-3">
+      {/* every view at once, two per row — tablet & desktop product page */}
+      {!compact && (
+        <div className="hidden grid-cols-2 gap-2 md:grid" aria-label="Product views">
+          {slides.map((s, i) => (
+            <div
+              key={s.id}
+              className={cn('art-tile relative aspect-square overflow-hidden', slides.length % 2 === 1 && i === 0 && 'col-span-2', s.kind !== 'video' && 'cursor-zoom-in')}
+              onMouseMove={(e) => {
+                if (s.kind === 'video') return;
+                const r = e.currentTarget.getBoundingClientRect();
+                setZoom({
+                  i,
+                  x: ((e.clientX - r.left) / r.width) * 100,
+                  y: ((e.clientY - r.top) / r.height) * 100,
+                });
+              }}
+              onMouseLeave={() => setZoom(null)}
+              onClick={() => s.kind !== 'video' && openAt(i)}
             >
-              <SlideView s={current} art={art} metal={metal} shape={shape} carat={carat} name={name} sizes={sizes} priority />
-            </m.div>
-          </AnimatePresence>
+              <div
+                key={metal}
+                className="absolute inset-0 transition-transform duration-100 ease-out"
+                style={
+                  zoom?.i === i
+                    ? {
+                        transform: 'scale(2)',
+                        transformOrigin: `${zoom.x}% ${zoom.y}%`,
+                      }
+                    : undefined
+                }
+              >
+                <LazyMount eager={i < 2} className="absolute inset-0">
+                  <SlideView
+                    s={s}
+                    art={art}
+                    metal={metal}
+                    shape={shape}
+                    carat={carat}
+                    name={name}
+                    sizes={slides.length % 2 === 1 && i === 0 ? '(min-width:1024px) 58vw, 100vw' : '(min-width:1024px) 29vw, 50vw'}
+                    priority={i === 0}
+                  />
+                </LazyMount>
+              </div>
+            </div>
+          ))}
         </div>
-        {current.kind !== 'video' && (
-          <button onClick={() => setFull(true)} className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink transition-colors hover:bg-ink hover:text-ivory" aria-label="Open fullscreen">
-            <Expand className="h-4 w-4" strokeWidth={1.25} />
-          </button>
-        )}
-        <div className="absolute bottom-3 right-3 flex gap-1">
-          <button onClick={() => go(index - 1)} className="flex h-9 w-9 items-center justify-center rounded-full bg-ivory/90 hover:bg-ivory" aria-label="Previous image">
-            <ChevronLeft className="h-4 w-4" strokeWidth={1.25} />
-          </button>
-          <button onClick={() => go(index + 1)} className="flex h-9 w-9 items-center justify-center rounded-full bg-ivory/90 hover:bg-ivory" aria-label="Next image">
-            <ChevronRight className="h-4 w-4" strokeWidth={1.25} />
-          </button>
+      )}
+
+      {/* main stage — quick view */}
+      {compact && (
+        <div className="art-tile relative aspect-square flex-1 overflow-hidden">
+          <div className={cn('absolute inset-0', current.kind !== 'video' && 'cursor-zoom-in')} onClick={() => current.kind !== 'video' && setFull(true)}>
+            <AnimatePresence mode="wait" initial={false}>
+              <m.div key={`${current.id}-${metal}`} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
+                <SlideView s={current} art={art} metal={metal} shape={shape} carat={carat} name={name} sizes={sizes} priority />
+              </m.div>
+            </AnimatePresence>
+          </div>
+          {current.kind !== 'video' && (
+            <button
+              onClick={() => setFull(true)}
+              className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/90 text-ink transition-colors hover:bg-ink hover:text-ivory"
+              aria-label="Open fullscreen"
+            >
+              <Expand className="h-4 w-4" strokeWidth={1.25} />
+            </button>
+          )}
+          <div className="absolute bottom-3 right-3 flex gap-1">
+            <button onClick={() => go(index - 1)} className="flex h-9 w-9 items-center justify-center rounded-full bg-ivory/90 hover:bg-ivory" aria-label="Previous image">
+              <ChevronLeft className="h-4 w-4" strokeWidth={1.25} />
+            </button>
+            <button onClick={() => go(index + 1)} className="flex h-9 w-9 items-center justify-center rounded-full bg-ivory/90 hover:bg-ivory" aria-label="Next image">
+              <ChevronRight className="h-4 w-4" strokeWidth={1.25} />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* swipeable stage — mobile */}
       {!compact && (
@@ -142,7 +199,10 @@ export function Gallery({ name, art, images, metal, shape, carat, compact }: Pro
                 key={s.id}
                 aria-label={`Show ${s.label}`}
                 onClick={() => {
-                  track.current?.scrollTo({ left: i * (track.current?.clientWidth ?? 0), behavior: 'smooth' });
+                  track.current?.scrollTo({
+                    left: i * (track.current?.clientWidth ?? 0),
+                    behavior: 'smooth',
+                  });
                   setIndex(i);
                 }}
                 className="flex h-6 min-w-6 items-center justify-center px-1"
@@ -155,26 +215,28 @@ export function Gallery({ name, art, images, metal, shape, carat, compact }: Pro
       )}
 
       {/* thumbnails */}
-      <ul className={cn('no-scrollbar flex gap-2 overflow-x-auto', compact ? '' : 'hidden md:flex lg:w-20 lg:flex-col')} aria-label="Product views">
-        {slides.map((s, i) => (
-          <li key={s.id} className="shrink-0">
-            <button
-              onClick={() => setIndex(i)}
-              aria-label={s.label}
-              aria-current={i === index}
-              className={cn('art-tile relative block h-16 w-16 overflow-hidden border transition-colors lg:h-20 lg:w-20', i === index ? 'border-ink' : 'border-transparent hover:border-stone')}
-            >
-              {s.kind === 'video' ? (
-                <span className="flex h-full w-full items-center justify-center text-[12px] uppercase tracking-[0.12em] text-taupe">Video</span>
-              ) : (
-                <LazyMount className="absolute inset-0">
-                  <SlideView s={s} art={art} metal={metal} shape={shape} carat={carat} name={name} sizes="80px" />
-                </LazyMount>
-              )}
-            </button>
-          </li>
-        ))}
-      </ul>
+      {compact && (
+        <ul className="no-scrollbar flex gap-2 overflow-x-auto" aria-label="Product views">
+          {slides.map((s, i) => (
+            <li key={s.id} className="shrink-0">
+              <button
+                onClick={() => setIndex(i)}
+                aria-label={s.label}
+                aria-current={i === index}
+                className={cn('art-tile relative block h-16 w-16 overflow-hidden border transition-colors lg:h-20 lg:w-20', i === index ? 'border-ink' : 'border-transparent hover:border-stone')}
+              >
+                {s.kind === 'video' ? (
+                  <span className="flex h-full w-full items-center justify-center text-[12px] uppercase tracking-[0.12em] text-taupe">Video</span>
+                ) : (
+                  <LazyMount className="absolute inset-0">
+                    <SlideView s={s} art={art} metal={metal} shape={shape} carat={carat} name={name} sizes="80px" />
+                  </LazyMount>
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
 
       {mounted &&
         createPortal(
