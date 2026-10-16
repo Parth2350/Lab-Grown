@@ -348,7 +348,7 @@ export const cookieSections: DocSection[] = [
     body: (
       <ul>
         <li>
-          <strong className="font-normal text-ink">Strictly necessary</strong> — keep you signed in, protect our forms from misuse and make checkout work. These are
+          <strong className="font-normal text-ink">Strictly necessary</strong> — keep you signed in and protect our forms from misuse. These are
           always on, because the website cannot function without them.
         </li>
         <li>
@@ -386,7 +386,7 @@ export const cookieSections: DocSection[] = [
     title: 'Third-party cookies',
     body: (
       <p>
-        Our payment processor may set its own cookies during checkout to prevent fraud and keep payments secure. We do not embed third-party videos, maps or social
+        We do not embed third-party videos, maps or social
         media widgets that track you across other websites.
       </p>
     ),
@@ -400,7 +400,7 @@ export const cookieSections: DocSection[] = [
           You can block or delete cookies in your browser settings at any time, and most browsers let you do this site by site. Clearing your browser&apos;s site data
           also removes items saved in local storage.
         </p>
-        <Note>If you block strictly necessary cookies, signing in and checkout will not work correctly.</Note>
+        <Note>If you block strictly necessary cookies, signing in will not work correctly.</Note>
       </>
     ),
   },

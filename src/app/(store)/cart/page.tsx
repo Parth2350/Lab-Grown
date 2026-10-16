@@ -4,7 +4,7 @@ import { CartView } from '@/components/checkout/CartView';
 
 export const metadata = pageMeta({
   title: 'Your Bag',
-  description: 'Review the pieces in your bag, apply a promo code and continue to secure checkout.',
+  description: 'Review the pieces in your bag, apply a promo code and send your order to us on WhatsApp.',
   path: '/cart',
   noIndex: true,
 });

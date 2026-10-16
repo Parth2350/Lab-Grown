@@ -109,6 +109,6 @@ export async function saveShippingMethods(_prev: FormState, fd: FormData): Promi
     const { methods } = parse(methodsSchema, { methods: raw });
     await updateStoreSettings({ shippingMethods: methods });
     revalidateAdmin();
-    return ok(`Saved ${methods.length} shipping method${methods.length === 1 ? '' : 's'}. Checkout is updated.`);
+    return ok(`Saved ${methods.length} shipping method${methods.length === 1 ? '' : 's'}.`);
   });
 }

@@ -1,9 +1,9 @@
-import { Gem, Lock, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
+import { Gem, Lock, MessageCircle, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function TrustBadges({ returnsDays = 30, className, compact }: { returnsDays?: number; className?: string; compact?: boolean }) {
   const items = [
-    { icon: Lock, title: 'Secure checkout', text: '256-bit SSL encryption' },
+    { icon: MessageCircle, title: 'Order on WhatsApp', text: 'Personal help, start to finish' },
     { icon: ShieldCheck, title: 'Certified diamonds', text: 'Graded by IGI & GIA' },
     { icon: Truck, title: 'Insured delivery', text: 'Signed for, door to door' },
     { icon: RotateCcw, title: `${returnsDays}-day returns`, text: 'Complimentary & simple' },

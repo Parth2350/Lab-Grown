@@ -182,7 +182,7 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
                     maxLength={200}
                     aria-invalid={fieldError(i, 'description') ? true : undefined}
                     className={fieldSm}
-                    placeholder="Shown under the option at checkout"
+                    placeholder="Optional short note"
                   />
                   {fieldError(i, 'description') && <p className="mt-1 text-[13px] text-danger">{fieldError(i, 'description')}</p>}
                 </div>
@@ -221,7 +221,7 @@ export function ShippingMethodsEditor({ methods, usage }: { methods: ShippingMet
             <>
               {formatNumber(usage[pendingRemoval.id] ?? 0)} existing order{(usage[pendingRemoval.id] ?? 0) === 1 ? '' : 's'} used this method. They keep the ID
               <span className="mx-1 font-mono text-[14px]">{pendingRemoval.id}</span>
-              and will show it instead of the label. Customers can no longer choose it at checkout once you save.
+              and will show it instead of the label. It is no longer offered once you save.
             </>
           )
         }

@@ -6,7 +6,7 @@ import { LoginForm } from '@/components/account/LoginForm';
 
 export const metadata = pageMeta({
   title: 'Sign In',
-  description: 'Sign in to track orders, save addresses and check out faster.',
+  description: 'Sign in to track orders, save addresses and revisit your wishlist.',
   path: '/account/login',
   noIndex: true,
 });

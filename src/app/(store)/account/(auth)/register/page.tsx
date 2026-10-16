@@ -6,7 +6,7 @@ import { RegisterForm } from '@/components/account/RegisterForm';
 
 export const metadata = pageMeta({
   title: 'Create an Account',
-  description: 'Create an account to track orders, keep a wishlist and check out faster.',
+  description: 'Create an account to track orders and keep a wishlist.',
   path: '/account/register',
   noIndex: true,
 });

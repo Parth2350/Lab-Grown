@@ -115,7 +115,7 @@ export default async function ShippingPage({ searchParams }: { searchParams: Pro
         id="shipping-methods"
         className="mt-10 scroll-mt-24"
         title="Shipping methods"
-        description="The delivery options offered at checkout, in this order. IDs are stored on orders, so they can't be changed once saved."
+        description="The delivery options listed on product pages, in this order (the first one is used for the bag total). IDs are stored on orders, so they can't be changed once saved."
         bodyClassName="bg-ivory/50 p-5"
       >
         <ShippingMethodsEditor methods={settings.shippingMethods} usage={usage} />

@@ -43,7 +43,7 @@ function CouponForm({ coupon, onDone }: { coupon?: CouponRow; onDone: () => void
           <label htmlFor="c-desc" className={lbl}>
             Description
           </label>
-          <input id="c-desc" name="description" defaultValue={coupon?.description ?? ''} maxLength={200} className="field py-2.5" placeholder="Shown internally and at checkout" />
+          <input id="c-desc" name="description" defaultValue={coupon?.description ?? ''} maxLength={200} className="field py-2.5" placeholder="Internal note" />
           <FieldMsg state={state} name="description" />
         </div>
         <div className="grid grid-cols-2 gap-4">

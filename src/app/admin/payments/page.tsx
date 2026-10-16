@@ -58,7 +58,7 @@ export default async function PaymentsPage({ searchParams }: { searchParams: Pro
           <EmptyState
             icon={<CreditCard className="h-5 w-5" strokeWidth={1.25} />}
             title={filters.q || filters.status ? 'No matching payments' : 'No payments yet'}
-            description={filters.q || filters.status ? 'Try another search or status.' : 'Payment attempts appear here as customers check out.'}
+            description={filters.q || filters.status ? 'Try another search or status.' : 'Online payment attempts appear here.'}
           />
         </div>
       ) : (

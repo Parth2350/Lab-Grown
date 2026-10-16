@@ -51,7 +51,7 @@ export function LoginForm({ callbackUrl, adminNotice, signedInAs }: { callbackUr
     <div>
       <p className="eyebrow">Your account</p>
       <h1 className="mt-3 font-serif text-4xl font-light sm:text-5xl">Welcome back</h1>
-      <p className="mt-3 text-[17px] text-taupe">Sign in to track orders, revisit your wishlist and check out faster.</p>
+      <p className="mt-3 text-[17px] text-taupe">Sign in to track orders and revisit your wishlist.</p>
 
       {adminNotice && (
         <div role="alert" className="mt-8 flex gap-3 border border-gold/40 bg-gold-pale/40 px-4 py-3 text-[15px] text-charcoal">

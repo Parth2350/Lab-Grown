@@ -125,7 +125,7 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
         <h2 id="profile-title" className="font-serif text-3xl font-light">
           Your details
         </h2>
-        <p className="mb-6 mt-1 text-sm text-taupe">Used to personalise your account and pre-fill checkout.</p>
+        <p className="mb-6 mt-1 text-sm text-taupe">Used to personalise your account.</p>
         <ProfileForm initial={{ name: user.name ?? '', email: user.email, phone: user.phone ?? '' }} />
       </section>
 

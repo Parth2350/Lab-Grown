@@ -104,7 +104,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
         <h1 className="mt-3 font-serif text-4xl font-light leading-tight sm:text-5xl">{pending ? 'Your order is on hold' : `Thank you, ${firstName}.`}</h1>
         <p className="mx-auto mt-4 max-w-lg text-[17px] leading-relaxed text-taupe">
           {pending
-            ? 'We haven’t received payment for this order yet, so nothing has been charged. Return to checkout to complete your purchase.'
+            ? 'We haven’t received payment for this order yet, so nothing has been charged. Return to your bag and send it to us on WhatsApp to complete your order.'
             : `Your order is confirmed and already on its way to our workshop. We’ll keep you updated at ${order.email}.`}
         </p>
         <p className="mt-6 inline-flex items-center gap-3 border border-line bg-white px-4 py-2 text-sm">
@@ -113,7 +113,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
         </p>
         {pending && (
           <div className="mt-6">
-            <ButtonLink href="/checkout">Return to Checkout</ButtonLink>
+            <ButtonLink href="/cart">Return to Your Bag</ButtonLink>
           </div>
         )}
       </m.header>
@@ -195,7 +195,7 @@ export function SuccessView({ signedIn }: { signedIn: boolean }) {
             <div className="mt-6 bg-porcelain p-6 sm:p-8">
               <UserPlus className="h-5 w-5 text-gold" strokeWidth={1.25} aria-hidden />
               <p className="mt-4 font-serif text-xl">Save this order to an account</p>
-              <p className="mt-2 text-[15px] leading-relaxed text-taupe">Track delivery, request returns and check out faster next time. We’ll attach order {order.number} to your new account.</p>
+              <p className="mt-2 text-[15px] leading-relaxed text-taupe">Track delivery and request returns. We’ll attach order {order.number} to your new account.</p>
               <ButtonLink href={`/account/register?claim=${encodeURIComponent(order.number)}`} variant="outline" className="mt-5 w-full">
                 Create Account
               </ButtonLink>

@@ -89,7 +89,7 @@ export function RegisterForm({ callbackUrl, claim }: { callbackUrl: string; clai
     <div>
       <p className="eyebrow">Join {site.name}</p>
       <h1 className="mt-3 font-serif text-4xl font-light sm:text-5xl">Create an account</h1>
-      <p className="mt-3 text-[17px] text-taupe">Track every order, keep your wishlist across devices and check out in moments.</p>
+      <p className="mt-3 text-[17px] text-taupe">Track every order and keep your wishlist across devices.</p>
 
       {claim && (
         <p className="mt-6 flex items-start gap-3 bg-porcelain px-4 py-3 text-[15px] text-charcoal">

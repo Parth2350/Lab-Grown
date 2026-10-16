@@ -87,7 +87,7 @@ export function TaxForm({ taxRate, taxLabel }: { taxRate: number; taxLabel: stri
             />
             <FieldMsg state={form.state} name="taxLabel" />
             <p id="tax-label-hint" className="mt-1.5 text-[13px] text-taupe">
-              Shown in the cart and at checkout, e.g. “Estimated taxes” or “GST”.
+              Shown in the bag and in WhatsApp order messages, e.g. “Estimated taxes” or “GST”.
             </p>
           </div>
         </div>
@@ -136,7 +136,7 @@ export function ReturnsForm({ returnsDays }: { returnsDays: number }) {
         </div>
         <FieldMsg state={form.state} name="returnsDays" />
         <p id="returns-days-hint" className="mt-1.5 text-[13px] text-taupe">
-          0–365. Shown on product pages, the cart and checkout, and decides which delivered orders customers can still return.
+          0–365. Shown on product pages and in the bag, and decides which delivered orders customers can still return.
         </p>
       </Panel>
     </form>

@@ -99,7 +99,7 @@ const OCCASION_TILES: Tile[] = [
 
 const SERVICES = [
   { icon: Gift, t: 'Complimentary gift wrapping', d: 'Every piece arrives in our signature box, ribboned and ready to give.' },
-  { icon: PenLine, t: 'A handwritten note', d: 'Add a personal message at checkout and we will write it by hand.' },
+  { icon: PenLine, t: 'A handwritten note', d: 'Share your message when you order on WhatsApp and we will write it by hand.' },
   { icon: ShieldCheck, t: 'Insured, discreet delivery', d: 'Fully insured and shipped in plain outer packaging — no spoilers.' },
   { icon: RefreshCcw, t: 'Easy exchanges', d: 'Wrong size or style? Exchange within 30 days, with free insured returns.' },
 ];

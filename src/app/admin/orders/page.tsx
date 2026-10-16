@@ -83,7 +83,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           <EmptyState
             icon={<ShoppingBag className="h-5 w-5" strokeWidth={1.25} />}
             title={hasSearch || filters.status || filters.returns ? 'No matching orders' : 'No orders yet'}
-            description={hasSearch || filters.status || filters.returns ? 'Try a different search, status or date range.' : 'Orders placed at checkout will appear here.'}
+            description={hasSearch || filters.status || filters.returns ? 'Try a different search, status or date range.' : 'Orders placed online will appear here.'}
             action={
               hasSearch || filters.status || filters.returns ? (
                 <Link href="/admin/orders" className={buttonClass('outline', 'sm')}>

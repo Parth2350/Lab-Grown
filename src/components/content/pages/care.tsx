@@ -17,9 +17,9 @@ export const shippingSections: DocSection[] = [
       <>
         <p>
           Every order ships free of charge with our Insured Standard service. Your jewelry is insured for its full value from the moment it leaves our workshop
-          until it is signed for, so there is nothing for you to arrange and nothing to pay at checkout for delivery.
+          until it is signed for, so there is nothing for you to arrange and nothing extra to pay for delivery.
         </p>
-        <p>If you need your piece sooner, faster options are available at checkout for most destinations.</p>
+        <p>If you need your piece sooner, faster options are available for most destinations. Just ask when you order on WhatsApp.</p>
       </>
     ),
   },
@@ -76,7 +76,7 @@ export const shippingSections: DocSection[] = [
     body: (
       <p>
         We currently deliver to clients in more than {site.stats.countries.replace('+', '')} countries across North America, Europe, the Middle East and Asia-Pacific,
-        as well as throughout India. Available destinations are listed at checkout. If yours is not, write to us at <Mail /> and we will do our best to help.
+        as well as throughout India. If you are unsure whether we deliver to you, write to us at <Mail /> and we will do our best to help.
       </p>
     ),
   },
@@ -86,7 +86,7 @@ export const shippingSections: DocSection[] = [
     body: (
       <>
         <p>
-          Import duties and local taxes are set by the destination country. Where we can calculate them in advance, they are shown at checkout; otherwise the
+          Import duties and local taxes are set by the destination country. Where we can calculate them in advance, we share them with you before you confirm your order; otherwise the
           carrier may collect them before delivery. We will always let you know before dispatch if charges are likely to apply.
         </p>
         <Note>

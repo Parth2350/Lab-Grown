@@ -30,7 +30,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
     items: [
       {
         q: 'Which payment methods do you accept?',
-        a: 'Payments are processed securely by our payment partner, which supports major credit and debit cards, UPI, net banking and popular wallets. Available methods vary by country and are shown at checkout.',
+        a: 'Payments are processed securely by our payment partner, which supports major credit and debit cards, UPI, net banking and popular wallets. Available methods vary by country, and our team confirms them with you on WhatsApp when you place your order.',
       },
       {
         q: 'Can I change or cancel my order?',
@@ -38,7 +38,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       },
       {
         q: 'In which currency are prices shown?',
-        a: 'All prices are in Indian rupees (₹). GST of 3% is added at checkout. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
+        a: 'All prices are in Indian rupees (₹). GST of 3% is added to your order total. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
       },
     ],
   },
@@ -48,7 +48,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
     items: [
       {
         q: 'Is shipping really free?',
-        a: 'Yes. Every order ships with complimentary, fully insured standard delivery and requires a signature on arrival. Express and overnight upgrades are available at checkout.',
+        a: 'Yes. Every order ships with complimentary, fully insured standard delivery and requires a signature on arrival. Express and overnight upgrades are available, just ask when you order on WhatsApp.',
       },
       {
         q: 'How long will my jewelry take to arrive?',
@@ -56,7 +56,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       },
       {
         q: 'Do you ship internationally?',
-        a: `Yes — we deliver to clients in more than ${site.stats.countries.replace('+', '')} countries. Import duties and taxes are shown at checkout where they can be calculated in advance.`,
+        a: `Yes — we deliver to clients in more than ${site.stats.countries.replace('+', '')} countries. Where import duties and taxes can be calculated in advance, our team shares them with you before you confirm your order.`,
       },
     ],
   },

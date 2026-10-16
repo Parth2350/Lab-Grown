@@ -161,7 +161,7 @@ export function AddressBook({ initial }: { initial: BookAddress[] }) {
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="font-serif text-3xl font-light">Addresses</h2>
-          <p className="mt-1 text-sm text-taupe">Saved addresses appear at checkout for one-tap delivery.</p>
+          <p className="mt-1 text-sm text-taupe">Keep your delivery addresses here, ready for your next order.</p>
         </div>
         {editing !== 'new' && (
           <Button variant="outline" size="sm" onClick={() => setEditing('new')}>
@@ -182,7 +182,7 @@ export function AddressBook({ initial }: { initial: BookAddress[] }) {
         <div className="flex flex-col items-center border border-line px-6 py-14 text-center">
           <MapPin className="h-8 w-8 text-gold" strokeWidth={1} aria-hidden />
           <p className="mt-4 font-serif text-2xl">No saved addresses</p>
-          <p className="mt-2 text-sm text-taupe">Add one now, or tick “save this address” at checkout.</p>
+          <p className="mt-2 text-sm text-taupe">Add one now so it is ready for your next order.</p>
         </div>
       ) : (
         <ul className="grid gap-4 md:grid-cols-2">

@@ -90,7 +90,7 @@ export function AccountMenu({ className }: { className?: string }) {
             ) : (
               <>
                 <p className="font-serif text-xl">Your Account</p>
-                <p className="mb-4 mt-1 text-[15px] text-taupe">Track orders, save favourites and check out faster.</p>
+                <p className="mb-4 mt-1 text-[15px] text-taupe">Track orders and save your favourites.</p>
                 <Link href="/account/login" onClick={() => setOpen(false)} className="label-caps flex h-11 items-center justify-center bg-ink text-ivory transition-colors hover:bg-charcoal" role="menuitem">
                   Sign In
                 </Link>

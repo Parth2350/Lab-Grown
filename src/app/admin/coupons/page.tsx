@@ -34,7 +34,7 @@ export default async function CouponsPage() {
 
   return (
     <>
-      <PageHeader title="Coupons" description="Discount codes customers can redeem at checkout. Codes are case-insensitive and stored in upper case." actions={<CouponEditor />} />
+      <PageHeader title="Coupons" description="Discount codes customers can apply in their bag. Codes are case-insensitive and stored in upper case." actions={<CouponEditor />} />
       {coupons.length === 0 ? (
         <div className="border border-line bg-white">
           <EmptyState icon={<TicketPercent className="h-5 w-5" strokeWidth={1.25} />} title="No coupons yet" description="Create your first discount code to run a promotion." action={<CouponEditor />} />

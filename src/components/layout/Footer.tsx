@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Award, Gem, RefreshCcw, ShieldCheck } from 'lucide-react';
+import { Award, Gem, MessageCircle, RefreshCcw } from 'lucide-react';
 import { FOOTER_NAV } from '@/config/navigation';
 import { site } from '@/config/site';
 import { Logo } from './Logo';
@@ -10,7 +10,7 @@ const PROMISES = [
   { icon: Gem, title: 'IGI & GIA Certified', text: 'Every diamond, independently graded' },
   { icon: Award, title: 'Lifetime Warranty', text: 'Manufacturing defects covered forever' },
   { icon: RefreshCcw, title: '30-Day Returns', text: 'Easy, insured & complimentary' },
-  { icon: ShieldCheck, title: 'Secure Checkout', text: 'Encrypted payments via Razorpay' },
+  { icon: MessageCircle, title: 'Order on WhatsApp', text: 'Our team confirms every order personally' },
 ];
 
 export function Footer() {
