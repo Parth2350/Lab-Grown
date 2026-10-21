@@ -201,6 +201,24 @@ model Product {
   tags              String[]
   hasCenterStone    Boolean                @default(false)
   requiresSize      Boolean                @default(false)
+  /// Partner catalogue (BrillianceCarat) family key, e.g. "BCE33451-0.25CT-S-14Y". Null for products made in the admin.
+  familyKey         String?                @unique
+  /// Full catalogue title, e.g. "14K Yellow Gold Lab Grown Diamond EARRINGS 0.23 ctw BCE33451-0.25CT"
+  sourceTitle       String?
+  /// Catalogue product type, e.g. "EARRINGS", "ENGAGEMENT RINGS"
+  productType       String?
+  /// Highest variant price (paise) — "From … to …" in the admin
+  priceTo           Int                    @default(0)
+  variantCount      Int                    @default(0)
+  /// Ring sizes offered (catalogue products); empty = the store's standard list
+  ringSizes         String[]
+  showEngraving     Boolean                @default(false)
+  /// Crafted after the order is placed: always orderable, "Made to order" on the product page
+  madeToOrder       Boolean                @default(false)
+  /// Extra product-page choices carried by the variants: any of "shape", "carat", "length"
+  optionAxes        String[]
+  /// What the carat choice measures: "center" or "total"
+  caratKind         String?
   /// Procedural illustration spec used when no photography has been uploaded.
   art               Json?
   isActive          Boolean                @default(true)
@@ -242,14 +260,24 @@ model ProductVariant {
   sku        String      @unique
   purity     String
   metalColor String
-  /// Setting price in cents for this purity/colour (diamond priced separately)
-  price      Int
-  stock      Int         @default(10)
-  isActive   Boolean     @default(true)
-  cartItems  CartItem[]
-  orderItems OrderItem[]
+  /// Setting price in paise for this purity/colour (diamond priced separately).
+  /// Catalogue variants carry the full price of that exact combination.
+  price       Int
+  stock       Int         @default(10)
+  isActive    Boolean     @default(true)
+  /// catalogue option axes (null for admin-made products)
+  shape       String?
+  centerCarat Float?
+  totalCarat  Float?
+  length      String?
+  /// stone breakdown: [{ role, shape, type, color, clarity, pieces, carat, size }]
+  stones      Json?
+  /// ring-size prices in paise, e.g. { "6.5": 13366400 } — larger sizes use more gold
+  sizePrices  Json?
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
 
-  @@unique([productId, purity, metalColor])
+  @@index([productId, purity, metalColor])
   @@index([stock])
   @@map("product_variants")
 }
@@ -263,6 +291,8 @@ model ProductImage {
   /// image | video | spin360
   kind       String   @default("image")
   metalColor String?
+  /// catalogue products: the diamond shape this photo shows
+  shape      String?
   position   Int      @default(0)
   createdAt  DateTime @default(now())
 

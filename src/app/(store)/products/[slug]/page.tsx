@@ -11,6 +11,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductExperience } from '@/components/pdp/ProductExperience';
+import { packVariants } from '@/lib/variant';
 import { Reviews } from '@/components/pdp/Reviews';
 import { RecentlyViewed } from '@/components/pdp/RecentlyViewed';
 
@@ -57,7 +58,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
         />
       </div>
       <section className="container-x mt-6 md:mt-8" aria-label="Product">
-        <ProductExperience p={p} init={{ metal: one(sp.metal), purity: one(sp.purity), shape: one(sp.shape) }} configure={one(sp.configure) === '1'} />
+        <ProductExperience p={{ ...p, variants: [], stoneSets: [] }} packed={packVariants(p.variants, p.stoneSets)} init={{ metal: one(sp.metal), purity: one(sp.purity), shape: one(sp.shape), carat: one(sp.carat), length: one(sp.length) }} configure={one(sp.configure) === '1'} />
       </section>
 
       <section className="mt-20 bg-porcelain py-14 md:mt-28" aria-label="Our promise">

@@ -22,7 +22,12 @@ export type EnquiryItem = {
   diamond?: string | null;
   /** total-weight option, e.g. "1.50 ct total weight" */
   option?: string | null;
+  /** catalogue options, e.g. "Oval · 2.08 ct centre · 2.63 ctw" */
+  details?: string | null;
   shape?: string | null;
+  /** chosen carat / chain length (catalogue products) — carried in the product link */
+  carat?: number | null;
+  length?: string | null;
   ringSize?: string | null;
   requiresSize?: boolean;
   engraving?: string | null;
@@ -35,7 +40,9 @@ export type EnquiryItem = {
 
 function productLink(origin: string, it: EnquiryItem) {
   const q = new URLSearchParams({ metal: it.metalColor, purity: it.purity });
-  if (it.diamond && it.shape) q.set('shape', it.shape);
+  if ((it.diamond || it.details) && it.shape) q.set('shape', it.shape);
+  if (it.carat) q.set('carat', String(it.carat));
+  if (it.length) q.set('length', it.length);
   return `${origin.replace(/\/$/, '')}/products/${it.slug}?${q.toString()}`;
 }
 
@@ -43,6 +50,7 @@ function itemLines(origin: string, it: EnquiryItem, indent = '') {
   const lines = [`${indent}Metal: ${it.purity} ${label.metal(it.metalColor)}`];
   if (it.diamond) lines.push(`${indent}Diamond: ${it.diamond}`);
   if (it.option) lines.push(`${indent}Diamonds: ${it.option}`);
+  if (it.details) lines.push(`${indent}Options: ${it.details}`);
   if (it.ringSize) lines.push(`${indent}Ring size: ${it.ringSize}`);
   else if (it.requiresSize) lines.push(`${indent}Ring size: not chosen yet`);
   if (it.engraving) lines.push(`${indent}Engraving: "${it.engraving}"`);
@@ -69,7 +77,9 @@ export function lineItem(l: CartLine): EnquiryItem {
     metalColor: l.metalColor,
     diamond: l.diamond?.summary ?? null,
     option: l.option?.label ?? null,
+    details: l.details ?? null,
     shape: l.diamond?.shape ?? l.shape,
+    carat: l.details ? l.carat : null,
     ringSize: l.ringSize ?? null,
     engraving: l.engraving ?? null,
     quantity: l.quantity,

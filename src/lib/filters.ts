@@ -5,6 +5,7 @@
 import { formatMoney } from './utils';
 import {
   CARAT_RANGES,
+  FILTER_SHAPES,
   FILTER_COLLECTIONS,
   METAL_COLORS,
   PRICE_RANGES,
@@ -26,7 +27,7 @@ export const FILTER_GROUPS: { key: FilterKey; title: string; options: readonly {
   { key: 'price', title: 'Price', options: PRICE_RANGES },
   { key: 'metal', title: 'Metal Type', options: METAL_COLORS },
   { key: 'purity', title: 'Metal Purity', options: PURITIES },
-  { key: 'shape', title: 'Diamond Shape', options: SHAPES },
+  { key: 'shape', title: 'Diamond Shape', options: FILTER_SHAPES },
   { key: 'center', title: 'Center Stone Carat', options: CARAT_RANGES },
   { key: 'total', title: 'Total Carat', options: CARAT_RANGES },
   { key: 'setting', title: 'Setting Type', options: SETTING_TYPES },
@@ -333,6 +334,13 @@ export function computeFacets(rows: IndexRow[], f: Filters) {
       }
     };
     const opts = g.options.map((o) => ({ value: o.slug, label: o.label, count: count(o.slug) }));
+    // styles and setting types come from the catalogue too: list every value the products carry
+    if (g.key === 'style' || g.key === 'setting') {
+      const known = new Set(opts.map((o) => o.value));
+      const extra = new Set(rows.flatMap((r) => (g.key === 'style' ? r.styles : r.settingType ? [r.settingType] : [])).filter((v) => !known.has(v)));
+      const more = [...extra].map((v) => ({ value: v, label: g.key === 'style' ? label.style(v) : label.setting(v), count: count(v) }));
+      opts.push(...more.sort((a, b) => b.count - a.count));
+    }
     // keep any active-but-unlisted values (e.g. a custom price range from a link) visible
     for (const v of f[g.key]) if (!opts.some((o) => o.value === v)) opts.unshift({ value: v, label: rangeLabel(g.key, v), count: count(v) });
     facets[g.key] = opts.filter((o) => o.count > 0 || f[g.key].includes(o.value));

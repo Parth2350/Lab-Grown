@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { PURITIES, label } from '@/lib/catalog';
 import type { ProductCard, ProductDetail } from '@/lib/types';
 import { formatMoney } from '@/lib/utils';
+import { fmtCarat, unpackStones, unpackVariants, type PackedVariants } from '@/lib/variant';
 import { useRecentlyViewed } from '@/store/lists';
 import { AccordionItem } from '@/components/ui/Accordion';
 import { useStoreSettings } from '@/components/providers/SettingsProvider';
@@ -51,7 +52,21 @@ export function toCard(p: ProductDetail): ProductCard {
   };
 }
 
-export function ProductExperience({ p, init, configure, compact }: { p: ProductDetail; init?: InitialConfig; configure?: boolean; compact?: boolean }) {
+export function ProductExperience({
+  p: wire,
+  packed,
+  init,
+  configure,
+  compact,
+}: {
+  p: ProductDetail;
+  /** variants sent as compact rows (product page) — otherwise p.variants is used */
+  packed?: PackedVariants;
+  init?: InitialConfig;
+  configure?: boolean;
+  compact?: boolean;
+}) {
+  const p = useMemo(() => (packed ? { ...wire, variants: unpackVariants(packed), stoneSets: unpackStones(packed) } : wire), [wire, packed]);
   const c = useConfiguration(p, init);
   const card = useMemo(() => toCard(p), [p]);
   const addRecent = useRecentlyViewed((s) => s.add);
@@ -67,14 +82,21 @@ export function ProductExperience({ p, init, configure, compact }: { p: ProductD
     const u = new URL(window.location.href);
     u.searchParams.set('metal', c.metal);
     u.searchParams.set('purity', c.purity);
-    if (c.centerOption) u.searchParams.set('shape', c.shape);
+    if (c.centerOption || p.optionAxes.includes('shape')) u.searchParams.set('shape', c.shape);
+    if (p.optionAxes.includes('carat') && c.selectedCarat != null) u.searchParams.set('carat', String(c.selectedCarat));
+    if (p.optionAxes.includes('length') && c.selectedLength) u.searchParams.set('length', c.selectedLength);
     u.searchParams.delete('configure');
     window.history.replaceState(window.history.state, '', u.toString());
-  }, [c.metal, c.purity, c.shape, c.centerOption, compact]);
+  }, [c.metal, c.purity, c.shape, c.selectedCarat, c.selectedLength, c.centerOption, p.optionAxes, compact]);
 
   const purity = PURITIES.find((x) => x.slug === c.purity);
   const d = c.centerOption ? c.diamond : null;
   const o = !c.centerOption ? c.option : null;
+  // catalogue products: the selected variant's own stones
+  const stones = c.catalog && c.variant?.stonesIdx != null ? p.stoneSets[c.variant.stonesIdx] ?? [] : [];
+  const center = stones.find((x) => x.role === 'center');
+  const side = stones.filter((x) => x.role === 'side');
+  const join = (xs: (string | null | undefined)[]) => [...new Set(xs.filter(Boolean))].join(', ') || null;
 
   return (
     <div className={compact ? 'grid gap-8 md:grid-cols-2' : 'grid gap-8 lg:grid-cols-5 lg:gap-12 xl:gap-14'}>
@@ -95,8 +117,36 @@ export function ProductExperience({ p, init, configure, compact }: { p: ProductD
                   <Spec k="Diamond type" v="Lab-grown" />
                   {p.settingType && <Spec k="Setting" v={label.setting(p.settingType)} />}
                   {o?.totalCarat != null && <Spec k="Total carat" v={`${o.totalCarat.toFixed(2)} ctw`} />}
+                  {c.catalog && c.variant?.totalCarat != null && <Spec k="Total carat" v={`${fmtCarat(c.variant.totalCarat)} ctw`} />}
+                  {c.catalog && c.variant?.length && <Spec k="Length" v={`${c.variant.length} in`} />}
                 </dl>
               </div>
+              {center && (
+                <div>
+                  <h3 className="mb-2 font-sans text-xs font-semibold uppercase tracking-wide text-gold">Center Stone</h3>
+                  <dl className={SPEC_GRID}>
+                    <Spec k="Shape" v={center.shape} />
+                    {center.carat != null && <Spec k="Carat" v={`${fmtCarat(center.carat)} ct`} />}
+                    {center.pieces != null && center.pieces > 1 && <Spec k="Pieces" v={center.pieces} />}
+                    {center.type !== 'Diamond' && <Spec k="Stone" v={center.type} />}
+                    <Spec k="Colour" v={center.color} />
+                    <Spec k="Clarity" v={center.clarity} />
+                  </dl>
+                </div>
+              )}
+              {side.length > 0 && (
+                <div>
+                  <h3 className="mb-2 font-sans text-xs font-semibold uppercase tracking-wide text-gold">{center ? 'Side Stones' : 'Diamonds'}</h3>
+                  <dl className={SPEC_GRID}>
+                    <Spec k="Shape" v={join(side.map((x) => x.shape))} />
+                    <Spec k={center ? 'Total side carat' : 'Total carat'} v={`${fmtCarat(side.reduce((n, x) => n + (x.carat ?? 0), 0))} ctw`} />
+                    <Spec k="Pieces" v={side.reduce((n, x) => n + (x.pieces ?? 0), 0) || null} />
+                    {side.some((x) => x.type !== 'Diamond') && <Spec k="Stones" v={join(side.map((x) => x.type))} />}
+                    <Spec k="Colour" v={join(side.map((x) => x.color))} />
+                    <Spec k="Clarity" v={join(side.map((x) => x.clarity))} />
+                  </dl>
+                </div>
+              )}
               {d && (
                 <div>
                   <h3 className="mb-2 font-sans text-xs font-semibold uppercase tracking-wide text-gold">Center Stone</h3>

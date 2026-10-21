@@ -96,6 +96,8 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
   const photos = product.images.filter((i) => i.kind === 'image');
   const metalPhotos = photos.filter((i) => !i.metalColor || i.metalColor === metal);
   const twoUp = (metalPhotos.length ? metalPhotos : photos).length !== 1;
+  // photographs fill the tile edge to edge on white; the drawn illustration keeps its framed backdrop
+  const inset = photos.length ? 'inset-0' : 'inset-[6%]';
 
   return (
     // the whole card is one box: picture on top, details and the call to action inside the same border
@@ -103,15 +105,15 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
       className={cn('group relative flex h-full flex-col overflow-hidden border border-line bg-white transition-shadow duration-500 hover:shadow-soft', className)}
       onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}
     >
-      <div className={cn('art-tile relative overflow-hidden', twoUp ? 'aspect-[2/1] sm:aspect-square' : 'aspect-square')}>
+      <div className={cn('relative overflow-hidden', photos.length ? 'bg-white' : 'art-tile', twoUp ? 'aspect-[2/1] sm:aspect-square' : 'aspect-square')}>
         <Link href={href} className="absolute inset-0 flex" aria-label={product.name}>
           <span className="relative block h-full flex-1">
             {/* the main view only fades out once the alternate view exists, so the tile can never go blank */}
-            <LazyMount eager={priority} className={cn('absolute inset-[6%] transition-all duration-700 ease-luxe', hovered && 'group-hover:scale-[1.04] group-hover:opacity-0')}>
+            <LazyMount eager={priority} className={cn('absolute transition-all duration-700 ease-luxe', inset, hovered && 'group-hover:scale-[1.04] group-hover:opacity-0')}>
               <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} priority={priority} sizes={sizes} />
             </LazyMount>
             {hovered && (
-              <span className="absolute inset-[6%] scale-[0.98] opacity-0 transition-all duration-700 ease-luxe group-hover:scale-100 group-hover:opacity-100">
+              <span className={cn('absolute scale-[0.98] opacity-0 transition-all duration-700 ease-luxe group-hover:scale-100 group-hover:opacity-100', inset)}>
                 <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} view={1} sizes={sizes} />
               </span>
             )}
@@ -119,7 +121,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
           {/* phones only: the second picture beside the first (never mounted on larger screens) */}
           {twoUp && (
             <span className="relative block h-full flex-1 sm:hidden">
-              <LazyMount className="absolute inset-[6%]">
+              <LazyMount className={cn('absolute', inset)}>
                 <ProductMedia name={product.name} art={product.art} images={product.images} shape={shape} metal={metal} carat={carat} view={1} sizes="50vw" />
               </LazyMount>
             </span>

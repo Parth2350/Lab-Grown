@@ -11,12 +11,17 @@ import { removeLocalUploads } from './product-files';
 import type { MediaItem } from '@/components/admin/products/shared';
 
 const MAX_MEDIA_PER_PRODUCT = 40;
+const CATALOG_MEDIA_PREFIX = 'https://webassests.s3.';
 const MAX_FILES_PER_UPLOAD = 10;
 
 type MediaResult = ActionResult<{ items: MediaItem[] }>;
 
 async function productOrThrow(productId: string) {
-  const product = await db.product.findUnique({ where: { id: productId }, select: { id: true, metalColors: true, _count: { select: { images: true } } } });
+  // partner-catalogue photos don't count towards the limit — it is for the store's own uploads
+  const product = await db.product.findUnique({
+    where: { id: productId },
+    select: { id: true, metalColors: true, _count: { select: { images: { where: { NOT: { url: { startsWith: CATALOG_MEDIA_PREFIX } } } } } } },
+  });
   if (!product) throw new ActionError('This product no longer exists.');
   return product;
 }

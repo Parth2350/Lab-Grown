@@ -87,6 +87,12 @@ export function CartLineItem({ line, compact, onNavigate }: { line: CartLine; co
               <dd>{line.diamond.summary}</dd>
             </div>
           )}
+          {line.details && (
+            <div>
+              <dt className="sr-only">Options</dt>
+              <dd>{line.details}</dd>
+            </div>
+          )}
           {line.option && (
             <div>
               <dt className="sr-only">Diamonds</dt>

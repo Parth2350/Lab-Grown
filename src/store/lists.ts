@@ -35,10 +35,10 @@ function makeList(name: string, max: number, version = 1) {
   );
 }
 
-export const useWishlist = makeList('aurevia-wishlist', 100);
-export const useCompare = makeList('aurevia-compare', 4);
-// v2: cards saved before the switch to INR carried dollar prices
-export const useRecentlyViewed = makeList('aurevia-recent', 12, 2);
+// v2 (wishlist, compare) / v3 (recent): the demo catalogue was replaced by the partner catalogue
+export const useWishlist = makeList('aurevia-wishlist', 100, 2);
+export const useCompare = makeList('aurevia-compare', 4, 2);
+export const useRecentlyViewed = makeList('aurevia-recent', 12, 3);
 export const COMPARE_MAX = 4;
 
 type SearchHistory = { terms: string[]; push: (t: string) => void; clear: () => void };

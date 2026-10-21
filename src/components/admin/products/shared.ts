@@ -4,6 +4,7 @@
  * browser-only imports here.
  */
 import type { ArtSpec } from '@/components/art/JewelryArt';
+import type { ProductObject } from '@/lib/server/admin/product-object';
 import { DIAMOND_CLARITIES, DIAMOND_COLORS, METAL_COLORS, PURITIES, SETTING_TYPES, SHAPE_SLUGS, STYLES, purityMultiplier } from '@/lib/catalog';
 import { retailRound } from '@/lib/utils';
 
@@ -129,6 +130,26 @@ export type ProductDraft = {
 
 export type MediaItem = { id: string; url: string; alt: string | null; kind: string; metalColor: string | null; position: number };
 
+export type CatalogVariantRow = {
+  sku: string;
+  purity: string;
+  metalColor: string;
+  shape: string | null;
+  centerCarat: number | null;
+  totalCarat: number | null;
+  length: string | null;
+  price: number;
+  isActive: boolean;
+};
+
+/** Partner-catalogue facts shown read-only in the editor */
+export type CatalogMeta = {
+  object: ProductObject;
+  variants: CatalogVariantRow[];
+  ringSizes: string[];
+  showEngraving: boolean;
+};
+
 export type ProductMeta = {
   id: string;
   name: string;
@@ -141,6 +162,8 @@ export type ProductMeta = {
   orderCount: number;
   createdAt: string;
   updatedAt: string;
+  /** set for partner-catalogue products */
+  catalog?: CatalogMeta | null;
 };
 
 export type ProductEditorData = { meta: ProductMeta; draft: ProductDraft; media: MediaItem[] };

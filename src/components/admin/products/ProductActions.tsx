@@ -12,7 +12,8 @@ type Props = {
   slug: string;
   name: string;
   isActive: boolean;
-  duplicate: () => Promise<ActionResult<{ id: string }>>;
+  /** omitted for catalogue products (their SKUs belong to the partner catalogue) */
+  duplicate?: () => Promise<ActionResult<{ id: string }>>;
   remove: () => Promise<ActionResult<{ deleted: boolean }>>;
   /** row = compact icon buttons in a table; header = labelled buttons on the edit page */
   layout?: 'row' | 'header';
@@ -57,9 +58,11 @@ export function ProductActions({ id, slug, name, isActive, duplicate, remove, la
         ) : (
           <span className="px-2 text-xs text-taupe">Hidden from store</span>
         )}
-        <ActionButton action={duplicate} variant="outline" icon={<Copy className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />} onDone={onDuplicated} successMessage="Product duplicated">
-          Duplicate
-        </ActionButton>
+        {duplicate && (
+          <ActionButton action={duplicate} variant="outline" icon={<Copy className="h-3.5 w-3.5" strokeWidth={1.5} aria-hidden />} onDone={onDuplicated} successMessage="Product duplicated">
+            Duplicate
+          </ActionButton>
+        )}
         <ActionButton
           action={remove}
           variant="ghost"
@@ -79,7 +82,9 @@ export function ProductActions({ id, slug, name, isActive, duplicate, remove, la
       <Link href={`/admin/products/${id}`} className={iconLink} aria-label={`Edit ${name}`} title="Edit">
         <Pencil className="h-4 w-4" strokeWidth={1.4} />
       </Link>
-      <ActionButton action={duplicate} variant="icon" title={`Duplicate ${name}`} icon={<Copy className="h-4 w-4" strokeWidth={1.4} />} onDone={onDuplicated} successMessage="Product duplicated" />
+      {duplicate && (
+        <ActionButton action={duplicate} variant="icon" title={`Duplicate ${name}`} icon={<Copy className="h-4 w-4" strokeWidth={1.4} />} onDone={onDuplicated} successMessage="Product duplicated" />
+      )}
       {isActive ? (
         <a href={storeHref} target="_blank" rel="noopener noreferrer" className={iconLink} aria-label={`View ${name} on the store (opens in a new tab)`} title="View on store">
           <ExternalLink className="h-4 w-4" strokeWidth={1.4} />

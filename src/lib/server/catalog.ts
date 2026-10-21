@@ -14,7 +14,7 @@ import {
   type IndexRow,
   type Scope,
 } from '@/lib/filters';
-import type { DiamondData, ProductCard, ProductDetail } from '@/lib/types';
+import type { DiamondData, ProductCard, ProductDetail, StoneData } from '@/lib/types';
 import { SHAPES } from '@/lib/catalog';
 
 // ───────────────────────────── catalog index ─────────────────────────────
@@ -43,7 +43,6 @@ export const getCatalogIndex = unstable_cache(
         isNew: true,
         position: true,
         createdAt: true,
-        description: true,
         category: { select: { slug: true, name: true } },
         collections: { select: { slug: true, name: true } },
       },
@@ -76,7 +75,7 @@ export const getCatalogIndex = unstable_cache(
         .replace(/-/g, ' '),
     }));
   },
-  ['catalog-index', 'inr'],
+  ['catalog-index', 'bc1'],
   { tags: ['products'], revalidate: 3600 },
 );
 
@@ -102,8 +101,10 @@ const cardSelect = {
   reviewCount: true,
   isNew: true,
   hasCenterStone: true,
+  madeToOrder: true,
   category: { select: { slug: true, name: true } },
-  images: { orderBy: { position: 'asc' }, select: { url: true, alt: true, kind: true, metalColor: true }, take: 8 },
+  // cards need each metal's first two photos (catalogue products order them first)
+  images: { where: { kind: 'image' }, orderBy: { position: 'asc' }, select: { url: true, alt: true, kind: true, metalColor: true, shape: true }, take: 12 },
   variants: { where: { isActive: true }, select: { purity: true, price: true, stock: true } },
 } satisfies Prisma.ProductSelect;
 
@@ -140,7 +141,7 @@ function toCard(p: CardRow): ProductCard {
     reviewCount: p.reviewCount,
     isNew: p.isNew,
     hasCenterStone: p.hasCenterStone,
-    inStock: p.variants.some((v) => v.stock > 0),
+    inStock: p.madeToOrder || p.variants.some((v) => v.stock > 0),
   };
 }
 
@@ -151,7 +152,7 @@ export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
   return ids.map((id) => map.get(id)).filter(Boolean) as ProductCard[];
 }
 
-export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'inr'], {
+export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'bc1'], {
   tags: ['products'],
   revalidate: 3600,
 });
@@ -309,8 +310,19 @@ export const getProductBySlug = unstable_cache(
         seoTitle: true,
         seoDescription: true,
         requiresSize: true,
+        familyKey: true,
+        sourceTitle: true,
+        productType: true,
+        ringSizes: true,
+        showEngraving: true,
+        optionAxes: true,
+        caratKind: true,
         updatedAt: true,
-        variants: { where: { isActive: true }, select: { id: true, sku: true, purity: true, metalColor: true, price: true, stock: true } },
+        images: { orderBy: { position: 'asc' }, select: { url: true, alt: true, kind: true, metalColor: true, shape: true } },
+        variants: {
+          where: { isActive: true },
+          select: { id: true, sku: true, purity: true, metalColor: true, price: true, stock: true, shape: true, centerCarat: true, totalCarat: true, length: true, stones: true, sizePrices: true },
+        },
         diamondOptions: { orderBy: { position: 'asc' } },
         collections: { select: { slug: true, name: true } },
         reviews: {
@@ -323,6 +335,18 @@ export const getProductBySlug = unstable_cache(
     });
     if (!p || !p.isActive) return null;
     const card = toCard(p as unknown as CardRow);
+    // many variants share one stone breakdown: send each distinct one once (keeps big products' pages light)
+    const stoneSets: StoneData[][] = [];
+    const stoneIdx = new Map<string, number>();
+    const variants = p.variants.map(({ stones, sizePrices, ...v }) => {
+      let stonesIdx: number | null = null;
+      if (Array.isArray(stones) && stones.length) {
+        const k = JSON.stringify(stones);
+        stonesIdx = stoneIdx.get(k) ?? stoneSets.push(stones as StoneData[]) - 1;
+        stoneIdx.set(k, stonesIdx);
+      }
+      return { ...v, stonesIdx, sizePrices: (sizePrices as Record<string, number> | null) ?? null };
+    });
 
     let defaultDiamond: DiamondData | null = null;
     const center = p.diamondOptions.find((o) => o.kind === 'CENTER_STONE');
@@ -344,7 +368,16 @@ export const getProductBySlug = unstable_cache(
       seoTitle: p.seoTitle,
       seoDescription: p.seoDescription,
       requiresSize: p.requiresSize,
-      variants: p.variants,
+      familyKey: p.familyKey,
+      sourceTitle: p.sourceTitle,
+      productType: p.productType,
+      ringSizes: p.ringSizes,
+      showEngraving: p.showEngraving,
+      madeToOrder: p.madeToOrder,
+      optionAxes: p.optionAxes,
+      caratKind: p.caratKind,
+      stoneSets,
+      variants,
       diamondOptions: p.diamondOptions.map((o) => ({
         id: o.id,
         kind: o.kind,
@@ -364,7 +397,7 @@ export const getProductBySlug = unstable_cache(
       updatedAt: p.updatedAt.toISOString(),
     };
   },
-  ['product-by-slug', 'inr'],
+  ['product-by-slug', 'bc2'],
   { tags: ['products'], revalidate: 3600 },
 );
 

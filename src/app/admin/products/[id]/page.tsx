@@ -45,7 +45,7 @@ export default async function EditProductPage({ params }: Props) {
             <span className="font-mono text-[14px]">{data.draft.sku}</span> · Created {formatDate(meta.createdAt)} · Last saved {formatRelative(meta.updatedAt)}
           </>
         }
-        actions={<ProductActions layout="header" id={meta.id} slug={meta.slug} name={meta.name} isActive={meta.isActive} duplicate={duplicateProduct.bind(null, meta.id)} remove={deleteProduct.bind(null, meta.id)} />}
+        actions={<ProductActions layout="header" id={meta.id} slug={meta.slug} name={meta.name} isActive={meta.isActive} duplicate={meta.catalog ? undefined : duplicateProduct.bind(null, meta.id)} remove={deleteProduct.bind(null, meta.id)} />}
       />
       <ProductEditor key={meta.id} productId={meta.id} initial={data.draft} meta={meta} media={data.media} options={options} lowStock={settings.lowStockThreshold} />
     </>

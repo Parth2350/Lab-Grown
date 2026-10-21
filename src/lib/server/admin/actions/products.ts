@@ -144,8 +144,7 @@ const diamondsSchema = z.discriminatedUnion('mode', [
   z.object({ mode: z.literal('TOTAL_WEIGHT'), options: z.array(optionSchema).min(1, 'Add at least one diamond package').max(12, 'Up to 12 diamond packages') }),
 ]);
 
-const productSchema = z
-  .object({
+const productFields = z.object({
     name: zText('Name', 160),
     slug: zSlug,
     sku: skuField('SKU'),
@@ -180,8 +179,9 @@ const productSchema = z
     diamonds: diamondsSchema,
     seoTitle: zOptText(120),
     seoDescription: zOptText(320),
-  })
-  .superRefine((d, ctx) => {
+  });
+
+const productSchema = productFields.superRefine((d, ctx) => {
     if (!d.metalColors.includes(d.defaultMetalColor)) ctx.addIssue({ code: 'custom', path: ['defaultMetalColor'], message: 'Default metal must be one of the offered metal colours' });
     if (!d.purities.includes(d.defaultPurity)) ctx.addIssue({ code: 'custom', path: ['defaultPurity'], message: 'Default purity must be one of the offered purities' });
     const seen = new Map<string, number>();
@@ -197,6 +197,24 @@ const productSchema = z
   });
 
 type ProductInput = z.output<typeof productSchema>;
+
+/** Partner-catalogue products: the admin edits only what the store owns — prices & options come from the catalogue */
+const catalogEditSchema = productFields.pick({
+  name: true,
+  slug: true,
+  subtitle: true,
+  categoryId: true,
+  collectionIds: true,
+  description: true,
+  details: true,
+  isActive: true,
+  isFeatured: true,
+  isTrending: true,
+  isNew: true,
+  position: true,
+  seoTitle: true,
+  seoDescription: true,
+});
 
 // ───────────────────────────── error keys ─────────────────────────────
 
@@ -274,6 +292,28 @@ export async function saveProduct(_prev: FormState<SaveProductResult>, fd: FormD
     const rawId = fdString(fd, 'id');
     const id = rawId ? parse(zCuid, rawId) : null;
     const raw = readPayload(fd);
+
+    // ── partner-catalogue product: save the store-owned fields only, never its variants ──
+    const owner = id ? await db.product.findUnique({ where: { id }, select: { familyKey: true } }) : null;
+    if (id && owner?.familyKey) {
+      const c = parse(catalogEditSchema, raw);
+      const [category, collections, slugTaken] = await Promise.all([
+        db.category.findUnique({ where: { id: c.categoryId }, select: { id: true } }),
+        c.collectionIds.length ? db.collection.findMany({ where: { id: { in: c.collectionIds } }, select: { id: true } }) : Promise.resolve([]),
+        db.product.findFirst({ where: { slug: c.slug, NOT: { id } }, select: { id: true } }),
+      ]);
+      const errors: Record<string, string> = {};
+      if (!category) errors.categoryId = 'Choose a category';
+      if (collections.length !== c.collectionIds.length) errors.collectionIds = 'One of the selected collections no longer exists';
+      if (slugTaken) errors.slug = 'That slug is already used by another product';
+      if (Object.keys(errors).length) fail(errors);
+      const { collectionIds, ...fields } = c;
+      await db.product.update({ where: { id }, data: { ...fields, collections: { set: collectionIds.map((cid) => ({ id: cid })) } } });
+      await revalidateCatalog();
+      revalidateAdmin();
+      return ok(`Saved ${c.name}`, { id, created: false, editor: await getProductEditorData(id) });
+    }
+
     const d = validateProduct(raw);
 
     // Only purity × metal combinations that are offered are saved (server decides, not the client).
@@ -360,6 +400,7 @@ export async function saveProduct(_prev: FormState<SaveProductResult>, fd: FormD
       tags: d.tags,
       hasCenterStone,
       requiresSize: d.requiresSize,
+      showEngraving: d.requiresSize,
       art: artJson(d.art),
       isActive: d.isActive,
       isFeatured: d.isFeatured,
@@ -500,8 +541,9 @@ export async function duplicateProduct(id: string): Promise<ActionResult<{ id: s
       include: { variants: true, diamondOptions: { orderBy: { position: 'asc' } }, collections: { select: { id: true } } },
     });
     if (!src) throw new ActionError('This product no longer exists.');
+    if (src.familyKey) throw new ActionError('Catalogue products can’t be duplicated — their item codes and prices come from the partner catalogue.');
 
-    const rebaseSku = (sku: string, newBase: string, purity: string, metal: string) => (sku.startsWith(src.sku) ? `${newBase}${sku.slice(src.sku.length)}` : variantSku(newBase, purity, metal));
+    const rebaseSku =(sku: string, newBase: string, purity: string, metal: string) => (sku.startsWith(src.sku) ? `${newBase}${sku.slice(src.sku.length)}` : variantSku(newBase, purity, metal));
 
     let slug = '';
     let sku = '';

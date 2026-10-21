@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { ProductMedia } from '@/components/product/ProductMedia';
@@ -10,6 +10,7 @@ import { Badge, DescList } from '../ui';
 import { AttributesSection } from './AttributesSection';
 import { MetalSwitcher } from './ArtPreview';
 import { BasicsSection } from './BasicsSection';
+import { CatalogSection } from './CatalogSection';
 import { DiamondSection, type Eligible } from './DiamondSection';
 import type { DraftUpdate } from './editor-ui';
 import { ImagerySection } from './ImagerySection';
@@ -17,23 +18,12 @@ import { MediaManager } from './MediaManager';
 import { MerchandisingSection } from './MerchandisingSection';
 import { SeoSection } from './SeoSection';
 import { VariantsSection } from './VariantsSection';
-import {
-  gridVariants,
-  normalizeDraft,
-  parseFloatInput,
-  parseMoneyInput,
-  toArtSpec,
-  toPayload,
-  type EditorOptions,
-  type MediaItem,
-  type ProductDraft,
-  type ProductMeta,
-  type SaveProductResult,
-} from './shared';
+import { gridVariants, normalizeDraft, parseFloatInput, parseMoneyInput, toArtSpec, toPayload, type EditorOptions, type MediaItem, type ProductDraft, type ProductMeta, type SaveProductResult } from './shared';
 
 const SECTIONS = [
   { id: 'basics', label: 'Basics' },
   { id: 'merchandising', label: 'Merchandising' },
+  { id: 'catalogue', label: 'Catalogue' },
   { id: 'attributes', label: 'Attributes' },
   { id: 'imagery', label: 'Imagery' },
   { id: 'variants', label: 'Variants' },
@@ -41,10 +31,15 @@ const SECTIONS = [
   { id: 'seo', label: 'SEO' },
 ] as const;
 type SectionId = (typeof SECTIONS)[number]['id'];
+type Section = (typeof SECTIONS)[number];
+/** catalogue products: prices & options come from the partner catalogue, so these sections are replaced by "Catalogue" */
+const CATALOG_HIDES: SectionId[] = ['attributes', 'imagery', 'variants', 'diamonds'];
+const sectionsFor = (catalog: boolean) => SECTIONS.filter((s) => (catalog ? !CATALOG_HIDES.includes(s.id) : s.id !== 'catalogue'));
 
 const SECTION_FIELDS: Record<SectionId, string[]> = {
   basics: ['name', 'slug', 'sku', 'subtitle', 'categoryId', 'collectionIds', 'description', 'details'],
   merchandising: ['isActive', 'isFeatured', 'isTrending', 'isNew', 'position'],
+  catalogue: [],
   attributes: ['metalColors', 'purities', 'defaultMetalColor', 'defaultPurity', 'shapes', 'styles', 'settingType', 'centerCarat', 'totalCarat', 'hasCenterStone', 'requiresSize', 'tags', 'basePrice'],
   imagery: ['art'],
   variants: ['variants'],
@@ -87,10 +82,10 @@ function useUnsavedGuard(dirty: boolean) {
   }, [dirty]);
 }
 
-function useActiveSection() {
+function useActiveSection(sections: readonly Section[]) {
   const [active, setActive] = useState<SectionId>('basics');
   useEffect(() => {
-    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter((el): el is HTMLElement => !!el);
+    const els = sections.map((s) => document.getElementById(s.id)).filter((el): el is HTMLElement => !!el);
     if (!els.length || typeof IntersectionObserver === 'undefined') return;
     const obs = new IntersectionObserver(
       (entries) => {
@@ -101,14 +96,14 @@ function useActiveSection() {
     );
     els.forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [sections]);
   return active;
 }
 
-function SectionLinks({ active, errorCounts, orientation }: { active: SectionId; errorCounts: Partial<Record<SectionId, number>>; orientation: 'vertical' | 'horizontal' }) {
+function SectionLinks({ sections, active, errorCounts, orientation }: { sections: readonly Section[]; active: SectionId; errorCounts: Partial<Record<SectionId, number>>; orientation: 'vertical' | 'horizontal' }) {
   return (
     <ul className={orientation === 'vertical' ? 'space-y-px' : 'flex gap-1'}>
-      {SECTIONS.map((s) => {
+      {sections.map((s) => {
         const n = errorCounts[s.id] ?? 0;
         const isActive = active === s.id;
         return (
@@ -159,7 +154,9 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
   const savedJson = useMemo(() => JSON.stringify(saved), [saved]);
   const dirty = useMemo(() => JSON.stringify(draft) !== savedJson, [draft, savedJson]);
   useUnsavedGuard(dirty);
-  const active = useActiveSection();
+  const catalog = meta?.catalog ?? null;
+  const sections = useMemo(() => sectionsFor(!!catalog), [catalog]);
+  const active = useActiveSection(sections);
 
   const update: DraftUpdate = useCallback((patch) => setDraft((d) => normalizeDraft({ ...d, ...(typeof patch === 'function' ? patch(d) : patch) })), []);
 
@@ -179,7 +176,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
       }
     },
   });
-  const errors = useMemo(() => (form.state && !form.state.ok ? form.state.fieldErrors ?? {} : {}), [form.state]);
+  const errors = useMemo(() => (form.state && !form.state.ok ? (form.state.fieldErrors ?? {}) : {}), [form.state]);
   const errorCounts = useMemo(() => {
     const out: Partial<Record<SectionId, number>> = {};
     for (const k of Object.keys(errors)) {
@@ -232,13 +229,13 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
   // ── preview inputs ──
   const metal = draft.metalColors.includes(previewMetal) ? previewMetal : draft.defaultMetalColor || 'yellow';
   const defaultOption = draft.options.find((o) => o.isDefault);
-  const previewShape = draft.diamondMode === 'CENTER_STONE' ? draft.center.shape || 'round' : draft.shapes[0] ?? 'round';
+  const previewShape = draft.diamondMode === 'CENTER_STONE' ? draft.center.shape || 'round' : (draft.shapes[0] ?? 'round');
   const previewCarat =
     (draft.diamondMode === 'CENTER_STONE'
-      ? parseFloatInput(draft.centerCarat) ?? parseFloatInput(draft.center.minCarat)
+      ? (parseFloatInput(draft.centerCarat) ?? parseFloatInput(draft.center.minCarat))
       : draft.diamondMode === 'TOTAL_WEIGHT'
-        ? parseFloatInput(defaultOption?.totalCarat ?? '') ?? parseFloatInput(draft.totalCarat)
-        : parseFloatInput(draft.centerCarat) ?? parseFloatInput(draft.totalCarat)) ?? 1;
+        ? (parseFloatInput(defaultOption?.totalCarat ?? '') ?? parseFloatInput(draft.totalCarat))
+        : (parseFloatInput(draft.centerCarat) ?? parseFloatInput(draft.totalCarat))) ?? 1;
   const spec = toArtSpec(draft.art);
 
   // ── summary ──
@@ -260,7 +257,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
   return (
     <form ref={formRef} onSubmit={onSubmit} noValidate aria-label={productId ? `Edit ${saved.name}` : 'New product'}>
       <nav aria-label="Editor sections" className="no-scrollbar sticky top-14 z-30 -mx-4 mb-4 overflow-x-auto border-b border-line bg-[#F7F4EE]/95 px-4 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 xl:hidden">
-        <SectionLinks active={active} errorCounts={errorCounts} orientation="horizontal" />
+        <SectionLinks sections={sections} active={active} errorCounts={errorCounts} orientation="horizontal" />
       </nav>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(0,1fr)_330px]">
@@ -268,27 +265,33 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
           <FormBanner state={form.state && !form.state.ok ? form.state : null} />
           <BasicsSection draft={draft} update={update} errors={errors} options={options} slugTouched={slugTouched} setSlugTouched={setSlugTouched} />
           <MerchandisingSection draft={draft} update={update} errors={errors} />
-          <AttributesSection draft={draft} update={update} errors={errors} />
-          <ImagerySection
-            draft={draft}
-            update={update}
-            errors={errors}
-            previewMetal={metal}
-            setPreviewMetal={setPreviewMetal}
-            previewShape={previewShape}
-            previewCarat={previewCarat}
-            media={
-              productId ? (
-                <MediaManager productId={productId} productName={saved.name} items={mediaItems} onItemsChange={setMediaItems} metals={saved.metalColors} />
-              ) : (
-                <p className="border border-dashed border-line bg-ivory/60 px-4 py-4 text-[15px] text-taupe">
-                  Save the product first, then upload photos and video here. Uploaded photos replace the illustration on the storefront.
-                </p>
-              )
-            }
-          />
-          <VariantsSection draft={draft} update={update} errors={errors} lowStock={lowStock} />
-          <DiamondSection draft={draft} update={update} errors={errors} eligible={eligible} setEligible={setEligible} />
+          {catalog && productId ? (
+            <CatalogSection catalog={catalog} media={<MediaManager productId={productId} productName={saved.name} items={mediaItems} onItemsChange={setMediaItems} metals={saved.metalColors} />} />
+          ) : (
+            <>
+              <AttributesSection draft={draft} update={update} errors={errors} />
+              <ImagerySection
+                draft={draft}
+                update={update}
+                errors={errors}
+                previewMetal={metal}
+                setPreviewMetal={setPreviewMetal}
+                previewShape={previewShape}
+                previewCarat={previewCarat}
+                media={
+                  productId ? (
+                    <MediaManager productId={productId} productName={saved.name} items={mediaItems} onItemsChange={setMediaItems} metals={saved.metalColors} />
+                  ) : (
+                    <p className="border border-dashed border-line bg-ivory/60 px-4 py-4 text-[15px] text-taupe">
+                      Save the product first, then upload photos and video here. Uploaded photos replace the illustration on the storefront.
+                    </p>
+                  )
+                }
+              />
+              <VariantsSection draft={draft} update={update} errors={errors} lowStock={lowStock} />
+              <DiamondSection draft={draft} update={update} errors={errors} eligible={eligible} setEligible={setEligible} />
+            </>
+          )}
           <SeoSection draft={draft} update={update} errors={errors} />
         </div>
 
@@ -296,7 +299,7 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
           <div className="no-scrollbar sticky top-[76px] max-h-[calc(100vh-150px)] space-y-4 overflow-y-auto">
             <nav aria-label="Editor sections" className="border border-line bg-white py-2">
               <p className="px-3 pb-1.5 text-[12px] font-medium uppercase tracking-[0.2em] text-taupe">On this page</p>
-              <SectionLinks active={active} errorCounts={errorCounts} orientation="vertical" />
+              <SectionLinks sections={sections} active={active} errorCounts={errorCounts} orientation="vertical" />
             </nav>
 
             <div className="border border-line bg-white">
@@ -320,20 +323,36 @@ export function ProductEditor({ productId, initial, meta, media, options, lowSto
                 <DescList
                   className="grid-cols-[minmax(84px,auto)_1fr] text-[14.5px]"
                   items={[
-                    [
-                      'From',
-                      fromEstimate != null ? (
-                        <span key="from">
-                          {formatMoney(fromEstimate)} <span className="text-[13px] text-taupe">est.</span>
-                        </span>
-                      ) : (
-                        <span key="from" className="text-taupe">
-                          {minVariant != null ? `${formatMoney(minVariant)} + diamond` : '—'}
-                        </span>
-                      ),
-                    ],
-                    ['Variants', `${activeVariants.length} active`],
-                    ['Stock', <span key="stock" className={totalStock === 0 && activeVariants.length ? 'text-danger' : undefined}>{totalStock.toLocaleString()} units</span>],
+                    ...((catalog
+                      ? [
+                          ['Price', `${formatMoney(catalog.object.priceFrom * 100)}${catalog.object.priceTo > catalog.object.priceFrom ? ` – ${formatMoney(catalog.object.priceTo * 100)}` : ''}`],
+                          ['Variants', `${catalog.variants.filter((v) => v.isActive).length} live`],
+                          ['Stock', 'Made to order'],
+                        ]
+                      : []) as [string, string][]),
+                    ...(catalog
+                      ? []
+                      : ([
+                          [
+                            'From',
+                            fromEstimate != null ? (
+                              <span key="from">
+                                {formatMoney(fromEstimate)} <span className="text-[13px] text-taupe">est.</span>
+                              </span>
+                            ) : (
+                              <span key="from" className="text-taupe">
+                                {minVariant != null ? `${formatMoney(minVariant)} + diamond` : '—'}
+                              </span>
+                            ),
+                          ],
+                          ['Variants', `${activeVariants.length} active`],
+                          [
+                            'Stock',
+                            <span key="stock" className={totalStock === 0 && activeVariants.length ? 'text-danger' : undefined}>
+                              {totalStock.toLocaleString()} units
+                            </span>,
+                          ],
+                        ] as [string, ReactNode][])),
                     ['Photos', productId ? (photoCount ? `${photoCount} — replaces illustration` : 'Illustration only') : 'After first save'],
                     ...(meta
                       ? ([

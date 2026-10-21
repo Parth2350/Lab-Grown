@@ -2,7 +2,8 @@
 //   1. generate the Prisma client
 //   2. apply pending migrations
 //   3. on the very first deploy (empty database) load the demo catalogue
-//   4. build Next.js
+//   4. production: import the partner catalogue (data/catalog) — once per catalogue version, in one transaction
+//   5. build Next.js
 //
 // Works with DATABASE_URL directly or with the variables Vercel's Postgres
 // integrations inject (Neon / Supabase: POSTGRES_PRISMA_URL + an unpooled URL).
@@ -38,5 +39,8 @@ if (products === 0) {
 } else {
   console.log(`Database already has ${products} products — skipping seed.`);
 }
+
+// Preview deployments never import, so they can't change live data.
+if (env.VERCEL_ENV === 'production' || env.CATALOG_IMPORT === '1') run('node scripts/catalog/import.mjs', { DATABASE_URL: direct });
 
 run('npx next build');

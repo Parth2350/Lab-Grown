@@ -1,7 +1,9 @@
 'use client';
 import { Check, ChevronDown, Gem, RefreshCcw, Ruler, Share2, ShieldCheck, Truck } from 'lucide-react';
 import { useState } from 'react';
-import { METAL_COLORS, PURITIES, RING_SIZES, label } from '@/lib/catalog';
+import { METAL_COLORS, PURITIES, SHAPE_SLUGS, label } from '@/lib/catalog';
+import { fmtCarat } from '@/lib/variant';
+import { ShapeIcon } from '@/components/art/ShapeIcon';
 import type { ProductCard, ProductDetail } from '@/lib/types';
 import { cn, formatMoney } from '@/lib/utils';
 import { useUI } from '@/store/ui';
@@ -55,15 +57,13 @@ function SizeGuide({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-/** "28 Oct": the latest dispatch date, counted in India time (weekends don't count for in-stock pieces) */
-function shipBy(inStock: boolean) {
+/** "28 Oct": the latest dispatch date in India time — 5 business days in stock, 10 when made to order */
+function shipBy(madeToOrder: boolean) {
   const d = new Date(Date.now() + 5.5 * 36e5);
-  if (!inStock) d.setUTCDate(d.getUTCDate() + 21);
-  else
-    for (let n = 0; n < 5; ) {
-      d.setUTCDate(d.getUTCDate() + 1);
-      if (d.getUTCDay() % 6 !== 0) n++;
-    }
+  for (let n = 0; n < (madeToOrder ? 10 : 5); ) {
+    d.setUTCDate(d.getUTCDate() + 1);
+    if (d.getUTCDay() % 6 !== 0) n++;
+  }
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 }
 
@@ -125,6 +125,40 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
             </button>
           ))}
         </OptionGroup>
+
+        {c.choices.shapes.length > 0 && (
+          <OptionGroup label="Shape" value={label.shape(c.shape)}>
+            {c.choices.shapes.map((s) => {
+              const classic = (SHAPE_SLUGS as string[]).includes(s);
+              return (
+                <button key={s} type="button" title={label.shape(s)} aria-label={label.shape(s)} aria-pressed={s === c.shape} onClick={() => c.setShape(s)} className={cn(optionBtn(s === c.shape), !classic && 'gap-1')}>
+                  <ShapeIcon shape={s} size={24} className={s === c.shape ? 'text-ink' : 'text-charcoal/70'} />
+                  {!classic && <span className="max-w-[5.5rem] text-[11px] leading-tight">{label.shape(s)}</span>}
+                </button>
+              );
+            })}
+          </OptionGroup>
+        )}
+
+        {c.choices.carats.length > 0 && (
+          <OptionGroup label={p.caratKind === 'total' ? 'Total Carat' : 'Center Carat'} value={c.selectedCarat != null ? `${fmtCarat(c.selectedCarat)} ct` : undefined}>
+            {c.choices.carats.map((ct) => (
+              <button key={ct} type="button" aria-pressed={ct === c.selectedCarat} onClick={() => c.setCarat(ct)} className={optionBtn(ct === c.selectedCarat)}>
+                <span className="text-sm font-medium leading-none">{fmtCarat(ct)}</span>
+              </button>
+            ))}
+          </OptionGroup>
+        )}
+
+        {c.choices.lengths.length > 0 && (
+          <OptionGroup label="Length" value={c.selectedLength ? `${c.selectedLength} in` : undefined}>
+            {c.choices.lengths.map((l) => (
+              <button key={l} type="button" aria-pressed={l === c.selectedLength} onClick={() => c.setLength(l)} className={optionBtn(l === c.selectedLength)}>
+                <span className="text-sm font-medium leading-none">{l} in</span>
+              </button>
+            ))}
+          </OptionGroup>
+        )}
 
         {c.centerOption && (
           <CenterDiamondPicker
@@ -193,7 +227,7 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
               </button>
             </div>
             <ul className="mt-2 space-y-1">
-              {RING_SIZES.map((s) => (
+              {c.sizes.map((s) => (
                 <li key={s}>
                   <button
                     type="button"
@@ -218,8 +252,8 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
         </div>
       )}
 
-      {/* free engraving (rings) */}
-      {p.requiresSize && (
+      {/* free engraving */}
+      {p.showEngraving && (
         <div className="mt-6">
           <div className="flex items-baseline justify-between gap-3">
             <label htmlFor={`engraving-${p.id}`} className="text-sm font-semibold text-ink">
@@ -267,7 +301,10 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
                   : 'to be chosen'
                 : null,
               option: !c.centerOption ? c.option?.label ?? null : null,
+              details: c.details,
               shape: c.shape,
+              carat: c.catalog ? c.selectedCarat : null,
+              length: c.selectedLength,
               ringSize: c.ringSize || null,
               requiresSize: p.requiresSize,
               engraving: c.engraving.trim() || null,
@@ -300,10 +337,10 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
         <Truck className="mt-0.5 h-5 w-5 shrink-0 text-gold" strokeWidth={1.25} aria-hidden />
         <p className="text-sm leading-relaxed text-ink">
           <span className="font-semibold">
-            Ships by <span suppressHydrationWarning>{shipBy(c.inStock)}</span>
+            Ships by <span suppressHydrationWarning>{shipBy(c.madeToOrder)}</span>
           </span>
           <br />
-          {c.inStock ? (
+          {!c.madeToOrder ? (
             <>
               <span className="font-semibold">In stock</span> — ready to ship in 3–5 business days.
             </>

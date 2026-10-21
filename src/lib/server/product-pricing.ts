@@ -8,10 +8,12 @@ import { db } from './db';
 export async function recomputeFromPrice(productId: string) {
   const p = await db.product.findUnique({
     where: { id: productId },
-    select: { centerCarat: true, totalCarat: true, variants: { where: { isActive: true }, select: { price: true } }, diamondOptions: true },
+    select: { centerCarat: true, totalCarat: true, variants: { select: { price: true, isActive: true } }, diamondOptions: true },
   });
   if (!p) return;
-  const minVariant = p.variants.length ? Math.min(...p.variants.map((v) => v.price)) : 0;
+  const live = p.variants.filter((v) => v.isActive);
+  const minVariant = live.length ? Math.min(...live.map((v) => v.price)) : 0;
+  const maxVariant = live.length ? Math.max(...live.map((v) => v.price)) : 0;
   let diamond = 0;
   const center = p.diamondOptions.find((o) => o.kind === 'CENTER_STONE');
   if (center?.shape) {
@@ -30,6 +32,8 @@ export async function recomputeFromPrice(productId: string) {
     where: { id: productId },
     data: {
       fromPrice: minVariant + diamond,
+      priceTo: maxVariant + diamond,
+      variantCount: p.variants.length,
       ...(def?.totalCarat != null ? { totalCarat: def.totalCarat } : {}),
       caratSort: p.centerCarat ?? def?.totalCarat ?? p.totalCarat ?? 0,
     },

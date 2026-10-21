@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Package, Plus, Search, Star } from 'lucide-react';
+import { Package, Plus, Search } from 'lucide-react';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { ProductMedia } from '@/components/product/ProductMedia';
 import { pageMeta } from '@/lib/seo';
@@ -10,6 +10,8 @@ import { listProducts } from '@/lib/server/admin/queries/products';
 import { AutoSubmitSelect, ToggleAction } from '@/components/admin/forms';
 import { formatMoney, formatNumber } from '@/components/admin/format';
 import { ProductActions } from '@/components/admin/products/ProductActions';
+import { ProductObjectButton } from '@/components/admin/products/ProductObjectButton';
+import { METAL_COLORS } from '@/lib/catalog';
 import { PRODUCT_SORTS } from '@/components/admin/products/shared';
 import { Badge, EmptyState, FilterBar, FilterLabel, PageHeader, Pagination, TableWrap, Tabs, fieldSm, selectChevron, selectSm, table } from '@/components/admin/ui';
 
@@ -22,7 +24,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const params = await searchParams;
   const data = await listProducts(params);
   const { filters, counts, lowStockThreshold } = data;
-  const current = cleanParams({ q: filters.q, category: filters.category, status: filters.status, sort: filters.sort === 'newest' ? '' : filters.sort, page: String(data.page) });
+  const current = cleanParams({ q: filters.q, category: filters.category, status: filters.status, sort: filters.sort === 'position' ? '' : filters.sort, page: String(data.page) });
   const filtered = !!(filters.q || filters.category || filters.status);
   const activeCategory = data.categories.find((c) => c.slug === filters.category);
 
@@ -86,7 +88,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         <Button type="submit" size="sm" variant="outline">
           Search
         </Button>
-        {(filters.q || filters.category || filters.sort !== 'newest') && (
+        {(filters.q || filters.category || filters.sort !== 'position') && (
           <Link href={filters.status ? `${BASE}?status=${filters.status}` : BASE} className="inline-flex h-9 items-center px-2 text-xs text-taupe underline-offset-4 hover:text-ink hover:underline">
             Clear
           </Link>
@@ -127,23 +129,23 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
       ) : (
         <>
           <TableWrap>
-            <table className={`${table.base} min-w-[980px]`}>
+            <table className={`${table.base} min-w-[1180px]`}>
               <thead className={table.head}>
                 <tr>
                   <th scope="col" className={table.th}>
                     Product
                   </th>
                   <th scope="col" className={table.thRight}>
-                    From
+                    Price
                   </th>
-                  <th scope="col" className={table.thRight}>
-                    Stock
+                  <th scope="col" className={table.th}>
+                    Metal &amp; purity
+                  </th>
+                  <th scope="col" className={table.th}>
+                    Shapes &amp; carats
                   </th>
                   <th scope="col" className={table.thRight}>
                     Variants
-                  </th>
-                  <th scope="col" className={table.th}>
-                    Rating
                   </th>
                   <th scope="col" className={table.th}>
                     Flags
@@ -158,62 +160,97 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
               </thead>
               <tbody>
                 {data.items.map((p) => {
+                  const o = p.object;
                   const inactiveVariants = p.totalVariants - p.activeVariants;
-                  const stockTone = p.stock === 0 ? 'text-danger' : p.stock <= lowStockThreshold ? 'text-[#7A5718]' : 'text-ink';
+                  const carats = o.centerCarats.length ? o.centerCarats : o.totalCarats;
+                  const caratKind = o.centerCarats.length ? 'Centre' : 'Total';
+                  const range = (xs: number[]) => (xs.length > 1 ? `${xs[0]}–${xs[xs.length - 1]} ct` : `${xs[0]} ct`);
+                  const stockTone = p.stock === 0 ? 'text-danger' : p.stock <= lowStockThreshold ? 'text-[#7A5718]' : 'text-taupe';
                   return (
                     <tr key={p.id} className={table.row}>
                       <td className={table.td}>
-                        <div className="flex items-center gap-3">
-                          <Link href={`/admin/products/${p.id}`} className="art-tile relative block h-14 w-14 shrink-0 overflow-hidden border border-line" tabIndex={-1} aria-hidden>
-                            <ProductMedia name={p.name} art={p.art} images={p.images} metal={p.metal} shape={p.shape} carat={p.carat} sizes="56px" />
+                        <div className="flex items-start gap-3">
+                          <Link href={`/admin/products/${p.id}`} className="group/img art-tile relative block h-16 w-16 shrink-0 overflow-hidden border border-line" tabIndex={-1} aria-hidden>
+                            <ProductMedia name={p.name} art={p.art} images={p.images} metal={p.metal} shape={p.shape} carat={p.carat} sizes="64px" />
+                            {o.hoverImage && (
+                              <span className="absolute inset-0 opacity-0 transition-opacity group-hover/img:opacity-100">
+                                <ProductMedia name={p.name} art={p.art} images={p.images} metal={p.metal} shape={p.shape} carat={p.carat} view={1} sizes="64px" />
+                              </span>
+                            )}
                           </Link>
                           <div className="min-w-0">
-                            <Link href={`/admin/products/${p.id}`} className="block max-w-[320px] truncate font-medium text-ink underline-offset-4 hover:underline">
-                              {p.name}
+                            <Link href={`/admin/products/${p.id}`} className="block max-w-[340px] truncate font-medium text-ink underline-offset-4 hover:underline">
+                              {o.displayTitle}
                             </Link>
+                            {o.title !== o.displayTitle && (
+                              <p className="max-w-[340px] truncate text-[13px] text-taupe" title={o.title}>
+                                {o.title}
+                              </p>
+                            )}
                             <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-taupe">
-                              <span className="font-mono text-[13px]">{p.sku}</span>
+                              <span className="font-mono text-[12.5px]">{o.familyKey}</span>
+                              <span aria-hidden>·</span>
+                              <span>{o.productType}</span>
                               <span aria-hidden>·</span>
                               <Link href={`${BASE}?category=${p.category.slug}`} className="hover:text-ink">
                                 {p.category.name}
                               </Link>
                               {!p.category.isActive && <span className="text-[#7A5718]">(category hidden)</span>}
                             </p>
+                            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1">
+                              {p.catalog && <Badge tone="info">Catalogue</Badge>}
+                              <ProductObjectButton object={o} name={o.displayTitle} />
+                            </div>
                           </div>
                         </div>
                       </td>
-                      <td className={table.tdRight}>{formatMoney(p.fromPrice)}</td>
-                      <td className={table.tdRight}>
-                        <p className={`font-medium ${stockTone}`}>{formatNumber(p.stock)}</p>
-                        {p.stock === 0 ? (
-                          <Badge tone="danger" className="mt-0.5">
-                            Out of stock
-                          </Badge>
-                        ) : p.stock <= lowStockThreshold ? (
-                          <Badge tone="warning" className="mt-0.5">
-                            Low stock
-                          </Badge>
-                        ) : p.soldOutVariants > 0 ? (
+                      <td className={`${table.tdRight} whitespace-nowrap`}>
+                        <p>
+                          {formatMoney(p.fromPrice)}
+                          {o.priceTo > o.priceFrom && <span className="text-taupe"> – {formatMoney(o.priceTo * 100)}</span>}
+                        </p>
+                        {o.defaultPrice != null && <p className="text-[13px] text-taupe">Default {formatMoney(o.defaultPrice * 100)}</p>}
+                      </td>
+                      <td className={table.td}>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {o.metalTypes.map((m) => {
+                            const img = (o.colorImages as Record<string, string>)[m];
+                            const swatch = METAL_COLORS.find((x) => x.label === m)?.swatch;
+                            const isDefault = m === o.defaultMetalType;
+                            return img ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img key={m} src={img} alt={m} title={m} loading="lazy" className={`h-8 w-8 border object-cover ${isDefault ? 'border-ink' : 'border-line'}`} />
+                            ) : (
+                              <span key={m} title={m} className={`h-5 w-5 rounded-full border ${isDefault ? 'border-ink' : 'border-line'}`} style={{ background: swatch }} />
+                            );
+                          })}
+                        </div>
+                        <p className="mt-1 flex flex-wrap gap-1 text-[12.5px]">
+                          {o.metalStamps.map((s) => (
+                            <span key={s} className={`border px-1.5 ${s === o.defaultMetalStamp ? 'border-ink text-ink' : 'border-line text-taupe'}`}>
+                              {s}
+                            </span>
+                          ))}
+                        </p>
+                      </td>
+                      <td className={table.td}>
+                        <p className="max-w-[220px] truncate text-[14px]" title={o.shapes.join(', ')}>
+                          {o.shapes.slice(0, 3).join(', ') || '—'}
+                          {o.shapes.length > 3 && <span className="text-taupe"> +{o.shapes.length - 3}</span>}
+                        </p>
+                        {carats.length > 0 && (
                           <p className="text-[13px] text-taupe">
-                            {p.soldOutVariants} variant{p.soldOutVariants === 1 ? '' : 's'} sold out
+                            {caratKind} {range(carats)}
+                            {carats.length > 1 && ` · ${carats.length} sizes`}
                           </p>
-                        ) : null}
+                        )}
+                        {o.lengths.length > 0 && <p className="text-[13px] text-taupe">{o.lengths.join(' / ')} in</p>}
                       </td>
                       <td className={table.tdRight}>
                         <p>{formatNumber(p.activeVariants)}</p>
                         {inactiveVariants > 0 && <p className="text-[13px] text-taupe">+{inactiveVariants} inactive</p>}
-                      </td>
-                      <td className={table.td}>
-                        {p.reviewCount > 0 ? (
-                          <span className="inline-flex items-center gap-1 whitespace-nowrap">
-                            <Star className="h-3.5 w-3.5 fill-gold text-gold" strokeWidth={1.2} aria-hidden />
-                            {p.rating.toFixed(1)}
-                            <span className="text-xs text-taupe">({formatNumber(p.reviewCount)})</span>
-                            <span className="sr-only">out of 5 from {p.reviewCount} reviews</span>
-                          </span>
-                        ) : (
-                          <span className="text-xs text-taupe">No reviews</span>
-                        )}
+                        {o.defaultItemCode && <p className="font-mono text-[12px] text-taupe">{o.defaultItemCode}</p>}
+                        {!p.catalog && <p className={`text-[13px] ${stockTone}`}>{formatNumber(p.stock)} in stock</p>}
                       </td>
                       <td className={table.td}>
                         <div className="flex flex-wrap gap-1">
@@ -227,7 +264,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
                         <ToggleAction checked={p.isActive} action={setProductActive.bind(null, p.id)} label={`${p.name} visible on store`} onLabel="Live" offLabel="Hidden" />
                       </td>
                       <td className={`${table.td} whitespace-nowrap`}>
-                        <ProductActions id={p.id} slug={p.slug} name={p.name} isActive={p.isActive} duplicate={duplicateProduct.bind(null, p.id)} remove={deleteProduct.bind(null, p.id)} />
+                        <ProductActions id={p.id} slug={p.slug} name={p.name} isActive={p.isActive} duplicate={p.catalog ? undefined : duplicateProduct.bind(null, p.id)} remove={deleteProduct.bind(null, p.id)} />
                       </td>
                     </tr>
                   );

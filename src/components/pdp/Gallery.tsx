@@ -7,6 +7,7 @@ import { createPortal } from 'react-dom';
 import { JewelryArt, type ArtSpec } from '@/components/art/JewelryArt';
 import type { MediaImage } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { isCatalogMedia } from '@/lib/catalog';
 import { useMounted } from '@/hooks/use-mounted';
 import { LazyMount } from '@/components/ui/LazyMount';
 
@@ -30,9 +31,11 @@ type Props = {
   compact?: boolean;
 };
 
-function buildSlides(images: MediaImage[], metal: string, name: string): Slide[] {
-  const media = images.filter((i) => !i.metalColor || i.metalColor === metal);
-  const pool = media.length ? media : images;
+function buildSlides(images: MediaImage[], metal: string, shape: string, name: string): Slide[] {
+  // catalogue photos are shot per metal and per diamond shape: show the selected combination
+  const byShape = images.some((i) => i.shape === shape) ? images.filter((i) => !i.shape || i.shape === shape) : images;
+  const media = byShape.filter((i) => !i.metalColor || i.metalColor === metal);
+  const pool = media.length ? media : byShape.length ? byShape : images;
   if (pool.length) {
     return pool.map((m, i) => ({
       id: `m${i}`,
@@ -50,7 +53,7 @@ function buildSlides(images: MediaImage[], metal: string, name: string): Slide[]
 }
 
 function SlideView({ s, art, metal, shape, carat, name, sizes, priority }: { s: Slide; art: ArtSpec | null; metal: string; shape: string; carat: number; name: string; sizes: string; priority?: boolean }) {
-  if (s.kind === 'image') return <Image src={s.url!} alt={s.alt ?? name} fill sizes={sizes} priority={priority} className="object-cover" />;
+  if (s.kind === 'image') return <Image src={s.url!} alt={s.alt ?? name} fill sizes={sizes} priority={priority} unoptimized={isCatalogMedia(s.url)} className="object-cover" />;
   if (s.kind === 'video') return <video src={s.url} className="h-full w-full object-cover" autoPlay muted loop playsInline controls aria-label={`${name} video`} />;
   return (
     <div className="absolute inset-[6%]" style={s.zoom ? { transform: `scale(${s.zoom})` } : undefined}>
@@ -60,7 +63,7 @@ function SlideView({ s, art, metal, shape, carat, name, sizes, priority }: { s: 
 }
 
 export function Gallery({ name, art, images, metal, shape, carat, compact }: Props) {
-  const slides = buildSlides(images, metal, name);
+  const slides = buildSlides(images, metal, shape, name);
   const [index, setIndex] = useState(0);
   const [zoom, setZoom] = useState<{ i: number; x: number; y: number } | null>(null);
   const [full, setFull] = useState(false);

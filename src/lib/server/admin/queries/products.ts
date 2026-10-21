@@ -5,6 +5,7 @@ import { db } from '@/lib/server/db';
 import type { MediaImage } from '@/lib/types';
 import { pageCount, paging, sp, spEnum, type SearchParams } from '../list';
 import { readStoreSettings } from '../settings';
+import { productObject, productObjectSelect, type ProductObject } from '../product-object';
 import {
   PRODUCT_SORTS,
   PRODUCT_STATUSES,
@@ -47,9 +48,14 @@ export type ProductListRow = {
   activeVariants: number;
   totalVariants: number;
   soldOutVariants: number;
+  /** partner catalogue product (prices & options come from the catalogue) */
+  catalog: boolean;
+  /** the product in the catalogue's own object shape */
+  object: ProductObject;
 };
 
 const listSelect = {
+  ...productObjectSelect,
   id: true,
   slug: true,
   name: true,
@@ -67,7 +73,7 @@ const listSelect = {
   centerCarat: true,
   totalCarat: true,
   category: { select: { name: true, slug: true, isActive: true } },
-  images: { where: { kind: 'image' }, orderBy: [{ position: 'asc' }, { createdAt: 'asc' }], take: 6, select: { url: true, alt: true, kind: true, metalColor: true } },
+  images: { where: { kind: 'image' }, orderBy: [{ position: 'asc' }, { createdAt: 'asc' }], take: 16, select: { url: true, alt: true, kind: true, metalColor: true, shape: true } },
   _count: { select: { variants: true } },
 } satisfies Prisma.ProductSelect;
 
@@ -106,7 +112,7 @@ export async function listProducts(params: SearchParams) {
   const q = sp(params, 'q');
   const category = sp(params, 'category');
   const status = spEnum(params, 'status', PRODUCT_STATUSES);
-  const sort = spEnum(params, 'sort', PRODUCT_SORTS.map((s) => s.value), 'newest');
+  const sort = spEnum(params, 'sort', PRODUCT_SORTS.map((s) => s.value), 'position');
   const { page, skip, take, pageSize } = paging(params, PRODUCTS_PAGE_SIZE);
 
   const base: Prisma.ProductWhereInput = { AND: [searchWhere(q) ?? {}, category ? { category: { slug: category } } : {}] };
@@ -171,6 +177,8 @@ export async function listProducts(params: SearchParams) {
     activeVariants: stockBy.get(r.id)?.active ?? 0,
     totalVariants: r._count.variants,
     soldOutVariants: soldOutBy.get(r.id) ?? 0,
+    catalog: !!r.familyKey,
+    object: productObject(r),
   }));
 
   return {
@@ -215,14 +223,15 @@ export async function getProductEditorData(id: string): Promise<ProductEditorDat
       variants: { orderBy: [{ purity: 'asc' }, { metalColor: 'asc' }] },
       diamondOptions: { orderBy: [{ position: 'asc' }, { id: 'asc' }] },
       collections: { select: { id: true } },
-      category: { select: { isActive: true } },
-      images: { orderBy: [{ position: 'asc' }, { createdAt: 'asc' }], select: { id: true, url: true, alt: true, kind: true, metalColor: true, position: true } },
+      category: { select: { isActive: true, name: true } },
+      images: { orderBy: [{ position: 'asc' }, { createdAt: 'asc' }], select: { id: true, url: true, alt: true, kind: true, metalColor: true, shape: true, position: true } },
       _count: { select: { orderItems: true } },
     },
   });
   if (!p) return null;
 
-  const variantIds = p.variants.map((v) => v.id);
+  const catalog = !!p.familyKey;
+  const variantIds = catalog ? [] : p.variants.map((v) => v.id);
   const [orderRefs, cartRefs] = variantIds.length
     ? await Promise.all([
         db.orderItem.groupBy({ by: ['variantId'], where: { variantId: { in: variantIds } }, _count: { _all: true } }),
@@ -232,7 +241,8 @@ export async function getProductEditorData(id: string): Promise<ProductEditorDat
   const orderBy = new Map(orderRefs.map((r) => [r.variantId, r._count._all]));
   const cartBy = new Map(cartRefs.map((r) => [r.variantId, r._count._all]));
 
-  const variants: VariantDraft[] = p.variants.map((v) => ({
+  // catalogue products keep their (many) variants out of the form — they are shown read-only instead
+  const variants: VariantDraft[] = (catalog ? [] : p.variants).map((v) => ({
     id: v.id,
     purity: v.purity,
     metalColor: v.metalColor,
@@ -312,6 +322,24 @@ export async function getProductEditorData(id: string): Promise<ProductEditorDat
       orderCount: p._count.orderItems,
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString(),
+      catalog: catalog
+        ? {
+            object: productObject({ ...p, images: p.images.filter((i) => i.kind === 'image'), category: { name: p.category.name } }),
+            variants: p.variants.map((v) => ({
+              sku: v.sku,
+              purity: v.purity,
+              metalColor: v.metalColor,
+              shape: v.shape,
+              centerCarat: v.centerCarat,
+              totalCarat: v.totalCarat,
+              length: v.length,
+              price: v.price,
+              isActive: v.isActive,
+            })),
+            ringSizes: p.ringSizes,
+            showEngraving: p.showEngraving,
+          }
+        : null,
     },
     draft,
     media: p.images,

@@ -1,29 +1,32 @@
-// WhatsApp ordering: adds three different pieces to the bag through the real buttons, then checks
-// that the product page, the bag drawer and the bag page (desktop + phone) all open WhatsApp on the
-// store number with every piece in the message.   npm run qa:whatsapp
+// WhatsApp ordering: adds three different catalogue pieces to the bag through the real buttons — a sized
+// ring with engraving, a piece with shape & carat choices, a plain piece — then checks the product page,
+// the bag drawer and the bag page (desktop + phone) all open WhatsApp on the store number with every piece
+// (and its options) in the message, and that the server prices the bag without complaint.   npm run qa:whatsapp
 import { launch } from './cdp.mjs';
 import { BASE, TMP, projectRequire } from './env.mjs';
 
 const NUMBER = '919824822200';
 const { PrismaClient } = projectRequire('@prisma/client');
 const db = new PrismaClient();
-const pick = (where) => db.product.findFirst({ where: { isActive: true, variants: { some: { stock: { gt: 0 } } }, ...where }, select: { slug: true, name: true } });
-const ring = await pick({ hasCenterStone: true, requiresSize: true });
-const band = await pick({ hasCenterStone: false, diamondOptions: { some: { kind: 'TOTAL_WEIGHT' } } });
-const plain = await pick({ hasCenterStone: false, requiresSize: false, NOT: { slug: band?.slug } });
+const pick = (where) => db.product.findFirst({ where: { isActive: true, familyKey: { not: null }, ...where }, orderBy: { position: 'asc' }, select: { slug: true, name: true, optionAxes: true } });
+const ring = await pick({ requiresSize: true, showEngraving: true, NOT: { ringSizes: { isEmpty: true } } });
+const shaped = await pick({ optionAxes: { hasEvery: ['shape', 'carat'] }, requiresSize: false });
+const plain = await pick({ optionAxes: { isEmpty: true }, requiresSize: false });
 await db.$disconnect();
-const products = [ring, band, plain].filter(Boolean);
+const products = [ring, shaped, plain].filter(Boolean);
 
 let failures = 0;
 const check = (ok, what) => {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${what}`);
   if (!ok) failures++;
 };
+check(products.length === 3, `test products found (${products.map((p) => p.slug).join(', ')})`);
 /** the decoded message of every WhatsApp link on the page whose text matches */
 const waLinks = (b, scope = 'document') =>
   b.eval(`return [...${scope}.querySelectorAll('a[href*="wa.me/"]')]
     .filter((a) => /whatsapp|enquire/i.test(a.textContent) && a.getBoundingClientRect().width > 0)
     .map((a) => { const u = new URL(a.href); return { text: a.textContent.trim(), number: u.pathname.slice(1), msg: u.searchParams.get('text') ?? '' }; })`);
+const price = (b) => b.eval(`return document.querySelector('p[aria-live="polite"]')?.textContent.trim()`);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const b = await launch({ profile: TMP + '/chrome-whatsapp', port: 9341 });
@@ -33,43 +36,60 @@ try {
 
   for (const [i, p] of products.entries()) {
     await b.goto(`${BASE}/products/${p.slug}`, 2500);
-    const hasSize = await b.eval(`return !!document.querySelector('button[id^="ring-size-"]')`);
-    if (hasSize) {
-      // the size is picked from a side drawer
+    const who = `${['ring', 'shape & carat', 'plain'][i]} (${p.slug.slice(0, 40)}…)`;
+    let size = null;
+    if (i === 0) {
+      // the size is picked from a side drawer; bigger sizes use more gold, so the price follows
+      const before = await price(b);
       await b.eval(`document.querySelector('button[id^="ring-size-"]').click(); return 1`);
-      check(await b.waitFor(`[...document.querySelectorAll('[role="dialog"] button')].some((x) => x.textContent.trim() === 'Size 6.5')`, 5000), `${p.name}: ring size drawer opens`);
-      await b.eval(`[...document.querySelectorAll('[role="dialog"] button')].find((x) => x.textContent.trim() === 'Size 6.5').click(); return 1`);
+      check(await b.waitFor(`[...document.querySelectorAll('[role="dialog"] button')].some((x) => /^Size /.test(x.textContent.trim()))`, 5000), `${who}: ring size drawer opens`);
+      size = await b.eval(`const bs = [...document.querySelectorAll('[role="dialog"] button')].filter((x) => /^Size /.test(x.textContent.trim())); const pick = bs[bs.length - 1]; pick.click(); return pick.textContent.trim().replace('Size ', '');`);
       await sleep(500);
-      check(await b.eval(`return document.querySelector('button[id^="ring-size-"]').textContent.includes('Size 6.5')`), `${p.name}: chosen size shows on the page`);
-    }
-    if (i === 1) {
+      check(await b.eval(`return document.querySelector('button[id^="ring-size-"]').textContent.includes('Size ${size}')`), `${who}: chosen size ${size} shows on the page`);
+      const after = await price(b);
+      check(!!before && !!after && before !== after, `${who}: price follows the ring size (${before} → ${after})`);
       await b.eval(`const el = document.querySelector('input[id^="engraving-"]');
         Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(el, 'A & J 2026 forever');
         el.dispatchEvent(new Event('input', { bubbles: true })); return 1`);
     }
+    if (i === 1) {
+      // switch shape, then carat: the URL, price and message follow the exact variant
+      const shape = await b.eval(`const g = [...document.querySelectorAll('fieldset')].find((f) => /^Shape/i.test(f.querySelector('legend')?.textContent ?? '')); const bs = [...g.querySelectorAll('button')]; const next = bs.find((x) => x.getAttribute('aria-pressed') !== 'true'); next.click(); return next.getAttribute('aria-label');`);
+      await sleep(600);
+      const url = await b.eval(`return location.search`);
+      check(/shape=/.test(url), `${who}: choosing ${shape} updates the link (${url})`);
+      const carat = await b.eval(`const g = [...document.querySelectorAll('fieldset')].find((f) => /Carat/i.test(f.querySelector('legend')?.textContent ?? '')); const bs = [...g.querySelectorAll('button')]; const next = bs[bs.length - 1]; next.click(); return next.textContent.trim();`);
+      await sleep(600);
+      const msg = (await waLinks(b)).find((l) => l.text === 'Enquire')?.msg ?? '';
+      check(msg.includes(`Options: ${shape}`) && msg.includes(`${carat} ct`), `${who}: message carries the chosen shape ${shape} and ${carat} ct`);
+    }
     await sleep(400);
     const pdp = (await waLinks(b)).find((l) => l.text === 'Enquire');
-    check(!!pdp && !(await b.eval(`return [...document.querySelectorAll('button')].some((x) => /buy it now/i.test(x.textContent))`)), `${p.name}: "Buy It Now" replaced by the green "Enquire" WhatsApp button`);
-    check(pdp?.number === NUMBER, `${p.name}: product button opens WhatsApp on +${NUMBER}`);
-    check(!!pdp && pdp.msg.includes(p.name) && /Metal: /.test(pdp.msg) && /Price: ₹/.test(pdp.msg) && pdp.msg.includes(`/products/${p.slug}?`), `${p.name}: message has name, metal, price and link`);
-    if (hasSize) check(!!pdp?.msg.includes('Ring size: 6.5'), `${p.name}: message has the chosen ring size`);
-    if (i === 1) check(!!pdp?.msg.includes('Engraving: "A & J 2026 f"'), `${p.name}: message has the engraving (cut to 12 characters)`);
-    if (i === 0) await b.screenshot(TMP + '/wa-product.png');
+    check(!!pdp && !(await b.eval(`return [...document.querySelectorAll('button')].some((x) => /buy it now/i.test(x.textContent))`)), `${who}: green "Enquire" WhatsApp button`);
+    check(pdp?.number === NUMBER, `${who}: opens WhatsApp on +${NUMBER}`);
+    check(!!pdp && pdp.msg.includes(p.name) && /Metal: /.test(pdp.msg) && /Price: ₹/.test(pdp.msg) && /SKU: /.test(pdp.msg) && pdp.msg.includes(`/products/${p.slug}?`), `${who}: message has name, metal, price, item code and link`);
+    if (i === 0) {
+      check(!!pdp?.msg.includes(`Ring size: ${size}`), `${who}: message has ring size ${size}`);
+      check(!!pdp?.msg.includes('Engraving: "A & J 2026 f"'), `${who}: message has the engraving (cut to 12 characters)`);
+      await b.screenshot(TMP + '/wa-product.png');
+    }
 
     await b.eval(`[...document.querySelectorAll('button')].find((x) => /^add to cart/i.test(x.textContent.trim())).click(); return 1`);
-    check(await b.waitFor(`document.querySelector('[role="dialog"]') && /Your Bag/.test(document.querySelector('[role="dialog"]').textContent)`, 8000), `${p.name}: added to bag, drawer opened`);
+    check(await b.waitFor(`document.querySelector('[role="dialog"]') && /Your Bag/.test(document.querySelector('[role="dialog"]').textContent)`, 8000), `${who}: added to bag, drawer opened`);
     await sleep(600);
   }
 
   // bag drawer
-  const names = products.map((p) => p.name);
+  const links = products.map((p) => `/products/${p.slug}?`);
   const drawer = (await waLinks(b, `document.querySelector('[role="dialog"]')`)).find((l) => l.text === 'Chat with us on WhatsApp');
   check(!(await b.eval(`return [...document.querySelectorAll('[role="dialog"] a, [role="dialog"] button')].some((x) => /^checkout$/i.test(x.textContent.trim()))`)), 'drawer: no Checkout button left');
   check(drawer?.number === NUMBER, 'drawer: WhatsApp button on the store number');
-  check(!!drawer && names.every((n) => drawer.msg.includes(n)), `drawer: message lists all ${names.length} pieces`);
+  check(!!drawer && links.every((l) => drawer.msg.includes(l)), `drawer: message lists all ${links.length} pieces`);
+  check(!!drawer && /Options: /.test(drawer.msg), 'drawer: message carries the chosen options');
   check(!!drawer && /\*Total: ₹[\d,.]+\*/.test(drawer.msg) && /Subtotal: ₹/.test(drawer.msg), 'drawer: message has subtotal and total');
   await b.screenshot(TMP + '/wa-drawer.png');
   console.log('\n--- drawer message ---\n' + (drawer?.msg ?? '(none)') + '\n---\n');
+  const names = links;
 
   // bag page, desktop then phone
   for (const mobile of [false, true]) {
@@ -79,6 +99,8 @@ try {
     const links = (await waLinks(b)).filter((l) => /chat/i.test(l.text));
     check(links.length >= 1 && links.every((l) => l.number === NUMBER), `${who}: WhatsApp button(s) on the store number (${links.map((l) => l.text).join(' | ')})`);
     check(links.length >= 1 && links.every((l) => names.every((n) => l.msg.includes(n))), `${who}: every WhatsApp button lists all pieces`);
+    const issues = await b.eval(`await new Promise((r) => setTimeout(r, 1500)); return [...document.querySelectorAll('section[aria-label="Pieces in your bag"] [role=alert]')].map((x) => x.textContent.trim())`);
+    check(issues.length === 0, `${who}: the server prices every piece without a problem${issues.length ? ' — ' + issues.join(' / ') : ''}`);
     check(!(await b.eval(`return [...document.querySelectorAll('a, button')].some((x) => /^checkout$/i.test(x.textContent.trim()) && x.getBoundingClientRect().width > 0)`)), `${who}: no Checkout button left`);
     check(!(await b.eval(`return document.documentElement.scrollWidth > innerWidth + 1`)), `${who}: no sideways overflow`);
     await b.screenshot(TMP + `/wa-cart-${mobile ? 'phone' : 'desktop'}.png`);

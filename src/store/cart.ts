@@ -15,6 +15,8 @@ export type CartLine = {
   metalColor: string;
   diamond?: { id: string; summary: string; price: number; shape: string; carat: number } | null;
   option?: { id: string; label: string; priceDelta: number } | null;
+  /** catalogue options of this variant, e.g. "Oval · 2.08 ct centre · 2.63 ctw" */
+  details?: string | null;
   ringSize?: string | null;
   /** free engraving text (rings only) */
   engraving?: string | null;
@@ -59,8 +61,8 @@ export const useCart = create<CartState>()(
       clear: () => set({ lines: [] }),
       replace: (lines) => set({ lines }),
     }),
-    // v2: prices moved from USD to INR — carts saved before that are dropped
-    { name: 'aurevia-cart', storage: createJSONStorage(() => localStorage), version: 2, migrate: () => ({ lines: [] }) },
+    // v2: prices moved from USD to INR; v3: demo catalogue replaced — older carts are dropped
+    { name: 'aurevia-cart', storage: createJSONStorage(() => localStorage), version: 3, migrate: () => ({ lines: [] }) },
   ),
 );
 

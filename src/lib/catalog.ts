@@ -2,6 +2,7 @@
  * Catalog vocabulary shared by the storefront, filters, admin and seed.
  * Slugs are what live in the database and in URLs; labels are what shoppers see.
  */
+import { CATALOG_COMMON_SHAPES, CATALOG_SHAPE_LABELS } from './catalog-shapes';
 
 export const SHAPES = [
   { slug: 'round', label: 'Round', blurb: 'The most brilliant cut — timeless and endlessly sparkling.' },
@@ -24,6 +25,7 @@ export const METAL_COLORS = [
   { slug: 'rose', label: 'Rose Gold', short: 'Rose', swatch: 'linear-gradient(135deg,#F7D2C0 0%,#DFA088 50%,#B06F58 100%)' },
   { slug: 'yellow-white', label: 'Yellow & White Gold', short: 'Yellow & White', swatch: 'linear-gradient(135deg,#E9CB80 0%,#E9CB80 50%,#D6D9DC 50%,#D6D9DC 100%)' },
   { slug: 'rose-white', label: 'Rose & White Gold', short: 'Rose & White', swatch: 'linear-gradient(135deg,#E8AE97 0%,#E8AE97 50%,#D6D9DC 50%,#D6D9DC 100%)' },
+  { slug: 'black', label: 'Black Rhodium Gold', short: 'Black', swatch: 'linear-gradient(135deg,#6B6B70 0%,#3A3A3F 50%,#1E1E22 100%)' },
 ] as const;
 export type MetalColor = (typeof METAL_COLORS)[number]['slug'];
 
@@ -112,8 +114,14 @@ export const CERT_LABS = ['IGI', 'GIA'] as const;
 
 export const RING_SIZES = ['3', '3.5', '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11'];
 
+/** Shapes offered in the shape filter: the classic ten, then the catalogue's common fancy cuts */
+export const FILTER_SHAPES: readonly { slug: string; label: string }[] = [...SHAPES, ...CATALOG_COMMON_SHAPES.map((slug) => ({ slug, label: CATALOG_SHAPE_LABELS[slug] ?? titleCase(slug) }))];
+
+/** Partner-catalogue photos and videos are served straight from the partner's media server (already web-sized). */
+export const isCatalogMedia = (url?: string | null) => !!url && url.startsWith('https://webassests.s3.');
+
 export const label = {
-  shape: (s?: string | null) => SHAPES.find((x) => x.slug === s)?.label ?? (s ? titleCase(s) : ''),
+  shape: (s?: string | null) => SHAPES.find((x) => x.slug === s)?.label ?? (s ? CATALOG_SHAPE_LABELS[s] ?? titleCase(s) : ''),
   metal: (s?: string | null) => METAL_COLORS.find((x) => x.slug === s)?.label ?? (s ? titleCase(s) : ''),
   setting: (s?: string | null) => SETTING_TYPES.find((x) => x.slug === s)?.label ?? (s ? titleCase(s) : ''),
   style: (s?: string | null) => STYLES.find((x) => x.slug === s)?.label ?? (s ? titleCase(s) : ''),

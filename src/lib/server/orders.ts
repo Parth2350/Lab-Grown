@@ -9,6 +9,7 @@ import { revalidateCatalog } from './revalidate';
 import { recomputeFromPrice } from './product-pricing';
 import { site } from '@/config/site';
 import { RING_SIZES, label } from '@/lib/catalog';
+import { sizedPrice, variantSummary } from '@/lib/variant';
 import { computeTotals, evaluateCoupon, unitPrice as composeUnitPrice, type StoreSettings } from '@/lib/pricing';
 import type { ArtSpec } from '@/components/art/JewelryArt';
 import type { CartLine } from '@/store/cart';
@@ -148,12 +149,15 @@ export async function priceLines(inputs: LineInput[], opts: { checkStock?: boole
         name: true,
         isActive: true,
         requiresSize: true,
+        ringSizes: true,
+        madeToOrder: true,
         art: true,
         shapes: true,
         centerCarat: true,
         totalCarat: true,
         category: { select: { slug: true, isActive: true } },
-        images: { where: { kind: 'image' }, orderBy: { position: 'asc' }, take: 1, select: { url: true } },
+        // catalogue products photograph every metal (and shape): enough to find the line's own picture
+        images: { where: { kind: 'image' }, orderBy: { position: 'asc' }, take: 60, select: { url: true, metalColor: true, shape: true } },
         diamondOptions: {
           orderBy: { position: 'asc' },
           select: { id: true, kind: true, shape: true, minCarat: true, maxCarat: true, label: true, totalCarat: true, color: true, clarity: true, priceDelta: true },
@@ -162,7 +166,21 @@ export async function priceLines(inputs: LineInput[], opts: { checkStock?: boole
     }),
     db.productVariant.findMany({
       where: { id: { in: uniq(inputs.map((l) => l.variantId)) } },
-      select: { id: true, productId: true, sku: true, purity: true, metalColor: true, price: true, stock: true, isActive: true },
+      select: {
+        id: true,
+        productId: true,
+        sku: true,
+        purity: true,
+        metalColor: true,
+        price: true,
+        stock: true,
+        isActive: true,
+        shape: true,
+        centerCarat: true,
+        totalCarat: true,
+        length: true,
+        sizePrices: true,
+      },
     }),
     db.diamond.findMany({
       where: { id: { in: uniq(inputs.map((l) => l.diamondId)) } },
@@ -221,11 +239,12 @@ export async function priceLines(inputs: LineInput[], opts: { checkStock?: boole
     let ringSize: string | null = null;
     if (p.requiresSize) {
       if (!l.ringSize) issue ??= ['size_required', `Select a ring size for ${p.name}.`];
-      else if (!RING_SIZES.includes(l.ringSize)) issue ??= ['size_invalid', `Select a valid ring size for ${p.name}.`];
+      else if (!(p.ringSizes.length ? p.ringSizes : RING_SIZES).includes(l.ringSize)) issue ??= ['size_invalid', `Select a valid ring size for ${p.name}.`];
       else ringSize = l.ringSize;
     }
 
-    if (opts.checkStock && !issue) {
+    // made-to-order pieces are crafted after the order, so stock never limits them
+    if (opts.checkStock && !issue && !p.madeToOrder) {
       const want = qtyByVariant.get(v.id) ?? l.quantity;
       if (v.stock < want)
         issue =
@@ -234,12 +253,14 @@ export async function priceLines(inputs: LineInput[], opts: { checkStock?: boole
             : ['stock', `${p.name} in ${v.purity} ${label.metal(v.metalColor)} is currently out of stock.`];
     }
 
-    const unit = composeUnitPrice({ variantPrice: v.price, diamondPrice: diamond?.price, optionDelta: option?.priceDelta });
+    const sizes = (v.sizePrices as Record<string, number> | null) ?? null;
+    const unit = composeUnitPrice({ variantPrice: sizedPrice({ price: v.price, sizePrices: sizes }, ringSize), diamondPrice: diamond?.price, optionDelta: option?.priceDelta });
     const art = (p.art as ArtSpec | null) ?? null;
-    const shape = diamond?.shape ?? center?.shape ?? p.shapes[0] ?? 'round';
-    const carat = diamond?.carat ?? option?.totalCarat ?? p.centerCarat ?? p.totalCarat ?? 1;
+    const shape = diamond?.shape ?? center?.shape ?? v.shape ?? p.shapes[0] ?? 'round';
+    const carat = diamond?.carat ?? option?.totalCarat ?? v.centerCarat ?? v.totalCarat ?? p.centerCarat ?? p.totalCarat ?? 1;
     const dSummary = diamond ? diamondSummary(diamond) : null;
-    const oSummary = option && option.kind === 'TOTAL_WEIGHT' ? optionSummary(option) : null;
+    const oSummary = option && option.kind === 'TOTAL_WEIGHT' ? optionSummary(option) : variantSummary(v);
+    const photo = p.images.find((i) => i.metalColor === v.metalColor && (!i.shape || i.shape === v.shape)) ?? p.images.find((i) => i.metalColor === v.metalColor) ?? p.images[0];
     const line: PricedLine = {
       index,
       key: key({ ...l, ringSize }),
@@ -263,7 +284,7 @@ export async function priceLines(inputs: LineInput[], opts: { checkStock?: boole
       art,
       shape,
       carat,
-      image: p.images[0]?.url ?? null,
+      image: photo?.url ?? null,
       stock: v.stock,
     };
     lines.push(line);
@@ -861,6 +882,7 @@ function toCartLine(l: PricedLine, addedAt: number): CartLine {
     metalColor: l.metalColor,
     diamond: l.diamond,
     option: l.option,
+    details: l.diamond || l.option ? null : l.summary,
     ringSize: l.ringSize,
     quantity: l.quantity,
     unitPrice: l.unitPrice,

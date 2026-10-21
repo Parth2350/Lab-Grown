@@ -16,7 +16,10 @@ const [bespoke, collection, customer, diamond, order, partner, product] = await 
   one('partnerApplication'),
   one('product'),
 ]);
-const productSlug = (await db.product.findFirst({ where: { isActive: true, hasCenterStone: true }, select: { slug: true } }))?.slug;
+const slugOf = async (where) => (await db.product.findFirst({ where: { isActive: true, ...where }, orderBy: { position: 'asc' }, select: { slug: true } }))?.slug;
+const productSlug = await slugOf({ optionAxes: { hasEvery: ['shape', 'carat'] } });
+const ringSlug = await slugOf({ requiresSize: true, NOT: { ringSizes: { isEmpty: true } } });
+const lengthSlug = await slugOf({ optionAxes: { has: 'length' } });
 await db.$disconnect();
 
 const admin = [
@@ -28,7 +31,7 @@ const admin = [
 ];
 const store = [
   '/', '/engagement-rings', '/wedding-bands', '/necklaces', '/collections/all?shape=round', '/collections/gifts-under-50000',
-  `/products/${productSlug}`, '/search?q=oval', '/cart', '/wishlist', '/compare', '/gifts', '/bespoke', '/find-your-match',
+  `/products/${productSlug}`, `/products/${ringSlug}`, `/products/${lengthSlug}`, '/search?q=oval', '/cart', '/wishlist', '/compare', '/gifts', '/bespoke', '/find-your-match',
   '/about', '/contact', '/partner-program', '/pages/faq', '/pages/lab-grown-diamonds', '/account',
 ];
 

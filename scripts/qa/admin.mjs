@@ -38,24 +38,7 @@ try {
   check('admin sign-in', await login(b));
 
   // ───────────── PRODUCTS ─────────────
-  await run('products: edit & save price typed as ₹1,23,400', async () => {
-    const p = await db.product.findFirst({ where: { slug: 'aria-round-solitaire-engagement-ring' }, include: { variants: { orderBy: [{ purity: 'asc' }, { metalColor: 'asc' }] } } });
-    await go('/admin/products/' + p.id);
-    const original = await b.eval(`const i = document.querySelector('input[id^=v-][id$=-price]'); return { label: i.labels[0].textContent.trim(), value: i.value, id: i.id };`);
-    await b.eval(`window.__set(document.getElementById('${original.id}'), '₹1,23,400');`);
-    await b.eval(`window.__btn('Save changes').click();`);
-    const t = await waitToast(/saved|updated|changes/i);
-    const label = original.label.replace('Price for ', '').replace(' in rupees', '');
-    const after = await db.productVariant.findMany({ where: { productId: p.id } });
-    const hit = after.find((v) => v.price === 12340000);
-    check('products: save with ₹ and Indian commas', !!t && !!hit, `toast="${t}" error="${await anyError()}" variant(${label})=${hit ? '₹1,23,400 saved' : 'not saved'}`);
-    // restore
-    await b.eval(`window.__set(document.getElementById('${original.id}'), '${original.value}');`);
-    await b.eval(`window.__btn('Save changes').click();`);
-    await waitToast(/saved|updated|changes/i);
-  });
-
-  await run('products: create, duplicate and delete', async () => {
+  await run('products: create, edit price, duplicate and delete', async () => {
     await go('/admin/products/new');
     const fields = await b.eval(`return [...document.querySelectorAll('label')].map(l => l.textContent.trim()).filter(Boolean).slice(0, 40)`);
     await b.eval(`
@@ -70,6 +53,18 @@ try {
     const created = await db.product.findFirst({ where: { name: 'QA Test Pendant' }, include: { variants: true } });
     check('products: create new product', moved && !!created, moved ? `id=${created?.id} variants=${created?.variants.length} base=₹${created ? created.basePrice / 100 : '?'}` : `stayed on form; messages=${JSON.stringify(await toasts())} errors=${JSON.stringify(await b.eval(`return [...document.querySelectorAll('[role=alert]')].map(n=>n.textContent.trim()).filter(Boolean)`))} fields=${fields.join('|')}`);
     if (!created) return;
+
+    // a variant price typed the Indian way
+    await go('/admin/products/' + created.id);
+    const field = await b.eval(`const i = document.querySelector('input[id^=v-][id$=-price]'); return i ? { label: i.labels[0].textContent.trim(), id: i.id } : null;`);
+    if (field) {
+      await b.eval(`window.__set(document.getElementById('${field.id}'), '₹1,23,400');`);
+      await b.eval(`window.__btn('Save changes').click();`);
+      const t = await waitToast(/saved|updated|changes/i);
+      const hit = (await db.productVariant.findMany({ where: { productId: created.id } })).find((v) => v.price === 12340000);
+      check('products: save with ₹ and Indian commas', !!t && !!hit, `toast="${t}" error="${await anyError()}" ${field.label.replace('Price for ', '').replace(' in rupees', '')}=${hit ? '₹1,23,400 saved' : 'not saved'}`);
+    } else check('products: save with ₹ and Indian commas', false, 'no variant price field on the editor');
+
     await go('/admin/products/' + created.id);
     await b.eval(`window.__btn('Duplicate').click();`);
     await sleep(800);
@@ -89,10 +84,36 @@ try {
     check('products: delete (returns to list)', left === 0 && (await b.eval(`return location.pathname`)) === '/admin/products', `remaining=${left}`);
   });
 
+  await run('products: catalogue product — edit description, variants untouched', async () => {
+    const p = await db.product.findFirst({ where: { familyKey: { not: null }, variantCount: { gt: 50 } }, orderBy: { position: 'asc' }, include: { variants: { select: { id: true, price: true } } } });
+    if (!p) return check('products: catalogue product edit', false, 'no catalogue product with many variants');
+    await go('/admin/products/' + p.id);
+    const view = await b.eval(`return { catalogue: !!document.getElementById('catalogue'), variantsSection: !!document.getElementById('variants'), duplicate: [...document.querySelectorAll('button')].some(x => /duplicate/i.test(x.textContent + (x.getAttribute('title') || ''))), rows: document.querySelectorAll('#catalogue tbody tr').length }`);
+    check('products: catalogue editor shows partner catalogue, no variant grid, no duplicate', view.catalogue && !view.variantsSection && !view.duplicate && view.rows > 0, JSON.stringify(view));
+    const original = p.description;
+    await b.eval(`const d = window.__label('Description'); window.__set(d, d.value + ' QA-EDIT');`);
+    await b.eval(`window.__btn('Save changes').click();`);
+    const t = await waitToast(/saved|updated|changes/i);
+    const after = await db.product.findUnique({ where: { id: p.id }, include: { variants: { select: { id: true, price: true } } } });
+    const samePrices = after.variants.length === p.variants.length && p.variants.every((v) => after.variants.find((x) => x.id === v.id)?.price === v.price);
+    check('products: catalogue product saves description, keeps every variant & price', !!t && after.description.endsWith('QA-EDIT') && samePrices, `toast="${t}" error="${await anyError()}" variants ${p.variants.length}→${after.variants.length} pricesKept=${samePrices}`);
+    await db.product.update({ where: { id: p.id }, data: { description: original } });
+  });
+
+  await run('products: list shows the catalogue product object', async () => {
+    await go('/admin/products');
+    const row = await b.eval(`const btn = [...document.querySelectorAll('button')].find(x => /product object/i.test(x.textContent)); if (!btn) return null; btn.click(); await new Promise(r => setTimeout(r, 700)); const pre = document.querySelector('[role=dialog] pre'); return pre ? pre.textContent : null;`);
+    let obj = null;
+    try { obj = JSON.parse(row); } catch {}
+    const keys = ['familyKey', 'slug', 'title', 'displayTitle', 'productType', 'image', 'hoverImage', 'colorImages', 'currency', 'priceFrom', 'priceTo', 'defaultPrice', 'variantCount', 'available', 'defaultItemCode', 'shapes', 'centerCarats', 'totalCarats', 'lengths', 'metalStamps', 'metalTypes', 'metalPrices', 'metalOptions', 'defaultMetalType', 'defaultMetalStamp'];
+    const missing = obj ? keys.filter((k) => !(k in obj)) : keys;
+    check('products: product object has every catalogue field', !!obj && missing.length === 0 && obj.metalOptions.length > 0, obj ? `missing=${missing.join(',') || 'none'} options=${obj.metalOptions.length} family=${obj.familyKey}` : 'no product object dialog');
+  });
+
   // ───────────── UPLOADS ─────────────
   await run('uploads: product photo from disk (4.8 MB camera-size JPEG)', async () => {
     const fs = await import('node:fs');
-    const p = await db.product.findFirst({ where: { slug: 'celeste-oval-hidden-halo-engagement-ring' } });
+    const p = await db.product.findFirst({ where: { familyKey: { not: null } }, orderBy: { position: 'asc' } });
     const before = await db.productImage.findMany({ where: { productId: p.id } });
     await go('/admin/products/' + p.id);
     await b.setFiles('#media-files', [S + '/photo_4000.jpg']);
@@ -293,8 +314,14 @@ try {
 
   // ───────────── REVIEWS ─────────────
   await run('reviews: approve / reject', async () => {
-    const pending = await db.review.findMany({ where: { status: 'PENDING' }, take: 2, orderBy: { createdAt: 'desc' } });
-    if (pending.length < 2) { check('reviews: approve / reject', false, `only ${pending.length} pending reviews to test with`); return; }
+    // two pending reviews of our own (removed again below), so the check never depends on shop data
+    const target = await db.product.findFirst({ where: { isActive: true }, orderBy: { position: 'asc' }, select: { id: true } });
+    const made = await Promise.all(
+      ['QA Reviewer One', 'QA Reviewer Two'].map((authorName, i) =>
+        db.review.create({ data: { productId: target.id, authorName, rating: 5 - i, title: `QA review ${i + 1}`, body: 'Created by the automated admin check.', status: 'PENDING', createdAt: new Date(Date.now() + 60_000 * (i + 1)) } }),
+      ),
+    );
+    const pending = await db.review.findMany({ where: { id: { in: made.map((r) => r.id) } }, orderBy: { createdAt: 'desc' } });
     await go('/admin/reviews?status=PENDING');
     await b.eval(`[...document.querySelectorAll('button')].find(x => x.textContent.trim() === 'Approve').click();`);
     await sleep(2500);
@@ -306,7 +333,10 @@ try {
     const after = await db.review.findMany({ where: { id: { in: pending.map((p) => p.id) } } });
     const statuses = after.map((r) => r.status).sort();
     check('reviews: approve / reject', statuses.includes('APPROVED') && statuses.includes('REJECTED'), statuses.join(','));
-    for (const r of pending) await db.review.update({ where: { id: r.id }, data: { status: 'PENDING' } });
+    await db.review.deleteMany({ where: { id: { in: made.map((r) => r.id) } } });
+    // put the product's rating back the way it was (approving updated it)
+    const agg = await db.review.aggregate({ where: { productId: target.id, status: 'APPROVED' }, _avg: { rating: true }, _count: { _all: true } });
+    await db.product.update({ where: { id: target.id }, data: { rating: Math.round((agg._avg.rating ?? 0) * 10) / 10, reviewCount: agg._count._all } });
   });
 
   // ───────────── BESPOKE / PARTNERS / MESSAGES ─────────────
