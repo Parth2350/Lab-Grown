@@ -5,9 +5,9 @@
 export const site = {
   name: 'The V Jewels',
   legalName: 'The V Jewels',
-  tagline: 'Lab-Grown Diamond Fine Jewelry',
+  tagline: 'Natural & Lab-Grown Diamond Fine Jewelry',
   description:
-    'The V Jewels crafts certified lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
+    'The V Jewels crafts certified natural & lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
   // NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is detected automatically
   url: (
     process.env.NEXT_PUBLIC_SITE_URL ??
@@ -18,18 +18,18 @@ export const site = {
   currencySymbol: '₹',
   foundedYear: 2010,
   contact: {
-    email: 'concierge@thevjewels.example',
-    phone: '+1 (212) 555-0148',
-    phoneHref: 'tel:+12125550148',
+    email: 'support@thevjewels.com',
+    phone: '+91 98248 22200',
+    phoneHref: 'tel:+919824822200',
     whatsapp: '+91 98248 22200',
     /** digits only (country code first), as wa.me expects */
     whatsappNumber: '919824822200',
     whatsappHref: 'https://wa.me/919824822200',
     address: {
-      street: '14 Opera House Lane',
-      city: 'Mumbai',
-      region: 'Maharashtra',
-      postalCode: '400004',
+      street: 'Laxmi Enclave 2',
+      city: 'Surat',
+      region: 'Gujarat',
+      postalCode: '395003',
       country: 'India',
     },
     hours: [
