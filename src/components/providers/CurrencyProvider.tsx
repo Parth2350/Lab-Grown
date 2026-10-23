@@ -25,14 +25,14 @@ export function useLocalize() {
   return useCallback((text: string) => localizeRupees(text, currency), [currency]);
 }
 
-/** Footer location / currency switch: remembered for a year, the page re-renders in the new currency. */
+/** Header currency switch (after the bag, as on brilliancecarat.com): remembered for a year, the page re-renders in the new currency. */
 export function CurrencySwitcher({ className }: { className?: string }) {
   const currency = useCurrency();
   const router = useRouter();
   const [pending, start] = useTransition();
   return (
     <label className={className}>
-      <span className="sr-only">Location and currency</span>
+      <span className="sr-only">Currency</span>
       <select
         value={currency}
         disabled={pending}
@@ -40,16 +40,16 @@ export function CurrencySwitcher({ className }: { className?: string }) {
           document.cookie = `${CURRENCY_COOKIE}=${e.target.value}; path=/; max-age=31536000; samesite=lax`;
           start(() => router.refresh());
         }}
-        className="cursor-pointer appearance-none border border-white/15 bg-transparent py-1.5 pl-3 pr-8 text-[13px] text-ivory/80 transition-colors hover:border-white/40 focus:outline-none disabled:opacity-60"
+        className="cursor-pointer appearance-none rounded-full border border-line bg-transparent py-1.5 pl-2 pr-5 text-2xs font-semibold text-ink transition-colors hover:border-ink focus:border-ink focus:outline-none disabled:opacity-60 sm:pl-3 sm:pr-7"
         style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%23d8cfc1' stroke-width='1.4'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E\")",
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%2368615B' stroke-width='1.4'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E\")",
           backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'right 10px center',
+          backgroundPosition: 'right 7px center',
         }}
       >
         {CURRENCIES.map((c) => (
-          <option key={c.code} value={c.code} className="text-ink">
-            {c.country} ({c.symbol} {c.code})
+          <option key={c.code} value={c.code} title={c.country}>
+            {c.code}
           </option>
         ))}
       </select>

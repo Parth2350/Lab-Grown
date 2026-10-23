@@ -42,7 +42,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       },
       {
         q: 'In which currency are prices shown?',
-        a: 'Prices are shown in Indian rupees (₹) by default, in US dollars ($) for visitors in the United States and in Canadian dollars (CAD$) in Canada. You can switch at any time from the location menu at the bottom of every page. GST of 3% is added to your order total. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
+        a: 'Prices are shown in Indian rupees (₹) in India, in Canadian dollars (CAD$) in Canada and in US dollars ($) everywhere else. You can switch at any time from the currency menu at the top of every page, next to the bag. GST of 3% is added to your order total. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
       },
     ],
   },

@@ -5,6 +5,7 @@ import { getProductsWhere, getTrending } from '@/lib/server/catalog';
 import { getSettings } from '@/lib/server/settings';
 import { getCurrency } from '@/lib/server/currency';
 import { localizeRupees } from '@/lib/utils';
+import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { Hero } from '@/components/home/Hero';
 import { ProductRail } from '@/components/home/ProductRail';
 import { ShopByCategory } from '@/components/home/ShopByCategory';
@@ -37,6 +38,8 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* the brand-promise strip runs on the homepage only */}
+      <AnnouncementBar messages={settings.announcements} />
       <Hero hero={settings.hero} />
 
       <ProductRail eyebrow="Most Loved" title="Trending Now" subtitle="Discover pieces everyone is loving." href="/collections/all" products={trending} />

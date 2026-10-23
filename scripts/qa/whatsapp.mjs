@@ -30,6 +30,8 @@ const price = (b) => b.eval(`return document.querySelector('p[aria-live="polite"
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const b = await launch({ profile: TMP + '/chrome-whatsapp', port: 9341 });
+// the Indian shopper's flow (rupees), whatever the test machine's location
+await b.send('Network.setCookie', { name: 'tvj-currency', value: 'INR', url: BASE });
 try {
   await b.goto(BASE + '/');
   await b.eval(`localStorage.removeItem('aurevia-cart'); return 1`);

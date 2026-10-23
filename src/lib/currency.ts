@@ -1,7 +1,7 @@
 /**
- * Display currency. Prices are stored in rupees (paise). Visitors in the United States see US dollars and in Canada
- * Canadian dollars, at the partner's published rates (so prices match the partner's own); everyone else sees rupees.
- * Shoppers can switch in the footer (saved in a cookie).
+ * Display currency. Prices are stored in rupees (paise). Visitors in India see rupees, in Canada Canadian dollars, and
+ * everywhere else US dollars — at the partner's published rates, so prices match the partner's own. Shoppers can
+ * switch in the footer (saved in a cookie).
  */
 import { CATALOG_CAD_PER_USD, CATALOG_INR_PER_USD } from './catalog-generated';
 
@@ -22,6 +22,6 @@ export const inrPer = (code: Currency) => INR_PER_USD / currencyInfo(code).perUs
 
 export const isCurrency = (v: unknown): v is Currency => CURRENCIES.some((c) => c.code === v);
 
-const BY_COUNTRY: Record<string, Currency> = { US: 'USD', CA: 'CAD' };
-/** Rupees by default; US dollars in the United States, Canadian dollars in Canada */
-export const currencyForCountry = (country?: string | null): Currency => BY_COUNTRY[country?.toUpperCase() ?? ''] ?? 'INR';
+const BY_COUNTRY: Record<string, Currency> = { IN: 'INR', CA: 'CAD' };
+/** India → rupees, Canada → Canadian dollars, anywhere else (or an unknown location) → US dollars */
+export const currencyForCountry = (country?: string | null): Currency => BY_COUNTRY[country?.toUpperCase() ?? ''] ?? 'USD';

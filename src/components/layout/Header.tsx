@@ -13,7 +13,7 @@ import { useUI } from '@/store/ui';
 import { useMounted } from '@/hooks/use-mounted';
 import { JewelryArt } from '@/components/art/JewelryArt';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
-import { useLocalize } from '@/components/providers/CurrencyProvider';
+import { CurrencySwitcher, useLocalize } from '@/components/providers/CurrencyProvider';
 import { Logo } from './Logo';
 import { AccountMenu } from './AccountMenu';
 
@@ -133,7 +133,8 @@ export function Header() {
               {site.contact.phone}
             </a>
             <AccountMenu className="hidden sm:block" />
-            <Link href="/wishlist" className={iconBtn} aria-label={`Wishlist (${mounted ? wish : 0})`}>
+            {/* phones: the wishlist is in the menu, making room for the currency (as on brilliancecarat.com) */}
+            <Link href="/wishlist" className={cn(iconBtn, 'hidden sm:flex')} aria-label={`Wishlist (${mounted ? wish : 0})`}>
               <Heart className="h-[19px] w-[19px]" strokeWidth={1.25} />
               {mounted && <Badge n={wish} />}
             </Link>
@@ -145,6 +146,7 @@ export function Header() {
               <ShoppingBag className="h-[19px] w-[19px]" strokeWidth={1.25} />
               {mounted && <Badge n={cartCount(lines)} />}
             </button>
+            <CurrencySwitcher className="ml-1 sm:ml-2" />
           </div>
         </div>
 

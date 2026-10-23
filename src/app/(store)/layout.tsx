@@ -1,10 +1,10 @@
 import { getSettings } from '@/lib/server/settings';
 import { Header } from '@/components/layout/Header';
-import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { Footer } from '@/components/layout/Footer';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { SearchOverlay } from '@/components/layout/SearchOverlay';
 import { Toaster } from '@/components/layout/Toaster';
+import { WelcomeOffer } from '@/components/account/WelcomeOffer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { QuickView } from '@/components/product/QuickView';
 import { SettingsProvider } from '@/components/providers/SettingsProvider';
@@ -18,7 +18,6 @@ export default async function StoreLayout({ children }: { children: React.ReactN
     <SettingsProvider value={settings}>
       <CurrencyProvider currency={currency}>
         <Header />
-        <AnnouncementBar messages={settings.announcements} />
         <main id="main">{children}</main>
         <Footer />
         <MobileMenu />
@@ -26,6 +25,7 @@ export default async function StoreLayout({ children }: { children: React.ReactN
         <CartDrawer />
         <QuickView />
         <Toaster />
+        <WelcomeOffer />
         <SyncManager />
       </CurrencyProvider>
     </SettingsProvider>
