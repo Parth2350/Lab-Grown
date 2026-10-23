@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { MATCH_BUDGETS, MATCH_CATEGORIES, MATCH_METALS, MATCH_OCCASIONS } from '@/config/quiz';
-import { INR_PER_USD } from '@/lib/currency';
+import { currencyInfo, INR_PER_USD } from '@/lib/currency';
 import { isCatalogMedia } from '@/lib/catalog';
 import type { ProductCard as Card } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -41,10 +41,12 @@ export function MatchQuiz({ categoryImages }: { categoryImages: Record<string, s
   const [error, setError] = useState('');
   const update = (patch: Partial<State>) => setS((prev) => ({ ...prev, ...patch }));
 
-  const budgets = MATCH_BUDGETS[currency];
-  const unit = (n: number) => (currency === 'USD' ? `$${n.toLocaleString('en-US')}` : `₹${n.toLocaleString('en-IN')}`);
+  // rupee ranges in India; elsewhere the partner's dollar ranges at its rate, as on brilliancecarat.com (Under CAD$1,057)
+  const rupees = currency === 'INR';
+  const budgets = rupees ? MATCH_BUDGETS.INR : MATCH_BUDGETS.USD;
+  const unit = (n: number) => currencyInfo(currency).prefix + (rupees ? n.toLocaleString('en-IN') : Math.round(n * currencyInfo(currency).perUsd).toLocaleString('en-US'));
   const budgetLabel = ([min, max]: readonly [number, number | null]) => (max == null ? `${unit(min)}+` : min === 0 ? `Under ${unit(max)}` : `${unit(min)} – ${unit(max)}`);
-  const paise = (n: number) => Math.round(currency === 'USD' ? n * 100 * INR_PER_USD : n * 100);
+  const paise = (n: number) => Math.round(rupees ? n * 100 : n * 100 * INR_PER_USD);
 
   // pick up where the shopper left off (this tab), else a signed-in shopper's saved matches
   useEffect(() => {

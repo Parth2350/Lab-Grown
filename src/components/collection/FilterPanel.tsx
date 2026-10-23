@@ -2,7 +2,7 @@
 import { Check, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { METAL_COLORS, PRICE_RANGES } from '@/lib/catalog';
-import { CURRENCIES, INR_PER_USD } from '@/lib/currency';
+import { currencyInfo, inrPer } from '@/lib/currency';
 import { FILTER_GROUPS, parseRange, rangeLabel, type FilterKey } from '@/lib/filters';
 import type { Facets } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -31,9 +31,9 @@ function Group({ title, active, defaultOpen, children }: { title: string; active
 function PriceInputs() {
   const { filters, set } = useFilters();
   const currency = useCurrency();
-  // the price filter is always in rupees; dollar shoppers type dollars
-  const rate = currency === 'USD' ? INR_PER_USD : 1;
-  const symbol = CURRENCIES.find((c) => c.code === currency)!.symbol;
+  // the price filter is always in rupees; shoppers type amounts in their own currency
+  const rate = inrPer(currency);
+  const symbol = currencyInfo(currency).prefix;
   const custom = filters.price.find((p) => !PRICE_RANGES.some((r) => r.slug === p));
   const [min, max] = custom ? parseRange(custom) : [NaN, NaN];
   const [lo, setLo] = useState(Number.isFinite(min) ? String(Math.round(min / rate)) : '');

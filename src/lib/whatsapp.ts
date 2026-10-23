@@ -52,7 +52,7 @@ type Money = (paise: number, exact?: boolean) => string;
 const moneyIn =
   (currency: Currency): Money =>
   (paise, exact) =>
-    currency === 'USD' ? `${formatMoney(paise, { exact, currency })} (${formatMoney(paise, { exact })})` : formatMoney(paise, { exact });
+    currency !== 'INR' ? `${formatMoney(paise, { exact, currency })} (${formatMoney(paise, { exact })})` : formatMoney(paise, { exact });
 
 function itemLines(origin: string, it: EnquiryItem, money: Money, indent = '') {
   const lines = [`${indent}Metal: ${it.purity} ${label.metal(it.metalColor)}`];

@@ -23,7 +23,7 @@ export const MATCH_CATEGORIES = [
   { slug: 'bracelets', label: 'Bracelets' },
 ] as const;
 
-/** Budget ranges in each display currency's whole units ([min, max], max null = no limit) */
+/** Budget ranges ([min, max], max null = no limit): rupees for India; dollars elsewhere, converted for other currencies */
 export const MATCH_BUDGETS = {
   INR: [[0, 75000], [75000, 150000], [150000, 300000], [300000, 600000], [600000, null]],
   USD: [[0, 750], [750, 1500], [1500, 3000], [3000, 6000], [6000, null]],

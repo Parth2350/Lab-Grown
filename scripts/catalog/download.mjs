@@ -33,10 +33,12 @@ async function get(url, tries = 5) {
 }
 
 const rates = await get(`${API}/currencies`);
-const inr = rates?.data?.list?.find((c) => c.code === 'INR')?.rate;
-if (!inr) throw new Error('INR rate not found');
-writeFileSync(path.join(DIR, 'rates.json'), JSON.stringify({ INR: inr, source: `${API}/currencies`, fetchedAt: new Date().toISOString() }));
-console.log(`INR rate ${inr}`);
+const rate = (code) => rates?.data?.list?.find((c) => c.code === code)?.rate;
+const inr = rate('INR');
+const cad = rate('CAD');
+if (!inr || !cad) throw new Error('INR or CAD rate not found');
+writeFileSync(path.join(DIR, 'rates.json'), JSON.stringify({ INR: inr, CAD: cad, source: `${API}/currencies`, fetchedAt: new Date().toISOString() }));
+console.log(`rates per US dollar: INR ${inr}, CAD ${cad}`);
 
 const first = await get(`${API}/products?page=1`);
 const { pages, total } = first.data;

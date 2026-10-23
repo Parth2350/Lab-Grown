@@ -18,7 +18,10 @@ if (!SRC) {
   process.exit(1);
 }
 const MEDIA_HOST = 'https://webassests.s3.us-east-1.amazonaws.com/';
-const INR_PER_USD = Number(process.env.INR_PER_USD ?? JSON.parse(readFileSync(path.join(SRC, 'rates.json'), 'utf8')).INR);
+const RATES = JSON.parse(readFileSync(path.join(SRC, 'rates.json'), 'utf8'));
+const INR_PER_USD = Number(process.env.INR_PER_USD ?? RATES.INR);
+const CAD_PER_USD = Number(process.env.CAD_PER_USD ?? RATES.CAD);
+if (!CAD_PER_USD) throw new Error('No CAD rate in rates.json — download the catalogue again (or set CAD_PER_USD)');
 
 const METALS = {
   'Yellow Gold': 'yellow',
@@ -196,7 +199,9 @@ writeFileSync(
     `/** Non-standard shapes common enough (15+ products) to offer as a filter */\n` +
     `export const CATALOG_COMMON_SHAPES: string[] = ${JSON.stringify(common).replace(/"/g, "'")};\n\n` +
     `/** Rupees per US dollar used for the catalogue prices — US visitors see the partner's dollar prices */\n` +
-    `export const CATALOG_INR_PER_USD = ${INR_PER_USD};\n`,
+    `export const CATALOG_INR_PER_USD = ${INR_PER_USD};\n\n` +
+    `/** Canadian dollars per US dollar (the partner's published rate) — Canadian visitors see the partner's CAD prices */\n` +
+    `export const CATALOG_CAD_PER_USD = ${CAD_PER_USD};\n`,
 );
 
 const variants = products.reduce((n, p) => n + p.v.length, 0);

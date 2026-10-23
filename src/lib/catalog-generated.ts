@@ -231,3 +231,6 @@ export const CATALOG_COMMON_SHAPES: string[] = ['step-cut-marquise','baguette','
 
 /** Rupees per US dollar used for the catalogue prices — US visitors see the partner's dollar prices */
 export const CATALOG_INR_PER_USD = 96.4804;
+
+/** Canadian dollars per US dollar (the partner's published rate) — Canadian visitors see the partner's CAD prices */
+export const CATALOG_CAD_PER_USD = 1.40929;
