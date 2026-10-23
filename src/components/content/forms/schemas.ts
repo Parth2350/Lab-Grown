@@ -3,7 +3,6 @@
  * (authoritative validation). Keep this module free of server-only imports.
  */
 import { z } from 'zod';
-import { SHAPES } from '@/lib/catalog';
 
 // ───────────────────────────── primitives ─────────────────────────────
 
@@ -91,69 +90,34 @@ export type PartnerInput = z.input<typeof partnerSchema>;
 
 // ───────────────────────────── bespoke ─────────────────────────────
 
-export const BESPOKE_TYPES = [
-  { value: 'engagement-ring', label: 'Engagement Ring' },
-  { value: 'wedding-band', label: 'Wedding Band' },
-  { value: 'ring', label: 'Ring' },
-  { value: 'earrings', label: 'Earrings' },
-  { value: 'pendant', label: 'Pendant' },
-  { value: 'necklace', label: 'Necklace' },
-  { value: 'bracelet', label: 'Bracelet' },
-  { value: 'other', label: 'Something Else' },
-] as const;
-
-export const BESPOKE_SHAPES = [...SHAPES.map((s) => ({ value: s.slug as string, label: s.label as string })), { value: 'not-sure', label: 'Not Sure' }];
-
-export const BESPOKE_CARATS = [
-  { value: 'under-1', label: 'Under 1 ct', hint: 'Delicate and refined' },
-  { value: '1-1.5', label: '1 – 1.5 ct', hint: 'Our most requested size' },
-  { value: '1.5-2', label: '1.5 – 2 ct', hint: 'Noticeable presence' },
-  { value: '2-3', label: '2 – 3 ct', hint: 'A true statement' },
-  { value: '3-plus', label: '3 ct +', hint: 'Show-stopping' },
-  { value: 'not-sure', label: 'Not sure yet', hint: 'We will guide you' },
-] as const;
-
-export const BESPOKE_METALS = [
-  { value: 'yellow', label: 'Yellow Gold', swatch: 'linear-gradient(135deg,#F6E2A8 0%,#D9B465 50%,#A87F33 100%)' },
-  { value: 'white', label: 'White Gold', swatch: 'linear-gradient(135deg,#FFFFFF 0%,#DADDE0 50%,#A9AEB4 100%)' },
-  { value: 'rose', label: 'Rose Gold', swatch: 'linear-gradient(135deg,#F7D2C0 0%,#DFA088 50%,#B06F58 100%)' },
-  { value: 'yellow-white', label: 'Yellow & White Gold', swatch: 'linear-gradient(135deg,#E9CB80 0%,#E9CB80 50%,#D6D9DC 50%,#D6D9DC 100%)' },
-  { value: 'rose-white', label: 'Rose & White Gold', swatch: 'linear-gradient(135deg,#E8AE97 0%,#E8AE97 50%,#D6D9DC 50%,#D6D9DC 100%)' },
-  { value: 'not-sure', label: 'Not sure yet', swatch: 'conic-gradient(from 45deg,#E9CB80,#D6D9DC,#E8AE97,#E9CB80)' },
-] as const;
-
-export const BESPOKE_BUDGETS = [
-  { value: 'under-100000', label: 'Under ₹1,00,000' },
-  { value: '100000-250000', label: '₹1,00,000 – ₹2,50,000' },
-  { value: '250000-500000', label: '₹2,50,000 – ₹5,00,000' },
-  { value: '500000-1000000', label: '₹5,00,000 – ₹10,00,000' },
-  { value: '1000000-plus', label: '₹10,00,000 +' },
-  { value: 'not-sure', label: 'I would like guidance' },
-] as const;
-
 export const MAX_INSPIRATION_IMAGES = 5;
-/** Only URLs produced by our own upload endpoint are accepted. */
-export const INSPIRATION_URL_RE = /^(\/uploads\/bespoke\/[\w.-]+|https:\/\/res\.cloudinary\.com\/[\w./-]+)$/;
+/** Only URLs produced by our own upload endpoint are accepted (local files, Cloudinary or Vercel Blob). */
+export const INSPIRATION_URL_RE = /^(\/uploads\/bespoke\/[\w.-]+|https:\/\/res\.cloudinary\.com\/[\w./-]+|https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/uploads\/bespoke\/[\w.-]+)$/;
 
-const values = <T extends readonly { value: string }[]>(arr: T) => arr.map((o) => o.value) as [string, ...string[]];
+const short = (max: number) => optionalText(max, 'Please shorten this answer.');
 
+/** The bespoke brief (brilliancecarat.com style): everything optional except how to reach the customer. */
 export const bespokeSchema = z.object({
-  jewelryType: z.enum(values(BESPOKE_TYPES), { errorMap: () => ({ message: 'Please choose a type of jewelry.' }) }),
-  shape: z.enum(values(BESPOKE_SHAPES), { errorMap: () => ({ message: 'Please choose a diamond shape.' }) }),
-  carat: z.enum(values(BESPOKE_CARATS), { errorMap: () => ({ message: 'Please choose a carat range.' }) }),
-  metal: z.enum(values(BESPOKE_METALS), { errorMap: () => ({ message: 'Please choose a metal.' }) }),
-  budget: z.enum(values(BESPOKE_BUDGETS), { errorMap: () => ({ message: 'Please choose a budget range.' }) }),
+  jewelryType: short(40),
+  idea: optionalText(3000, 'Please keep your idea under 3,000 characters.'),
+  links: z.array(z.string().trim().max(500).url('Please check your reference link.')).max(10, 'Please share up to 10 links.').default([]),
   inspirationUrls: z
     .array(z.string().regex(INSPIRATION_URL_RE, 'One of your images could not be verified. Please upload it again.'))
     .max(MAX_INSPIRATION_IMAGES, `Please share up to ${MAX_INSPIRATION_IMAGES} images.`)
     .default([]),
+  metal: short(40),
+  metalStamp: short(10),
+  goldWeight: short(20),
+  shape: short(30),
+  carat: short(20),
+  totalCarat: short(20),
+  setting: short(60),
+  budget: short(60),
+  needBy: short(20),
+  notes: optionalText(3000, 'Please keep your notes under 3,000 characters.'),
   name,
   email,
   phone,
-  country: country
-    .transform((v) => v || undefined)
-    .optional(),
-  notes: optionalText(3000, 'Please keep your notes under 3,000 characters.'),
 });
 export type BespokeInput = z.input<typeof bespokeSchema>;
 

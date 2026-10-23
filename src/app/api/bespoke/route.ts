@@ -21,19 +21,32 @@ export async function POST(req: Request) {
 
   try {
     const d = parsed.data;
+    // details without a column of their own reach the design team as labelled lines in the notes
+    const notes = [
+      d.idea && `Idea: ${d.idea}`,
+      d.links.length && `Reference links:\n${d.links.join('\n')}`,
+      d.metalStamp && `Metal stamp: ${d.metalStamp}`,
+      d.goldWeight && `Approx gold weight: ${d.goldWeight} g`,
+      d.totalCarat && `Total diamond weight: ${d.totalCarat} ctw`,
+      d.setting && `Setting type: ${d.setting}`,
+      d.needBy && `Needed by: ${d.needBy}`,
+      d.notes && `Anything else: ${d.notes}`,
+    ]
+      .filter(Boolean)
+      .join('\n\n');
     const row = await db.bespokeRequest.create({
       data: {
-        jewelryType: d.jewelryType,
-        shape: d.shape,
-        carat: d.carat,
-        metal: d.metal,
-        budget: d.budget,
+        jewelryType: d.jewelryType ?? 'Not specified',
+        shape: d.shape ?? null,
+        carat: d.carat ? `${d.carat} ct` : null,
+        metal: d.metal ?? null,
+        budget: d.budget ?? null,
         inspirationUrls: [...new Set(d.inspirationUrls)],
-        notes: d.notes ?? null,
+        notes: notes || null,
         name: d.name,
         email: d.email,
         phone: d.phone ?? null,
-        country: d.country ?? null,
+        country: req.headers.get('x-vercel-ip-country'),
       },
       select: { id: true },
     });

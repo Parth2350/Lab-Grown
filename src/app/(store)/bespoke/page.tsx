@@ -4,9 +4,10 @@ import { pageMeta } from '@/lib/seo';
 import { ButtonLink } from '@/components/ui/Button';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { Reveal } from '@/components/ui/Reveal';
-import { BespokeWizard } from '@/components/content/bespoke/BespokeWizard';
+import { getProductsWhere } from '@/lib/server/catalog';
+import { BespokeBrief, type CollectionPiece } from '@/components/content/bespoke/BespokeBrief';
 import { FaqSection, type Faq } from '@/components/content/FaqSection';
-import { ArtPanel, NumberedSteps, TextLink } from '@/components/content/ui';
+import { ArtPanel, NumberedSteps } from '@/components/content/ui';
 import type { ArtSpec } from '@/components/art/JewelryArt';
 
 export const metadata = pageMeta({
@@ -102,7 +103,22 @@ const FAQS: Faq[] = [
   },
 ];
 
-export default function BespokePage() {
+/** the categories the brief's "Inspired by our collection" panel draws on */
+const BRIEF_CATEGORIES = ['engagement-rings', 'wedding-bands', 'necklaces', 'pendants', 'earrings', 'bracelets'];
+/** the catalogue's 300 px thumbnail of a photo — the panel's tiles are small */
+const thumb = (url: string) => url.replace('webassests.s3.us-east-1.amazonaws.com/images/zoom/', 'webassests.s3.us-east-1.amazonaws.com/images/thumb/');
+
+export default async function BespokePage() {
+  const lists = await Promise.all(BRIEF_CATEGORIES.map((c) => getProductsWhere({ category: c }, {}, 6)));
+  const collection: Record<string, CollectionPiece[]> = Object.fromEntries(
+    BRIEF_CATEGORIES.map((c, i) => [
+      c,
+      lists[i].flatMap((p) => {
+        const image = p.images.find((m) => m.kind === 'image')?.url;
+        return image ? [{ slug: p.slug, name: p.name, image: thumb(image), price: p.fromPrice }] : [];
+      }),
+    ]),
+  );
   return (
     <>
       {/* ───────── hero ───────── */}
@@ -196,27 +212,19 @@ export default function BespokePage() {
         </div>
       </section>
 
-      {/* ───────── inquiry ───────── */}
-      <section id="start" aria-labelledby="start-title" className="container-x scroll-mt-32 py-16 md:py-24">
-        <div className="mb-10 grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <p className="eyebrow mb-3">Begin Here</p>
-            <h2 id="start-title" className="h-section">
-              Start your bespoke request
+      {/* ───────── inquiry: the brief, as on brilliancecarat.com ───────── */}
+      <section id="start" aria-labelledby="start-title" className="scroll-mt-24 border-y border-line bg-porcelain py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <p className="text-2xs font-semibold uppercase tracking-luxe text-gold">Tell us your idea</p>
+            <h2 id="start-title" className="mt-2 font-serif text-3xl font-semibold leading-tight text-ink sm:text-[2.15rem]">
+              Start your bespoke piece
             </h2>
-            <p className="mt-4 max-w-xl text-[17px] leading-relaxed text-taupe">
-              It takes about three minutes. There is no obligation — just the beginning of a conversation with your designer.
-            </p>
+            <span className="mx-auto mt-4 block h-px w-12 bg-gold" />
+            <p className="mt-4 text-sm leading-relaxed text-taupe">Two quick minutes. Most fields are optional — share only what you know, add a reference, and we’ll take it from there.</p>
           </div>
-          <p className="text-[16px] leading-relaxed text-taupe lg:col-span-5 lg:text-right">
-            Prefer to talk first?{' '}
-            <a href={site.contact.whatsappHref} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-stone underline-offset-4 hover:decoration-ink">
-              Message us on WhatsApp
-            </a>{' '}
-            or <TextLink href="/contact">send a note</TextLink>.
-          </p>
+          <BespokeBrief collection={collection} />
         </div>
-        <BespokeWizard />
       </section>
 
       <FaqSection items={FAQS} title="Bespoke, answered" intro={<>Anything else? Our design team is always happy to talk it through.</>} />
