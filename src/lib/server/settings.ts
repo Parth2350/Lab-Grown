@@ -12,6 +12,6 @@ export const getSettings = unstable_cache(
       return DEFAULT_SETTINGS;
     }
   },
-  ['store-settings', 'hero-film'],
+  ['store-settings', 'hero-film-2'],
   { tags: ['settings'], revalidate: 3600 },
 );

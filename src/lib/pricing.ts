@@ -48,7 +48,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     subtitle:
       'Discover beautifully crafted natural and lab-grown diamond jewelry designed to celebrate your most meaningful moments.',
     image: null,
-    video: null,
+    video: '/videos/hero-desktop.mp4',
     videoMobile: '/videos/hero.mp4',
   },
   popularSearches: ['2ct oval halo', 'round solitaire', 'diamond earrings', 'tennis bracelet', 'emerald cut', 'eternity band'],
