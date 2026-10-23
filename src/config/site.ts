@@ -8,11 +8,8 @@ export const site = {
   tagline: 'Natural & Lab-Grown Diamond Fine Jewelry',
   description:
     'The V Jewels crafts certified natural & lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
-  // NEXT_PUBLIC_SITE_URL wins; on Vercel the production domain is detected automatically
-  url: (
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000')
-  ).replace(/\/$/, ''),
+  // NEXT_PUBLIC_SITE_URL wins; on Vercel the store's own address (the old one forwards to it — see next.config)
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? 'https://thevjewels.vercel.app' : 'http://localhost:3000')).replace(/\/$/, ''),
   locale: 'en-IN',
   currency: 'INR',
   currencySymbol: '₹',

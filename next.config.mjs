@@ -31,6 +31,8 @@ const nextConfig = {
       { source: '/collections/gifts-under-250', destination: '/collections/gifts-under-25000', permanent: true },
       { source: '/collections/gifts-under-500', destination: '/collections/gifts-under-50000', permanent: true },
       { source: '/collections/gifts-under-1000', destination: '/collections/gifts-under-100000', permanent: true },
+      // the store's old address forwards to its own, keeping the page and query
+      { source: '/:path*', has: [{ type: 'host', value: 'lab-grown-pi.vercel.app' }], destination: 'https://thevjewels.vercel.app/:path*', permanent: true },
     ];
   },
   async headers() {
