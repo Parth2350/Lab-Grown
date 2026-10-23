@@ -20,7 +20,7 @@ export const revalidate = 3600;
 
 export const metadata = pageMeta({
   title: 'Gift Guide',
-  description: `Lab-grown diamond gifts for every occasion and budget — under ₹25,000, ₹50,000 and ₹1,00,000, plus anniversary, birthday, wedding and personalised jewelry. Beautifully wrapped by ${site.name}.`,
+  description: `Natural and lab-grown diamond gifts for every occasion and budget — under ₹25,000, ₹50,000 and ₹1,00,000, plus anniversary, birthday, wedding and personalised jewelry. Beautifully wrapped by ${site.name}.`,
   path: '/gifts',
 });
 
@@ -175,7 +175,7 @@ export default async function GiftsPage() {
           </div>
           <div className="lg:col-span-5 lg:pb-3">
             <p className="max-w-md text-[18px] leading-relaxed text-taupe">
-              Certified lab-grown diamonds in solid gold, beautifully wrapped and delivered fully insured. Find the perfect piece by budget or by occasion.
+              Certified natural and lab-grown diamonds in solid gold, beautifully wrapped and delivered fully insured. Find the perfect piece by budget or by occasion.
             </p>
             <Link href="/find-your-match" className="label-caps group mt-6 inline-flex min-h-10 items-center gap-2 text-ink">
               <span className="link-underline pb-0.5">Not sure? Take the gift quiz</span>

@@ -14,42 +14,35 @@ import { Counter, PanelFooter, settingsLabel } from './shared';
 
 const LIMITS = { eyebrow: 60, title: 120, subtitle: 300 } as const;
 
-/** directUpload: the browser sends the video straight to Vercel Blob (production); otherwise it goes with the form */
+const VIDEOS = [
+  { name: 'video', remove: 'removeVideo', label: 'Desktop video (landscape)', aspect: 'aspect-[16/9]', hint: 'Fills the hero on computers and tablets held sideways. Landscape 16:9, e.g. 1920 × 1080.' },
+  { name: 'videoMobile', remove: 'removeVideoMobile', label: 'Phone video (portrait)', aspect: 'aspect-[9/16] max-h-[300px]', hint: 'Fills the hero on phones. Portrait 9:16, e.g. 1080 × 1920.' },
+] as const;
+
+/** directUpload: the browser sends videos straight to Vercel Blob (production); otherwise they go with the form */
 export function HeroForm({ hero, directUpload }: { hero: StoreSettings['hero']; directUpload: boolean }) {
   const form = useAdminForm(saveHeroSettings);
-  const videoRef = useRef<HTMLInputElement>(null);
-  const [videoPreview, setVideoPreview] = useState<string | null>(null);
-  const [removeVideo, setRemoveVideo] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const currentVideo = safeUrl(hero.video);
-  const shownVideo = videoPreview ?? (removeVideo ? null : currentVideo);
-
-  useEffect(() => {
-    if (!videoPreview) return;
-    return () => URL.revokeObjectURL(videoPreview);
-  }, [videoPreview]);
-
-  const clearVideo = () => {
-    if (videoRef.current) videoRef.current.value = '';
-    setVideoPreview(null);
-  };
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const video = fd.get('video');
-    if (directUpload && video instanceof File && video.size) {
-      setUploading(true);
-      try {
-        const name = video.name.replace(/[^a-z0-9.]+/gi, '-').toLowerCase();
-        const blob = await upload(`uploads/hero/${name}`, video, { access: 'public', handleUploadUrl: '/api/admin/blob', contentType: video.type });
-        fd.set('videoUrl', blob.url);
-        fd.delete('video');
-      } catch (err) {
-        toast.error('The video could not be uploaded', err instanceof Error ? err.message : 'Please try again.');
-        return;
-      } finally {
-        setUploading(false);
+    if (directUpload) {
+      for (const { name } of VIDEOS) {
+        const video = fd.get(name);
+        if (!(video instanceof File) || !video.size) continue;
+        setUploading(true);
+        try {
+          const file = video.name.replace(/[^a-z0-9.]+/gi, '-').toLowerCase();
+          const blob = await upload(`uploads/hero/${file}`, video, { access: 'public', handleUploadUrl: '/api/admin/blob', contentType: video.type });
+          fd.set(`${name}Url`, blob.url);
+          fd.delete(name);
+        } catch (err) {
+          toast.error('The video could not be uploaded', err instanceof Error ? err.message : 'Please try again.');
+          return;
+        } finally {
+          setUploading(false);
+        }
       }
     }
     form.submit(fd);
@@ -109,7 +102,7 @@ export function HeroForm({ hero, directUpload }: { hero: StoreSettings['hero']; 
       <Panel
         id="hero"
         title="Homepage hero"
-        description="The headline block at the top of the homepage. A video plays behind the headline, with the image showing while it loads; without either, the illustrated hero is shown."
+        description="The top of the homepage. With a video, the film fills the first screen (the headline is kept for search engines); without one, the headline shows with the image or the illustration."
         footer={
           <PanelFooter note={fileName ? `New image: ${fileName} — uploaded when you save` : remove ? 'The current image will be removed when you save' : undefined}>
             <SubmitButton pending={form.pending || preparing || uploading} pendingLabel={preparing ? 'Preparing image…' : uploading ? 'Uploading video…' : fileName ? 'Uploading…' : 'Saving…'}>
@@ -211,62 +204,87 @@ export function HeroForm({ hero, directUpload }: { hero: StoreSettings['hero']; 
               )}
             </div>
 
-            <p className={cn(settingsLabel, 'mt-6')}>Background video</p>
-            <div className="relative aspect-[16/9] overflow-hidden border border-line bg-porcelain">
-              {shownVideo ? (
-                <video key={shownVideo} src={shownVideo} muted loop autoPlay playsInline className="h-full w-full object-cover" aria-label={videoPreview ? 'Preview of the new hero video' : 'Current hero video'} />
-              ) : (
-                <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center text-xs text-taupe">
-                  <Video className="h-5 w-5" strokeWidth={1.25} aria-hidden />
-                  {removeVideo ? 'Video will be removed' : 'No video'}
-                </div>
-              )}
-              {videoPreview && <span className="absolute left-2 top-2 bg-ink px-2 py-0.5 text-[12px] uppercase tracking-[0.14em] text-ivory">New</span>}
-            </div>
-            <label htmlFor="hero-video" className="sr-only">
-              Upload a new hero video
-            </label>
-            <input
-              ref={videoRef}
-              id="hero-video"
-              type="file"
-              name="video"
-              accept="video/mp4,video/webm"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (!f) return clearVideo();
-                if (!directUpload && f.size > 8 * 1024 * 1024) {
-                  toast.error('This video is too large here', 'Without cloud storage, videos up to 8 MB can be uploaded.');
-                  return clearVideo();
-                }
-                setVideoPreview(URL.createObjectURL(f));
-                setRemoveVideo(false);
-              }}
-              aria-describedby="hero-video-hint"
-              className={cn(
-                'mt-3 block w-full text-xs text-taupe',
-                'file:mr-3 file:cursor-pointer file:border file:border-ink/80 file:bg-white file:px-3 file:py-2 file:text-[12.5px] file:font-medium file:uppercase file:tracking-[0.14em] file:text-ink file:transition-colors hover:file:bg-ink hover:file:text-ivory',
-              )}
-            />
-            <p id="hero-video-hint" className="mt-1.5 text-[13px] text-taupe">
-              MP4 (H.264) plays on every phone and browser. It plays muted on a loop; keep it short (10–20 s) and under about 10 MB so it starts quickly on phones.
-            </p>
-            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-              {videoPreview && (
-                <button type="button" onClick={clearVideo} className="text-xs text-charcoal underline underline-offset-4 hover:text-ink">
-                  Discard new video
-                </button>
-              )}
-              {currentVideo && !videoPreview && (
-                <label className="flex cursor-pointer items-center gap-2 text-xs text-charcoal">
-                  <input type="checkbox" name="removeVideo" checked={removeVideo} onChange={(e) => setRemoveVideo(e.target.checked)} className="h-3.5 w-3.5 accent-ink" />
-                  Remove current video
-                </label>
-              )}
-            </div>
+            {VIDEOS.map((v) => (
+              <VideoField key={v.name} {...v} current={safeUrl(hero[v.name])} directUpload={directUpload} />
+            ))}
           </div>
         </div>
       </Panel>
     </form>
+  );
+}
+
+function VideoField({ name, remove: removeName, label, aspect, hint, current, directUpload }: (typeof VIDEOS)[number] & { current: string | null; directUpload: boolean }) {
+  const ref = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [remove, setRemove] = useState(false);
+  const shown = preview ?? (remove ? null : current);
+
+  useEffect(() => {
+    if (!preview) return;
+    return () => URL.revokeObjectURL(preview);
+  }, [preview]);
+
+  const clear = () => {
+    if (ref.current) ref.current.value = '';
+    setPreview(null);
+  };
+
+  return (
+    <div className="mt-6">
+      <p className={settingsLabel}>{label}</p>
+      <div className={cn('relative overflow-hidden border border-line bg-porcelain', aspect)}>
+        {shown ? (
+          <video key={shown} src={shown} muted loop autoPlay playsInline className="h-full w-full object-cover" aria-label={preview ? `Preview of the new ${label.toLowerCase()}` : `Current ${label.toLowerCase()}`} />
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center text-xs text-taupe">
+            <Video className="h-5 w-5" strokeWidth={1.25} aria-hidden />
+            {remove ? 'Video will be removed' : 'No video'}
+          </div>
+        )}
+        {preview && <span className="absolute left-2 top-2 bg-ink px-2 py-0.5 text-[12px] uppercase tracking-[0.14em] text-ivory">New</span>}
+      </div>
+      <label htmlFor={`hero-${name}`} className="sr-only">
+        Upload a new {label.toLowerCase()}
+      </label>
+      <input
+        ref={ref}
+        id={`hero-${name}`}
+        type="file"
+        name={name}
+        accept="video/mp4,video/webm"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (!f) return clear();
+          if (!directUpload && f.size > 8 * 1024 * 1024) {
+            toast.error('This video is too large here', 'Without cloud storage, videos up to 8 MB can be uploaded.');
+            return clear();
+          }
+          setPreview(URL.createObjectURL(f));
+          setRemove(false);
+        }}
+        aria-describedby={`hero-${name}-hint`}
+        className={cn(
+          'mt-3 block w-full text-xs text-taupe',
+          'file:mr-3 file:cursor-pointer file:border file:border-ink/80 file:bg-white file:px-3 file:py-2 file:text-[12.5px] file:font-medium file:uppercase file:tracking-[0.14em] file:text-ink file:transition-colors hover:file:bg-ink hover:file:text-ivory',
+        )}
+      />
+      <p id={`hero-${name}-hint`} className="mt-1.5 text-[13px] text-taupe">
+        {hint} MP4 (H.264) plays everywhere; keep it short (10–20 s) and under about 10 MB so it starts quickly. With only one of the two videos, the other screen shows it whole over a soft blur.
+      </p>
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+        {preview && (
+          <button type="button" onClick={clear} className="text-xs text-charcoal underline underline-offset-4 hover:text-ink">
+            Discard new video
+          </button>
+        )}
+        {current && !preview && (
+          <label className="flex cursor-pointer items-center gap-2 text-xs text-charcoal">
+            <input type="checkbox" name={removeName} checked={remove} onChange={(e) => setRemove(e.target.checked)} className="h-3.5 w-3.5 accent-ink" />
+            Remove current video
+          </label>
+        )}
+      </div>
+    </div>
   );
 }

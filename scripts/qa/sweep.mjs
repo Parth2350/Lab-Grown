@@ -28,7 +28,7 @@ const admin = [
   '/admin/payments', '/admin/products', '/admin/products/new', '/admin/reviews', '/admin/settings', '/admin/shipping',
   `/admin/bespoke/${bespoke}`, `/admin/collections/${collection}`, `/admin/customers/${customer}`, `/admin/diamonds/${diamond}`,
   `/admin/orders/${order}`, `/admin/partners/${partner}`, `/admin/products/${product}`,
-];
+].filter((p) => !p.endsWith('/undefined')); // detail pages need a record (e.g. there may be no orders yet)
 const store = [
   '/', '/engagement-rings', '/wedding-bands', '/necklaces', '/collections/all?shape=round', '/collections/gifts-under-50000',
   `/products/${productSlug}`, `/products/${ringSlug}`, `/products/${lengthSlug}`, '/search?q=oval', '/cart', '/wishlist', '/compare', '/gifts', '/bespoke', '/find-your-match',

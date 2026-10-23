@@ -159,8 +159,14 @@ export type BespokeInput = z.input<typeof bespokeSchema>;
 
 // ───────────────────────────── quiz ─────────────────────────────
 
-export const quizSchema = z.object({
-  answers: z.record(z.string().max(40), z.string().max(60)).refine((r) => Object.keys(r).length <= 20, 'Too many answers.'),
+export const matchSchema = z.object({
+  step: z.enum(['taste', 'match']),
+  occasion: z.string().max(40).optional(),
+  categories: z.array(z.string().max(40)).max(12).default([]),
+  /** paise */
+  budget: z.object({ min: z.number().int().min(0), max: z.number().int().positive().nullable() }).nullable().optional(),
+  metal: z.string().max(20).nullable().optional(),
+  liked: z.array(z.string().max(40)).max(40).default([]),
 });
 
 // ───────────────────────────── helpers ─────────────────────────────

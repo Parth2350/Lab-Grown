@@ -114,7 +114,7 @@ export default function BespokePage() {
             <h1 className="h-display text-balance">Your idea, made by hand</h1>
             <p className="mt-6 max-w-lg text-[18px] leading-relaxed text-taupe md:text-[19px]">
               Work one-to-one with our designers and master jewelers to create an engagement ring or fine jewelry piece that exists nowhere else — crafted in
-              our own workshop with certified lab-grown diamonds.
+              our own workshop with certified natural or lab-grown diamonds.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href="#start" size="lg">

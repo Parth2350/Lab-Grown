@@ -12,7 +12,7 @@ import { PrismaClient, type OrderStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { randomUUID } from 'node:crypto';
 import { CATEGORIES, COLLECTIONS, PRODUCTS, REVIEW_POOL, REVIEWERS, FIRST_NAMES, LAST_NAMES, CITIES, type SeedProduct } from './data/catalog';
-import { QUIZ_QUESTIONS, QUIZ_SLUG } from '../src/config/quiz';
+import { QUIZ_SLUG } from '../src/config/quiz';
 import { DEFAULT_SETTINGS, computeTotals } from '../src/lib/pricing';
 
 const prisma = new PrismaClient();
@@ -515,7 +515,7 @@ async function main() {
     ],
   });
   await prisma.newsletterSubscriber.createMany({ data: ['ava@example.com', 'liam@example.com', 'maya@example.com'].map((email) => ({ email })) });
-  await prisma.recommendationQuiz.create({ data: { slug: QUIZ_SLUG, title: 'Find Your Match', questions: QUIZ_QUESTIONS as object } });
+  await prisma.recommendationQuiz.create({ data: { slug: QUIZ_SLUG, title: 'Find Your Match', questions: [] } });
 
   const counts = await Promise.all([prisma.product.count(), prisma.productVariant.count(), prisma.diamond.count(), prisma.order.count(), prisma.review.count()]);
   console.log(`Done → ${counts[0]} products, ${counts[1]} variants, ${counts[2]} diamonds, ${counts[3]} orders, ${counts[4]} reviews.`);

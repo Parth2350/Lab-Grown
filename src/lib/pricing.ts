@@ -19,8 +19,8 @@ export type StoreSettings = {
   taxLabel: string;
   shippingMethods: ShippingMethod[];
   returnsDays: number;
-  /** video: plays muted and looping behind the copy (the image is its poster) */
-  hero: { eyebrow: string; title: string; subtitle: string; image?: string | null; video?: string | null };
+  /** video (landscape, desktop) / videoMobile (portrait, phones): a film that fills the first screen; the image is its poster */
+  hero: { eyebrow: string; title: string; subtitle: string; image?: string | null; video?: string | null; videoMobile?: string | null };
   popularSearches: string[];
   lowStockThreshold: number;
 };
@@ -31,7 +31,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     'Made in Our Own Workshop',
     'Free Insured Worldwide Shipping',
     '30-Day Easy Returns',
-    'Premium Lab-Grown Diamonds',
+    'Natural & Lab-Grown Diamonds',
     'Lifetime Warranty on Every Piece',
   ],
   taxRate: 0.03,
@@ -43,12 +43,13 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   ],
   returnsDays: 30,
   hero: {
-    eyebrow: 'Lab-Grown Diamond Fine Jewelry',
+    eyebrow: 'Natural & Lab-Grown Diamond Fine Jewelry',
     title: 'Jewelry Made for the Moments That Matter',
     subtitle:
-      'Discover beautifully crafted lab-grown diamond jewelry designed to celebrate your most meaningful moments.',
+      'Discover beautifully crafted natural and lab-grown diamond jewelry designed to celebrate your most meaningful moments.',
     image: null,
     video: null,
+    videoMobile: '/videos/hero.mp4',
   },
   popularSearches: ['2ct oval halo', 'round solitaire', 'diamond earrings', 'tennis bracelet', 'emerald cut', 'eternity band'],
   lowStockThreshold: 3,

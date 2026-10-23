@@ -1,95 +1,36 @@
-/** "Find Your Match" recommendation quiz definition (seeded into recommendation_quiz). */
-
-export type QuizOption = { value: string; label: string; hint?: string };
-export type QuizQuestion = { id: string; title: string; subtitle?: string; options: QuizOption[]; layout?: 'grid' | 'shapes' | 'list' };
+/**
+ * "Find Your Match", laid out as on brilliancecarat.com: occasion → what for → budget (+ metal) → taste → matches.
+ */
 
 export const QUIZ_SLUG = 'find-your-match';
 
-export const QUIZ_QUESTIONS: QuizQuestion[] = [
-  {
-    id: 'recipient',
-    title: 'Who are you shopping for?',
-    subtitle: 'We will tailor every suggestion to them.',
-    options: [
-      { value: 'partner', label: 'My partner' },
-      { value: 'proposal', label: 'A proposal', hint: 'Planning to pop the question' },
-      { value: 'myself', label: 'Myself', hint: 'Treat yourself — you deserve it' },
-      { value: 'family', label: 'Family or a friend' },
-    ],
-  },
-  {
-    id: 'occasion',
-    title: 'What is the occasion?',
-    options: [
-      { value: 'engagement', label: 'Engagement' },
-      { value: 'wedding', label: 'Wedding' },
-      { value: 'anniversary', label: 'Anniversary' },
-      { value: 'birthday', label: 'Birthday' },
-      { value: 'milestone', label: 'A milestone' },
-      { value: 'everyday', label: 'Just because' },
-    ],
-  },
-  {
-    id: 'metal',
-    title: 'Which metal do they wear most?',
-    options: [
-      { value: 'yellow', label: 'Yellow Gold' },
-      { value: 'white', label: 'White Gold' },
-      { value: 'rose', label: 'Rose Gold' },
-      { value: 'any', label: 'Not sure' },
-    ],
-  },
-  {
-    id: 'shape',
-    title: 'Pick a diamond shape',
-    subtitle: 'Go with your instinct — you can always change it later.',
-    layout: 'shapes',
-    options: [
-      { value: 'round', label: 'Round' },
-      { value: 'oval', label: 'Oval' },
-      { value: 'princess', label: 'Princess' },
-      { value: 'cushion', label: 'Cushion' },
-      { value: 'emerald', label: 'Emerald' },
-      { value: 'pear', label: 'Pear' },
-      { value: 'marquise', label: 'Marquise' },
-      { value: 'radiant', label: 'Radiant' },
-      { value: 'asscher', label: 'Asscher' },
-      { value: 'heart', label: 'Heart' },
-      { value: 'any', label: 'Not sure' },
-    ],
-  },
-  {
-    id: 'budget',
-    title: 'What is your budget?',
-    options: [
-      { value: '0-50000', label: 'Under ₹50,000' },
-      { value: '50000-100000', label: '₹50,000 – ₹1,00,000' },
-      { value: '100000-250000', label: '₹1,00,000 – ₹2,50,000' },
-      { value: '250000-500000', label: '₹2,50,000 – ₹5,00,000' },
-      { value: '500000-', label: '₹5,00,000+' },
-    ],
-  },
-  {
-    id: 'style',
-    title: 'Which style feels most like them?',
-    options: [
-      { value: 'classic', label: 'Classic & timeless' },
-      { value: 'modern', label: 'Modern & minimal' },
-      { value: 'vintage', label: 'Vintage-inspired' },
-      { value: 'statement', label: 'Bold & statement' },
-      { value: 'delicate', label: 'Delicate & everyday' },
-    ],
-  },
-  {
-    id: 'type',
-    title: 'What kind of piece?',
-    options: [
-      { value: 'engagement', label: 'Engagement ring' },
-      { value: 'band', label: 'Wedding band' },
-      { value: 'ring', label: 'Fashion ring' },
-      { value: 'earrings', label: 'Earrings' },
-      { value: 'necklace', label: 'Necklace or pendant' },
-      { value: 'bracelet', label: 'Bracelet' },
-    ],
-  },
-];
+/** categories: what the "What for" step starts with selected */
+export const MATCH_OCCASIONS = [
+  { value: 'engagement', label: 'Engagement', hint: 'The one', image: '/images/match/engagement.webp', categories: ['engagement-rings'] },
+  { value: 'wedding', label: 'Wedding', hint: 'Bands & sets', image: '/images/match/wedding.webp', categories: [] },
+  { value: 'anniversary', label: 'Anniversary', hint: 'Milestone', image: '/images/match/anniversary.webp', categories: [] },
+  { value: 'gift', label: 'A gift', hint: 'For someone special', image: '/images/match/gift.webp', categories: [] },
+  { value: 'everyday', label: 'Everyday', hint: 'Wear it always', image: '/images/match/everyday.webp', categories: [] },
+  { value: 'treat', label: 'Treat myself', hint: 'Because why not', image: '/images/match/treat.webp', categories: [] },
+] as const;
+
+export const MATCH_CATEGORIES = [
+  { slug: 'engagement-rings', label: 'Engagement rings' },
+  { slug: 'wedding-bands', label: 'Wedding bands' },
+  { slug: 'earrings', label: 'Earrings' },
+  { slug: 'necklaces', label: 'Necklaces' },
+  { slug: 'pendants', label: 'Pendants' },
+  { slug: 'bracelets', label: 'Bracelets' },
+] as const;
+
+/** Budget ranges in each display currency's whole units ([min, max], max null = no limit) */
+export const MATCH_BUDGETS = {
+  INR: [[0, 75000], [75000, 150000], [150000, 300000], [300000, 600000], [600000, null]],
+  USD: [[0, 750], [750, 1500], [1500, 3000], [3000, 6000], [6000, null]],
+} as const;
+
+export const MATCH_METALS = [
+  { slug: 'white', label: 'White Gold' },
+  { slug: 'yellow', label: 'Yellow Gold' },
+  { slug: 'rose', label: 'Rose Gold' },
+] as const;

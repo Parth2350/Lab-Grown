@@ -11,7 +11,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const term = Array.isArray(q) ? q[0] : q;
   return pageMeta({
     title: term ? `Search: ${term}` : 'Search',
-    description: 'Search lab-grown diamond jewelry by shape, style, carat weight or SKU.',
+    description: 'Search natural and lab-grown diamond jewelry by shape, style, carat weight or SKU.',
     path: '/search',
     noIndex: true,
   });

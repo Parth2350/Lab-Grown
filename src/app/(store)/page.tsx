@@ -17,7 +17,7 @@ import { Bespoke } from '@/components/home/Bespoke';
 import { PartnerProgram } from '@/components/home/PartnerProgram';
 import { Testimonials } from '@/components/home/Testimonials';
 
-const homeTitle = `${site.name} — Lab-Grown Diamond Fine Jewelry`;
+const homeTitle = `${site.name} — ${site.tagline}`;
 
 export const metadata: Metadata = {
   ...pageMeta({ title: homeTitle, description: site.description, path: '/' }),

@@ -34,32 +34,41 @@ export async function saveAnnouncements(_prev: FormState, fd: FormData): Promise
 
 const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']);
 
+// set when the browser uploaded a video straight to Vercel Blob (see /api/admin/blob)
+const blobVideoUrl = z
+  .string()
+  .trim()
+  .optional()
+  .refine((v) => !v || /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/uploads\/hero\//i.test(v), 'The uploaded video could not be verified. Please upload it again.');
+
 const heroSchema = z.object({
   eyebrow: zText('Eyebrow', 60),
   title: zText('Title', 120),
   subtitle: zText('Subtitle', 300),
   removeImage: zCheckbox,
   removeVideo: zCheckbox,
-  // set when the browser uploaded the video straight to Vercel Blob (see /api/admin/blob)
-  videoUrl: z
-    .string()
-    .trim()
-    .optional()
-    .refine((v) => !v || /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/uploads\/hero\//i.test(v), 'The uploaded video could not be verified. Please upload it again.'),
+  removeVideoMobile: zCheckbox,
+  videoUrl: blobVideoUrl,
+  videoMobileUrl: blobVideoUrl,
 });
 const VIDEO_TYPES = new Set(['video/mp4', 'video/webm']);
 
+/** One hero video: uploaded straight to storage by the browser (production) or sent with the form (local development). undefined = unchanged */
+async function heroVideo(fd: FormData, name: 'video' | 'videoMobile', url: string | undefined, remove: boolean) {
+  if (url) return url;
+  const file = fdFiles(fd, name)[0];
+  if (file) {
+    if (!VIDEO_TYPES.has(file.type)) throw new ActionError('Please upload hero videos as MP4 or WebM files.');
+    return (await saveUpload(file, 'hero')).url;
+  }
+  return remove ? null : undefined;
+}
+
 export async function saveHeroSettings(_prev: FormState, fd: FormData): Promise<FormState> {
   return adminAction(async () => {
-    const { eyebrow, title, subtitle, removeImage, removeVideo, videoUrl } = parse(heroSchema, formObject(fd));
-    // video: uploaded straight to storage by the browser (production), or sent with the form (local development)
-    const videoFile = fdFiles(fd, 'video')[0];
-    let video: string | null | undefined;
-    if (videoUrl) video = videoUrl;
-    else if (videoFile) {
-      if (!VIDEO_TYPES.has(videoFile.type)) throw new ActionError('Please upload the hero video as an MP4 or WebM file.');
-      video = (await saveUpload(videoFile, 'hero')).url;
-    } else if (removeVideo) video = null;
+    const { eyebrow, title, subtitle, removeImage, removeVideo, removeVideoMobile, videoUrl, videoMobileUrl } = parse(heroSchema, formObject(fd));
+    const video = await heroVideo(fd, 'video', videoUrl, removeVideo);
+    const videoMobile = await heroVideo(fd, 'videoMobile', videoMobileUrl, removeVideoMobile);
     const files = fdFiles(fd, 'image');
     if (files.length > 1) throw new ActionError('Please upload a single hero image.');
     const file = files[0];
@@ -71,9 +80,9 @@ export async function saveHeroSettings(_prev: FormState, fd: FormData): Promise<
     } else if (removeImage) {
       image = null;
     }
-    await updateStoreSettings({ hero: { eyebrow, title, subtitle, ...(image !== undefined ? { image } : {}), ...(video !== undefined ? { video } : {}) } });
+    await updateStoreSettings({ hero: { eyebrow, title, subtitle, ...(image !== undefined ? { image } : {}), ...(video !== undefined ? { video } : {}), ...(videoMobile !== undefined ? { videoMobile } : {}) } });
     revalidateAdmin();
-    const what = [file && 'new image', video && 'new video', image === null && 'image removed', video === null && 'video removed'].filter(Boolean).join(', ');
+    const what = [file && 'new image', video && 'new desktop video', videoMobile && 'new phone video', image === null && 'image removed', video === null && 'desktop video removed', videoMobile === null && 'phone video removed'].filter(Boolean).join(', ');
     return ok(what ? `Hero updated — ${what}` : 'Hero updated');
   });
 }

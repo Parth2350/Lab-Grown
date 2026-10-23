@@ -10,7 +10,7 @@ import { ArtPanel, NumberedSteps } from '@/components/content/ui';
 
 export const metadata = pageMeta({
   title: 'Partner Program',
-  description: `Partner with ${site.name}: share certified lab-grown diamond jewelry with your audience and earn rewards on every sale — no inventory required. Apply today.`,
+  description: `Partner with ${site.name}: share certified natural and lab-grown diamond jewelry with your audience and earn rewards on every sale — no inventory required. Apply today.`,
   path: '/partner-program',
 });
 
@@ -25,7 +25,7 @@ const BENEFITS = [
   { icon: Sparkles, t: 'Exclusive Rewards', d: 'Competitive commission on every completed sale, plus gifted pieces and bonuses for our most active partners.' },
   { icon: Globe, t: 'Global Opportunity', d: `We ship to more than ${site.stats.countries.replace('+', '')} countries, so your audience can shop wherever they are.` },
   { icon: PackageOpen, t: 'No Inventory Required', d: 'We handle making, insured shipping, returns and client care. You simply share.' },
-  { icon: Gem, t: 'Premium Jewelry Designs', d: 'Certified lab-grown diamonds in solid gold, handcrafted in our own workshop — pieces you will be proud to recommend.' },
+  { icon: Gem, t: 'Premium Jewelry Designs', d: 'Certified natural and lab-grown diamonds in solid gold, handcrafted in our own workshop — pieces you will be proud to recommend.' },
   { icon: Megaphone, t: 'Marketing Support', d: 'Original imagery, product details, launch previews and a dedicated partner manager to help your content shine.' },
   { icon: Laptop, t: 'Work From Anywhere', d: 'Everything happens online, on your schedule — from a studio, a boutique or the other side of the world.' },
 ];
@@ -75,7 +75,7 @@ export default function PartnerProgramPage() {
             <p className="eyebrow mb-4">Partner Program</p>
             <h1 className="h-display text-balance">Partner With {site.name}</h1>
             <p className="mt-6 max-w-xl text-[18px] leading-relaxed text-taupe md:text-[19px]">
-              Share certified lab-grown diamond jewelry with the people who trust your taste — and be rewarded for every piece they fall in love with. No stock,
+              Share certified natural and lab-grown diamond jewelry with the people who trust your taste — and be rewarded for every piece they fall in love with. No stock,
               no shipping, no fuss.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">

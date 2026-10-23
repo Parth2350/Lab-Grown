@@ -55,7 +55,7 @@ export const CONTENT_PAGES = {
     title: 'Jewelry Care Guide',
     navLabel: 'Care Guide',
     eyebrow: 'Client Care',
-    description: 'How to clean, store and care for lab-grown diamond jewelry and solid gold, so every piece keeps its brilliance for a lifetime.',
+    description: 'How to clean, store and care for diamond jewelry and solid gold, so every piece keeps its brilliance for a lifetime.',
     group: 'care',
   },
   faq: {
@@ -63,7 +63,7 @@ export const CONTENT_PAGES = {
     title: 'Frequently Asked Questions',
     navLabel: 'FAQ',
     eyebrow: 'Client Care',
-    description: 'Answers about lab-grown diamonds, certification, orders, payment, shipping, returns, ring sizing and bespoke design.',
+    description: 'Answers about natural and lab-grown diamonds, certification, orders, payment, shipping, returns, ring sizing and bespoke design.',
     group: 'care',
   },
   manufacturing: {

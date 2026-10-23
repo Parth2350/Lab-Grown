@@ -1,6 +1,5 @@
 import { Factory, Gem, Globe, Hammer, Scale } from 'lucide-react';
 import Image from 'next/image';
-import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
@@ -8,8 +7,6 @@ import { cn } from '@/lib/utils';
 const STATS = [
   { value: site.stats.years, label: 'Years of Craftsmanship' },
   { value: site.stats.countries, label: 'Countries Served' },
-  { value: site.stats.pieces, label: 'Pieces Crafted' },
-  { value: site.stats.artisans, label: 'Master Artisans' },
 ];
 
 const FEATURES = [
@@ -82,7 +79,7 @@ export function BrandStory() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8 sm:grid-cols-4">
+            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8">
               {STATS.map((s) => (
                 <div key={s.label} className="flex flex-col-reverse gap-1.5">
                   <dt className="text-[12.5px] font-medium uppercase leading-snug tracking-[0.16em] text-taupe">{s.label}</dt>
@@ -90,9 +87,6 @@ export function BrandStory() {
                 </div>
               ))}
             </dl>
-            <ButtonLink href="/about" variant="outline" className="mt-10">
-              Discover Our Story
-            </ButtonLink>
           </Reveal>
         </div>
       </div>

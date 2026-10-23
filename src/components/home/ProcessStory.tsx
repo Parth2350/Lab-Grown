@@ -1,41 +1,46 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { m, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import { EditorialArt, type EditorialScene } from '@/components/art/EditorialArt';
-import { LazyMount } from '@/components/ui/LazyMount';
 import { cn } from '@/lib/utils';
 
-const STEPS: { title: string; scene: EditorialScene; text: string }[] = [
+const STEPS: { title: string; image: string; alt: string; text: string }[] = [
   {
     title: 'Concept & Design',
-    scene: 'sketch',
+    image: '/images/home/process-1.webp',
+    alt: 'A designer drawing ring sketches with measurements at a desk',
     text: 'Every piece begins as a pencil sketch at our design table — proportion, profile and the path light will take through the stone, refined until it feels inevitable.',
   },
   {
     title: 'CAD Modeling',
-    scene: 'cad',
+    image: '/images/home/process-2.webp',
+    alt: 'A ring being modelled in 3D design software',
     text: 'The sketch becomes a precise 3D model, engineered to a hundredth of a millimetre so every claw, gallery and shoulder is balanced before metal is cast.',
   },
   {
     title: 'Expert Setting',
-    scene: 'setting',
+    image: '/images/home/process-3.webp',
+    alt: 'A jeweller holding a ring in tweezers with a fine torch at the bench',
     text: 'Under magnification, our master setters seat each diamond by hand, tightening every claw until the stone sits secure and perfectly level.',
   },
   {
     title: 'Quality Inspection',
-    scene: 'inspection',
+    image: '/images/home/process-4.webp',
+    alt: 'A diamond being weighed on a precision scale beside a tray of rings',
     text: 'Each piece is examined under the loupe — stone security, symmetry, finish and fit — before it is allowed to carry our hallmark.',
   },
   {
     title: 'Finishing & Polishing',
-    scene: 'polishing',
+    image: '/images/home/process-5.webp',
+    alt: 'A craftsman filing and finishing a ring by hand',
     text: 'Hours of hand polishing bring the gold to a flawless mirror finish, even inside the band and beneath the stone, where few will ever look.',
   },
   {
     title: 'Luxury Packaging',
-    scene: 'packaging',
+    image: '/images/home/process-6.webp',
+    alt: 'A gold solitaire ring in a navy velvet box beside its gift box',
     text: 'Your piece is presented in our signature box with its diamond certificate and care guide, then insured all the way to your door.',
   },
 ];
@@ -153,10 +158,14 @@ export function ProcessStory() {
                 key={step.title}
                 className={cn('group', pinned && 'w-[min(400px,30vw,46vh)] shrink-0 transition-opacity duration-700', pinned && i !== active && 'opacity-60')}
               >
-                <div className="art-tile relative aspect-[4/3] overflow-hidden">
-                  <LazyMount className="absolute inset-0 block" rootMargin="600px">
-                    <EditorialArt scene={step.scene} decorative className="transition-transform duration-[1400ms] ease-luxe group-hover:scale-[1.03]" />
-                  </LazyMount>
+                <div className="art-tile relative aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={step.image}
+                    alt={step.alt}
+                    fill
+                    sizes="(min-width:1024px) 400px, (min-width:640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-[1400ms] ease-luxe group-hover:scale-[1.03]"
+                  />
                 </div>
                 <div className="mt-5 flex gap-4">
                   <span className="font-serif text-[2rem] font-light leading-none text-gold">{pad(i + 1)}</span>

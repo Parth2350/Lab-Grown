@@ -1,5 +1,5 @@
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
-import { LazyEditorialArt } from '@/components/art/LazyArt';
 import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 
@@ -68,13 +68,14 @@ export function Bespoke() {
         </div>
 
         <Reveal delay={0.1} className="lg:col-span-7">
-          <div className="relative mx-auto max-w-[620px] border border-white/10 p-4 sm:p-8">
-            <span className="absolute left-0 top-0 h-4 w-4 border-l border-t border-gold-light/70" aria-hidden />
-            <span className="absolute right-0 top-0 h-4 w-4 border-r border-t border-gold-light/70" aria-hidden />
-            <span className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-gold-light/70" aria-hidden />
-            <span className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-gold-light/70" aria-hidden />
-            <LazyEditorialArt scene="bespoke" className="block aspect-[520/560] w-full" />
-          </div>
+          <Image
+            src="/images/home/bespoke.webp"
+            alt="A designer sketching ring ideas on a tablet with a client, loose diamonds and drawings on the table"
+            width={1024}
+            height={572}
+            sizes="(min-width:1024px) 55vw, 100vw"
+            className="block h-auto w-full rounded-2xl"
+          />
         </Reveal>
       </div>
     </section>

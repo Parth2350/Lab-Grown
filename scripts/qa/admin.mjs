@@ -173,13 +173,15 @@ try {
     await b.waitFor(`!/Uploading|Saving/.test(document.body.textContent)`, 30000);
     await sleep(1500);
     const error = await anyError();
-    const video = (await db.setting.findUnique({ where: { key: 'store' } })).value.hero?.video;
-    const saved = !!video && fs.existsSync(ROOT + 'public' + video);
+    // uploaded as the desktop (landscape) cut; the phone cut is left as it was
+    const hero = (await db.setting.findUnique({ where: { key: 'store' } })).value.hero ?? {};
+    const video = hero.video;
+    const saved = !!video && video !== sBefore.value.hero?.video && fs.existsSync(ROOT + 'public' + video) && hero.videoMobile === sBefore.value.hero?.videoMobile;
     await go('/');
-    const shown = await b.eval(`await new Promise((r) => setTimeout(r, 2500)); const v = document.querySelector('video'); return v ? { src: v.getAttribute('src'), muted: v.muted, playing: !v.paused && v.readyState >= 2 } : null;`);
+    const shown = await b.eval(`await new Promise((r) => setTimeout(r, 2500)); const v = document.querySelector('section[aria-labelledby="hero-title"] video'); return v ? { src: new URL(v.currentSrc).pathname, muted: v.muted, playing: !v.paused && v.readyState >= 2 } : null;`);
     // iPhones only autoplay when the server-rendered tag already says muted
     const ssrMuted = /<video[^>]*\smuted=""/.test(await (await fetch(BASE + '/')).text());
-    check('uploads: hero video → saved & playing on the homepage', saved && shown?.src === video && shown.muted && shown.playing && ssrMuted, `saved=${video} ${(clip.length * 0.75 / 1024).toFixed(0)} KB shown=${JSON.stringify(shown)} ssrMuted=${ssrMuted} error="${error}"`);
+    check('uploads: hero video → saved & playing on the homepage', saved && shown?.src === video && shown.muted && shown.playing && ssrMuted, `saved=${video} phone=${hero.videoMobile} ${(clip.length * 0.75 / 1024).toFixed(0)} KB shown=${JSON.stringify(shown)} ssrMuted=${ssrMuted} error="${error}"`);
     await db.setting.update({ where: { key: 'store' }, data: { value: sBefore.value } });
     if (video && video.startsWith('/uploads/')) try { fs.unlinkSync(ROOT + 'public' + video); } catch {}
   });
@@ -268,7 +270,15 @@ try {
 
   // ───────────── ORDERS ─────────────
   await run('orders: status, notes, shipment', async () => {
-    const o = await db.order.findFirst({ where: { status: { in: ['PAID', 'PROCESSING'] } }, include: { shipments: true } });
+    // the store keeps no sample orders, so the test brings its own and removes it afterwards
+    const o = await db.order.create({
+      data: {
+        number: 'QA-ORDER-1', email: 'qa.order@example.com', customerName: 'QA Test', deliveryMethod: 'standard', status: 'PAID', subtotal: 100000, tax: 3000, total: 103000,
+        shippingAddress: { firstName: 'QA', lastName: 'Test', line1: '1 Test Street', city: 'Surat', state: 'Gujarat', postalCode: '395001', country: 'India' },
+        items: { create: [{ name: 'QA Test Ring', sku: 'QA-RING-1', purity: '14K', metalColor: 'yellow', quantity: 1, unitPrice: 100000, lineTotal: 100000 }] },
+      },
+    });
+    try {
     await go('/admin/orders/' + o.id);
     const opts = await b.eval(`const s = document.querySelector('form [name=status]'); return [...s.options].filter(x => !x.disabled).map(x => x.value);`);
     const target = opts.find((x) => x && x !== o.status && !['CANCELLED', 'REFUNDED', 'PENDING'].includes(x));
@@ -287,8 +297,9 @@ try {
     await sleep(2500);
     const ships = await db.shipment.findMany({ where: { orderId: o.id } });
     check('orders: add shipment', ships.some((s) => s.trackingNumber === 'QA123456789IN'), `fields=${shipFields.join(',')} shipments=${ships.length} messages=${JSON.stringify(await toasts())}`);
-    await db.shipment.deleteMany({ where: { orderId: o.id, trackingNumber: 'QA123456789IN' } });
-    await db.order.update({ where: { id: o.id }, data: { status: o.status, adminNotes: o.adminNotes } });
+    } finally {
+      await db.order.delete({ where: { id: o.id } });
+    }
   });
 
   await run('orders: CSV export', async () => {
@@ -431,15 +442,25 @@ try {
     check('shipping: save Express price ₹1,600', exp?.price === 160000, ok === 'clicked' ? `express=₹${exp?.price / 100} messages=${JSON.stringify(await toasts())}` : 'inputs: ' + ok);
     const s = await db.setting.findUnique({ where: { key: 'store' } });
     await db.setting.update({ where: { key: 'store' }, data: { value: { ...s.value, shippingMethods: before } } });
-    await go('/admin/shipping');
-    const ship = await b.eval(`return document.querySelector('form [name=trackingNumber]').form.querySelector('[name=id]').value;`);
-    const original = await db.shipment.findUnique({ where: { id: ship } });
-    await b.eval(`const f = document.querySelector('form [name=trackingNumber]').form; window.__set(f.querySelector('[name=trackingNumber]'), 'QA-TRACK-1'); [...f.querySelectorAll('button[type=submit]')].pop().click();`);
-    await sleep(2500);
-    const sh = await db.shipment.findUnique({ where: { id: ship } });
-    check('shipping: save shipment row', sh?.trackingNumber === 'QA-TRACK-1', `tracking=${sh?.trackingNumber}`);
-    // put the real tracking number back
-    if (original && original.trackingNumber !== 'QA-TRACK-1') await db.shipment.update({ where: { id: ship }, data: { trackingNumber: original.trackingNumber, status: original.status } });
+    // the store keeps no sample orders, so the shipment row comes from a throwaway order removed afterwards
+    const o = await db.order.create({
+      data: {
+        number: 'QA-ORDER-2', email: 'qa.order@example.com', customerName: 'QA Test', deliveryMethod: 'express', status: 'SHIPPED', subtotal: 100000, tax: 3000, total: 103000, shippingAddress: { firstName: 'QA', lastName: 'Test', city: 'Surat', country: 'India' },
+        items: { create: [{ name: 'QA Test Ring', sku: 'QA-RING-1', purity: '14K', metalColor: 'yellow', quantity: 1, unitPrice: 100000, lineTotal: 100000 }] },
+        shipments: { create: [{ carrier: 'BlueDart', method: 'express', trackingNumber: 'QA-TRACK-0', status: 'IN_TRANSIT', shippedAt: new Date() }] },
+      },
+      include: { shipments: true },
+    });
+    try {
+      const ship = o.shipments[0].id;
+      await go('/admin/shipping');
+      await b.eval(`const f = document.querySelector('form [name=id][value="${ship}"]').form; window.__set(f.querySelector('[name=trackingNumber]'), 'QA-TRACK-1'); [...f.querySelectorAll('button[type=submit]')].pop().click();`);
+      await sleep(2500);
+      const sh = await db.shipment.findUnique({ where: { id: ship } });
+      check('shipping: save shipment row', sh?.trackingNumber === 'QA-TRACK-1', `tracking=${sh?.trackingNumber}`);
+    } finally {
+      await db.order.delete({ where: { id: o.id } });
+    }
   });
 
   // ───────────── SETTINGS ─────────────

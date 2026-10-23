@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { ArrowRight, Gem, ShieldCheck } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/Button';
 import { EditorialArt } from '@/components/art/EditorialArt';
+import { HeroFilm } from './HeroFilm';
 import { cn } from '@/lib/utils';
 import type { StoreSettings } from '@/lib/pricing';
 import s from './home.module.css';
@@ -18,15 +19,26 @@ const OPTIMISABLE = [/^\/(?!\/)/, /^https:\/\/res\.cloudinary\.com\//, /^https:\
 export function Hero({ hero }: Props) {
   const image = hero.image?.trim() || null;
   const video = hero.video?.trim() || null;
-  const media = !!(image || video);
+  const videoMobile = hero.videoMobile?.trim() || null;
+  const media = !!image;
+
+  // a film fills the first screen under the header, as on brilliancecarat.com; the headline stays for search engines
+  if (video || videoMobile) {
+    return (
+      <section aria-labelledby="hero-title" className="relative h-[calc(100svh-106px)] min-h-[420px] overflow-hidden bg-porcelain xl:h-[calc(100svh-164px)]">
+        <h1 id="hero-title" className="sr-only">
+          {hero.title}
+        </h1>
+        <HeroFilm desktop={video} mobile={videoMobile} poster={image} />
+      </section>
+    );
+  }
 
   return (
     <section aria-labelledby="hero-title" className={cn('relative isolate overflow-hidden', s.heroBackdrop)}>
-      {media && (
+      {image && (
         <div className="relative aspect-[4/3] w-full sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto">
-          {image && <Image src={image} alt="" fill priority sizes="100vw" unoptimized={!OPTIMISABLE.some((r) => r.test(image))} className="object-cover" />}
-          {/* the video covers the image once it plays; the image stays as the poster and for reduced-motion visitors */}
-          {video && <video src={video} poster={image ?? undefined} autoPlay muted loop playsInline preload="auto" aria-hidden className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden" />}
+          <Image src={image} alt="" fill priority sizes="100vw" unoptimized={!OPTIMISABLE.some((r) => r.test(image))} className="object-cover" />
           <div className={cn('absolute inset-0 hidden lg:block', s.heroScrim)} aria-hidden />
         </div>
       )}

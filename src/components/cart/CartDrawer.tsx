@@ -83,7 +83,7 @@ export function CartDrawer() {
         <div className="flex h-full flex-col items-center justify-center py-16 text-center">
           <ShoppingBag className="h-10 w-10 text-stone" strokeWidth={1} />
           <p className="mt-5 font-serif text-2xl">Your bag is empty</p>
-          <p className="mt-2 max-w-xs text-sm text-taupe">Discover certified lab-grown diamond jewelry, crafted in our own workshop.</p>
+          <p className="mt-2 max-w-xs text-sm text-taupe">Discover certified natural and lab-grown diamond jewelry, crafted in our own workshop.</p>
           <div className="mt-6 flex flex-col gap-2">
             <ButtonLink href="/engagement-rings" onClick={close}>
               Shop Engagement Rings

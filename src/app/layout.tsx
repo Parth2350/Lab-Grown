@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: { default: `${site.name} — ${site.tagline}`, template: `%s | ${site.name}` },
   description: site.description,
   applicationName: site.name,
-  keywords: ['lab-grown diamonds', 'engagement rings', 'wedding bands', 'fine jewelry', 'IGI certified', 'tennis bracelet', 'diamond earrings'],
+  keywords: ['natural diamonds', 'lab-grown diamonds', 'engagement rings', 'wedding bands', 'fine jewelry', 'IGI certified', 'tennis bracelet', 'diamond earrings'],
   openGraph: { siteName: site.name, type: 'website', locale: 'en_US', url: site.url },
   twitter: { card: 'summary_large_image' },
   formatDetection: { telephone: false },

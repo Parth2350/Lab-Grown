@@ -1,307 +1,103 @@
 import 'server-only';
-import { unstable_cache } from 'next/cache';
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
 import { db } from './db';
 import { getCardsByIds, getCatalogIndex } from './catalog';
-import { QUIZ_QUESTIONS, QUIZ_SLUG, type QuizQuestion } from '@/config/quiz';
-import { label } from '@/lib/catalog';
-import { parseRange, type IndexRow } from '@/lib/filters';
+import { MATCH_CATEGORIES, QUIZ_SLUG } from '@/config/quiz';
+import type { IndexRow } from '@/lib/filters';
 import type { ProductCard } from '@/lib/types';
 
 /**
- * "Find Your Match" recommendation engine.
- * Products are scored against every answer, then picked through progressively relaxed
- * constraint tiers so the shopper always receives a full set of suggestions — the
- * strongest (exact) matches first, then the closest alternatives.
+ * "Find Your Match". The shopper's categories, budget and metal narrow the catalogue; the pieces they tap on the
+ * taste step then rank what remains, most similar first. The optional metal, then the budget, are relaxed rather
+ * than come back with too few pieces.
  */
 
-export type QuizAnswers = Record<string, string>;
-export type QuizDefinition = { id: string | null; title: string; questions: QuizQuestion[] };
-export type QuizLink = { label: string; href: string };
-export type Recommendation = { ids: string[]; exactCount: number; products: ProductCard[]; links: QuizLink[] };
+/** budget in paise */
+export type MatchAnswers = { occasion?: string; categories: string[]; budget?: { min: number; max: number | null } | null; metal?: string | null; liked: string[] };
+export type TasteTile = { id: string; name: string; image: string };
 
-const DEFAULT_TITLE = 'Find Your Match';
-const ANY = new Set(['any', 'not-sure', '']);
+const CATEGORIES = new Set<string>(MATCH_CATEGORIES.map((c) => c.slug));
 
-// ───────────────────────────── quiz definition ─────────────────────────────
-
-const questionSchema = z.object({
-  id: z.string().min(1).max(40),
-  title: z.string().min(1).max(200),
-  subtitle: z.string().max(300).optional(),
-  layout: z.enum(['grid', 'shapes', 'list']).optional(),
-  options: z
-    .array(z.object({ value: z.string().min(1).max(60), label: z.string().min(1).max(120), hint: z.string().max(200).optional() }))
-    .min(2)
-    .max(24),
-});
-
-/** Loads the quiz from the database (admin-editable), falling back to the built-in definition. */
-export const getQuizDefinition = unstable_cache(
-  async (): Promise<QuizDefinition> => {
-    try {
-      const row = await db.recommendationQuiz.findUnique({ where: { slug: QUIZ_SLUG }, select: { id: true, title: true, questions: true, isActive: true } });
-      if (row) {
-        const parsed = z.array(questionSchema).min(1).max(20).safeParse(row.questions);
-        return { id: row.id, title: row.title || DEFAULT_TITLE, questions: row.isActive && parsed.success ? parsed.data : QUIZ_QUESTIONS };
-      }
-    } catch {
-      /* database unavailable — use the built-in quiz */
-    }
-    return { id: null, title: DEFAULT_TITLE, questions: QUIZ_QUESTIONS };
-  },
-  ['quiz-definition', QUIZ_SLUG, 'inr'],
-  { tags: ['quiz'], revalidate: 3600 },
-);
-
-/** Keeps only answers to known questions with valid option values. */
-export function sanitizeAnswers(questions: QuizQuestion[], raw: Record<string, unknown>): QuizAnswers {
-  const out: QuizAnswers = {};
-  for (const q of questions) {
-    const v = raw[q.id];
-    if (typeof v === 'string' && q.options.some((o) => o.value === v)) out[q.id] = v;
+async function candidates(a: MatchAnswers, need: number) {
+  const rows = (await getCatalogIndex()).filter((r) => (a.categories.length ? a.categories.includes(r.category) : CATEGORIES.has(r.category))).sort((x, y) => x.position - y.position);
+  const inBudget = (r: IndexRow) => !a.budget || (r.fromPrice >= a.budget.min && (a.budget.max == null || r.fromPrice <= a.budget.max));
+  const inMetal = (r: IndexRow) => !a.metal || r.metalColors.includes(a.metal);
+  for (const keep of [(r: IndexRow) => inBudget(r) && inMetal(r), inBudget]) {
+    const hit = rows.filter(keep);
+    if (hit.length >= need) return hit;
   }
-  return out;
+  return rows;
 }
 
-// ───────────────────────────── vocabulary mapping ─────────────────────────────
-
-const TYPE_CATEGORIES: Record<string, string[]> = {
-  engagement: ['engagement-rings'],
-  band: ['wedding-bands'],
-  ring: ['rings'],
-  earrings: ['earrings'],
-  necklace: ['necklaces', 'pendants'],
-  bracelet: ['bracelets'],
+/** The photo in the shopper's metal, else the first one */
+const photo = (c: ProductCard, metal?: string | null) => {
+  const photos = c.images.filter((i) => i.kind === 'image');
+  return (photos.find((i) => i.metalColor === metal) ?? photos[0])?.url;
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  'engagement-rings': 'Engagement Rings',
-  'wedding-bands': 'Wedding Bands',
-  rings: 'Rings',
-  earrings: 'Earrings',
-  necklaces: 'Necklaces',
-  pendants: 'Pendants',
-  bracelets: 'Bracelets',
-};
-
-type Affinity = { styles: string[]; collections: string[]; categories?: string[]; text?: string[] };
-
-const OCCASIONS: Record<string, Affinity & { link?: QuizLink }> = {
-  engagement: {
-    styles: ['solitaire', 'halo', 'hidden-halo', 'three-stone', 'toi-et-moi'],
-    collections: ['engagement', 'bridal'],
-    categories: ['engagement-rings'],
-    link: { label: 'The Engagement Edit', href: '/collections/engagement' },
-  },
-  wedding: {
-    styles: ['eternity'],
-    collections: ['bridal', 'wedding-gifts', 'bridal-gifts', 'eternity'],
-    categories: ['wedding-bands'],
-    link: { label: 'Wedding Gifts', href: '/collections/wedding-gifts' },
-  },
-  anniversary: {
-    styles: ['anniversary', 'eternity', 'three-stone'],
-    collections: ['anniversary-gifts', 'eternity', 'three-stone'],
-    link: { label: 'Anniversary Gifts', href: '/collections/anniversary-gifts' },
-  },
-  birthday: {
-    styles: ['stud', 'hoop', 'layering'],
-    collections: ['birthday-gifts'],
-    link: { label: 'Birthday Gifts', href: '/collections/birthday-gifts' },
-  },
-  milestone: {
-    styles: ['tennis', 'three-stone', 'eternity'],
-    collections: ['anniversary-gifts', 'tennis', 'three-stone'],
-    link: { label: 'Tennis Jewelry', href: '/collections/tennis' },
-  },
-  everyday: {
-    styles: ['stud', 'stackable', 'layering', 'bezel', 'hoop'],
-    collections: ['stackable', 'birthday-gifts'],
-    link: { label: 'Stackable Pieces', href: '/collections/stackable' },
-  },
-};
-
-const STYLES: Record<string, Affinity & { link: QuizLink }> = {
-  classic: { styles: ['solitaire', 'halo', 'eternity', 'tennis', 'stud'], collections: ['solitaire', 'eternity', 'tennis'], link: { label: 'Solitaire Collection', href: '/collections/solitaire' } },
-  modern: { styles: ['modern', 'bezel'], collections: ['geometric'], text: ['east west'], link: { label: 'Geometric Collection', href: '/collections/geometric' } },
-  vintage: { styles: ['vintage', 'halo'], collections: ['art-deco'], link: { label: 'Art Deco Collection', href: '/collections/art-deco' } },
-  statement: {
-    styles: ['cocktail', 'toi-et-moi', 'three-stone', 'bold-gold', 'tennis'],
-    collections: ['toi-et-moi', 'three-stone', 'tennis'],
-    link: { label: 'Tennis Collection', href: '/collections/tennis' },
-  },
-  delicate: { styles: ['stackable', 'layering', 'stud', 'bezel', 'hoop'], collections: ['stackable'], link: { label: 'Stackable Collection', href: '/collections/stackable' } },
-};
-
-const overlap = (a: string[], b: string[], cap = 2) => Math.min(cap, a.filter((x) => b.includes(x)).length);
-
-// ───────────────────────────── scoring ─────────────────────────────
-
-type Context = {
-  categories: string[];
-  budget: [number, number] | null; // cents
-  metal: string | null;
-  shape: string | null;
-  style: Affinity | null;
-  occasion: Affinity | null;
-  recipient: string | null;
-  typeChosen: boolean;
-};
-
-function contextFor(a: QuizAnswers): Context {
-  const pick = (k: string) => (a[k] && !ANY.has(a[k]) ? a[k] : null);
-  const budget = pick('budget');
-  let range: [number, number] | null = null;
-  if (budget) {
-    const [min, max] = parseRange(budget);
-    range = [min * 100, max === Infinity ? Infinity : max * 100];
-  }
-  const type = pick('type');
-  return {
-    categories: (type && TYPE_CATEGORIES[type]) || [],
-    budget: range,
-    metal: pick('metal'),
-    shape: pick('shape'),
-    style: (pick('style') && STYLES[a.style]) || null,
-    occasion: (pick('occasion') && OCCASIONS[a.occasion]) || null,
-    recipient: pick('recipient'),
-    typeChosen: Boolean(type && TYPE_CATEGORIES[type]),
-  };
-}
-
-const hasMetal = (r: IndexRow, metal: string) => r.metalColors.some((m) => m.split('-').includes(metal));
-
-function affinity(r: IndexRow, aff: Affinity, wStyle: number, wColl: number) {
-  let s = wStyle * overlap(r.styles, aff.styles) + wColl * overlap(r.collections, aff.collections);
-  if (aff.text?.some((t) => r.text.includes(t))) s += wStyle;
-  return s;
-}
-
-function score(r: IndexRow, c: Context) {
-  let s = 0;
-  if (c.categories.length && c.categories.includes(r.category)) s += 40;
-
-  if (c.budget) {
-    const [min, max] = c.budget;
-    const p = r.fromPrice;
-    if (p >= min && p <= max) {
-      s += 30;
-      // within the range, favour pieces that use the budget well rather than the cheapest
-      if (Number.isFinite(max)) s += 6 * (1 - Math.min(1, Math.abs(p - (min + max) / 2) / Math.max(1, (max - min) / 2)));
-      else s += Math.min(6, ((p - min) / Math.max(1, min)) * 6);
-    } else if (p > max) {
-      s -= Math.min(45, ((p - max) / Math.max(1, max)) * 45);
-    } else {
-      s -= Math.min(30, ((min - p) / Math.max(1, min)) * 30);
+/** 12 varied pieces to tap: the chosen categories take turns, and near-duplicates (same style and shape) wait until last */
+export async function tasteTiles(a: MatchAnswers, count = 12): Promise<TasteTile[]> {
+  const seen: Record<string, number> = {};
+  const turns = (await candidates(a, count)).map((r) => ({ r, turn: (seen[r.category] = (seen[r.category] ?? -1) + 1) })).sort((x, y) => x.turn - y.turn).map((x) => x.r);
+  const look = (r: IndexRow) => `${r.category}|${r.styles[0] ?? ''}|${r.shapes[0] ?? ''}`;
+  const looks = new Set<string>();
+  const picked: IndexRow[] = [];
+  for (const r of turns) {
+    if (picked.length < count && !looks.has(look(r))) {
+      looks.add(look(r));
+      picked.push(r);
     }
   }
-
-  if (c.metal) s += hasMetal(r, c.metal) ? 12 : -8;
-  if (c.shape) s += r.shapes.includes(c.shape) ? 14 : r.shapes.length ? -4 : 0;
-  if (c.style) s += affinity(r, c.style, 7, 5);
-  if (c.occasion) {
-    s += affinity(r, c.occasion, 3, 5);
-    if (!c.typeChosen && c.occasion.categories?.includes(r.category)) s += 15;
-  }
-  if (c.recipient === 'proposal' && r.category === 'engagement-rings') s += 10;
-  if (c.recipient === 'family' && !c.typeChosen && (r.category === 'engagement-rings' || r.category === 'wedding-bands')) s -= 15;
-
-  s += (r.isTrending ? 2 : 0) + (r.isFeatured ? 1 : 0);
-  return s;
+  for (const r of turns) if (picked.length < count && !picked.includes(r)) picked.push(r);
+  const cards = await getCardsByIds(picked.map((r) => r.id));
+  return cards.flatMap((c) => {
+    const image = photo(c, a.metal);
+    return image ? [{ id: c.id, name: c.name, image }] : [];
+  });
 }
 
-// ───────────────────────────── recommend ─────────────────────────────
+const overlap = (a: string[], b: string[]) => a.filter((x) => b.includes(x)).length;
 
-export async function recommendProducts(answers: QuizAnswers, limit = 8): Promise<Recommendation> {
-  const index = await getCatalogIndex();
-  const c = contextFor(answers);
-
-  const inCat = (r: IndexRow) => !c.categories.length || c.categories.includes(r.category);
-  const inBudget = (r: IndexRow, tol: number) => !c.budget || (r.fromPrice <= c.budget[1] * tol && r.fromPrice >= c.budget[0] / tol);
-  const metalOk = (r: IndexRow) => !c.metal || hasMetal(r, c.metal);
-  const shapeOk = (r: IndexRow) => !c.shape || r.shapes.includes(c.shape);
-
-  // Strictest first. Each tier only adds products the previous tiers did not already include.
-  const tiers: ((r: IndexRow) => boolean)[] = [
-    (r) => inCat(r) && inBudget(r, 1) && metalOk(r) && shapeOk(r),
-    (r) => inCat(r) && inBudget(r, 1) && metalOk(r),
-    (r) => inCat(r) && inBudget(r, 1.25),
-    (r) => inCat(r) && inBudget(r, 1.75),
-    (r) => inCat(r),
-    (r) => inBudget(r, 1.25),
-    () => true,
-  ];
-
-  const scored = new Map(index.map((r) => [r.id, score(r, c)]));
-  const byScore = (a: IndexRow, b: IndexRow) => scored.get(b.id)! - scored.get(a.id)! || a.position - b.position;
-
-  const chosen: IndexRow[] = [];
-  const seen = new Set<string>();
-  let exactCount = 0;
-  for (const [i, tier] of tiers.entries()) {
-    if (chosen.length >= limit) break;
-    const pool = index.filter((r) => !seen.has(r.id) && tier(r)).sort(byScore);
-    for (const r of pool) {
-      if (chosen.length >= limit) break;
-      chosen.push(r);
-      seen.add(r.id);
-      if (i === 0) exactCount++;
-    }
-  }
-
-  const ids = chosen.map((r) => r.id);
-  const products = await getCardsByIds(ids);
-  return { ids: products.map((p) => p.id), exactCount: Math.min(exactCount, products.length), products, links: buildLinks(answers) };
+function similarity(r: IndexRow, liked: IndexRow) {
+  const price = Math.abs(Math.log(Math.max(r.fromPrice, 1) / Math.max(liked.fromPrice, 1)));
+  return (
+    (r.id === liked.id ? 5 : 0) +
+    (r.category === liked.category ? 2 : 0) +
+    overlap(r.styles, liked.styles) * 3 +
+    overlap(r.shapes, liked.shapes) * 2 +
+    overlap(r.metalColors, liked.metalColors) +
+    (r.settingType && r.settingType === liked.settingType ? 1 : 0) +
+    Math.max(0, 2 - price * 2)
+  );
 }
 
-/** Collection links that continue the shopper's journey from their answers. */
-export function buildLinks(a: QuizAnswers): QuizLink[] {
-  const c = contextFor(a);
-  const links: QuizLink[] = [];
-  const q = new URLSearchParams();
-  if (c.metal) q.set('metal', c.metal);
-  if (c.shape) q.set('shape', c.shape);
-  const qs = q.toString() ? `?${q.toString()}` : '';
-  const refinements = [c.shape && label.shape(c.shape), c.metal && label.metal(c.metal)].filter(Boolean).join(' · ');
-  for (const cat of c.categories) links.push({ label: [CATEGORY_LABELS[cat] ?? cat, refinements].filter(Boolean).join(' · '), href: `/${cat}${qs}` });
-  const occasion = c.occasion ? OCCASIONS[a.occasion] : undefined;
-  if (occasion?.link) links.push(occasion.link);
-  const style = c.style ? STYLES[a.style] : undefined;
-  if (style) links.push(style.link);
-  if (c.budget && Number.isFinite(c.budget[1])) {
-    const max = c.budget[1];
-    if (max <= 2500000) links.push({ label: 'Gifts Under ₹25,000', href: '/collections/gifts-under-25000' });
-    else if (max <= 5000000) links.push({ label: 'Gifts Under ₹50,000', href: '/collections/gifts-under-50000' });
-    else if (max <= 10000000) links.push({ label: 'Gifts Under ₹1,00,000', href: '/collections/gifts-under-100000' });
-  }
-  if (c.shape) links.push({ label: `${label.shape(c.shape)} Diamonds`, href: `/collections/shape/${c.shape}` });
-  const seen = new Set<string>();
-  return links.filter((l) => !seen.has(l.href) && seen.add(l.href)).slice(0, 5);
+/** The matches, ranked by how much each piece resembles the ones the shopper tapped */
+export async function matchProducts(a: MatchAnswers, count = 20): Promise<{ ids: string[]; products: ProductCard[] }> {
+  const rows = await candidates(a, count);
+  const index = new Map((await getCatalogIndex()).map((r) => [r.id, r]));
+  const liked = a.liked.map((id) => index.get(id)).filter((r): r is IndexRow => !!r);
+  const score = new Map(rows.map((r) => [r.id, liked.reduce((s, l) => s + similarity(r, l), 0)]));
+  const ids = (liked.length ? [...rows].sort((x, y) => score.get(y.id)! - score.get(x.id)! || x.position - y.position) : rows).slice(0, count).map((r) => r.id);
+  return { ids, products: await getCardsByIds(ids) };
 }
 
-// ───────────────────────────── persistence ─────────────────────────────
+// ───────────────────────────── saved matches ─────────────────────────────
 
-export async function saveQuizResult({ quizId, userId, answers, ids }: { quizId: string | null; userId?: string | null; answers: QuizAnswers; ids: string[] }) {
-  let qid = quizId;
-  if (!qid) {
-    const row = await db.recommendationQuiz.upsert({
-      where: { slug: QUIZ_SLUG },
-      update: {},
-      create: { slug: QUIZ_SLUG, title: DEFAULT_TITLE, questions: QUIZ_QUESTIONS as unknown as Prisma.InputJsonValue },
-      select: { id: true },
-    });
-    qid = row.id;
-  }
-  const data = { quizId: qid, answers: answers as Prisma.InputJsonValue, recommendedIds: ids };
+export async function saveMatch(userId: string | null, answers: MatchAnswers, ids: string[]) {
+  const quiz = await db.recommendationQuiz.upsert({ where: { slug: QUIZ_SLUG }, update: {}, create: { slug: QUIZ_SLUG, title: 'Find Your Match', questions: [] }, select: { id: true } });
+  const data = { quizId: quiz.id, answers: answers as unknown as Prisma.InputJsonValue, recommendedIds: ids };
   try {
-    const saved = await db.recommendationAnswer.create({ data: { ...data, userId: userId ?? null }, select: { id: true } });
-    return saved.id;
+    await db.recommendationAnswer.create({ data: { ...data, userId } });
   } catch (err) {
     // a stale session can reference a user that no longer exists — save anonymously instead
     if (!userId) throw err;
-    const saved = await db.recommendationAnswer.create({ data, select: { id: true } });
-    return saved.id;
+    await db.recommendationAnswer.create({ data });
   }
+}
+
+/** A signed-in shopper's latest matches */
+export async function lastMatch(userId: string) {
+  const row = await db.recommendationAnswer.findFirst({ where: { userId, quiz: { slug: QUIZ_SLUG } }, orderBy: { createdAt: 'desc' }, select: { answers: true, recommendedIds: true } });
+  if (!row || !row.recommendedIds.length) return null;
+  return { answers: row.answers as unknown as MatchAnswers, products: await getCardsByIds(row.recommendedIds) };
 }

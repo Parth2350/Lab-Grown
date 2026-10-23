@@ -11,7 +11,7 @@ import { ArrowLink, ArtPanel, CtaBand } from '@/components/content/ui';
 
 export const metadata = pageMeta({
   title: 'Our Story',
-  description: `The story of ${site.name}: a family fine jewelry workshop crafting certified lab-grown diamond jewelry by hand since ${site.foundedYear}.`,
+  description: `The story of ${site.name}: a family fine jewelry workshop crafting certified natural and lab-grown diamond jewelry by hand since ${site.foundedYear}.`,
   path: '/about',
 });
 
@@ -60,7 +60,7 @@ function Chapter({
 const VALUES = [
   { t: 'Craft over haste', d: 'We would rather take an extra day at the bench than send out a piece that is almost right.' },
   { t: 'Radical transparency', d: 'Independent grading, honest pricing and clear policies — no fine print, no inflated “original” prices.' },
-  { t: 'Considered sourcing', d: 'Lab-grown diamonds with traceable origins, and solid gold from refiners we know and trust.' },
+  { t: 'Considered sourcing', d: 'Natural and lab-grown diamonds with traceable origins, and solid gold from refiners we know and trust.' },
   { t: 'Made for life', d: 'Designed to be worn every day and backed by a lifetime warranty, because heirlooms should last.' },
 ];
 

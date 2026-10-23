@@ -4,8 +4,12 @@ import type { Faq } from '../FaqSection';
 export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
   {
     id: 'diamonds',
-    title: 'Lab-grown diamonds',
+    title: 'Diamonds',
     items: [
+      {
+        q: 'Do you offer natural diamonds as well as lab-grown?',
+        a: 'Yes. We work with both certified natural and lab-grown diamonds. Prices shown on the site are for lab-grown diamonds; tell us the design you love on WhatsApp, or start a bespoke enquiry, and we will source a certified natural diamond and quote it for you.',
+      },
       {
         q: 'Are lab-grown diamonds real diamonds?',
         a: 'Yes. A lab-grown diamond is pure crystallised carbon, exactly like a mined diamond, with the same hardness, brilliance and fire. The only difference is its origin: it is grown under carefully controlled conditions rather than extracted from the earth. It is not a simulant such as cubic zirconia or moissanite.',

@@ -227,7 +227,7 @@ export const VIRTUAL_COLLECTIONS: Record<string, { title: string; description: s
   'gifts-under-25000': { title: 'Gifts Under ₹25,000', description: 'Thoughtful lab-grown diamond gifts, all under ₹25,000 — beautifully boxed and ready to give.', maxPrice: 2500000 },
   'gifts-under-50000': { title: 'Gifts Under ₹50,000', description: 'Studs, pendants and stacking rings under ₹50,000 that feel far more precious.', maxPrice: 5000000 },
   'gifts-under-100000': { title: 'Gifts Under ₹1,00,000', description: 'Considered fine jewelry gifts under ₹1,00,000 — made to be treasured for a lifetime.', maxPrice: 10000000 },
-  all: { title: 'All Jewelry', description: `Explore every ${site.name} design — certified lab-grown diamonds in solid gold, crafted in our own workshop.` },
+  all: { title: 'All Jewelry', description: `Explore every ${site.name} design — certified natural and lab-grown diamonds in solid gold, crafted in our own workshop.` },
 };
 
 export const FOOTER_NAV = {
