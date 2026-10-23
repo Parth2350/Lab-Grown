@@ -10,6 +10,7 @@ import { useUI } from '@/store/ui';
 import { Sheet } from '@/components/ui/Sheet';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { SocialIcon } from './SocialIcons';
+import { useLocalize } from '@/components/providers/CurrencyProvider';
 import { Logo } from './Logo';
 
 export function MobileMenu() {
@@ -17,6 +18,7 @@ export function MobileMenu() {
   const setMenu = useUI((s) => s.setMenu);
   const { data: session } = useSession();
   const [expanded, setExpanded] = useState<string | null>(null);
+  const localize = useLocalize();
   const close = () => setMenu(false);
 
   return (
@@ -57,7 +59,7 @@ export function MobileMenu() {
                                     )}
                                   >
                                     {l.shape && <ShapeIcon shape={l.shape} size={26} className="text-taupe" />}
-                                    {l.label}
+                                    {localize(l.label)}
                                   </Link>
                                 </li>
                               ))}

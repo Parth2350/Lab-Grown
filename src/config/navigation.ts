@@ -232,6 +232,7 @@ export const VIRTUAL_COLLECTIONS: Record<string, { title: string; description: s
 
 export const FOOTER_NAV = {
   shop: [
+    { label: 'Shop All', href: '/collections/all' },
     { label: 'Engagement Rings', href: '/engagement-rings' },
     { label: 'Wedding Bands', href: '/wedding-bands' },
     { label: 'Rings', href: '/rings' },

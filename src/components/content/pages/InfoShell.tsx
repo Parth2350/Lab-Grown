@@ -3,7 +3,8 @@ import type { ReactNode } from 'react';
 import { Mail, MessageCircle, Phone } from 'lucide-react';
 import { site } from '@/config/site';
 import type { Crumb } from '@/components/ui/Breadcrumbs';
-import { cn, formatDate } from '@/lib/utils';
+import { cn, formatDate, localizeRupees } from '@/lib/utils';
+import { getCurrency } from '@/lib/server/currency';
 import { PageIntro } from '../ui';
 import { PAGE_NAV } from './registry';
 
@@ -185,7 +186,9 @@ export function Steps({ children }: { children: ReactNode }) {
 }
 
 /** Simple, responsive data table for policy pages. */
-export function DataTable({ head, rows, caption }: { head: string[]; rows: ReactNode[][]; caption?: string }) {
+export async function DataTable({ head, rows: raw, caption }: { head: string[]; rows: ReactNode[][]; caption?: string }) {
+  const currency = await getCurrency();
+  const rows = raw.map((r) => r.map((cell) => (typeof cell === 'string' ? localizeRupees(cell, currency) : cell)));
   return (
     <div className="mb-6 overflow-x-auto border border-line bg-white">
       <table className="w-full min-w-[480px] text-left text-[16px]">

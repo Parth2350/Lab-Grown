@@ -3,10 +3,11 @@ import { ShieldCheck } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { SHAPES, label } from '@/lib/catalog';
 import type { DiamondData, DiamondOptionData } from '@/lib/types';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { DiamondConfigurator } from './DiamondConfigurator';
 import { OptionGroup, optionBtn } from './Options';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 /** Carat sizes shoppers think in; each covers stones up to the next size. */
 const SIZES = [0.3, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4];
@@ -49,6 +50,7 @@ type Props = {
 };
 
 export function CenterDiamondPicker({ option, shape, onShape, diamond, onDiamond, settingPrice, defaultCarat, scrollIntoView }: Props) {
+  const formatMoney = useFormatMoney();
   const minC = option.minCarat ?? 0.3;
   const maxC = option.maxCarat ?? 4.5;
   const [lists, setLists] = useState<Record<string, DiamondData[]>>({});

@@ -4,6 +4,8 @@ import { getCollection, listProducts, LISTING_PAGE_SIZE } from '@/lib/server/cat
 import { parseFilters, type Scope } from '@/lib/filters';
 import { pageMeta } from '@/lib/seo';
 import { SHAPES } from '@/lib/catalog';
+import { localizeRupees } from '@/lib/utils';
+import { getCurrency } from '@/lib/server/currency';
 import { VIRTUAL_COLLECTIONS } from '@/config/navigation';
 import { CollectionView } from '@/components/collection/CollectionView';
 
@@ -23,9 +25,10 @@ type Resolved = {
 async function resolve(slug: string): Promise<Resolved | null> {
   const virtual = VIRTUAL_COLLECTIONS[slug];
   if (virtual) {
+    const currency = await getCurrency();
     return {
-      title: virtual.title,
-      description: virtual.description,
+      title: localizeRupees(virtual.title, currency),
+      description: localizeRupees(virtual.description, currency),
       scope: { maxPrice: virtual.maxPrice, minPrice: virtual.minPrice },
       apiScope: { collectionSlug: slug },
       eyebrow: slug.startsWith('gifts') ? 'Gifts' : 'Collection',

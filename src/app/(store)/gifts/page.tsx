@@ -4,7 +4,8 @@ import { VIRTUAL_COLLECTIONS } from '@/config/navigation';
 import { site } from '@/config/site';
 import { countProducts, getProductsWhere } from '@/lib/server/catalog';
 import { pageMeta } from '@/lib/seo';
-import { pluralize } from '@/lib/utils';
+import { localizeRupees, pluralize } from '@/lib/utils';
+import { getCurrency } from '@/lib/server/currency';
 import type { ProductCard as Card } from '@/lib/types';
 import { type ArtSpec } from '@/components/art/JewelryArt';
 import { LazyJewelryArt } from '@/components/art/LazyArt';
@@ -152,11 +153,12 @@ function ProductRail({ id, eyebrow, title, subtitle, products, href }: { id: str
 
 export default async function GiftsPage() {
   const tiles = [...PRICE_TILES, ...OCCASION_TILES];
-  const [counts, under500, anniversary, everyday] = await Promise.all([
+  const [counts, under500, anniversary, everyday, currency] = await Promise.all([
     Promise.all(tiles.map((t) => countProducts(t.scope))),
     getProductsWhere({ maxPrice: 5000000 }, {}, 10, 'featured'),
     getProductsWhere({ collection: 'anniversary-gifts' }, {}, 10, 'featured'),
     getProductsWhere({ maxPrice: 10000000 }, { style: ['stud', 'hoop', 'drop', 'layering'] }, 10, 'featured'),
+    getCurrency(),
   ]);
   const countFor = (slug: string) => counts[tiles.findIndex((t) => t.slug === slug)] ?? 0;
   const quizArt = QUIZ_TYPE_ART.earrings!;
@@ -192,7 +194,7 @@ export default async function GiftsPage() {
           {PRICE_TILES.map((t, i) => (
             <li key={t.slug}>
               <Reveal delay={i * 0.08}>
-                <CategoryTile tile={t} count={countFor(t.slug)} tall priority />
+                <CategoryTile tile={{ ...t, title: localizeRupees(t.title, currency) }} count={countFor(t.slug)} tall priority />
               </Reveal>
             </li>
           ))}
@@ -223,7 +225,7 @@ export default async function GiftsPage() {
       <ProductRail
         id="under-500"
         eyebrow="Most gifted"
-        title="Favourites under ₹50,000"
+        title={localizeRupees('Favourites under ₹50,000', currency)}
         subtitle="Small in price, never in meaning."
         products={under500}
         href="/collections/gifts-under-50000"

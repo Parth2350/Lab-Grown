@@ -7,6 +7,7 @@ import { LazyJewelryArt, LazyLooseDiamond } from '@/components/art/LazyArt';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
+import { useLocalize } from '@/components/providers/CurrencyProvider';
 import { TYPE_ART } from '../art-presets';
 import {
   BESPOKE_BUDGETS,
@@ -66,6 +67,7 @@ function fieldStep(field: string) {
 }
 
 export function BespokeWizard() {
+  const localize = useLocalize();
   const rootRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const interacted = useRef(false);
@@ -387,7 +389,7 @@ export function BespokeWizard() {
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {BESPOKE_BUDGETS.map((b) => (
                     <OptionCard key={b.value} name="budget" value={b.value} checked={data.budget === b.value} onSelect={set('budget')} describedBy={errors.budget ? 'err-budget' : undefined}>
-                      <span className="flex min-h-[72px] items-center px-5 py-4 font-serif text-xl text-ink">{b.label}</span>
+                      <span className="flex min-h-[72px] items-center px-5 py-4 font-serif text-xl text-ink">{localize(b.label)}</span>
                     </OptionCard>
                   ))}
                 </div>
@@ -467,12 +469,13 @@ function Choice({ legend, error, errorId, children }: { legend: string; error?: 
 }
 
 function Review({ data, uploads, onEdit }: { data: Data; uploads: UploadItem[]; onEdit: (step: number) => void }) {
+  const localize = useLocalize();
   const rows: { label: string; value: ReactNode; step: number }[] = [
     { label: 'Jewelry', value: labelFor(BESPOKE_TYPES, data.jewelryType), step: 0 },
     { label: 'Diamond shape', value: labelFor(BESPOKE_SHAPES, data.shape), step: 1 },
     { label: 'Carat', value: labelFor(BESPOKE_CARATS, data.carat), step: 2 },
     { label: 'Metal', value: labelFor(BESPOKE_METALS, data.metal), step: 3 },
-    { label: 'Budget', value: labelFor(BESPOKE_BUDGETS, data.budget), step: 4 },
+    { label: 'Budget', value: localize(labelFor(BESPOKE_BUDGETS, data.budget)), step: 4 },
     {
       label: 'Inspiration',
       value: uploads.length ? (

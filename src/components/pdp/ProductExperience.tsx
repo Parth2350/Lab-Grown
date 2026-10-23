@@ -2,7 +2,7 @@
 import { useEffect, useMemo } from 'react';
 import { PURITIES, label } from '@/lib/catalog';
 import type { ProductCard, ProductDetail } from '@/lib/types';
-import { formatMoney } from '@/lib/utils';
+
 import { fmtCarat, unpackStones, unpackVariants, type PackedVariants } from '@/lib/variant';
 import { useRecentlyViewed } from '@/store/lists';
 import { AccordionItem } from '@/components/ui/Accordion';
@@ -10,6 +10,7 @@ import { useStoreSettings } from '@/components/providers/SettingsProvider';
 import { Gallery } from './Gallery';
 import { ConfiguratorPanel } from './ConfiguratorPanel';
 import { useConfiguration, type InitialConfig } from './useConfiguration';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 const SPEC_GRID = 'grid grid-cols-1 gap-x-6 gap-y-3 text-sm sm:grid-cols-2 lg:grid-cols-1';
 
@@ -66,6 +67,7 @@ export function ProductExperience({
   configure?: boolean;
   compact?: boolean;
 }) {
+  const formatMoney = useFormatMoney();
   const p = useMemo(() => (packed ? { ...wire, variants: unpackVariants(packed), stoneSets: unpackStones(packed) } : wire), [wire, packed]);
   const c = useConfiguration(p, init);
   const card = useMemo(() => toCard(p), [p]);

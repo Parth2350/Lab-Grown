@@ -4,11 +4,12 @@ import { Check, ChevronDown, ShieldCheck, SlidersHorizontal } from 'lucide-react
 import { useEffect, useMemo, useState } from 'react';
 import { CERT_LABS, DIAMOND_CLARITIES, DIAMOND_COLORS, DIAMOND_CUTS, label } from '@/lib/catalog';
 import type { DiamondData, DiamondOptionData } from '@/lib/types';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { Sheet } from '@/components/ui/Sheet';
 import { LooseDiamond } from '@/components/art/JewelryArt';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { diamondSummary } from './useConfiguration';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 type Props = {
   open: boolean;
@@ -121,6 +122,7 @@ export function DiamondDetail({ d }: { d: DiamondData }) {
 }
 
 export function DiamondConfigurator({ open, onClose, option, selected, settingPrice, onSelect }: Props) {
+  const formatMoney = useFormatMoney();
   const minC = option.minCarat ?? 0.3;
   const maxC = option.maxCarat ?? 4;
   const initial: Q = { minCarat: minC, maxCarat: maxC, colors: [], clarities: [], cuts: [], labs: [], minPrice: '', maxPrice: '', sort: 'price-asc' };

@@ -2,12 +2,15 @@ import type { ReactNode } from 'react';
 import { AccordionItem } from '@/components/ui/Accordion';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { faqLd } from '@/lib/seo';
-import { cn } from '@/lib/utils';
+import { cn, localizeRupees } from '@/lib/utils';
+import { getCurrency } from '@/lib/server/currency';
 
 export type Faq = { q: string; a: string };
 
 /** Plain-text answers keep the visible copy and the FAQPage JSON-LD identical. */
-export function FaqList({ items, className, withSchema = true }: { items: Faq[]; className?: string; withSchema?: boolean }) {
+export async function FaqList({ items: raw, className, withSchema = true }: { items: Faq[]; className?: string; withSchema?: boolean }) {
+  const currency = await getCurrency();
+  const items = raw.map((f) => ({ ...f, a: localizeRupees(f.a, currency) }));
   return (
     <>
       <div className={cn('border-t border-line', className)}>

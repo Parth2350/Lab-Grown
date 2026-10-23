@@ -4,7 +4,7 @@ import { ArrowLeftRight, Plus, X } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { PURITIES, label } from '@/lib/catalog';
 import type { ProductCard, ProductDetail } from '@/lib/types';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { COMPARE_MAX, useCompare } from '@/store/lists';
 import { useUI } from '@/store/ui';
 import { useMounted } from '@/hooks/use-mounted';
@@ -13,8 +13,9 @@ import { WishlistButton, productHref } from '@/components/product/ProductCard';
 import { Stars } from '@/components/ui/Stars';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ButtonLink } from '@/components/ui/Button';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
-type Row = { id: string; label: string; value: (c: ProductCard, d: ProductDetail | null | undefined) => { text: string; node?: ReactNode } };
+type Row = { id: string; label: string; value: (c: ProductCard, d: ProductDetail | null | undefined, money: (cents: number) => string) => { text: string; node?: ReactNode } };
 
 const dash = '—';
 
@@ -26,7 +27,7 @@ function quality(d: ProductDetail | null | undefined) {
 }
 
 const ROWS: Row[] = [
-  { id: 'price', label: 'Price', value: (c) => ({ text: `From ${formatMoney(c.fromPrice)}` }) },
+  { id: 'price', label: 'Price', value: (c, _d, money) => ({ text: `From ${money(c.fromPrice)}` }) },
   {
     id: 'metal',
     label: 'Metal options',
@@ -70,6 +71,7 @@ const ROWS: Row[] = [
 
 /** Side-by-side comparison for up to four pieces (sticky attribute column, scrolls on mobile). */
 export function CompareView() {
+  const formatMoney = useFormatMoney();
   const mounted = useMounted();
   const items = useCompare((s) => s.items);
   const remove = useCompare((s) => s.remove);
@@ -217,7 +219,7 @@ export function CompareView() {
           </thead>
           <tbody>
             {ROWS.map((row) => {
-              const values = items.map((c) => row.value(c, details[c.id] === undefined ? undefined : details[c.id]));
+              const values = items.map((c) => row.value(c, details[c.id] === undefined ? undefined : details[c.id], formatMoney));
               const differs = new Set(values.map((v) => v.text)).size > 1;
               const mark = highlight && differs;
               return (

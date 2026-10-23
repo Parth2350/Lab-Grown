@@ -5,7 +5,7 @@ import { METAL_COLORS, PURITIES, SHAPE_SLUGS, label } from '@/lib/catalog';
 import { fmtCarat } from '@/lib/variant';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import type { ProductCard, ProductDetail } from '@/lib/types';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useUI } from '@/store/ui';
 import { Sheet } from '@/components/ui/Sheet';
 import { CompareButton, WishlistButton } from '@/components/product/ProductCard';
@@ -15,6 +15,7 @@ import { OptionGroup, optionBtn, optionLabel } from './Options';
 import { ENGRAVING_MAX, diamondSummary, type Configuration } from './useConfiguration';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
 import { productEnquiry } from '@/lib/whatsapp';
+import { useCurrency, useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 const SIZE_CHART = [
   ['4', '14.9', '46.8'],
@@ -68,6 +69,8 @@ function shipBy(madeToOrder: boolean) {
 }
 
 export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p: ProductDetail; card: ProductCard; c: Configuration; compact?: boolean; initialConfigure?: boolean }) {
+  const formatMoney = useFormatMoney();
+  const currency = useCurrency();
   const toast = useUI((s) => s.toast);
   const settings = useStoreSettings();
   const [sizeGuide, setSizeGuide] = useState(false);
@@ -311,7 +314,7 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
               quantity: c.quantity,
               unitPrice: c.price,
               priceNote: c.needsDiamond ? 'setting only, diamond extra' : null,
-            })
+            }, currency)
           }
         >
           Enquire

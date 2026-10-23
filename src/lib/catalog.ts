@@ -2,7 +2,7 @@
  * Catalog vocabulary shared by the storefront, filters, admin and seed.
  * Slugs are what live in the database and in URLs; labels are what shoppers see.
  */
-import { CATALOG_COMMON_SHAPES, CATALOG_SHAPE_LABELS } from './catalog-shapes';
+import { CATALOG_COMMON_SHAPES, CATALOG_SHAPE_LABELS } from './catalog-generated';
 
 export const SHAPES = [
   { slug: 'round', label: 'Round', blurb: 'The most brilliant cut — timeless and endlessly sparkling.' },

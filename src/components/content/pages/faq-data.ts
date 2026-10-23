@@ -38,7 +38,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
       },
       {
         q: 'In which currency are prices shown?',
-        a: 'All prices are in Indian rupees (₹). GST of 3% is added to your order total. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
+        a: 'Prices are shown in Indian rupees (₹) by default, and in US dollars ($) for visitors in the United States. You can switch at any time from the location menu at the bottom of every page. GST of 3% is added to your order total. If you pay with a card in another currency, your bank converts the amount at its own exchange rate.',
       },
     ],
   },

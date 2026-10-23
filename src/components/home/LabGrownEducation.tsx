@@ -1,5 +1,5 @@
 import { ArrowRight, BadgeCheck, Diamond, HandCoins, Leaf, Sparkles } from 'lucide-react';
-import { LazyLooseDiamond } from '@/components/art/LazyArt';
+import Image from 'next/image';
 import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { cn } from '@/lib/utils';
@@ -63,17 +63,8 @@ export function LabGrownEducation() {
           </Reveal>
 
           <Reveal delay={0.1} className="lg:col-span-6 xl:col-span-6 xl:col-start-7">
-            <figure className="art-tile-cool relative mx-auto aspect-square w-full max-w-[560px] overflow-hidden">
-              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 400" aria-hidden>
-                <g fill="none" stroke="#A8834A" strokeWidth="0.6" opacity="0.45">
-                  <circle cx="200" cy="196" r="150" strokeDasharray="1 5" />
-                  <circle cx="200" cy="196" r="118" />
-                  <path d="M60 60L118 114M340 60L282 114M60 340L118 282M340 340L282 282" />
-                </g>
-              </svg>
-              <div className="absolute inset-[16%]">
-                <LazyLooseDiamond shape="oval" title="An oval lab-grown diamond" className="block h-full w-full" />
-              </div>
+            <figure className="relative mx-auto aspect-square w-full max-w-[560px] overflow-hidden bg-white">
+              <Image src="/images/home/lab-grown-ring.webp" alt="A lab-grown diamond halo ring in white gold" fill sizes="(min-width:1024px) 560px, 100vw" className="object-contain p-[14%]" />
               {FACTS.map((f) => (
                 <div key={f.label} className={cn('absolute', f.pos)}>
                   <p className="font-serif text-xl leading-none text-ink sm:text-2xl">{f.value}</p>

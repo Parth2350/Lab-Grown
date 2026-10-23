@@ -7,7 +7,7 @@ import { Heart, Share2, ShoppingBag, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { label } from '@/lib/catalog';
 import type { ProductCard } from '@/lib/types';
-import { cn, formatMoney, pluralize } from '@/lib/utils';
+import { cn, pluralize } from '@/lib/utils';
 import { useCart } from '@/store/cart';
 import { useWishlist } from '@/store/lists';
 import { useUI } from '@/store/ui';
@@ -16,6 +16,7 @@ import { ProductMedia } from '@/components/product/ProductMedia';
 import { CompareButton, productHref } from '@/components/product/ProductCard';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 async function fetchCards(ids: string[]) {
   if (!ids.length) return [];
@@ -25,6 +26,7 @@ async function fetchCards(ids: string[]) {
 }
 
 function WishCard({ card, onRemove, onMove, readOnly, saved, onSave }: { card: ProductCard; onRemove?: () => void; onMove: () => void; readOnly?: boolean; saved?: boolean; onSave?: () => void }) {
+  const formatMoney = useFormatMoney();
   const href = productHref(card, card.defaultMetalColor, card.defaultPurity);
   return (
     <m.article layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="group flex flex-col">

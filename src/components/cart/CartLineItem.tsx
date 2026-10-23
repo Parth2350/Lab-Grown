@@ -2,12 +2,13 @@
 import Link from 'next/link';
 import { Heart, Minus, Plus } from 'lucide-react';
 import { label } from '@/lib/catalog';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useCart, type CartLine } from '@/store/cart';
 import { useWishlist } from '@/store/lists';
 import { useUI } from '@/store/ui';
 import type { ProductCard } from '@/lib/types';
 import { ProductMedia } from '@/components/product/ProductMedia';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 /** Minimal ProductCard rebuilt from a cart line (for "move to wishlist") */
 export function lineToCard(l: CartLine): ProductCard {
@@ -56,6 +57,7 @@ export function QtyStepper({ value, onChange, size = 'sm' }: { value: number; on
 }
 
 export function CartLineItem({ line, compact, onNavigate }: { line: CartLine; compact?: boolean; onNavigate?: () => void }) {
+  const formatMoney = useFormatMoney();
   const remove = useCart((s) => s.remove);
   const setQty = useCart((s) => s.setQty);
   const addWish = useWishlist((s) => s.add);

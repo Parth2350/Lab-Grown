@@ -1,12 +1,13 @@
 'use client';
-import { site } from '@/config/site';
 import { Check, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
-import { METAL_COLORS } from '@/lib/catalog';
-import { FILTER_GROUPS, parseRange, type FilterKey } from '@/lib/filters';
+import { METAL_COLORS, PRICE_RANGES } from '@/lib/catalog';
+import { CURRENCIES, INR_PER_USD } from '@/lib/currency';
+import { FILTER_GROUPS, parseRange, rangeLabel, type FilterKey } from '@/lib/filters';
 import type { Facets } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
+import { useCurrency } from '@/components/providers/CurrencyProvider';
 import { useFilters } from './FilterContext';
 
 function Group({ title, active, defaultOpen, children }: { title: string; active: number; defaultOpen: boolean; children: React.ReactNode }) {
@@ -29,17 +30,21 @@ function Group({ title, active, defaultOpen, children }: { title: string; active
 
 function PriceInputs() {
   const { filters, set } = useFilters();
-  const custom = filters.price.find((p) => !['0-200', '200-500', '500-1000', '1000-'].includes(p));
+  const currency = useCurrency();
+  // the price filter is always in rupees; dollar shoppers type dollars
+  const rate = currency === 'USD' ? INR_PER_USD : 1;
+  const symbol = CURRENCIES.find((c) => c.code === currency)!.symbol;
+  const custom = filters.price.find((p) => !PRICE_RANGES.some((r) => r.slug === p));
   const [min, max] = custom ? parseRange(custom) : [NaN, NaN];
-  const [lo, setLo] = useState(Number.isFinite(min) ? String(min) : '');
-  const [hi, setHi] = useState(Number.isFinite(max) ? String(max) : '');
+  const [lo, setLo] = useState(Number.isFinite(min) ? String(Math.round(min / rate)) : '');
+  const [hi, setHi] = useState(Number.isFinite(max) ? String(Math.round(max / rate)) : '');
   return (
     <form
       className="mt-4 flex items-center gap-2"
       onSubmit={(e) => {
         e.preventDefault();
-        const a = Math.max(0, Number(lo) || 0);
-        const b = Number(hi) || 0;
+        const a = Math.round(Math.max(0, Number(lo) || 0) * rate);
+        const b = Math.round((Number(hi) || 0) * rate);
         if (!lo && !hi) return;
         set('price', [`${a}-${b > a ? b : ''}`]);
       }}
@@ -47,12 +52,12 @@ function PriceInputs() {
       <label className="sr-only" htmlFor="price-min">
         Minimum price
       </label>
-      <input id="price-min" inputMode="numeric" placeholder={`${site.currencySymbol} Min`} value={lo} onChange={(e) => setLo(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
+      <input id="price-min" inputMode="numeric" placeholder={`${symbol} Min`} value={lo} onChange={(e) => setLo(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
       <span className="text-taupe">–</span>
       <label className="sr-only" htmlFor="price-max">
         Maximum price
       </label>
-      <input id="price-max" inputMode="numeric" placeholder={`${site.currencySymbol} Max`} value={hi} onChange={(e) => setHi(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
+      <input id="price-max" inputMode="numeric" placeholder={`${symbol} Max`} value={hi} onChange={(e) => setHi(e.target.value.replace(/\D/g, ''))} className="field h-9 px-3 py-1 text-[15px]" />
       <button type="submit" className="label-caps h-9 shrink-0 border border-ink px-3 transition-colors hover:bg-ink hover:text-ivory">
         Go
       </button>
@@ -62,6 +67,7 @@ function PriceInputs() {
 
 export function FilterPanel({ facets, className }: { facets: Facets; className?: string }) {
   const { filters, toggle } = useFilters();
+  const currency = useCurrency();
 
   return (
     <div className={className}>
@@ -139,7 +145,7 @@ export function FilterPanel({ facets, className }: { facets: Facets; className?:
                         {isOn(o.value) && <Check className="h-3 w-3 text-ivory" strokeWidth={2} />}
                       </span>
                       {swatch && <span className="h-4 w-4 shrink-0 rounded-full ring-1 ring-line" style={{ background: swatch }} />}
-                      <span className="flex-1">{o.label}</span>
+                      <span className="flex-1">{g.key === 'price' ? rangeLabel('price', o.value, currency) : o.label}</span>
                       <span className="text-[13px] text-taupe">{o.count}</span>
                     </button>
                   </li>

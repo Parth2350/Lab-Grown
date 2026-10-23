@@ -17,12 +17,16 @@ const OPTIMISABLE = [/^\/(?!\/)/, /^https:\/\/res\.cloudinary\.com\//, /^https:\
  */
 export function Hero({ hero }: Props) {
   const image = hero.image?.trim() || null;
+  const video = hero.video?.trim() || null;
+  const media = !!(image || video);
 
   return (
     <section aria-labelledby="hero-title" className={cn('relative isolate overflow-hidden', s.heroBackdrop)}>
-      {image && (
+      {media && (
         <div className="relative aspect-[4/3] w-full sm:aspect-[16/9] lg:absolute lg:inset-0 lg:aspect-auto">
-          <Image src={image} alt="" fill priority sizes="100vw" unoptimized={!OPTIMISABLE.some((r) => r.test(image))} className="object-cover" />
+          {image && <Image src={image} alt="" fill priority sizes="100vw" unoptimized={!OPTIMISABLE.some((r) => r.test(image))} className="object-cover" />}
+          {/* the video covers the image once it plays; the image stays as the poster and for reduced-motion visitors */}
+          {video && <video src={video} poster={image ?? undefined} autoPlay muted loop playsInline preload="auto" aria-hidden className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden" />}
           <div className={cn('absolute inset-0 hidden lg:block', s.heroScrim)} aria-hidden />
         </div>
       )}
@@ -30,10 +34,10 @@ export function Hero({ hero }: Props) {
       <div
         className={cn(
           'container-x relative grid grid-cols-1 items-center lg:grid-cols-12 lg:gap-8',
-          image ? 'lg:min-h-[min(calc(100svh-150px),820px)]' : 'lg:min-h-[min(calc(100svh-150px),860px)]',
+          media ? 'lg:min-h-[min(calc(100svh-150px),820px)]' : 'lg:min-h-[min(calc(100svh-150px),860px)]',
         )}
       >
-        <div className={cn('relative z-10 pb-14 pt-8 sm:pb-16 lg:col-span-5 lg:py-24', image ? 'pt-10 lg:pt-24' : 'order-2 lg:order-1')}>
+        <div className={cn('relative z-10 pb-14 pt-8 sm:pb-16 lg:col-span-5 lg:py-24', media ? 'pt-10 lg:pt-24' : 'order-2 lg:order-1')}>
           <p className={cn('eyebrow flex items-center gap-3 text-gold-deep', s.rise)} style={{ animationDelay: '80ms' }}>
             <span className="h-px w-8 bg-gold" aria-hidden />
             {hero.eyebrow}
@@ -65,7 +69,7 @@ export function Hero({ hero }: Props) {
           </ul>
         </div>
 
-        {!image && (
+        {!media && (
           <div className={cn('relative order-1 -mx-4 sm:-mx-6 lg:order-2 lg:col-span-7 lg:mx-0 lg:-mr-6 xl:-mr-10', s.bloom)} style={{ animationDelay: '120ms' }}>
             <div className="mx-auto w-full max-w-[min(560px,46svh)] lg:max-w-none">
               <EditorialArt scene="hero" className="w-full" />

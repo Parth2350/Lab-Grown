@@ -5,6 +5,7 @@ import { site } from '@/config/site';
 import { Logo } from './Logo';
 import { SocialLinks } from './SocialIcons';
 import { NewsletterForm } from './NewsletterForm';
+import { CurrencySwitcher } from '@/components/providers/CurrencyProvider';
 
 const PROMISES = [
   { icon: Gem, title: 'IGI & GIA Certified', text: 'Every diamond, independently graded' },
@@ -90,6 +91,7 @@ export function Footer() {
               </li>
             ))}
           </ul>
+          <CurrencySwitcher />
           <ul className="flex items-center gap-2" aria-label="Accepted payments">
             {['UPI', 'VISA', 'MC', 'AMEX', 'RuPay'].map((p) => (
               <li key={p} className="rounded-sm border border-white/15 px-2 py-1 text-[11.5px] font-medium tracking-wider text-ivory/70">

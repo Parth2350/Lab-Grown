@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Crown, Earth, Gift, Laptop, Megaphone, PackageOpen } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
@@ -11,36 +12,36 @@ const STEPS = [
 ];
 
 const BENEFITS = [
-  { icon: Gift, title: 'Exclusive Rewards', text: 'Competitive commission on every referred sale, with rewards that grow as you do.' },
-  { icon: Earth, title: 'Global Opportunity', text: `Refer clients wherever we deliver — across ${site.stats.countries} countries and counting.` },
-  { icon: PackageOpen, title: 'No Inventory Required', text: 'We handle stock, certification, insured shipping and aftercare. You simply share.' },
-  { icon: Crown, title: 'Premium Jewelry Designs', text: 'Represent certified lab-grown diamond jewelry your audience will be proud to wear.' },
-  { icon: Megaphone, title: 'Marketing Support', text: 'Campaign assets, product stories and tracked links, refreshed every season.' },
-  { icon: Laptop, title: 'Work From Anywhere', text: 'Independent, flexible and entirely online — build it around your own schedule.' },
+  { icon: Gift, title: 'Exclusive Rewards Program' },
+  { icon: Earth, title: 'Global Opportunity' },
+  { icon: PackageOpen, title: 'No Inventory Required' },
+  { icon: Crown, title: 'Access to Premium Jewelry Designs' },
+  { icon: Megaphone, title: 'Marketing Support' },
+  { icon: Laptop, title: 'Work From Anywhere' },
 ];
 
 export function PartnerProgram() {
   return (
     <section aria-labelledby="partner-title" className="py-16 md:py-24">
-      <div className="container-x grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-        <Reveal className="lg:col-span-5">
-          <p className="eyebrow mb-4 flex items-center gap-3">
-            <span className="h-px w-8 bg-gold" aria-hidden />
-            Sales Partner Program
-          </p>
-          <h2 id="partner-title" className="h-section">{`Partner With ${site.name}`}</h2>
-          <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-charcoal/85 sm:text-base">
-            Love fine jewelry and know people who do? Our partner program lets stylists, creators, wedding planners and jewelry lovers recommend {site.name} and earn
-            rewards on every sale — while we take care of the craftsmanship, certification and delivery.
-          </p>
-          <ButtonLink href="/partner-program" size="lg" className="mt-9 w-full sm:w-auto">
-            Apply Now
-          </ButtonLink>
-        </Reveal>
+      <div className="container-x grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-6">
+          <Reveal>
+            <p className="eyebrow mb-4 flex items-center gap-3">
+              <span className="h-px w-8 bg-gold" aria-hidden />
+              Sales Partner Program
+            </p>
+            <h2 id="partner-title" className="h-section">{`Partner With ${site.name}`}</h2>
+            <p className="mt-6 max-w-lg text-[17px] leading-relaxed text-charcoal/85 sm:text-base">
+              Love fine jewelry and know people who do? Our partner program lets stylists, creators, wedding planners and jewelry lovers recommend {site.name} and earn
+              rewards on every sale — while we take care of the craftsmanship, certification and delivery.
+            </p>
+            <ButtonLink href="/partner-program" size="lg" className="mt-9 w-full sm:w-auto">
+              Apply Now
+            </ButtonLink>
+          </Reveal>
 
-        <div className="lg:col-span-7">
           <Reveal delay={0.05}>
-            <h3 className="label-caps mb-6 font-sans text-taupe">How it works</h3>
+            <h3 className="label-caps mb-6 mt-14 font-sans text-taupe">How it works</h3>
             <ol className="relative grid gap-6 sm:grid-cols-4 sm:gap-4">
               <span className="absolute left-5 top-5 hidden h-px w-[calc(100%-2.5rem)] bg-line sm:block" aria-hidden />
               {STEPS.map((step, i) => (
@@ -56,22 +57,29 @@ export function PartnerProgram() {
               ))}
             </ol>
           </Reveal>
+        </div>
 
-          <h3 className="label-caps mb-6 mt-14 font-sans text-taupe">Why partner with us</h3>
-          <ul className="grid border-l border-t border-line sm:grid-cols-2 xl:grid-cols-3">
-            {BENEFITS.map(({ icon: Icon, title, text }, i) => (
-              <li key={title} className="border-b border-r border-line">
-                <Reveal delay={i * 0.05} y={12} className="group flex h-full gap-4 p-5 transition-colors duration-500 hover:bg-porcelain/70 sm:block sm:p-6">
-                  <Icon className="mt-0.5 h-5 w-5 shrink-0 text-gold" strokeWidth={1.1} aria-hidden />
-                  <div>
-                    <p className="font-serif text-[1.2rem] leading-tight text-ink sm:mt-4">{title}</p>
-                    <p className="mt-1.5 text-[15.5px] leading-relaxed text-taupe">{text}</p>
-                  </div>
-                </Reveal>
+        {/* photo with the benefits card overlapping its lower edge */}
+        <Reveal delay={0.1} className="lg:col-span-6">
+          <div className="relative overflow-hidden rounded-2xl shadow-lift">
+            <Image
+              src="/images/home/partner.webp"
+              alt={`A ${site.name} partner shaking hands over a ring box and order form`}
+              width={1600}
+              height={893}
+              sizes="(min-width:1024px) 50vw, 100vw"
+              className="aspect-[3/2] h-auto w-full object-cover"
+            />
+          </div>
+          <ul className="relative z-10 mx-3 -mt-10 grid grid-cols-2 gap-x-3 gap-y-5 rounded-xl border border-line bg-white p-5 shadow-soft sm:mx-8 sm:-mt-16 sm:grid-cols-3 sm:p-6">
+            {BENEFITS.map(({ icon: Icon, title }) => (
+              <li key={title} className="flex flex-col items-center text-center">
+                <Icon className="h-6 w-6 text-gold" strokeWidth={1.1} aria-hidden />
+                <p className="mt-2 text-[13.5px] leading-snug text-ink">{title}</p>
               </li>
             ))}
           </ul>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

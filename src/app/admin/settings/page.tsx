@@ -65,7 +65,7 @@ export default async function SettingsPage() {
       <div className="space-y-6">
         {/* Keys remount a section only when its own saved values change, so unsaved edits elsewhere survive. */}
         <AnnouncementsForm key={JSON.stringify(settings.announcements)} initial={settings.announcements} />
-        <HeroForm key={JSON.stringify(settings.hero)} hero={settings.hero} />
+        <HeroForm key={JSON.stringify(settings.hero)} hero={settings.hero} directUpload={!!process.env.BLOB_READ_WRITE_TOKEN} />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           <TaxForm key={`${settings.taxRate}|${settings.taxLabel}`} taxRate={settings.taxRate} taxLabel={settings.taxLabel} />
           <ReturnsForm key={settings.returnsDays} returnsDays={settings.returnsDays} />

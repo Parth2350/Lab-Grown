@@ -13,6 +13,7 @@ import { useUI } from '@/store/ui';
 import { useMounted } from '@/hooks/use-mounted';
 import { JewelryArt } from '@/components/art/JewelryArt';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
+import { useLocalize } from '@/components/providers/CurrencyProvider';
 import { Logo } from './Logo';
 import { AccountMenu } from './AccountMenu';
 
@@ -29,6 +30,7 @@ const iconBtn = 'relative flex h-9 w-9 items-center justify-center rounded-full 
 
 function MegaPanel({ item, onNavigate }: { item: NavItem; onNavigate: () => void }) {
   const mega = item.mega!;
+  const localize = useLocalize();
   return (
     <div className="container-x grid grid-cols-12 gap-10 py-10">
       <div className="col-span-8 grid grid-cols-3 gap-10">
@@ -46,7 +48,7 @@ function MegaPanel({ item, onNavigate }: { item: NavItem; onNavigate: () => void
                         style={{ background: l.metal === 'yellow' ? 'linear-gradient(135deg,#F6E2A8,#A87F33)' : l.metal === 'white' ? 'linear-gradient(135deg,#fff,#A9AEB4)' : 'linear-gradient(135deg,#F7D2C0,#B06F58)' }}
                       />
                     )}
-                    <span className={cn('link-underline', l.label.startsWith('View All') && 'label-caps text-ink')}>{l.label}</span>
+                    <span className={cn('link-underline', l.label.startsWith('View All') && 'label-caps text-ink')}>{localize(l.label)}</span>
                   </Link>
                 </li>
               ))}

@@ -5,6 +5,7 @@ import { SORT_OPTIONS, type SortSlug } from '@/lib/catalog';
 import { activeFilterCount, FILTER_KEYS, rangeLabel } from '@/lib/filters';
 import type { Facets } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useCurrency } from '@/components/providers/CurrencyProvider';
 import { Sheet } from '@/components/ui/Sheet';
 import { useFilters } from './FilterContext';
 import { FilterPanel } from './FilterPanel';
@@ -73,6 +74,7 @@ export function SortSelect({ className }: { className?: string }) {
 
 export function ActiveChips() {
   const { filters, toggle, clearAll, navigate } = useFilters();
+  const currency = useCurrency();
   const chips = FILTER_KEYS.flatMap((k) => filters[k].map((v) => ({ k, v })));
   if (!chips.length && !filters.q) return null;
   return (
@@ -86,8 +88,8 @@ export function ActiveChips() {
       )}
       {chips.map(({ k, v }) => (
         <li key={`${k}-${v}`}>
-          <button onClick={() => toggle(k, v)} className="flex h-8 items-center gap-2 border border-ink/20 bg-white px-3 text-[14px] hover:border-ink" aria-label={`Remove filter ${rangeLabel(k, v)}`}>
-            {rangeLabel(k, v)} <X className="h-3 w-3" strokeWidth={1.5} />
+          <button onClick={() => toggle(k, v)} className="flex h-8 items-center gap-2 border border-ink/20 bg-white px-3 text-[14px] hover:border-ink" aria-label={`Remove filter ${rangeLabel(k, v, currency)}`}>
+            {rangeLabel(k, v, currency)} <X className="h-3 w-3" strokeWidth={1.5} />
           </button>
         </li>
       ))}

@@ -1,17 +1,14 @@
 import Link from 'next/link';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { SHAPES } from '@/lib/catalog';
-import { countProducts } from '@/lib/server/catalog';
-import { cn, pluralize } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { LazyLooseDiamond } from '@/components/art/LazyArt';
 
 /**
  * "Start With the Stone": ten diamond silhouettes. On hover the fine line drawing
  * resolves into a faceted stone (CSS only). Horizontal snap-scroll on small screens.
  */
-export async function ShopByShape() {
-  const counts = await Promise.all(SHAPES.map((s) => countProducts({ shape: s.slug })));
-
+export function ShopByShape() {
   return (
     <section aria-labelledby="shapes-title" className="border-y border-line bg-porcelain/70 py-16 md:py-24">
       <div className="container-x">
@@ -48,7 +45,6 @@ export async function ShopByShape() {
                 <span className="mt-4 font-serif text-[1.15rem] leading-tight text-ink">
                   <span className="link-underline group-hover:[background-size:100%_1px]">{shape.label}</span>
                 </span>
-                <span className="mt-1 text-[13px] tracking-wide text-taupe transition-colors group-hover:text-gold-deep">{pluralize(counts[i], 'design')}</span>
               </Link>
             </li>
           ))}

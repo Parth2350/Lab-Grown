@@ -4,7 +4,7 @@ import { ShieldCheck, ShoppingBag, Truck } from 'lucide-react';
 import { useUI } from '@/store/ui';
 import { cartCount, useCart } from '@/store/cart';
 import { computeTotals } from '@/lib/pricing';
-import { formatMoney } from '@/lib/utils';
+
 import { Sheet } from '@/components/ui/Sheet';
 import { ButtonLink } from '@/components/ui/Button';
 import { useStoreSettings } from '@/components/providers/SettingsProvider';
@@ -12,8 +12,11 @@ import { CartLineItem } from './CartLineItem';
 import { useMounted } from '@/hooks/use-mounted';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
 import { bagEnquiry, lineItem } from '@/lib/whatsapp';
+import { useCurrency, useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 export function CartDrawer() {
+  const formatMoney = useFormatMoney();
+  const currency = useCurrency();
   const open = useUI((s) => s.cartOpen);
   const setCart = useUI((s) => s.setCart);
   const lines = useCart((s) => s.lines);
@@ -62,7 +65,7 @@ export function CartDrawer() {
               <WhatsAppButton
                 className="h-12"
                 message={(origin) =>
-                  bagEnquiry(origin, lines.map(lineItem), totals, { taxLabel: settings.taxLabel, taxRate: settings.taxRate })
+                  bagEnquiry(origin, lines.map(lineItem), totals, { taxLabel: settings.taxLabel, taxRate: settings.taxRate, currency })
                 }
               />
               <button onClick={close} className="label-caps h-12 border border-ink/30 transition-colors hover:border-ink">

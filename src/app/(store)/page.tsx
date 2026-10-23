@@ -3,6 +3,8 @@ import { site } from '@/config/site';
 import { pageMeta } from '@/lib/seo';
 import { getProductsWhere, getTrending } from '@/lib/server/catalog';
 import { getSettings } from '@/lib/server/settings';
+import { getCurrency } from '@/lib/server/currency';
+import { localizeRupees } from '@/lib/utils';
 import { Hero } from '@/components/home/Hero';
 import { ProductRail } from '@/components/home/ProductRail';
 import { ShopByCategory } from '@/components/home/ShopByCategory';
@@ -14,7 +16,6 @@ import { ProcessStory } from '@/components/home/ProcessStory';
 import { Bespoke } from '@/components/home/Bespoke';
 import { PartnerProgram } from '@/components/home/PartnerProgram';
 import { Testimonials } from '@/components/home/Testimonials';
-import { QuizBand } from '@/components/home/QuizBand';
 
 const homeTitle = `${site.name} — Lab-Grown Diamond Fine Jewelry`;
 
@@ -48,7 +49,7 @@ export default async function HomePage() {
 
       <ProductRail
         eyebrow="The Golden Edit"
-        title="Yellow Gold Engagement Rings Under ₹2,50,000"
+        title={localizeRupees('Yellow Gold Engagement Rings Under ₹2,50,000', await getCurrency())}
         subtitle="Warm, timeless and thoughtfully priced — certified diamonds set in solid yellow gold."
         href="/engagement-rings?metal=yellow&price=0-250000"
         products={yellowRings}
@@ -75,8 +76,6 @@ export default async function HomePage() {
       <PartnerProgram />
 
       <Testimonials />
-
-      <QuizBand />
     </>
   );
 }

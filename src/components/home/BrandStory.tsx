@@ -1,5 +1,5 @@
 import { Factory, Gem, Globe, Hammer, Scale } from 'lucide-react';
-import { LazyEditorialArt } from '@/components/art/LazyArt';
+import Image from 'next/image';
 import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { site } from '@/config/site';
@@ -45,8 +45,15 @@ export function BrandStory() {
     <section aria-labelledby="story-title" className="py-16 md:py-24">
       <div className="container-x grid grid-cols-1 items-center gap-10 md:gap-14 lg:grid-cols-12 lg:gap-16">
         <Reveal className="mx-auto w-full max-w-[560px] lg:col-span-6 lg:max-w-none">
-          <figure className="art-tile-warm relative">
-            <LazyEditorialArt scene="workshop" className="block aspect-[4/5] w-full" />
+          <figure className="relative">
+            <Image
+              src="/images/home/workshop.webp"
+              alt="Our jewellers shaping, setting and inspecting a ring in the workshop"
+              width={1600}
+              height={893}
+              sizes="(min-width:1024px) 50vw, 100vw"
+              className="block h-auto w-full"
+            />
             <figcaption className="absolute bottom-4 left-4 bg-ivory/90 px-3 py-2 text-[12px] font-medium uppercase tracking-[0.2em] text-charcoal backdrop-blur-sm sm:bottom-6 sm:left-6">
               Our workshop · {site.contact.address.city}
             </figcaption>

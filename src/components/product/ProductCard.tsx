@@ -5,13 +5,14 @@ import { ArrowLeftRight, Eye, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { METAL_COLORS, PURITIES } from '@/lib/catalog';
 import type { ProductCard as Card } from '@/lib/types';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useCompare, useWishlist, COMPARE_MAX } from '@/store/lists';
 import { useUI } from '@/store/ui';
 import { useMounted } from '@/hooks/use-mounted';
 import { ProductMedia } from './ProductMedia';
 import { Stars } from '@/components/ui/Stars';
 import { LazyMount } from '@/components/ui/LazyMount';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 type Props = { product: Card; priority?: boolean; sizes?: string; className?: string };
 
@@ -80,6 +81,7 @@ export function CompareButton({ product, className, withLabel }: { product: Card
 }
 
 export function ProductCard({ product, priority, sizes, className }: Props) {
+  const formatMoney = useFormatMoney();
   const [metal, setMetal] = useState(product.defaultMetalColor);
   // cards open on the lowest purity so the "From" price matches price sorting & filters
   const [purity, setPurity] = useState(PURITIES.find((x) => product.purities.includes(x.slug))?.slug ?? product.defaultPurity);

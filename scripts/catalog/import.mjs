@@ -17,6 +17,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const FILE = path.join(ROOT, 'data/catalog/brilliancecarat.json.gz');
 const MARKER = 'catalog:brilliancecarat';
+const BROKEN_HOST = 'https://vats-wt.s3.ap-south-1.amazonaws.com/brilliance_carat/ No newline at end of file';
 const force = process.argv.includes('--force');
 
 const DEMO_SLUGS = [
@@ -123,7 +124,8 @@ export async function importCatalog({ datasourceUrl } = {}) {
     const missing = [...new Set(data.products.map((p) => p.category))].filter((c) => !catId.has(c));
     if (missing.length) throw new Error(`Missing categories: ${missing.join(', ')}`);
     const existingId = new Map(existingProducts.map((p) => [p.familyKey, p.id]));
-    const mediaUrl = (u) => (u && !/^https?:\/\//.test(u) ? data.mediaHost + u : u);
+    // some partner links carry a corrupted host prefix in front of the real media host
+    const mediaUrl = (u) => (u && !/^https?:\/\//.test(u) ? data.mediaHost + u : u)?.replace(BROKEN_HOST, 'https://');
 
     // ── shape every product, variant and photo row ──
     const products = [];

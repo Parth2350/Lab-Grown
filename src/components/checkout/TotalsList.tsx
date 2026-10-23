@@ -1,5 +1,7 @@
+'use client';
 import { site } from '@/config/site';
-import { cn, formatMoney } from '@/lib/utils';
+import { cn } from '@/lib/utils';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 type Totals = { subtotal: number; discount: number; shipping: number; tax: number; total: number };
 
@@ -29,6 +31,7 @@ export function TotalsList({
   className?: string;
   totalLabel?: string;
 }) {
+  const formatMoney = useFormatMoney();
   return (
     <dl className={cn('space-y-2.5 text-sm', loading && 'opacity-70 transition-opacity', className)} aria-busy={loading || undefined}>
       <div className="flex justify-between gap-4">

@@ -2,7 +2,8 @@
  * Collection filters: URL <-> state, plus the single matching predicate used for
  * listings AND facet counts so the two can never disagree.
  */
-import { formatMoney } from './utils';
+import { formatMoney, localizeRupees } from './utils';
+import type { Currency } from './currency';
 import {
   CARAT_RANGES,
   FILTER_SHAPES,
@@ -81,15 +82,16 @@ export function parseRange(slug: string): [number, number] {
   return [min, Number.isFinite(max) ? max : Infinity];
 }
 
-export function rangeLabel(key: FilterKey, slug: string) {
+export function rangeLabel(key: FilterKey, slug: string, currency: Currency = 'INR') {
   const group = FILTER_GROUPS.find((g) => g.key === key);
   const known = group?.options.find((o) => o.slug === slug);
-  if (known) return known.label;
+  if (known) return localizeRupees(known.label, currency);
   if (key === 'price') {
     const [min, max] = parseRange(slug);
-    if (!min) return `Under ${formatMoney(max * 100)}`;
-    if (max === Infinity) return `${formatMoney(min * 100)}+`;
-    return `${formatMoney(min * 100)} – ${formatMoney(max * 100)}`;
+    const money = (rupees: number) => formatMoney(rupees * 100, { currency });
+    if (!min) return `Under ${money(max)}`;
+    if (max === Infinity) return `${money(min)}+`;
+    return `${money(min)} – ${money(max)}`;
   }
   if (key === 'center' || key === 'total') {
     const [min, max] = parseRange(slug);

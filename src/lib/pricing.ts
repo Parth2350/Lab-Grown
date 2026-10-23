@@ -19,7 +19,8 @@ export type StoreSettings = {
   taxLabel: string;
   shippingMethods: ShippingMethod[];
   returnsDays: number;
-  hero: { eyebrow: string; title: string; subtitle: string; image?: string | null };
+  /** video: plays muted and looping behind the copy (the image is its poster) */
+  hero: { eyebrow: string; title: string; subtitle: string; image?: string | null; video?: string | null };
   popularSearches: string[];
   lowStockThreshold: number;
 };
@@ -47,6 +48,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     subtitle:
       'Discover beautifully crafted lab-grown diamond jewelry designed to celebrate your most meaningful moments.',
     image: null,
+    video: null,
   },
   popularSearches: ['2ct oval halo', 'round solitaire', 'diamond earrings', 'tennis bracelet', 'emerald cut', 'eternity band'],
   lowStockThreshold: 3,

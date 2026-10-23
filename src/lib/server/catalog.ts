@@ -75,7 +75,7 @@ export const getCatalogIndex = unstable_cache(
         .replace(/-/g, ' '),
     }));
   },
-  ['catalog-index', 'bc1'],
+  ['catalog-index', 'bc3'],
   { tags: ['products'], revalidate: 3600 },
 );
 
@@ -152,7 +152,7 @@ export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
   return ids.map((id) => map.get(id)).filter(Boolean) as ProductCard[];
 }
 
-export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'bc1'], {
+export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'bc3'], {
   tags: ['products'],
   revalidate: 3600,
 });
@@ -397,7 +397,7 @@ export const getProductBySlug = unstable_cache(
       updatedAt: p.updatedAt.toISOString(),
     };
   },
-  ['product-by-slug', 'bc2'],
+  ['product-by-slug', 'bc3'],
   { tags: ['products'], revalidate: 3600 },
 );
 

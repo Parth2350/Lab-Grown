@@ -145,6 +145,45 @@ try {
     if (img && img.startsWith('/uploads/')) try { fs.unlinkSync(ROOT + 'public' + img); } catch {}
   });
 
+  await run('uploads: hero video', async () => {
+    const fs = await import('node:fs');
+    const sBefore = await db.setting.findUnique({ where: { key: 'store' } });
+    await go('/admin/settings');
+    // a 2-second clip recorded in the browser, so the test needs no video fixture
+    const clip = await b.eval(`
+      const c = Object.assign(document.createElement('canvas'), { width: 640, height: 360 });
+      const g = c.getContext('2d');
+      const rec = new MediaRecorder(c.captureStream(25), { mimeType: 'video/webm' });
+      const parts = [];
+      rec.ondataavailable = (e) => parts.push(e.data);
+      const done = new Promise((r) => (rec.onstop = r));
+      rec.start();
+      const t0 = performance.now();
+      while (performance.now() - t0 < 2000) { g.fillStyle = 'hsl(' + Math.round((performance.now() - t0) / 6) + ',40%,70%)'; g.fillRect(0, 0, 640, 360); await new Promise((r) => setTimeout(r, 40)); }
+      rec.stop();
+      await done;
+      const buf = new Uint8Array(await new Blob(parts).arrayBuffer());
+      let s = '';
+      for (const x of buf) s += String.fromCharCode(x);
+      return btoa(s);`);
+    fs.writeFileSync(S + '/hero.webm', Buffer.from(clip, 'base64'));
+    await b.setFiles('#hero-video', [S + '/hero.webm']);
+    await sleep(500);
+    await b.eval(`window.__btn('Save hero').click();`);
+    await b.waitFor(`!/Uploading|Saving/.test(document.body.textContent)`, 30000);
+    await sleep(1500);
+    const error = await anyError();
+    const video = (await db.setting.findUnique({ where: { key: 'store' } })).value.hero?.video;
+    const saved = !!video && fs.existsSync(ROOT + 'public' + video);
+    await go('/');
+    const shown = await b.eval(`await new Promise((r) => setTimeout(r, 2500)); const v = document.querySelector('video'); return v ? { src: v.getAttribute('src'), muted: v.muted, playing: !v.paused && v.readyState >= 2 } : null;`);
+    // iPhones only autoplay when the server-rendered tag already says muted
+    const ssrMuted = /<video[^>]*\smuted=""/.test(await (await fetch(BASE + '/')).text());
+    check('uploads: hero video → saved & playing on the homepage', saved && shown?.src === video && shown.muted && shown.playing && ssrMuted, `saved=${video} ${(clip.length * 0.75 / 1024).toFixed(0)} KB shown=${JSON.stringify(shown)} ssrMuted=${ssrMuted} error="${error}"`);
+    await db.setting.update({ where: { key: 'store' }, data: { value: sBefore.value } });
+    if (video && video.startsWith('/uploads/')) try { fs.unlinkSync(ROOT + 'public' + video); } catch {}
+  });
+
   // ───────────── CATEGORIES ─────────────
   await run('categories: edit & save', async () => {
     await go('/admin/categories');

@@ -1,6 +1,8 @@
 import { site } from '@/config/site';
 import { pageMeta } from '@/lib/seo';
 import { getQuizDefinition } from '@/lib/server/recommend';
+import { getCurrency } from '@/lib/server/currency';
+import { localizeRupees } from '@/lib/utils';
 import { QuizWizard } from '@/components/content/quiz/QuizWizard';
 import { PageIntro, TextLink } from '@/components/content/ui';
 
@@ -13,7 +15,9 @@ export const metadata = pageMeta({
 });
 
 export default async function FindYourMatchPage() {
-  const quiz = await getQuizDefinition();
+  const [quiz, currency] = await Promise.all([getQuizDefinition(), getCurrency()]);
+  // budget answers read in the shopper's currency
+  const questions = quiz.questions.map((q) => ({ ...q, options: q.options.map((o) => ({ ...o, label: localizeRupees(o.label, currency) })) }));
   return (
     <>
       <PageIntro
@@ -29,7 +33,7 @@ export default async function FindYourMatchPage() {
         className="pb-8 md:pb-10"
       />
       <section aria-label="Find your match quiz" className="container-x pb-16 md:pb-24">
-        <QuizWizard questions={quiz.questions} />
+        <QuizWizard questions={questions} />
       </section>
     </>
   );

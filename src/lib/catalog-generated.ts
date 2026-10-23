@@ -228,3 +228,6 @@ export const CATALOG_SHAPE_LABELS: Record<string, string> = {
 
 /** Non-standard shapes common enough (15+ products) to offer as a filter */
 export const CATALOG_COMMON_SHAPES: string[] = ['step-cut-marquise','baguette','step-cut-pear','step-cut-oval','emerald-pear','long-cushion','pear-round','hexagon','marquise-pear','oval-pear'];
+
+/** Rupees per US dollar used for the catalogue prices — US visitors see the partner's dollar prices */
+export const CATALOG_INR_PER_USD = 96.4804;

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { site } from '@/config/site';
 import { computeTotals } from '@/lib/pricing';
 import type { ProductCard as Card } from '@/lib/types';
-import { formatMoney, pluralize } from '@/lib/utils';
+import { pluralize } from '@/lib/utils';
 import { cartCount, useCart } from '@/store/cart';
 import { useMounted } from '@/hooks/use-mounted';
 import { useStoreSettings } from '@/components/providers/SettingsProvider';
@@ -21,8 +21,12 @@ import { CouponField, validateCouponCode } from './CouponField';
 import { TotalsList } from './TotalsList';
 import { PaymentMarks, TrustBadges } from './TrustBadges';
 import { useQuote, type CouponResult } from './use-quote';
+import { useCurrency, useFormatMoney, useLocalize } from '@/components/providers/CurrencyProvider';
 
 export function CartView({ recommendations }: { recommendations: Card[] }) {
+  const formatMoney = useFormatMoney();
+  const currency = useCurrency();
+  const localize = useLocalize();
   const mounted = useMounted();
   const lines = useCart((s) => s.lines);
   const settings = useStoreSettings();
@@ -46,6 +50,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
       taxLabel: settings.taxLabel,
       taxRate: settings.taxRate,
       couponCode: coupon?.ok ? coupon.code : null,
+      currency,
     });
   const inBag = new Set(lines.map((l) => l.productId));
   const recs = recommendations.filter((p) => !inBag.has(p.id)).slice(0, 4);
@@ -176,7 +181,7 @@ export function CartView({ recommendations }: { recommendations: Card[] }) {
               </h2>
               <div className="mt-6 border-y border-line py-4">
                 <CouponField
-                  applied={code ? { code, ok: coupon?.ok ?? true, message: coupon?.message ?? 'Checking…' } : null}
+                  applied={code ? { code, ok: coupon?.ok ?? true, message: localize(coupon?.message ?? 'Checking…') } : null}
                   onApply={async (c) => {
                     const r = await validateCouponCode(c, totals.subtotal);
                     if (r.ok) {

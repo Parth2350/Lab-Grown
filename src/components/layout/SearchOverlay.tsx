@@ -9,9 +9,10 @@ import { Sheet } from '@/components/ui/Sheet';
 import { ProductMedia } from '@/components/product/ProductMedia';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { SHAPES } from '@/lib/catalog';
-import { formatMoney } from '@/lib/utils';
+
 import type { ProductCard } from '@/lib/types';
 import { useMounted } from '@/hooks/use-mounted';
+import { useFormatMoney } from '@/components/providers/CurrencyProvider';
 
 type Result = {
   total: number;
@@ -22,6 +23,7 @@ type Result = {
 };
 
 export function SearchOverlay({ popular }: { popular: string[] }) {
+  const formatMoney = useFormatMoney();
   const open = useUI((s) => s.searchOpen);
   const setSearch = useUI((s) => s.setSearch);
   const router = useRouter();

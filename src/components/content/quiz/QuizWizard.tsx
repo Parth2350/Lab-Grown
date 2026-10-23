@@ -11,6 +11,7 @@ import { Button, ButtonLink } from '@/components/ui/Button';
 import { METAL_COLORS } from '@/lib/catalog';
 import type { ProductCard as Card } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useLocalize } from '@/components/providers/CurrencyProvider';
 import { QUIZ_TYPE_ART } from '../art-presets';
 import { FormAlert, postJson } from '../forms/client';
 
@@ -385,6 +386,7 @@ function Results({
     .map((q, i) => ({ q, i, opt: q.options.find((o) => o.value === answers[q.id]) }))
     .filter((s) => s.opt);
   const alternatives = result.products.length - result.exactCount;
+  const localize = useLocalize();
 
   return (
     <m.section initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease }} aria-labelledby="quiz-results-title">
@@ -457,7 +459,7 @@ function Results({
             {result.links.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="group inline-flex min-h-11 items-center gap-2 border border-ink/80 px-5 text-[13px] font-medium uppercase tracking-[0.16em] text-ink transition-colors hover:bg-ink hover:text-ivory">
-                  {l.label}
+                  {localize(l.label)}
                   <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden />
                 </Link>
               </li>
