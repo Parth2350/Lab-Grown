@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server';
 import { Prisma, type OrderStatus } from '@prisma/client';
 import { db } from './db';
 import { getSettings } from './settings';
+import { getSession } from './auth';
+import { hasOrdered } from './welcome';
 import { getCardsByIds } from './catalog';
 import { revalidateCatalog } from './revalidate';
 import { recomputeFromPrice } from './product-pricing';
@@ -305,8 +307,16 @@ export async function findCoupon(code: string) {
 export async function validateCoupon(code: string, subtotal: number) {
   const coupon = await findCoupon(code);
   const r = evaluateCoupon(coupon, subtotal);
-  const message = coupon ? r.message : 'We don’t recognise this code';
-  return { ok: r.ok, discount: r.ok ? r.discount : 0, message, code: coupon?.code ?? code.trim().toUpperCase() };
+  let message = coupon ? r.message : 'We don’t recognise this code';
+  let ok = r.ok;
+  // a personal code (the welcome offer) works only for its own customer, on their first order
+  if (ok && coupon?.userId) {
+    const viewer = (await getSession())?.user?.id;
+    if (!viewer) [ok, message] = [false, 'Sign in to the account this code belongs to, then apply it'];
+    else if (viewer !== coupon.userId) [ok, message] = [false, 'This code belongs to another account'];
+    else if (await hasOrdered(viewer)) [ok, message] = [false, 'This code is for your first order'];
+  }
+  return { ok, discount: ok ? r.discount : 0, message, code: coupon?.code ?? code.trim().toUpperCase() };
 }
 
 // ───────────────────────────── quote ─────────────────────────────

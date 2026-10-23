@@ -3,6 +3,8 @@ import 'next-auth/jwt';
 
 declare module 'next-auth' {
   interface Session {
+    /** a welcome code issued at this sign-in, until the shopper has seen it */
+    welcome?: string;
     user: {
       id: string;
       role: 'ADMIN' | 'CUSTOMER';

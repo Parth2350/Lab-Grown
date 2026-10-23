@@ -1,11 +1,13 @@
 import Link from 'next/link';
-import { ArrowRight, Heart, LifeBuoy, MapPin, Package, RotateCcw, ShieldAlert } from 'lucide-react';
+import { ArrowRight, Gift, Heart, LifeBuoy, MapPin, Package, RotateCcw, ShieldAlert } from 'lucide-react';
 import { pageMeta } from '@/lib/seo';
 import { requireUser } from '@/lib/server/auth';
 import { db } from '@/lib/server/db';
+import { ensureWelcomeCoupon, hasOrdered } from '@/lib/server/welcome';
 import { formatDate, formatMoney, pluralize } from '@/lib/utils';
 import { StatusBadge } from '@/components/commerce/OrderParts';
 import { ListCount } from '@/components/account/ListCount';
+import { CopyCode } from '@/components/account/CopyCode';
 import { PasswordForm, ProfileForm } from '@/components/account/ProfileForms';
 import { ButtonLink } from '@/components/ui/Button';
 
@@ -16,7 +18,9 @@ type Search = Promise<{ error?: string }>;
 export default async function AccountOverview({ searchParams }: { searchParams: Search }) {
   const session = await requireUser('/account');
   const sp = await searchParams;
-  const [user, orderCount, recent, defaultAddress] = await Promise.all([
+  // customers who signed in before the welcome offer began get their code here
+  if (session.role === 'CUSTOMER') await ensureWelcomeCoupon(session.id).catch(() => null);
+  const [user, orderCount, recent, defaultAddress, welcome, ordered] = await Promise.all([
     db.user.findUnique({ where: { id: session.id }, select: { name: true, email: true, phone: true, createdAt: true, passwordHash: true } }),
     db.order.count({ where: { userId: session.id } }),
     db.order.findMany({
@@ -26,8 +30,11 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
       select: { number: true, status: true, total: true, createdAt: true, items: { select: { name: true, quantity: true } } },
     }),
     db.address.findFirst({ where: { userId: session.id }, orderBy: [{ isDefault: 'desc' }, { createdAt: 'asc' }] }),
+    db.coupon.findUnique({ where: { userId: session.id }, select: { code: true, isActive: true, usedCount: true, maxUses: true } }),
+    hasOrdered(session.id),
   ]);
   if (!user) return null;
+  const welcomeUsed = !!welcome && (ordered || !welcome.isActive || (welcome.maxUses != null && welcome.usedCount >= welcome.maxUses));
 
   const quick = [
     { href: '/account/orders', label: 'Orders', text: 'Track and review purchases', icon: Package },
@@ -44,6 +51,26 @@ export default async function AccountOverview({ searchParams }: { searchParams: 
           <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-gold-deep" strokeWidth={1.5} aria-hidden />
           That area is reserved for store administrators. You’ve been brought back to your account.
         </p>
+      )}
+
+      {welcome && (
+        <section aria-labelledby="welcome-gift-title" className="flex flex-col gap-5 border border-gold/40 bg-gold-pale/40 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+          <div className="flex items-start gap-4">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gold/15 text-gold-deep">
+              <Gift className="h-5 w-5" strokeWidth={1.25} aria-hidden />
+            </span>
+            <div>
+              <p className="eyebrow text-gold-deep">Your welcome gift</p>
+              <h2 id="welcome-gift-title" className="mt-1 font-serif text-2xl">
+                15% off your first order
+              </h2>
+              <p className="mt-1 text-[15px] text-taupe">
+                {welcomeUsed ? 'Already used on your first order — thank you for choosing us.' : 'Enter this code in your bag when you place your first order.'}
+              </p>
+            </div>
+          </div>
+          {!welcomeUsed && <CopyCode code={welcome.code} className="shrink-0" />}
+        </section>
       )}
 
       <section aria-label="At a glance" className="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">

@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { cache } from 'react';
 import { z } from 'zod';
 import { db } from './db';
+import { ensureWelcomeCoupon } from './welcome';
 
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(1) });
 
@@ -49,9 +50,15 @@ export const authOptions: NextAuthOptions = {
           token.uid = row.id;
           token.role = row.role;
           token.name = row.name;
+          // the new-account welcome code: issued at the first sign-in, announced once (see WelcomeOffer)
+          if (row.role === 'CUSTOMER') {
+            const welcome = await ensureWelcomeCoupon(row.id).catch(() => null);
+            if (welcome?.created) token.welcome = welcome.code;
+          }
         }
       }
       if (trigger === 'update' && session?.name) token.name = session.name;
+      if (trigger === 'update' && session?.welcomeSeen) delete token.welcome;
       return token;
     },
     async session({ session, token }) {
@@ -60,6 +67,7 @@ export const authOptions: NextAuthOptions = {
         session.user.role = (token.role as 'ADMIN' | 'CUSTOMER') ?? 'CUSTOMER';
         session.user.name = (token.name as string) ?? session.user.name;
       }
+      if (token.welcome) session.welcome = token.welcome as string;
       return session;
     },
   },

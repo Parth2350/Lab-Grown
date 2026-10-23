@@ -101,6 +101,7 @@ model User {
   updatedAt    DateTime        @updatedAt
   addresses    Address[]
   orders       Order[]
+  coupon       Coupon?
   cart         Cart?
   wishlist     Wishlist?
   compareItems CompareItem[]
@@ -566,6 +567,9 @@ model Coupon {
   startsAt    DateTime?
   endsAt      DateTime?
   isActive    Boolean    @default(true)
+  /// a personal code (the new-account welcome offer) usable only by this customer
+  userId      String?    @unique
+  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime   @default(now())
 
   @@map("coupons")
