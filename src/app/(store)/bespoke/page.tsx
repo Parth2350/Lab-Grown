@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Gem, Gift, MessageSquareText, PenTool } from 'lucide-react';
 import { site } from '@/config/site';
 import { pageMeta } from '@/lib/seo';
@@ -8,7 +9,6 @@ import { getProductsWhere } from '@/lib/server/catalog';
 import { BespokeBrief, type CollectionPiece } from '@/components/content/bespoke/BespokeBrief';
 import { FaqSection, type Faq } from '@/components/content/FaqSection';
 import { ArtPanel, NumberedSteps } from '@/components/content/ui';
-import type { ArtSpec } from '@/components/art/JewelryArt';
 
 export const metadata = pageMeta({
   title: 'Bespoke Design',
@@ -39,40 +39,30 @@ const STEPS = [
   },
 ];
 
-const SHOWCASE: { title: string; text: string; spec: ArtSpec; shape: string; metal: string; carat?: number; tone: 'default' | 'warm' | 'cool' }[] = [
+const SHOWCASE = [
   {
-    title: 'The heirloom reset',
-    text: 'A grandmother’s diamonds, reimagined as a three-stone ring with tapered pear sides.',
-    spec: { kind: 'ring', head: 'three-stone', sides: 'pear', band: 'plain' },
-    shape: 'oval',
-    metal: 'yellow',
-    carat: 1.5,
-    tone: 'warm',
+    title: 'The oval halo',
+    text: 'An oval centre stone framed by a halo of diamonds, on a slender pavé band in yellow gold.',
+    image: '/images/bespoke/showcase-1.webp',
+    alt: 'An oval halo engagement ring in yellow gold, worn on the hand',
   },
   {
-    title: 'East-west, on a whisper',
-    text: 'An oval turned on its side and set on a slender band, for a modern minimalist.',
-    spec: { kind: 'ring', head: 'east-west', band: 'plain', size: 'thin' },
-    shape: 'oval',
-    metal: 'white',
-    carat: 1.5,
-    tone: 'cool',
+    title: 'An emerald cocktail ring',
+    text: 'A deep green emerald ringed by tiers of diamonds in yellow gold — a statement piece for evenings out.',
+    image: '/images/bespoke/showcase-2.webp',
+    alt: 'An oval emerald ring with layered diamond halos in yellow gold, worn on the hand',
   },
   {
-    title: 'Wedding-day drops',
-    text: 'Pear-shaped drops in rose gold, sized to frame the face and match a vintage gown.',
-    spec: { kind: 'drops', head: 'halo' },
-    shape: 'pear',
-    metal: 'rose',
-    tone: 'default',
+    title: 'Chandelier pear drops',
+    text: 'Pear-shaped drop earrings with layered halos of diamonds, made to be worn with pearls.',
+    image: '/images/bespoke/showcase-3.webp',
+    alt: 'Pear-shaped chandelier drop earrings worn with a pearl necklace',
   },
   {
-    title: 'A two-tone tennis line',
-    text: 'Oval diamonds in yellow and white gold, made for a twentieth anniversary.',
-    spec: { kind: 'tennis-bracelet', stoneShape: 'oval' },
-    shape: 'oval',
-    metal: 'yellow-white',
-    tone: 'warm',
+    title: 'A floral bridal set',
+    text: 'A diamond collar of scrolling links with an emerald-accented flower pendant, and a halo ring to match.',
+    image: '/images/bespoke/showcase-4.webp',
+    alt: 'A diamond necklace with a flower pendant set with emeralds, and a matching halo ring',
   },
 ];
 
@@ -202,7 +192,7 @@ export default async function BespokePage() {
             {SHOWCASE.map((s, i) => (
               <li key={s.title}>
                 <Reveal delay={i * 0.08}>
-                  <ArtPanel spec={s.spec} shape={s.shape} metal={s.metal} carat={s.carat ?? 1} tone={s.tone} className="aspect-[4/5] bg-white" inset="p-6" title={s.title} />
+                  <Image src={s.image} alt={s.alt} width={600} height={600} sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw" className="aspect-square w-full bg-white object-cover" />
                   <h3 className="mt-5 font-serif text-[1.5rem] leading-tight">{s.title}</h3>
                   <p className="mt-2 text-[16px] leading-relaxed text-taupe">{s.text}</p>
                 </Reveal>
