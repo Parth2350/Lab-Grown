@@ -8,7 +8,7 @@ import { Reveal } from '@/components/ui/Reveal';
 import { getProductsWhere } from '@/lib/server/catalog';
 import { BespokeBrief, type CollectionPiece } from '@/components/content/bespoke/BespokeBrief';
 import { FaqSection, type Faq } from '@/components/content/FaqSection';
-import { ArtPanel, NumberedSteps } from '@/components/content/ui';
+import { NumberedSteps } from '@/components/content/ui';
 
 export const metadata = pageMeta({
   title: 'Bespoke Design',
@@ -143,24 +143,18 @@ export default async function BespokePage() {
             </ul>
           </div>
           <div className="grid grid-cols-5 grid-rows-[auto_auto] gap-3 sm:gap-4 lg:col-span-7">
+            {/* photographs served as they are (high-quality WebP) — no second compression */}
             <Reveal className="col-span-3 row-span-2">
-              <ArtPanel
-                spec={{ kind: 'ring', head: 'toi-et-moi', second: 'oval', band: 'plain' }}
-                shape="pear"
-                metal="yellow"
-                carat={1.5}
-                tone="warm"
-                className="aspect-[3/4] h-full"
-                inset="p-6 sm:p-10"
-                title="A toi et moi ring with pear and oval diamonds"
-                caption={<span>Toi et moi · pear &amp; oval</span>}
-              />
+              <figure className="relative aspect-[3/4] h-full overflow-hidden bg-porcelain">
+                <Image src="/images/bespoke/hero-1.webp" alt="A toi et moi ring with a pear and an oval diamond in yellow gold, worn on the hand" fill priority unoptimized className="object-cover" />
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/45 to-transparent p-4 pt-12 text-[13px] uppercase tracking-[0.16em] text-white sm:p-6 sm:pt-16">Toi et moi · pear &amp; oval</figcaption>
+              </figure>
             </Reveal>
             <Reveal delay={0.1} className="col-span-2">
-              <ArtPanel spec={{ kind: 'ring', head: 'double-halo', band: 'pave' }} shape="asscher" metal="white" carat={2} tone="cool" className="aspect-square" inset="p-4 sm:p-6" title="An asscher double halo ring" />
+              <Image src="/images/bespoke/hero-2.webp" alt="An asscher-cut double halo ring in white gold, worn on the hand" width={1024} height={1024} priority unoptimized className="aspect-square w-full bg-porcelain object-cover" />
             </Reveal>
             <Reveal delay={0.2} className="col-span-2">
-              <ArtPanel spec={{ kind: 'pendant', head: 'bezel' }} shape="emerald" metal="rose" className="aspect-square" inset="p-4 sm:p-6" title="An emerald-cut bezel pendant" />
+              <Image src="/images/bespoke/hero-3.webp" alt="An emerald-cut diamond pendant in rose gold, worn at the collarbone" width={1024} height={1024} unoptimized className="aspect-square w-full bg-porcelain object-cover" />
             </Reveal>
           </div>
         </div>

@@ -68,7 +68,13 @@ export function BespokeBrief({ collection }: { collection: Record<string, Collec
   const budgets = [`Under ${money(b0)}`, `${money(b0)} – ${money(b1)}`, `${money(b1)} – ${money(b2)}`, `${money(b2)} – ${money(b3)}`, `${money(b3)} & above`, 'Flexible'];
 
   const category = CATEGORIES.find((c) => c.label === f.category);
-  const pieces = category?.slug ? (collection[category.slug] ?? []) : [];
+  // a chosen category shows six of its pieces; before that (or "Something else"), one piece from each of four categories
+  const pieces = category?.slug
+    ? (collection[category.slug] ?? []).map((p) => ({ ...p, label: category.plural }))
+    : CATEGORIES.filter((c) => ['engagement-rings', 'necklaces', 'earrings', 'bracelets'].includes(c.slug ?? '')).flatMap((c) => {
+        const p = collection[c.slug!]?.[0];
+        return p ? [{ ...p, label: c.plural! }] : [];
+      });
 
   const addPhotos = async (files: FileList | null) => {
     const list = Array.from(files ?? []).slice(0, MAX_INSPIRATION_IMAGES - photos.length);
@@ -410,7 +416,11 @@ export function BespokeBrief({ collection }: { collection: Record<string, Collec
 
           <aside className="rounded-2xl bg-porcelain p-5">
             <p className="text-2xs uppercase tracking-luxe text-gold">Inspired by our collection</p>
-            <p className="mt-1 text-sm text-taupe">{category?.plural ? `We can craft something like these ${category.plural}${step > 0 ? ' — or anything you dream up.' : ''}` : 'Pick a category to see pieces we can make.'}</p>
+            <p className="mt-1 text-sm text-taupe">
+              {category?.plural
+                ? `We can craft something like these ${category.plural}${step > 0 ? ' — or anything you dream up.' : ''}`
+                : 'A few pieces we can make — pick a category to see more like it.'}
+            </p>
             <div className="mt-4 grid grid-cols-2 gap-3">
               {pieces.length
                 ? pieces.map((p) => (
@@ -419,7 +429,7 @@ export function BespokeBrief({ collection }: { collection: Record<string, Collec
                         <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />
                       </span>
                       <span className="block px-2.5 py-2">
-                        <span className="block truncate text-2xs uppercase text-taupe">{category?.plural}</span>
+                        <span className="block truncate text-2xs uppercase text-taupe">{p.label}</span>
                         <span className="block text-sm font-semibold text-ink">{formatMoney(p.price)}</span>
                       </span>
                     </Link>
