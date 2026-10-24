@@ -192,7 +192,8 @@ export default async function BespokePage() {
             {SHOWCASE.map((s, i) => (
               <li key={s.title}>
                 <Reveal delay={i * 0.08}>
-                  <Image src={s.image} alt={s.alt} width={600} height={600} sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw" className="aspect-square w-full bg-white object-cover" />
+                  {/* lossless originals, served as they are — no second compression */}
+                  <Image src={s.image} alt={s.alt} width={600} height={600} unoptimized className="aspect-square w-full bg-white object-cover" />
                   <h3 className="mt-5 font-serif text-[1.5rem] leading-tight">{s.title}</h3>
                   <p className="mt-2 text-[16px] leading-relaxed text-taupe">{s.text}</p>
                 </Reveal>
