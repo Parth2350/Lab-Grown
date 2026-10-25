@@ -4,16 +4,17 @@ import { usePathname } from 'next/navigation';
 import { AnimatePresence, m } from 'framer-motion';
 import { ArrowLeftRight, Heart, Menu, Search, ShoppingBag } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { MAIN_NAV, type NavItem } from '@/config/navigation';
+import Image from 'next/image';
+import type { MegaColumn, NavItem } from '@/config/navigation';
+import { METAL_COLORS } from '@/lib/catalog';
 import { site } from '@/config/site';
 import { cn } from '@/lib/utils';
 import { cartCount, useCart } from '@/store/cart';
 import { useCompare, useWishlist } from '@/store/lists';
 import { useUI } from '@/store/ui';
 import { useMounted } from '@/hooks/use-mounted';
-import { JewelryArt } from '@/components/art/JewelryArt';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
-import { CurrencySwitcher, useLocalize } from '@/components/providers/CurrencyProvider';
+import { CurrencySwitcher } from '@/components/providers/CurrencyProvider';
 import { Logo } from './Logo';
 import { AccountMenu } from './AccountMenu';
 
@@ -28,51 +29,50 @@ function Badge({ n }: { n: number }) {
 
 const iconBtn = 'relative flex h-9 w-9 items-center justify-center rounded-full text-ink transition-colors hover:bg-porcelain xs:h-10 xs:w-10';
 
+/** Ten links to a column, as on brilliancecarat.com */
+const columnsOf = <T,>(links: T[]) => Array.from({ length: Math.ceil(links.length / 10) }, (_, i) => links.slice(i * 10, i * 10 + 10));
+
+/** The marker beside a menu link: the diamond's outline for shapes, a gold swatch for metals */
+export function NavMarker({ kind, value, size = 18 }: { kind: MegaColumn['kind']; value: string; size?: number }) {
+  if (kind === 'shape') return <ShapeIcon shape={value} size={size} strokeWidth={1.3} className="shrink-0 text-ink" />;
+  if (kind === 'metal')
+    return <span className="shrink-0 rounded-full ring-1 ring-line" style={{ width: size - 2, height: size - 2, background: METAL_COLORS.find((m) => m.slug === value)?.swatch }} />;
+  return null;
+}
+
 function MegaPanel({ item, onNavigate }: { item: NavItem; onNavigate: () => void }) {
   const mega = item.mega!;
-  const localize = useLocalize();
   return (
-    <div className="container-x grid grid-cols-12 gap-10 py-10">
-      <div className="col-span-8 grid grid-cols-3 gap-10">
+    <div className="mx-auto flex max-w-[1408px] gap-8 px-4 py-8">
+      <div className="flex flex-1 flex-wrap gap-x-10 gap-y-6">
         {mega.columns.map((col) => (
-          <div key={col.title}>
-            <p className="eyebrow mb-5">{col.title}</p>
-            <ul className={cn(col.kind === 'shapes' ? 'grid grid-cols-2 gap-x-4 gap-y-3' : 'space-y-3')}>
-              {col.links.map((l) => (
-                <li key={l.href + l.label}>
-                  <Link href={l.href} onClick={onNavigate} className="group/link flex items-center gap-3 text-[16px] text-charcoal transition-colors hover:text-ink">
-                    {l.shape && <ShapeIcon shape={l.shape} size={22} className="text-taupe transition-colors group-hover/link:text-gold" />}
-                    {l.metal && (
-                      <span
-                        className="h-4 w-4 rounded-full ring-1 ring-line"
-                        style={{ background: l.metal === 'yellow' ? 'linear-gradient(135deg,#F6E2A8,#A87F33)' : l.metal === 'white' ? 'linear-gradient(135deg,#fff,#A9AEB4)' : 'linear-gradient(135deg,#F7D2C0,#B06F58)' }}
-                      />
-                    )}
-                    <span className={cn('link-underline', l.label.startsWith('View All') && 'label-caps text-ink')}>{localize(l.label)}</span>
-                  </Link>
-                </li>
+          <div key={col.title} className="flex flex-col">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-luxe text-ink">{col.title}</p>
+            <div className="flex gap-x-8">
+              {columnsOf(col.links).map((links, i) => (
+                <ul key={i} className="min-w-[8.5rem] space-y-2 text-sm text-ink">
+                  {links.map((l) => (
+                    <li key={l.value}>
+                      <Link href={l.href} onClick={onNavigate} className="flex items-center gap-2 whitespace-nowrap transition hover:font-semibold hover:text-black">
+                        <NavMarker kind={col.kind} value={l.value} />
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               ))}
-            </ul>
+            </div>
           </div>
         ))}
       </div>
-      {mega.feature && (
-        <Link href={mega.feature.href} onClick={onNavigate} className="group/feat col-span-4 grid grid-cols-2 items-center gap-6 bg-porcelain p-6">
-          <div className="art-tile aspect-square overflow-hidden">
-            <JewelryArt spec={mega.feature.art} shape={mega.feature.shape} metal={mega.feature.metal} carat={mega.feature.carat ?? 1} className="h-full w-full transition-transform duration-700 ease-luxe group-hover/feat:scale-105" />
-          </div>
-          <div>
-            <p className="eyebrow mb-2">{mega.feature.eyebrow}</p>
-            <p className="font-serif text-2xl leading-tight">{mega.feature.title}</p>
-            <span className="label-caps mt-4 inline-block border-b border-ink pb-1">{mega.feature.cta}</span>
-          </div>
-        </Link>
-      )}
+      <Link href={item.href} onClick={onNavigate} className="group/promo relative hidden min-h-[300px] w-64 shrink-0 overflow-hidden rounded-xl bg-porcelain xl:block" aria-label={`Shop all ${item.label}`}>
+        <Image src={mega.promo.image} alt={mega.promo.alt} fill sizes="256px" unoptimized className="object-cover transition-transform duration-700 ease-luxe group-hover/promo:scale-105" />
+      </Link>
     </div>
   );
 }
 
-export function Header() {
+export function Header({ nav }: { nav: NavItem[] }) {
   const mounted = useMounted();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -97,7 +97,7 @@ export function Header() {
     timer.current = setTimeout(() => setActive(i), delay);
   };
 
-  const activeItem = active != null ? MAIN_NAV[active] : null;
+  const activeItem = active != null ? nav[active] : null;
 
   return (
     <header
@@ -151,8 +151,8 @@ export function Header() {
         </div>
 
         <nav aria-label="Main" className="hidden xl:block">
-          <ul className="flex h-11 items-center justify-center gap-5 2xl:gap-9">
-            {MAIN_NAV.map((item, i) => {
+          <ul className="flex h-11 items-center justify-center gap-4 2xl:gap-5">
+            {nav.map((item, i) => {
               const current = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <li key={item.href} onMouseEnter={() => open(item.mega ? i : null)} onFocus={() => open(item.mega ? i : null, 0)}>
@@ -160,14 +160,9 @@ export function Header() {
                     href={item.href}
                     aria-expanded={item.mega ? active === i : undefined}
                     aria-current={current ? 'page' : undefined}
-                    className={cn(
-                      'relative flex h-11 items-center whitespace-nowrap text-[12.5px] font-medium uppercase tracking-[0.1em] text-charcoal transition-colors hover:text-ink 2xl:text-[13px] 2xl:tracking-[0.16em]',
-                      (active === i || current) && 'text-ink',
-                      item.label === 'Find Your Match' && 'text-gold-deep',
-                    )}
+                    className={cn('flex h-11 items-center whitespace-nowrap text-[14.5px] text-ink transition-colors hover:text-gold-deep', (active === i || current) && 'text-gold-deep')}
                   >
                     {item.label}
-                    <span className={cn('absolute inset-x-0 bottom-0 h-px origin-left bg-ink transition-transform duration-500 ease-luxe', active === i || current ? 'scale-x-100' : 'scale-x-0')} />
                   </Link>
                 </li>
               );
@@ -184,7 +179,7 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-x-0 top-full hidden border-b border-t border-line bg-ivory shadow-[0_30px_60px_-40px_rgba(20,19,17,0.35)] xl:block"
+            className="absolute inset-x-0 top-full hidden border-t border-line bg-white shadow-[0_30px_60px_-40px_rgba(20,19,17,0.35)] xl:block"
             onMouseEnter={() => clearTimeout(timer.current)}
             onKeyDown={(e) => e.key === 'Escape' && setActive(null)}
           >

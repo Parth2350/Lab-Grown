@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Gem, Gift, MessageSquareText, PenTool } from 'lucide-react';
 import { site } from '@/config/site';
+import { catalogSrc } from '@/lib/catalog';
 import { pageMeta } from '@/lib/seo';
 import { ButtonLink } from '@/components/ui/Button';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -96,7 +97,7 @@ const FAQS: Faq[] = [
 /** the categories the brief's "Inspired by our collection" panel draws on */
 const BRIEF_CATEGORIES = ['engagement-rings', 'wedding-bands', 'necklaces', 'pendants', 'earrings', 'bracelets'];
 /** the catalogue's 300 px thumbnail of a photo — the panel's tiles are small */
-const thumb = (url: string) => url.replace('webassests.s3.us-east-1.amazonaws.com/images/zoom/', 'webassests.s3.us-east-1.amazonaws.com/images/thumb/');
+const thumb = (url: string) => catalogSrc(url.replace('webassests.s3.us-east-1.amazonaws.com/images/zoom/', 'webassests.s3.us-east-1.amazonaws.com/images/thumb/'));
 
 export default async function BespokePage() {
   const lists = await Promise.all(BRIEF_CATEGORIES.map((c) => getProductsWhere({ category: c }, {}, 6)));

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Gift, PenLine, RefreshCcw, ShieldCheck } from 'lucide-react';
 import { VIRTUAL_COLLECTIONS } from '@/config/navigation';
@@ -7,14 +8,11 @@ import { pageMeta } from '@/lib/seo';
 import { localizeRupees, pluralize } from '@/lib/utils';
 import { getCurrency } from '@/lib/server/currency';
 import type { ProductCard as Card } from '@/lib/types';
-import { type ArtSpec } from '@/components/art/JewelryArt';
-import { LazyJewelryArt } from '@/components/art/LazyArt';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ButtonLink } from '@/components/ui/Button';
 import { Carousel } from '@/components/ui/Carousel';
 import { Reveal } from '@/components/ui/Reveal';
-import { QUIZ_TYPE_ART } from '@/components/content/art-presets';
 
 export const revalidate = 3600;
 
@@ -24,7 +22,7 @@ export const metadata = pageMeta({
   path: '/gifts',
 });
 
-type Tile = { slug: string; title: string; blurb: string; art: { spec: ArtSpec; shape: string; metal: string; carat?: number }; tone: string; scope: { maxPrice?: number; collection?: string } };
+type Tile = { slug: string; title: string; blurb: string; image: string; alt: string; scope: { maxPrice?: number; collection?: string } };
 
 const vc = (slug: string) => VIRTUAL_COLLECTIONS[slug]!;
 
@@ -33,24 +31,24 @@ const PRICE_TILES: Tile[] = [
     slug: 'gifts-under-25000',
     title: vc('gifts-under-25000').title,
     blurb: 'Petite studs, dainty pendants and stacking rings.',
-    art: { spec: { kind: 'studs', head: 'bezel' }, shape: 'round', metal: 'yellow', carat: 0.5 },
-    tone: 'art-tile-warm',
+    image: '/images/gifts/under-25000.webp',
+    alt: 'Petite diamond studs, a dainty diamond pendant and a stacking ring in yellow gold in a gift box',
     scope: { maxPrice: vc('gifts-under-25000').maxPrice },
   },
   {
     slug: 'gifts-under-50000',
     title: vc('gifts-under-50000').title,
     blurb: 'Solitaire pendants, huggies and halo studs.',
-    art: { spec: { kind: 'pendant', head: 'solitaire' }, shape: 'pear', metal: 'rose', carat: 0.75 },
-    tone: 'art-tile',
+    image: '/images/gifts/under-50000.webp',
+    alt: 'A pear diamond solitaire pendant, diamond huggies and halo studs in rose gold',
     scope: { maxPrice: vc('gifts-under-50000').maxPrice },
   },
   {
     slug: 'gifts-under-100000',
     title: vc('gifts-under-100000').title,
     blurb: 'Hoops, eternity bands and statement drops.',
-    art: { spec: { kind: 'hoops', size: 'medium' }, shape: 'round', metal: 'white' },
-    tone: 'art-tile-cool',
+    image: '/images/gifts/under-100000.webp',
+    alt: 'Diamond hoops, an eternity band and diamond drop earrings in white gold on a jewellery tray',
     scope: { maxPrice: vc('gifts-under-100000').maxPrice },
   },
 ];
@@ -60,40 +58,40 @@ const OCCASION_TILES: Tile[] = [
     slug: 'anniversary-gifts',
     title: 'Anniversary Gifts',
     blurb: 'Eternity bands and three-stone pieces for every year together.',
-    art: { spec: { kind: 'band', stones: 'full', stoneShape: 'round' }, shape: 'round', metal: 'yellow' },
-    tone: 'art-tile-warm',
+    image: '/images/gifts/anniversary.webp',
+    alt: 'A diamond eternity band and a three-stone ring in yellow gold beside champagne glasses',
     scope: { collection: 'anniversary-gifts' },
   },
   {
     slug: 'birthday-gifts',
     title: 'Birthday Gifts',
     blurb: 'Sparkle they will reach for every single day.',
-    art: { spec: { kind: 'studs', head: 'halo' }, shape: 'round', metal: 'rose' },
-    tone: 'art-tile',
+    image: '/images/gifts/birthday.webp',
+    alt: 'Diamond halo stud earrings in a pink gift box',
     scope: { collection: 'birthday-gifts' },
   },
   {
     slug: 'wedding-gifts',
     title: 'Wedding Gifts',
     blurb: 'For the couple, the bride and the bridal party.',
-    art: { spec: { kind: 'pendant', head: 'three-stone' }, shape: 'round', metal: 'white' },
-    tone: 'art-tile-cool',
+    image: '/images/gifts/wedding.webp',
+    alt: 'Wedding bands and a three-stone diamond pendant resting on a white rose bouquet',
     scope: { collection: 'wedding-gifts' },
   },
   {
     slug: 'bridal-gifts',
     title: 'Bridal Gifts',
     blurb: 'Something new to wear down the aisle — and long after.',
-    art: { spec: { kind: 'drops', head: 'halo' }, shape: 'pear', metal: 'white' },
-    tone: 'art-tile',
+    image: '/images/gifts/bridal.webp',
+    alt: 'A bride wearing pear-shaped diamond drop earrings with her veil',
     scope: { collection: 'bridal-gifts' },
   },
   {
     slug: 'personalized-jewelry',
     title: 'Personalized Jewelry',
     blurb: 'Engravable pieces for initials, dates and secret messages.',
-    art: { spec: { kind: 'signet' }, shape: 'round', metal: 'yellow' },
-    tone: 'art-tile-warm',
+    image: '/images/gifts/personalized.webp',
+    alt: 'An engraved initial signet ring and an engraved disc pendant in yellow gold',
     scope: { collection: 'personalized-jewelry' },
   },
 ];
@@ -108,10 +106,16 @@ const SERVICES = [
 function CategoryTile({ tile, count, priority, tall }: { tile: Tile; count: number; priority?: boolean; tall?: boolean }) {
   return (
     <Link href={`/collections/${tile.slug}`} className="group block" prefetch={priority ? true : undefined}>
-      <div className={`${tile.tone} relative overflow-hidden ${tall ? 'aspect-[4/3] sm:aspect-[4/5]' : 'aspect-square'}`}>
-        <div className="absolute inset-0 p-8 transition-transform duration-700 ease-luxe group-hover:scale-[1.04] sm:p-10">
-          <LazyJewelryArt spec={tile.art.spec} shape={tile.art.shape} metal={tile.art.metal} carat={tile.art.carat ?? 1} className="block h-full w-full" title={tile.title} />
-        </div>
+      <div className={`relative overflow-hidden bg-porcelain ${tall ? 'aspect-[4/3] sm:aspect-[4/5]' : 'aspect-square'}`}>
+        {/* high-quality WebP served as it is — no second compression */}
+        <Image
+          src={tile.image}
+          alt={tile.alt}
+          fill
+          unoptimized
+          priority={priority}
+          className="object-cover transition-transform duration-700 ease-luxe group-hover:scale-[1.04]"
+        />
         <span className="absolute left-4 top-4 bg-ivory/90 px-2.5 py-1 text-[12px] uppercase tracking-[0.16em] text-charcoal">{pluralize(count, 'piece')}</span>
       </div>
       <div className="mt-4 flex items-start justify-between gap-4">
@@ -157,11 +161,10 @@ export default async function GiftsPage() {
     Promise.all(tiles.map((t) => countProducts(t.scope))),
     getProductsWhere({ maxPrice: 5000000 }, {}, 10, 'featured'),
     getProductsWhere({ collection: 'anniversary-gifts' }, {}, 10, 'featured'),
-    getProductsWhere({ maxPrice: 10000000 }, { style: ['stud', 'hoop', 'drop', 'layering'] }, 10, 'featured'),
+    getProductsWhere({ maxPrice: 10000000 }, { style: ['hoops', 'drop', 'layered', 'paper-clip'] }, 10, 'featured'),
     getCurrency(),
   ]);
   const countFor = (slug: string) => counts[tiles.findIndex((t) => t.slug === slug)] ?? 0;
-  const quizArt = QUIZ_TYPE_ART.earrings!;
 
   return (
     <>
@@ -270,10 +273,8 @@ export default async function GiftsPage() {
       {/* ───────── quiz ───────── */}
       <section aria-labelledby="gift-quiz-title" className="container-x py-16 md:py-24">
         <div className="grid overflow-hidden border border-line bg-white md:grid-cols-2">
-          <div className="art-tile-warm relative aspect-[4/3] md:aspect-auto md:min-h-[380px]">
-            <div className="absolute inset-0 p-10 sm:p-14">
-              <LazyJewelryArt spec={quizArt.spec} shape={quizArt.shape} metal="rose" className="block h-full w-full" title="Diamond hoop earrings" />
-            </div>
+          <div className="relative aspect-[4/3] bg-porcelain md:aspect-auto md:min-h-[380px]">
+            <Image src="/images/gifts/quiz.webp" alt="Opening a gift box of rose gold diamond hoop earrings" fill unoptimized className="object-cover" />
           </div>
           <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
             <p className="eyebrow mb-4">Find Your Match</p>

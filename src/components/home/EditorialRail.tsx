@@ -1,7 +1,6 @@
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import type { ArtSpec } from '@/components/art/JewelryArt';
-import { LazyJewelryArt } from '@/components/art/LazyArt';
 import { Carousel, RailSkeleton } from '@/components/ui/Carousel';
 import { LazyMount } from '@/components/ui/LazyMount';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -15,22 +14,22 @@ type Props = {
   text: string;
   href: string;
   cta: string;
-  art: { spec: ArtSpec; shape: string; metal: string; carat?: number };
+  image: { src: string; alt: string };
   products: Card[];
   tint?: 'art-tile' | 'art-tile-warm' | 'art-tile-cool';
 };
 
 /** A curated edit: an editorial panel beside a product carousel. */
-export function EditorialRail({ id, eyebrow, title, text, href, cta, art, products, tint = 'art-tile-warm' }: Props) {
+export function EditorialRail({ id, eyebrow, title, text, href, cta, image, products, tint = 'art-tile-warm' }: Props) {
   if (!products.length) return null;
   return (
     <section aria-labelledby={id} className="py-16 md:py-24">
       <div className="container-x grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
         <div className={cn('relative flex flex-col overflow-hidden lg:col-span-4', tint)}>
-          <div className="relative mx-auto aspect-[16/10] w-full max-w-md sm:aspect-[2/1] lg:aspect-square lg:max-w-none" aria-hidden>
-            <LazyJewelryArt spec={art.spec} shape={art.shape} metal={art.metal} carat={art.carat ?? 1} className="absolute inset-[4%]" />
+          <div className="relative aspect-[16/10] w-full sm:aspect-[2/1] lg:aspect-square">
+            <Image src={image.src} alt={image.alt} fill unoptimized className="object-cover" />
           </div>
-          <div className="relative mt-auto p-6 pt-0 sm:p-8 sm:pt-0">
+          <div className="relative mt-auto p-6 sm:p-8">
             <p className="eyebrow mb-3 text-gold-deep">{eyebrow}</p>
             <h2 id={id} className="font-serif text-[2rem] font-light leading-[1.08] text-ink sm:text-[2.4rem]">
               {title}

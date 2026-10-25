@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { JewelryArt, type ArtSpec } from '@/components/art/JewelryArt';
 import { cn } from '@/lib/utils';
 import type { MediaImage } from '@/lib/types';
-import { isCatalogMedia } from '@/lib/catalog';
+import { catalogSrc, isCatalogMedia } from '@/lib/catalog';
 
 type Props = {
   name: string;
@@ -31,7 +31,7 @@ export function ProductMedia({ name, art, images = [], shape = 'round', metal = 
   if (photo) {
     return (
       <div className={cn('relative h-full w-full', className)}>
-        <Image src={photo.url} alt={photo.alt ?? name} fill sizes={sizes} priority={priority} unoptimized={isCatalogMedia(photo.url)} className="object-cover" />
+        <Image src={catalogSrc(photo.url)} alt={photo.alt ?? name} fill sizes={sizes} priority={priority} unoptimized={isCatalogMedia(photo.url)} className="object-cover" />
       </div>
     );
   }

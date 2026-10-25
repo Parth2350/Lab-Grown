@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { MATCH_BUDGETS, MATCH_CATEGORIES, MATCH_METALS, MATCH_OCCASIONS } from '@/config/quiz';
 import { currencyInfo, INR_PER_USD } from '@/lib/currency';
-import { isCatalogMedia } from '@/lib/catalog';
+import { catalogSrc, isCatalogMedia } from '@/lib/catalog';
 import type { ProductCard as Card } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -220,7 +220,7 @@ export function MatchQuiz({ categoryImages }: { categoryImages: Record<string, s
                   className={cn('group relative overflow-hidden rounded-xl border-2 transition', on ? 'border-gold' : 'border-transparent hover:border-line')}
                 >
                   <span className="relative block aspect-square bg-sand">
-                    <Image src={t.image} alt={t.name} fill sizes="200px" unoptimized={isCatalogMedia(t.image)} className="object-cover" />
+                    <Image src={catalogSrc(t.image)} alt={t.name} fill sizes="200px" unoptimized={isCatalogMedia(t.image)} className="object-cover" />
                   </span>
                   {on && check}
                 </button>

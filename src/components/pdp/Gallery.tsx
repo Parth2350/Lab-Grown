@@ -7,7 +7,7 @@ import { createPortal } from 'react-dom';
 import { JewelryArt, type ArtSpec } from '@/components/art/JewelryArt';
 import type { MediaImage } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { isCatalogMedia } from '@/lib/catalog';
+import { catalogSrc, isCatalogMedia } from '@/lib/catalog';
 import { useMounted } from '@/hooks/use-mounted';
 import { LazyMount } from '@/components/ui/LazyMount';
 
@@ -53,7 +53,7 @@ function buildSlides(images: MediaImage[], metal: string, shape: string, name: s
 }
 
 function SlideView({ s, art, metal, shape, carat, name, sizes, priority }: { s: Slide; art: ArtSpec | null; metal: string; shape: string; carat: number; name: string; sizes: string; priority?: boolean }) {
-  if (s.kind === 'image') return <Image src={s.url!} alt={s.alt ?? name} fill sizes={sizes} priority={priority} unoptimized={isCatalogMedia(s.url)} className="object-cover" />;
+  if (s.kind === 'image') return <Image src={catalogSrc(s.url!)} alt={s.alt ?? name} fill sizes={sizes} priority={priority} unoptimized={isCatalogMedia(s.url)} className="object-cover" />;
   if (s.kind === 'video') return <video src={s.url} className="h-full w-full object-cover" autoPlay muted loop playsInline controls aria-label={`${name} video`} />;
   return (
     <div className="absolute inset-[6%]" style={s.zoom ? { transform: `scale(${s.zoom})` } : undefined}>

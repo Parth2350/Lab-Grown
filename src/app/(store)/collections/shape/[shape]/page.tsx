@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters } from '@/lib/filters';
 import { pageMeta } from '@/lib/seo';
 import { SHAPES } from '@/lib/catalog';
 import { CollectionView } from '@/components/collection/CollectionView';
-import { LooseDiamond } from '@/components/art/JewelryArt';
 
 type Props = { params: Promise<{ shape: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 
@@ -41,8 +41,8 @@ export default async function ShapePage({ params, searchParams }: Props) {
       filters={filters}
       listing={listing}
       aside={
-        <div className="art-tile hidden h-40 w-40 lg:block">
-          <LooseDiamond shape={s.slug} className="h-full w-full" title={`${s.label} cut diamond`} />
+        <div className="relative hidden h-40 w-40 overflow-hidden rounded-full ring-1 ring-line lg:block">
+          <Image src={`/images/shapes/${s.slug}.webp`} alt={`${s.label} cut diamond`} fill unoptimized className="object-cover" />
         </div>
       }
     />

@@ -1,16 +1,16 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Check, Minus } from 'lucide-react';
 import { site } from '@/config/site';
 import { SHAPES } from '@/lib/catalog';
 import { pageMeta } from '@/lib/seo';
-import { LooseDiamond } from '@/components/art/JewelryArt';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { FaqSection, type Faq } from '@/components/content/FaqSection';
-import { CaratScale, ClarityScale, ColorScale, CutDiagram, CvdIllustration, HphtIllustration } from '@/components/content/illustrations';
+import { CaratScale, ClarityScale, ColorScale, CutDiagram } from '@/components/content/illustrations';
 import { CtaBand, TextLink } from '@/components/content/ui';
 
 const TITLE = 'Lab-Grown Diamonds: The Complete Guide';
@@ -99,11 +99,10 @@ export default function LabGrownDiamondsPage() {
             </div>
           </div>
           <div className="lg:col-span-6">
-            <div className="art-tile-cool relative aspect-square overflow-hidden sm:aspect-[5/4]">
-              <div className="absolute inset-0 p-10 sm:p-16">
-                <LooseDiamond shape="round" className="h-full w-full" title="A round brilliant lab-grown diamond" />
-              </div>
-              <p className="absolute bottom-4 left-4 text-[12.5px] uppercase tracking-[0.16em] text-taupe sm:bottom-6 sm:left-6">Round brilliant · 57 facets</p>
+            <div className="relative aspect-square overflow-hidden bg-porcelain sm:aspect-[5/4]">
+              {/* high-quality WebP served as it is — no second compression */}
+              <Image src="/images/lab/hero.webp" alt="A round brilliant lab-grown diamond" fill priority unoptimized className="object-cover" />
+              <p className="absolute bottom-4 left-4 text-[12.5px] uppercase tracking-[0.16em] text-white/90 [text-shadow:0_1px_6px_rgba(0,0,0,0.35)] sm:bottom-6 sm:left-6">Round brilliant · 57 facets</p>
             </div>
           </div>
         </div>
@@ -177,7 +176,8 @@ export default function LabGrownDiamondsPage() {
                 key: 'cvd',
                 abbr: 'CVD',
                 name: 'Chemical Vapour Deposition',
-                art: <CvdIllustration className="h-full w-full" />,
+                image: '/images/lab/cvd.webp',
+                alt: 'Diamond seeds growing in the glowing plasma of a CVD reactor',
                 text: 'Diamond seeds are placed in a sealed vacuum chamber filled with a carbon-rich gas, usually methane and hydrogen. Microwaves heat the gas into a glowing plasma, freeing carbon atoms that settle onto the seeds and build the crystal up in fine layers over several weeks.',
                 facts: ['Growth in thin, even layers', 'Excellent clarity potential', 'Typically 3–6 weeks per crystal'],
               },
@@ -185,13 +185,16 @@ export default function LabGrownDiamondsPage() {
                 key: 'hpht',
                 abbr: 'HPHT',
                 name: 'High Pressure, High Temperature',
-                art: <HphtIllustration className="h-full w-full" />,
+                image: '/images/lab/hpht.webp',
+                alt: 'A rough HPHT-grown diamond crystal beside a polished round diamond, with the press behind',
                 text: 'A press recreates the crushing force and intense heat found deep within the earth. Carbon dissolves in a molten metal solvent and crystallises onto the diamond seed, growing a single crystal from the centre outwards.',
                 facts: ['Mirrors natural formation', 'Often exceptionally colourless', 'Grows in days to weeks'],
               },
             ].map((m, i) => (
               <Reveal key={m.key} delay={i * 0.1} className="flex h-full flex-col border border-line bg-ivory">
-                <div className="aspect-[9/7] border-b border-line bg-white p-6 sm:p-10">{m.art}</div>
+                <div className="relative aspect-[9/7] overflow-hidden border-b border-line bg-porcelain">
+                  <Image src={m.image} alt={m.alt} fill unoptimized className="object-cover" />
+                </div>
                 <div className="flex flex-1 flex-col p-6 sm:p-8">
                   <p className="font-serif text-[2.2rem] font-light leading-none text-gold">{m.abbr}</p>
                   <h3 className="mt-2 font-serif text-2xl">{m.name}</h3>
@@ -282,7 +285,7 @@ export default function LabGrownDiamondsPage() {
             {SHAPES.map((s) => (
               <li key={s.slug}>
                 <Link href={`/collections/shape/${s.slug}`} className="group flex h-full flex-col items-center bg-ivory px-4 py-8 text-center transition-colors hover:bg-white">
-                  <ShapeIcon shape={s.slug} size={52} className="text-charcoal transition-colors duration-300 group-hover:text-gold" />
+                  <Image src={`/images/shapes/${s.slug}.webp`} alt={`${s.label} cut diamond`} width={80} height={80} unoptimized className="h-20 w-20 rounded-full object-cover ring-1 ring-line transition-transform duration-500 group-hover:scale-110" />
                   <span className="label-caps mt-4 text-ink">{s.label}</span>
                   <span className="mt-2 text-[14.5px] leading-snug text-taupe">{s.blurb}</span>
                 </Link>

@@ -33,14 +33,14 @@ export default async function HomePage() {
     getSettings(),
     getTrending(8),
     getProductsWhere({ category: 'engagement-rings', maxPrice: 25000000 }, { metal: ['yellow'] }, 8, 'price-asc'),
-    getProductsWhere({ category: 'earrings' }, { style: ['stud', 'hoop'] }, 8),
+    getProductsWhere({ category: 'earrings' }, { style: ['solitaire', 'hoops'] }, 8),
   ]);
 
   return (
     <>
-      {/* the brand-promise strip runs on the homepage only */}
-      <AnnouncementBar messages={settings.announcements} />
       <Hero hero={settings.hero} />
+      {/* the brand-promise strip runs on the homepage only, directly below the hero film */}
+      <AnnouncementBar messages={settings.announcements} />
 
       <ProductRail eyebrow="Most Loved" title="Trending Now" subtitle="Discover pieces everyone is loving." href="/collections/all" products={trending} />
 
@@ -64,9 +64,9 @@ export default async function HomePage() {
         eyebrow="The Earring Edit"
         title="Diamond Studs & Hoops"
         text="The pieces you reach for every single day — matched solitaire studs and hand-set pavé hoops that move effortlessly from desk to dinner."
-        href="/earrings?style=stud,hoop"
+        href="/earrings?style=solitaire,hoops"
         cta="Shop Studs & Hoops"
-        art={{ spec: { kind: 'hoops', size: 'large' }, shape: 'round', metal: 'yellow' }}
+        image={{ src: '/images/home/earring-edit.webp', alt: 'A diamond solitaire stud and a pavé diamond hoop in yellow gold, worn together' }}
         products={earrings}
       />
 

@@ -1,10 +1,10 @@
+import Image from 'next/image';
 import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { site } from '@/config/site';
 import { pageMeta } from '@/lib/seo';
 import { ButtonLink } from '@/components/ui/Button';
 import { ContactForm } from '@/components/content/ContactForm';
 import { FaqList, type Faq } from '@/components/content/FaqSection';
-import { MapIllustration } from '@/components/content/illustrations';
 import { ArrowLink, PageIntro } from '@/components/content/ui';
 
 export const metadata = pageMeta({
@@ -112,7 +112,7 @@ export default function ContactPage() {
       <section aria-labelledby="visit-title" className="border-y border-line bg-white">
         <div className="grid lg:grid-cols-12">
           <div className="relative min-h-[280px] overflow-hidden sm:min-h-[360px] lg:col-span-7 lg:min-h-[480px]">
-            <MapIllustration className="absolute inset-0 h-full w-full" />
+            <Image src="/images/contact/atelier.webp" alt="The private consultation salon at our atelier, with diamond rings on a velvet tray" fill unoptimized className="object-cover" />
           </div>
           <div className="flex flex-col justify-center px-4 py-12 sm:px-10 lg:col-span-5 lg:px-14">
             <p className="eyebrow mb-4 flex items-center gap-2">

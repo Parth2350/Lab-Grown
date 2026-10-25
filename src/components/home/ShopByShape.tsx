@@ -1,13 +1,9 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { ShapeIcon } from '@/components/art/ShapeIcon';
 import { SHAPES } from '@/lib/catalog';
 import { cn } from '@/lib/utils';
-import { LazyLooseDiamond } from '@/components/art/LazyArt';
 
-/**
- * "Start With the Stone": ten diamond silhouettes. On hover the fine line drawing
- * resolves into a faceted stone (CSS only). Horizontal snap-scroll on small screens.
- */
+/** "Start With the Stone": a photograph of each of the ten diamond shapes. Horizontal snap-scroll on small screens. */
 export function ShopByShape() {
   return (
     <section aria-labelledby="shapes-title" className="border-y border-line bg-porcelain/70 py-16 md:py-24">
@@ -29,17 +25,13 @@ export function ShopByShape() {
                 href={`/collections/shape/${shape.slug}`}
                 className="group flex h-full flex-col items-center border border-line bg-ivory px-2 pb-5 pt-6 text-center transition-colors duration-500 hover:bg-white focus-visible:bg-white lg:border-0 lg:bg-transparent lg:pb-8 lg:pt-10"
               >
-                <span className="relative flex h-[72px] w-[72px] items-center justify-center xl:h-[84px] xl:w-[84px]" aria-hidden>
-                  <span className="absolute inset-0 scale-75 rounded-full bg-gold-pale/0 transition-all duration-700 ease-luxe group-hover:scale-100 group-hover:bg-gold-pale/70" />
-                  <ShapeIcon
-                    shape={shape.slug}
-                    size={52}
-                    strokeWidth={0.9}
-                    className="relative text-charcoal/75 transition-all duration-500 ease-luxe group-hover:text-gold lg:group-hover:scale-90 lg:group-hover:opacity-0"
-                  />
-                  <LazyLooseDiamond
-                    shape={shape.slug}
-                    className="absolute inset-[-14%] hidden scale-75 opacity-0 transition-all duration-700 ease-luxe group-hover:scale-100 group-hover:opacity-100 lg:block"
+                <span className="relative block h-[72px] w-[72px] overflow-hidden rounded-full ring-1 ring-line xl:h-[84px] xl:w-[84px]">
+                  <Image
+                    src={`/images/shapes/${shape.slug}.webp`}
+                    alt={`${shape.label} cut diamond`}
+                    fill
+                    unoptimized
+                    className="object-cover transition-transform duration-700 ease-luxe group-hover:scale-110"
                   />
                 </span>
                 <span className="mt-4 font-serif text-[1.15rem] leading-tight text-ink">

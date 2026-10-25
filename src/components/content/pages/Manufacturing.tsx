@@ -1,13 +1,11 @@
-import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { site } from '@/config/site';
-import { JewelryArt, LooseDiamond } from '@/components/art/JewelryArt';
 import { Reveal } from '@/components/ui/Reveal';
 import { ButtonLink } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import { CadWireframe, LoupeOverlay, PackagingIllustration, SketchIllustration } from '../illustrations';
-import { ArtPanel } from '../ui';
+import { PhotoPanel } from '../ui';
 
-type Stage = { title: string; text: string[]; facts: { label: string; value: string }[]; visual: ReactNode; tone: string };
+type Stage = { title: string; text: string[]; facts: { label: string; value: string }[]; image: string; alt: string };
 
 const STAGES: Stage[] = [
   {
@@ -20,12 +18,8 @@ const STAGES: Stage[] = [
       { label: 'Method', value: 'Hand sketches & renderings' },
       { label: 'Reviewed by', value: 'Designer & master jeweler' },
     ],
-    visual: (
-      <div className="absolute inset-0 p-4 sm:p-6">
-        <SketchIllustration className="h-full w-full" />
-      </div>
-    ),
-    tone: 'art-tile-warm',
+    image: '/images/home/process-1.webp',
+    alt: 'A designer drawing ring sketches with measurements at a desk',
   },
   {
     title: 'CAD Modeling',
@@ -37,12 +31,8 @@ const STAGES: Stage[] = [
       { label: 'Precision', value: 'To one hundredth of a millimetre' },
       { label: 'Prototype', value: 'High-resolution resin print' },
     ],
-    visual: (
-      <div className="absolute inset-0 p-4 sm:p-6">
-        <CadWireframe className="h-full w-full" />
-      </div>
-    ),
-    tone: 'bg-white',
+    image: '/images/home/process-2.webp',
+    alt: 'A ring being modelled in 3D design software',
   },
   {
     title: 'Expert Setting',
@@ -54,12 +44,8 @@ const STAGES: Stage[] = [
       { label: 'Casting', value: 'Solid 9K, 10K, 14K & 18K gold' },
       { label: 'Training', value: 'Setters train for five years or more' },
     ],
-    visual: (
-      <div className="absolute inset-0 flex items-center justify-center p-8 sm:p-12">
-        <JewelryArt spec={{ kind: 'ring', head: 'solitaire', band: 'cathedral', prongs: 6 }} shape="round" metal="white" carat={1.5} view={1} className="h-full w-full" title="Side profile of a six-claw solitaire setting" />
-      </div>
-    ),
-    tone: 'art-tile-cool',
+    image: '/images/home/process-3.webp',
+    alt: 'A jeweller holding a ring in tweezers with a fine torch at the bench',
   },
   {
     title: 'Quality Inspection',
@@ -71,15 +57,8 @@ const STAGES: Stage[] = [
       { label: 'Checklist', value: '30 points per piece' },
       { label: 'Verified', value: 'Diamond, setting, metal & size' },
     ],
-    visual: (
-      <div className="absolute inset-0 p-8 sm:p-12">
-        <div className="relative h-full w-full">
-          <LooseDiamond shape="oval" className="absolute inset-0 h-full w-full" title="An oval diamond under a jeweler's loupe" />
-          <LoupeOverlay className="absolute inset-0 h-full w-full" />
-        </div>
-      </div>
-    ),
-    tone: 'art-tile',
+    image: '/images/home/process-4.webp',
+    alt: 'A diamond being weighed on a precision scale beside a tray of rings',
   },
   {
     title: 'Finishing & Polishing',
@@ -91,12 +70,8 @@ const STAGES: Stage[] = [
       { label: 'Stages', value: 'Up to six rounds of polishing' },
       { label: 'Finishes', value: 'High polish, satin & hammered' },
     ],
-    visual: (
-      <div className="absolute inset-0 flex items-center justify-center p-8 sm:p-12">
-        <JewelryArt spec={{ kind: 'band', stones: 'none', size: 'wide' }} shape="round" metal="yellow" className="h-full w-full" title="A polished solid gold band" />
-      </div>
-    ),
-    tone: 'art-tile-warm',
+    image: '/images/home/process-5.webp',
+    alt: 'A craftsman filing and finishing a ring by hand',
   },
   {
     title: 'Luxury Packaging',
@@ -108,27 +83,20 @@ const STAGES: Stage[] = [
       { label: 'Includes', value: 'Grading report & care card' },
       { label: 'Delivery', value: 'Insured, signature required' },
     ],
-    visual: (
-      <div className="absolute inset-0 p-4 sm:p-8">
-        <PackagingIllustration className="h-full w-full" />
-      </div>
-    ),
-    tone: 'art-tile',
+    image: '/images/home/process-6.webp',
+    alt: 'A gold solitaire ring in a navy velvet box beside its gift box',
   },
 ];
 
 export function ManufacturingHero() {
   return (
     <div className="container-x pb-14">
-      <ArtPanel
-        spec={{ kind: 'ring', head: 'three-stone', sides: 'pear', band: 'plain' }}
-        shape="oval"
-        metal="yellow"
-        carat={1.5}
-        tone="warm"
+      <PhotoPanel
+        src="/images/manufacturing/hero.webp"
+        alt="A three-stone engagement ring with an oval and two pear diamonds in yellow gold on the workshop bench"
+        priority
         className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/8]"
-        inset="p-8 sm:p-12 lg:p-14"
-        title="A three-stone ring in yellow gold"
+        position="object-[70%_60%]"
         caption={
           <>
             <span>
@@ -161,8 +129,8 @@ export function ManufacturingBody() {
         {STAGES.map((s, i) => (
           <li key={s.title} className="border-t border-line py-12 md:py-16">
             <Reveal className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
-              <div className={cn('relative aspect-square overflow-hidden', s.tone, s.tone === 'bg-white' && 'border border-line', i % 2 === 1 && 'md:order-2')}>
-                {s.visual}
+              <div className={cn('relative aspect-[4/3] overflow-hidden bg-porcelain', i % 2 === 1 && 'md:order-2')}>
+                <Image src={s.image} alt={s.alt} fill sizes="(min-width:768px) 50vw, 100vw" className="object-cover" />
               </div>
               <div>
                 <p className="flex items-baseline gap-4">

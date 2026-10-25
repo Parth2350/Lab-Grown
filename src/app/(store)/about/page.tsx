@@ -6,8 +6,7 @@ import { cn } from '@/lib/utils';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
-import { GlobeIllustration } from '@/components/content/illustrations';
-import { ArrowLink, ArtPanel, CtaBand } from '@/components/content/ui';
+import { ArrowLink, CtaBand, PhotoPanel } from '@/components/content/ui';
 
 export const metadata = pageMeta({
   title: 'Our Story',
@@ -96,15 +95,12 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="lg:col-span-6">
-            <ArtPanel
-              spec={{ kind: 'ring', head: 'hidden-halo', band: 'pave' }}
-              shape="oval"
-              metal="yellow"
-              carat={2}
-              tone="warm"
+            <PhotoPanel
+              src="/images/about/hero.webp"
+              alt="A master jeweller holding a finished oval hidden halo engagement ring in yellow gold at the workbench"
+              priority
               className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5]"
-              inset="p-10 sm:p-14"
-              title="An oval hidden halo engagement ring in yellow gold"
+              position="object-[50%_40%]"
               caption={<span>Designed &amp; made in {city}</span>}
             />
           </div>
@@ -117,15 +113,10 @@ export default function AboutPage() {
         eyebrow="Our Story"
         title="It began with a single bench"
         art={
-          <ArtPanel
-            spec={{ kind: 'ring', head: 'solitaire', band: 'plain', prongs: 6 }}
-            shape="round"
-            metal="white"
-            carat={1.5}
-            view={1}
-            tone="cool"
+          <PhotoPanel
+            src="/images/about/story.webp"
+            alt="A six-claw diamond solitaire ring on the bench pin of an old jeweller's workbench"
             className="aspect-[4/3]"
-            title="The profile of a six-claw solitaire ring"
           />
         }
       >
@@ -147,14 +138,7 @@ export default function AboutPage() {
         reverse
         link={{ href: '/pages/manufacturing', label: 'Our six-step process' }}
         art={
-          <ArtPanel
-            spec={{ kind: 'band', stones: 'full', stoneShape: 'emerald' }}
-            shape="emerald"
-            metal="yellow"
-            tone="warm"
-            className="aspect-[4/3]"
-            title="An emerald-cut eternity band"
-          />
+          <PhotoPanel src="/images/about/craft.webp" alt="An emerald-cut diamond eternity band in yellow gold held in tweezers" className="aspect-[4/3]" />
         }
       >
         <p>
@@ -186,13 +170,13 @@ export default function AboutPage() {
             </Reveal>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:col-span-7">
               {[
-                { spec: { kind: 'pendant' as const, head: 'bezel' as const }, shape: 'round', metal: 'rose', label: 'Bezel setting' },
-                { spec: { kind: 'studs' as const, head: 'halo' as const }, shape: 'round', metal: 'white', label: 'Halo studs' },
-                { spec: { kind: 'tennis-bracelet' as const, stoneShape: 'round' }, shape: 'round', metal: 'yellow', label: 'Tennis line' },
-                { spec: { kind: 'drops' as const, head: 'halo' as const }, shape: 'pear', metal: 'yellow', label: 'Pear drops' },
+                { src: '/images/about/bezel.webp', alt: 'A setter closing a rose gold bezel around a diamond under the microscope', label: 'Bezel setting' },
+                { src: '/images/about/halo-studs.webp', alt: 'Diamond halo stud earrings in white gold on a polishing cloth', label: 'Halo studs' },
+                { src: '/images/about/tennis.webp', alt: 'A yellow gold diamond tennis bracelet on the workbench', label: 'Tennis line' },
+                { src: '/images/about/pear-drops.webp', alt: 'Pear-shaped diamond halo drop earrings in yellow gold held in tweezers', label: 'Pear drops' },
               ].map((a, i) => (
                 <Reveal key={a.label} delay={i * 0.08}>
-                  <ArtPanel spec={a.spec} shape={a.shape} metal={a.metal} className="aspect-square" inset="p-5 sm:p-8" caption={<span>{a.label}</span>} />
+                  <PhotoPanel src={a.src} alt={a.alt} className="aspect-square" caption={<span>{a.label}</span>} />
                 </Reveal>
               ))}
             </div>
@@ -206,7 +190,7 @@ export default function AboutPage() {
         eyebrow="Our Diamonds"
         title="Real diamonds, grown with intention"
         link={{ href: '/pages/lab-grown-diamonds', label: 'The lab-grown diamond guide' }}
-        art={<ArtPanel loose shape="cushion" tone="cool" className="aspect-[4/3]" inset="p-12 sm:p-20" title="A cushion-cut lab-grown diamond" />}
+        art={<PhotoPanel src="/images/about/diamonds.webp" alt="A cushion-cut diamond held in gemologist's tweezers" className="aspect-[4/3]" />}
       >
         <p>
           Our diamonds are grown, not mined — chemically, physically and optically identical to diamonds from the earth, with an origin we can trace for every
@@ -277,7 +261,11 @@ export default function AboutPage() {
       <section id="global-reach" aria-labelledby="reach-title" className="container-x py-16 md:py-24">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal className="order-2 lg:order-1 lg:col-span-6">
-            <GlobeIllustration className="mx-auto w-full max-w-[520px]" />
+            <PhotoPanel
+              src="/images/about/global.webp"
+              alt="A gift-wrapped jewellery box and a diamond ring beside a brass globe and a world map"
+              className="mx-auto aspect-square w-full max-w-[520px]"
+            />
           </Reveal>
           <div className="order-1 lg:order-2 lg:col-span-6">
             <p className="eyebrow mb-4 flex items-center gap-3">

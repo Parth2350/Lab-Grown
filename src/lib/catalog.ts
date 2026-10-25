@@ -120,6 +120,10 @@ export const FILTER_SHAPES: readonly { slug: string; label: string }[] = [...SHA
 /** Partner-catalogue photos and videos are served straight from the partner's media server (already web-sized). */
 export const isCatalogMedia = (url?: string | null) => !!url && url.startsWith('https://webassests.s3.');
 
+const CATALOG_PHOTOS = 'https://webassests.s3.us-east-1.amazonaws.com/images/';
+/** A partner-catalogue photo through our own /cdn/catalog/ path (see next.config rewrites): the same file, cached near the shopper */
+export const catalogSrc = (url: string) => (url.startsWith(CATALOG_PHOTOS) ? '/cdn/catalog/' + url.slice(CATALOG_PHOTOS.length) : url);
+
 export const label = {
   shape: (s?: string | null) => SHAPES.find((x) => x.slug === s)?.label ?? (s ? CATALOG_SHAPE_LABELS[s] ?? titleCase(s) : ''),
   metal: (s?: string | null) => METAL_COLORS.find((x) => x.slug === s)?.label ?? (s ? titleCase(s) : ''),

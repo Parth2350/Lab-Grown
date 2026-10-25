@@ -11,16 +11,17 @@ import { SettingsProvider } from '@/components/providers/SettingsProvider';
 import { SyncManager } from '@/components/providers/SyncManager';
 import { CurrencyProvider } from '@/components/providers/CurrencyProvider';
 import { getCurrency } from '@/lib/server/currency';
+import { getMainNav } from '@/lib/server/catalog';
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  const [settings, currency] = await Promise.all([getSettings(), getCurrency()]);
+  const [settings, currency, nav] = await Promise.all([getSettings(), getCurrency(), getMainNav()]);
   return (
     <SettingsProvider value={settings}>
       <CurrencyProvider currency={currency}>
-        <Header />
+        <Header nav={nav} />
         <main id="main">{children}</main>
         <Footer />
-        <MobileMenu />
+        <MobileMenu nav={nav} />
         <SearchOverlay popular={settings.popularSearches} />
         <CartDrawer />
         <QuickView />

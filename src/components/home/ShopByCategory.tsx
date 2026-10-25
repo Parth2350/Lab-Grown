@@ -74,7 +74,7 @@ const TILES: Tile[] = [
     title: 'Hoop Earrings',
     path: '/earrings',
     scope: { category: 'earrings' },
-    filters: { style: ['hoop'] },
+    filters: { style: ['hoops'] },
   },
   {
     title: 'Toi et Moi Rings',

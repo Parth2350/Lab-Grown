@@ -6,7 +6,7 @@ import { ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { FaqSection, type Faq } from '@/components/content/FaqSection';
 import { PartnerForm } from '@/components/content/PartnerForm';
-import { ArtPanel, NumberedSteps } from '@/components/content/ui';
+import { NumberedSteps, PhotoPanel } from '@/components/content/ui';
 
 export const metadata = pageMeta({
   title: 'Partner Program',
@@ -89,10 +89,10 @@ export default function PartnerProgramPage() {
           </div>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:col-span-6">
             <Reveal className="mt-10">
-              <ArtPanel spec={{ kind: 'hoops', size: 'medium' }} shape="round" metal="yellow" tone="warm" className="aspect-[4/5]" inset="p-6 sm:p-8" title="Pavé hoop earrings" />
+              <PhotoPanel src="/images/partner/hoops.webp" alt="A pavé diamond hoop and a diamond stud earring in yellow gold, worn" priority className="aspect-[4/5]" />
             </Reveal>
             <Reveal delay={0.1}>
-              <ArtPanel spec={{ kind: 'pendant', head: 'solitaire' }} shape="oval" metal="rose" className="aspect-[4/5]" inset="p-6 sm:p-8" title="An oval solitaire pendant" />
+              <PhotoPanel src="/images/partner/pendant.webp" alt="An oval diamond solitaire pendant in rose gold on a velvet display bust" priority className="aspect-[4/5]" />
             </Reveal>
           </div>
         </div>

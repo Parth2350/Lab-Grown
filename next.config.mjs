@@ -35,9 +35,22 @@ const nextConfig = {
       { source: '/:path*', has: [{ type: 'host', value: 'lab-grown-pi.vercel.app' }], destination: 'https://thevjewels.vercel.app/:path*', permanent: true },
     ];
   },
+  // Partner-catalogue photos (served from the US with no CDN) come through our own address instead, so Vercel's CDN keeps
+  // a copy near each shopper — the same files, byte for byte. Videos stay on the partner's server.
+  async rewrites() {
+    return [{ source: '/cdn/catalog/:path*', destination: 'https://webassests.s3.us-east-1.amazonaws.com/images/:path*' }];
+  },
   async headers() {
     return [
       { source: '/fonts/:file*', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
+      {
+        source: '/cdn/catalog/:path*',
+        headers: [
+          { key: 'x-vercel-enable-rewrite-caching', value: '1' },
+          { key: 'CDN-Cache-Control', value: 'max-age=2592000, stale-while-revalidate=86400' },
+          { key: 'Cache-Control', value: 'public, max-age=604800, stale-while-revalidate=86400' },
+        ],
+      },
       {
         source: '/(.*)',
         headers: [

@@ -1,8 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { type ArtSpec } from '@/components/art/JewelryArt';
-import { LazyJewelryArt, LazyLooseDiamond } from '@/components/art/LazyArt';
 import { Breadcrumbs, type Crumb } from '@/components/ui/Breadcrumbs';
 import { cn } from '@/lib/utils';
 
@@ -37,47 +36,28 @@ export function PageIntro({
   );
 }
 
-const TONES = { default: 'art-tile', warm: 'art-tile-warm', cool: 'art-tile-cool' } as const;
-export type ArtTone = keyof typeof TONES;
-
-/** A framed procedural jewelry illustration for editorial layouts. */
-export function ArtPanel({
-  spec,
-  shape = 'round',
-  metal = 'yellow',
-  carat = 1,
-  view = 0,
-  tone = 'default',
+/** A framed editorial photograph — high-quality WebP served as it is, no second compression. */
+export function PhotoPanel({
+  src,
+  alt,
   className,
-  inset = 'p-6 sm:p-10',
-  title,
   caption,
-  loose,
+  priority,
+  position,
 }: {
-  spec?: ArtSpec;
-  shape?: string;
-  metal?: string;
-  carat?: number;
-  view?: number;
-  tone?: ArtTone;
+  src: string;
+  alt: string;
   className?: string;
-  inset?: string;
-  title?: string;
   caption?: ReactNode;
-  /** Render a single loose diamond instead of a piece of jewelry */
-  loose?: boolean;
+  priority?: boolean;
+  /** object-position, e.g. 'object-[50%_70%]', when the crop should favour part of the photo */
+  position?: string;
 }) {
   return (
-    <figure className={cn('relative overflow-hidden', TONES[tone], className)}>
-      <div className={cn('absolute inset-0 flex items-center justify-center', inset)}>
-        {loose || !spec ? (
-          <LazyLooseDiamond shape={shape} className="block h-full w-full" title={title} />
-        ) : (
-          <LazyJewelryArt spec={spec} shape={shape} metal={metal} carat={carat} view={view} className="block h-full w-full" title={title} />
-        )}
-      </div>
+    <figure className={cn('relative overflow-hidden bg-porcelain', className)}>
+      <Image src={src} alt={alt} fill unoptimized priority={priority} className={cn('object-cover', position)} />
       {caption && (
-        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 text-[13px] uppercase tracking-[0.16em] text-taupe sm:p-6">
+        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-black/45 to-transparent p-4 pt-12 text-[13px] uppercase tracking-[0.16em] text-white sm:p-6 sm:pt-16">
           {caption}
         </figcaption>
       )}

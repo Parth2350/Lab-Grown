@@ -16,6 +16,7 @@ import {
 } from '@/lib/filters';
 import type { DiamondData, ProductCard, ProductDetail, StoneData } from '@/lib/types';
 import { SHAPES } from '@/lib/catalog';
+import { MAIN_NAV, type NavItem } from '@/config/navigation';
 
 // ───────────────────────────── catalog index ─────────────────────────────
 
@@ -76,6 +77,33 @@ export const getCatalogIndex = unstable_cache(
     }));
   },
   ['catalog-index', 'bc3'],
+  { tags: ['products'], revalidate: 3600 },
+);
+
+/** The header menu, keeping only the shapes, metals and styles some product in that category carries — no dead-end links */
+export const getMainNav = unstable_cache(
+  async (): Promise<NavItem[]> => {
+    const rows = await getCatalogIndex();
+    const has = new Set(
+      rows.flatMap((r) => [
+        ...r.shapes.map((v) => `/${r.category}|shape|${v}`),
+        ...r.metalColors.map((v) => `/${r.category}|metal|${v}`),
+        ...r.styles.map((v) => `/${r.category}|style|${v}`),
+      ]),
+    );
+    return MAIN_NAV.map((item) =>
+      item.mega
+        ? {
+            ...item,
+            mega: {
+              ...item.mega,
+              columns: item.mega.columns.map((c) => ({ ...c, links: c.links.filter((l) => has.has(`${item.href}|${c.kind}|${l.value}`)) })).filter((c) => c.links.length),
+            },
+          }
+        : item,
+    );
+  },
+  ['main-nav', 'v1'],
   { tags: ['products'], revalidate: 3600 },
 );
 
