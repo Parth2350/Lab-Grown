@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { m } from 'framer-motion';
 import { ArrowLeftRight, Eye, Heart } from 'lucide-react';
 import { useState } from 'react';
-import { METAL_COLORS, PURITIES } from '@/lib/catalog';
+import { METAL_COLORS, PURITIES, nameFor } from '@/lib/catalog';
 import type { ProductCard as Card } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useCompare, useWishlist, COMPARE_MAX } from '@/store/lists';
@@ -87,6 +87,8 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
   const [purity, setPurity] = useState(PURITIES.find((x) => product.purities.includes(x.slug))?.slug ?? product.defaultPurity);
   const openQuickView = useUI((s) => s.openQuickView);
   const price = product.priceByPurity[purity] ?? product.fromPrice;
+  // the title follows the chosen gold, e.g. "10K White Gold Diamond Earrings"
+  const name = nameFor(product.name, metal, purity);
   const href = productHref(product, metal, purity);
   const shape = product.shapes[0] ?? 'round';
   const carat = product.centerCarat ?? product.totalCarat ?? 1;
@@ -108,7 +110,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
       onPointerEnter={(e) => e.pointerType === 'mouse' && setHovered(true)}
     >
       <div className={cn('relative overflow-hidden', photos.length ? 'bg-white' : 'art-tile', twoUp ? 'aspect-[2/1] sm:aspect-square' : 'aspect-square')}>
-        <Link href={href} className="absolute inset-0 flex" aria-label={product.name}>
+        <Link href={href} className="absolute inset-0 flex" aria-label={name}>
           <span className="relative block h-full flex-1">
             {/* the main view only fades out once the alternate view exists, so the tile can never go blank */}
             <LazyMount eager={priority} className={cn('absolute transition-all duration-700 ease-luxe', inset, hovered && 'group-hover:scale-[1.04] group-hover:opacity-0')}>
@@ -151,7 +153,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
 
       <div className="flex flex-1 flex-col px-3 pt-3.5 sm:px-4">
         <Link href={href} className="block">
-          <h3 className="font-sans text-[16px] leading-snug text-ink transition-colors group-hover:text-gold-deep">{product.name}</h3>
+          <h3 className="font-sans text-[16px] leading-snug text-ink transition-colors group-hover:text-gold-deep">{name}</h3>
         </Link>
         <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
           <p className="text-sm text-charcoal">
@@ -166,6 +168,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
         </div>
 
         <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2">
+          {/* as on brilliancecarat.com, pointing at a metal or purity selects it — title, price, photo and link follow */}
           <div className="flex items-center gap-1.5" role="radiogroup" aria-label="Metal colour">
             {product.metalColors.map((m) => {
               const mc = METAL_COLORS.find((x) => x.slug === m);
@@ -178,6 +181,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
                   aria-label={mc?.label ?? m}
                   title={mc?.label ?? m}
                   onClick={() => setMetal(m)}
+                  onPointerEnter={(e) => e.pointerType === 'mouse' && setMetal(m)}
                   className={cn('h-[18px] w-[18px] rounded-full border border-white ring-1 transition-all', metal === m ? 'ring-ink ring-offset-1' : 'ring-line hover:ring-stone')}
                   style={{ background: mc?.swatch }}
                 />
@@ -192,6 +196,7 @@ export function ProductCard({ product, priority, sizes, className }: Props) {
                 role="radio"
                 aria-checked={purity === p.slug}
                 onClick={() => setPurity(p.slug)}
+                onPointerEnter={(e) => e.pointerType === 'mouse' && setPurity(p.slug)}
                 className={cn(
                   'h-7 min-w-[30px] border px-1 text-[12.5px] tracking-wide transition-colors sm:min-w-[34px] sm:px-1.5',
                   purity === p.slug ? 'border-ink bg-ink text-ivory' : 'border-line text-charcoal hover:border-ink',

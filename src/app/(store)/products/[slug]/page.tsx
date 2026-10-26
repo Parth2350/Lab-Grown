@@ -12,6 +12,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { ProductCard } from '@/components/product/ProductCard';
 import { ProductExperience } from '@/components/pdp/ProductExperience';
 import { packVariants } from '@/lib/variant';
+import { nameFor } from '@/lib/catalog';
 import { Reviews } from '@/components/pdp/Reviews';
 import { RecentlyViewed } from '@/components/pdp/RecentlyViewed';
 
@@ -46,6 +47,10 @@ export default async function ProductPage({ params, searchParams }: Props) {
   const p = await getProductBySlug(slug);
   if (!p) notFound();
   const [related, distribution] = await Promise.all([getRelated(p.id, 8), reviewDistribution(p.id)]);
+  // arriving from a card set to another gold, the breadcrumb names that gold (only values this product offers)
+  const metal = one(sp.metal);
+  const purity = one(sp.purity);
+  const name = nameFor(p.name, metal && p.metalColors.includes(metal) ? metal : null, purity && p.purities.includes(purity) ? purity : null);
 
   return (
     <>
@@ -53,7 +58,7 @@ export default async function ProductPage({ params, searchParams }: Props) {
         <Breadcrumbs
           items={[
             { label: p.category.name, href: `/${p.category.slug}` },
-            { label: p.name, href: `/products/${p.slug}` },
+            { label: name, href: `/products/${p.slug}` },
           ]}
         />
       </div>

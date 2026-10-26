@@ -4,7 +4,7 @@ import type { DiamondData, DiamondOptionData, ProductDetail, VariantData } from 
 import { useCart } from '@/store/cart';
 import { useUI } from '@/store/ui';
 import { unitPrice } from '@/lib/pricing';
-import { RING_SIZES, SHAPE_SLUGS, type ShapeSlug } from '@/lib/catalog';
+import { RING_SIZES, SHAPE_SLUGS, nameFor, type ShapeSlug } from '@/lib/catalog';
 import { caratOf, sizedPrice, variantSummary } from '@/lib/variant';
 
 export const ENGRAVING_MAX = 12;
@@ -141,7 +141,7 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
     add({
       productId: p.id,
       slug: p.slug,
-      name: p.name,
+      name: nameFor(p.name, variant.metalColor, variant.purity),
       sku: variant.sku,
       category: p.category.slug,
       variantId: variant.id,
@@ -161,7 +161,7 @@ export function useConfiguration(p: ProductDetail, init: InitialConfig = {}) {
     });
     if (!opts.silent) {
       setCart(true);
-      toast({ title: 'Added to your bag', description: p.name, href: '/cart', action: 'View bag' });
+      toast({ title: 'Added to your bag', description: nameFor(p.name, variant.metalColor, variant.purity), href: '/cart', action: 'View bag' });
     }
     return true;
   }

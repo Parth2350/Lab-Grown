@@ -1,7 +1,7 @@
 'use client';
 import { Check, ChevronDown, Gem, RefreshCcw, Ruler, Share2, ShieldCheck, Truck } from 'lucide-react';
 import { useState } from 'react';
-import { METAL_COLORS, PURITIES, SHAPE_SLUGS, label } from '@/lib/catalog';
+import { METAL_COLORS, PURITIES, SHAPE_SLUGS, label, nameFor } from '@/lib/catalog';
 import { fmtCarat } from '@/lib/variant';
 import { ShapeIcon } from '@/components/art/ShapeIcon';
 import type { ProductCard, ProductDetail } from '@/lib/types';
@@ -76,12 +76,13 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
   const [sizeGuide, setSizeGuide] = useState(false);
   const [sizePicker, setSizePicker] = useState(false);
   const settingPrice = c.variant?.price ?? 0;
+  const name = nameFor(p.name, c.metal, c.purity);
   const tagline = p.subtitle ? p.subtitle[0].toUpperCase() + p.subtitle.slice(1) : null;
 
   const share = async () => {
     const url = window.location.href;
     try {
-      if (navigator.share) await navigator.share({ title: p.name, url });
+      if (navigator.share) await navigator.share({ title: name, url });
       else {
         await navigator.clipboard.writeText(url);
         toast({ title: 'Link copied', description: 'Share it with someone special.' });
@@ -93,7 +94,8 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
 
   return (
     <div>
-      {compact ? <h2 className="font-serif text-2xl font-semibold leading-tight">{p.name}</h2> : <h1 className="font-serif text-2xl font-semibold leading-tight sm:text-[1.75rem]">{p.name}</h1>}
+      {/* the title follows the chosen gold, e.g. "10K White Gold Diamond Earrings" */}
+      {compact ? <h2 className="font-serif text-2xl font-semibold leading-tight">{name}</h2> : <h1 className="font-serif text-2xl font-semibold leading-tight sm:text-[1.75rem]">{name}</h1>}
       {tagline && <p className="mt-2 font-serif text-[17px] italic text-gold">{tagline}</p>}
       <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-line pb-5 sm:pb-6">
         <p className="font-serif text-[1.75rem] font-semibold leading-none text-ink sm:text-[2rem]" aria-live="polite">
@@ -293,7 +295,7 @@ export function ConfiguratorPanel({ p, card, c, compact, initialConfigure }: { p
           className="shrink-0 py-3.5"
           message={(origin) =>
             productEnquiry(origin, {
-              name: p.name,
+              name,
               slug: p.slug,
               sku: c.variant?.sku ?? p.sku,
               purity: c.purity,

@@ -120,6 +120,16 @@ export const FILTER_SHAPES: readonly { slug: string; label: string }[] = [...SHA
 /** Partner-catalogue photos and videos are served straight from the partner's media server (already web-sized). */
 export const isCatalogMedia = (url?: string | null) => !!url && url.startsWith('https://webassests.s3.');
 
+const NAME_PURITY = /\b(?:9|10|14|18)\s?K\b/i;
+const NAME_METAL = /\b(?:Yellow\s*&\s*White|Rose\s*&\s*White|Yellow|White|Rose|Black\s+Rh?odium)\s+Gold\b/i;
+/** A product name worded for the chosen gold, as brilliancecarat.com does: "14K Yellow Gold Diamond Ring" + 10K white → "10K White Gold Diamond Ring" */
+export function nameFor(name: string, metal?: string | null, purity?: string | null) {
+  const metalLabel = METAL_COLORS.find((m) => m.slug === metal)?.label;
+  let out = purity ? name.replace(NAME_PURITY, purity) : name;
+  if (metalLabel) out = out.replace(NAME_METAL, metalLabel);
+  return out;
+}
+
 const CATALOG_PHOTOS = 'https://webassests.s3.us-east-1.amazonaws.com/images/';
 /** A partner-catalogue photo through our own /cdn/catalog/ path (see next.config rewrites): the same file, cached near the shopper */
 export const catalogSrc = (url: string) => (url.startsWith(CATALOG_PHOTOS) ? '/cdn/catalog/' + url.slice(CATALOG_PHOTOS.length) : url);
