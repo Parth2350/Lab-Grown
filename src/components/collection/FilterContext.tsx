@@ -53,7 +53,7 @@ export function FilterProvider({ filters: serverFilters, basePath, children }: {
 
   const clearAll = useCallback(
     () =>
-      navigate({ price: [], metal: [], purity: [], shape: [], center: [], total: [], setting: [], style: [], collection: [] }),
+      navigate({ q: '', price: [], metal: [], purity: [], shape: [], center: [], total: [], setting: [], style: [], collection: [] }),
     [navigate],
   );
 

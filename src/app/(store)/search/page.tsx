@@ -24,7 +24,6 @@ export default async function SearchPage({ searchParams }: Props) {
   return (
     <CollectionView
       title={filters.q ? `“${filters.q}”` : 'Search our jewelry'}
-      eyebrow={filters.q ? 'Search results' : 'Search'}
       description={
         filters.q
           ? 'Smart search understands carat weights, shapes, styles and SKUs — refine further with the filters below.'
@@ -36,7 +35,6 @@ export default async function SearchPage({ searchParams }: Props) {
       apiScope={{}}
       filters={filters}
       listing={listing}
-      showShapes
     />
   );
 }

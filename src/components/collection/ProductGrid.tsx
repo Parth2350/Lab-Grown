@@ -55,10 +55,13 @@ export function ProductGrid({ initial, total, page, pageCount, apiQuery, nextHre
 
   return (
     <div className={cn('transition-opacity duration-300', pending && 'pointer-events-none opacity-50')} aria-busy={pending || loading}>
-      <ul className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-5 sm:gap-y-6 md:grid-cols-3 2xl:grid-cols-4">
+      <p className="mb-4 mt-4 text-[15px] text-taupe" aria-live="polite">
+        Showing <b className="font-semibold text-ink">{items.length}</b> of <b className="font-semibold text-ink">{total}</b> {total === 1 ? 'design' : 'designs'}
+      </p>
+      <ul className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5 lg:grid-cols-3 xl:grid-cols-4">
         {items.map((p, i) => (
           <li key={p.id}>
-            <ProductCard product={p} priority={i < 4} sizes="(min-width:1440px) 22vw, (min-width:768px) 28vw, 48vw" />
+            <ProductCard product={p} priority={i < 4} sizes="(min-width:1200px) 24vw, (min-width:1024px) 32vw, (min-width:640px) 48vw, 100vw" />
           </li>
         ))}
       </ul>

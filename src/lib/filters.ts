@@ -27,8 +27,8 @@ export type Filters = Record<FilterKey, string[]> & { q: string; sort: SortSlug;
 export const FILTER_GROUPS: { key: FilterKey; title: string; options: readonly { slug: string; label: string }[] }[] = [
   { key: 'price', title: 'Price', options: PRICE_RANGES },
   { key: 'metal', title: 'Metal Type', options: METAL_COLORS },
-  { key: 'purity', title: 'Metal Purity', options: PURITIES },
-  { key: 'shape', title: 'Diamond Shape', options: FILTER_SHAPES },
+  { key: 'purity', title: 'Metal Stamp', options: PURITIES },
+  { key: 'shape', title: 'Shape', options: FILTER_SHAPES },
   { key: 'center', title: 'Center Stone Carat', options: CARAT_RANGES },
   { key: 'total', title: 'Total Carat', options: CARAT_RANGES },
   { key: 'setting', title: 'Setting Type', options: SETTING_TYPES },
@@ -90,7 +90,7 @@ export function rangeLabel(key: FilterKey, slug: string, currency: Currency = 'I
     const [min, max] = parseRange(slug);
     const money = (rupees: number) => formatMoney(rupees * 100, { currency });
     if (!min) return `Under ${money(max)}`;
-    if (max === Infinity) return `${money(min)}+`;
+    if (max === Infinity) return `${money(min)} & above`;
     return `${money(min)} – ${money(max)}`;
   }
   if (key === 'center' || key === 'total') {
@@ -336,13 +336,22 @@ export function computeFacets(rows: IndexRow[], f: Filters) {
       }
     };
     const opts = g.options.map((o) => ({ value: o.slug, label: o.label, count: count(o.slug) }));
-    // styles and setting types come from the catalogue too: list every value the products carry
-    if (g.key === 'style' || g.key === 'setting') {
+    // shapes, styles and setting types come from the catalogue too: list every value the products carry
+    if (g.key === 'shape' || g.key === 'style' || g.key === 'setting') {
       const known = new Set(opts.map((o) => o.value));
-      const extra = new Set(rows.flatMap((r) => (g.key === 'style' ? r.styles : r.settingType ? [r.settingType] : [])).filter((v) => !known.has(v)));
-      const more = [...extra].map((v) => ({ value: v, label: g.key === 'style' ? label.style(v) : label.setting(v), count: count(v) }));
+      const values = (r: IndexRow) => (g.key === 'shape' ? r.shapes : g.key === 'style' ? r.styles : r.settingType ? [r.settingType] : []);
+      const extra = new Set(rows.flatMap(values).filter((v) => !known.has(v)));
+      const name = g.key === 'shape' ? label.shape : g.key === 'style' ? label.style : label.setting;
+      const more = [...extra].map((v) => ({ value: v, label: name(v), count: count(v) }));
       opts.push(...more.sort((a, b) => b.count - a.count));
     }
+    // as on brilliancecarat.com: the ten classic shapes first, then other cuts A–Z, then mixed-shape designs; styles A–Z
+    if (g.key === 'shape') {
+      const classic = opts.filter((o) => SHAPES.some((s) => s.slug === o.value));
+      const rest = opts.filter((o) => !classic.includes(o)).sort((a, b) => Number(a.label.includes('+')) - Number(b.label.includes('+')) || a.label.localeCompare(b.label));
+      opts.splice(0, opts.length, ...classic, ...rest);
+    }
+    if (g.key === 'style') opts.sort((a, b) => a.label.localeCompare(b.label));
     // keep any active-but-unlisted values (e.g. a custom price range from a link) visible
     for (const v of f[g.key]) if (!opts.some((o) => o.value === v)) opts.unshift({ value: v, label: rangeLabel(g.key, v), count: count(v) });
     facets[g.key] = opts.filter((o) => o.count > 0 || f[g.key].includes(o.value));

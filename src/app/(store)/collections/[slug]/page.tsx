@@ -16,7 +16,6 @@ type Resolved = {
   description: string | null;
   scope: Scope;
   apiScope: Record<string, string>;
-  eyebrow: string;
   canonical: string;
   seoTitle?: string | null;
   seoDescription?: string | null;
@@ -31,7 +30,6 @@ async function resolve(slug: string): Promise<Resolved | null> {
       description: localizeRupees(virtual.description, currency),
       scope: { maxPrice: virtual.maxPrice, minPrice: virtual.minPrice },
       apiScope: { collectionSlug: slug },
-      eyebrow: slug.startsWith('gifts') ? 'Gifts' : 'Collection',
       canonical: `/collections/${slug}`,
     };
   }
@@ -42,7 +40,6 @@ async function resolve(slug: string): Promise<Resolved | null> {
       description: c.description,
       scope: { collection: c.slug },
       apiScope: { collectionSlug: c.slug },
-      eyebrow: slug.endsWith('gifts') || slug.includes('personalized') ? 'Gifts' : 'Collection',
       seoTitle: c.seoTitle,
       seoDescription: c.seoDescription,
       canonical: `/collections/${slug}`,
@@ -55,7 +52,6 @@ async function resolve(slug: string): Promise<Resolved | null> {
       description: `${shape.blurb} Explore every ${shape.label.toLowerCase()} lab-grown diamond design — engagement rings, bands, earrings, pendants and more.`,
       scope: { shape: shape.slug },
       apiScope: { shapeSlug: shape.slug },
-      eyebrow: 'Shop by Shape',
       canonical: `/collections/shape/${shape.slug}`,
     };
   }
@@ -78,7 +74,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
   return (
     <CollectionView
       title={r.title}
-      eyebrow={r.eyebrow}
       description={r.description}
       crumbs={[
         { label: 'Collections', href: '/collections/all' },
@@ -89,7 +84,6 @@ export default async function CollectionPage({ params, searchParams }: Props) {
       apiScope={r.apiScope}
       filters={filters}
       listing={listing}
-      showShapes
     />
   );
 }

@@ -29,7 +29,6 @@ export default async function ShapePage({ params, searchParams }: Props) {
   return (
     <CollectionView
       title={`${s.label} Diamonds`}
-      eyebrow="Shop by Shape"
       description={`${s.blurb} Every ${s.label.toLowerCase()} design is set with a certified lab-grown diamond and finished by hand in our workshop.`}
       crumbs={[
         { label: 'Shapes', href: '/collections/all' },

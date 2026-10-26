@@ -201,7 +201,7 @@ export type Listing = {
  * browser start hydrating before the page has fully arrived (an intermittent hydration warning).
  * "Load more" / infinite scroll fetch the next pages from /api/products with the same size.
  */
-export const LISTING_PAGE_SIZE = 12;
+export const LISTING_PAGE_SIZE = 20;
 
 export async function listProducts(scope: Scope, filters: Filters, pageSize = LISTING_PAGE_SIZE, opts: { cumulative?: boolean } = {}): Promise<Listing> {
   const index = await getCatalogIndex();
