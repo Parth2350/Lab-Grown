@@ -106,11 +106,13 @@ export function MatchQuiz({ categoryImages }: { categoryImages: Record<string, s
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      <ol className="mx-auto mb-10 flex max-w-lg items-center gap-2" aria-label="Quiz progress">
+      {/* five equal steps, bars on one line, each label centred under its bar */}
+      <ol className="mx-auto mb-10 grid max-w-2xl grid-cols-5 items-start gap-1.5 sm:gap-3" aria-label="Quiz progress">
         {STEPS.map((label, i) => (
-          <li key={label} className="flex-1" aria-current={i === s.step ? 'step' : undefined}>
+          <li key={label} aria-current={i === s.step ? 'step' : undefined}>
             <div className={cn('h-1 rounded-full', i <= s.step ? 'bg-gold' : 'bg-line')} />
-            <p className={cn('mt-2 text-2xs uppercase tracking-luxe', i === s.step ? 'text-ink' : 'text-taupe')}>{label}</p>
+            {/* phones: smaller, tighter letters so the longest word ("Occasion") fits its fifth of the width */}
+            <p className={cn('mt-2 text-center text-[10.5px] uppercase leading-snug tracking-[0.04em] sm:whitespace-nowrap sm:text-2xs sm:tracking-luxe', i === s.step ? 'text-ink' : 'text-taupe')}>{label}</p>
           </li>
         ))}
       </ol>
