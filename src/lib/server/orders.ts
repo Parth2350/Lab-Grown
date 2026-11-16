@@ -6,7 +6,7 @@ import { db } from './db';
 import { getSettings } from './settings';
 import { getSession } from './auth';
 import { hasOrdered } from './welcome';
-import { getCardsByIds } from './catalog';
+import { getCardsCached } from './catalog';
 import { revalidateCatalog } from './revalidate';
 import { recomputeFromPrice } from './product-pricing';
 import { site } from '@/config/site';
@@ -935,7 +935,7 @@ export async function getUserState(userId: string): Promise<{ cart: CartLine[]; 
   const lines = await sanitizeLines(
     items.map((i) => ({ productId: i.productId, variantId: i.variantId, diamondId: i.diamondId, diamondOptionId: i.diamondOptionId, ringSize: i.ringSize, quantity: Math.min(10, Math.max(1, i.quantity)) })),
   );
-  const [wishlist, compareCards] = await Promise.all([getCardsByIds(wish.map((w) => w.productId)), getCardsByIds(compare.map((c) => c.productId).slice(0, 4))]);
+  const [wishlist, compareCards] = await Promise.all([getCardsCached(wish.map((w) => w.productId)), getCardsCached(compare.map((c) => c.productId).slice(0, 4))]);
   return { cart: lines.map((l) => toCartLine(l, added.get(l.index) ?? Date.now())), wishlist, compare: compareCards };
 }
 

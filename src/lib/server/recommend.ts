@@ -1,7 +1,7 @@
 import 'server-only';
 import type { Prisma } from '@prisma/client';
 import { db } from './db';
-import { getCardsByIds, getCatalogIndex } from './catalog';
+import { getCardsCached, getCatalogIndex } from './catalog';
 import { MATCH_CATEGORIES, QUIZ_SLUG } from '@/config/quiz';
 import type { IndexRow } from '@/lib/filters';
 import type { ProductCard } from '@/lib/types';
@@ -49,7 +49,7 @@ export async function tasteTiles(a: MatchAnswers, count = 12): Promise<TasteTile
     }
   }
   for (const r of turns) if (picked.length < count && !picked.includes(r)) picked.push(r);
-  const cards = await getCardsByIds(picked.map((r) => r.id));
+  const cards = await getCardsCached(picked.map((r) => r.id));
   return cards.flatMap((c) => {
     const image = photo(c, a.metal);
     return image ? [{ id: c.id, name: c.name, image }] : [];
@@ -78,7 +78,7 @@ export async function matchProducts(a: MatchAnswers, count = 20): Promise<{ ids:
   const liked = a.liked.map((id) => index.get(id)).filter((r): r is IndexRow => !!r);
   const score = new Map(rows.map((r) => [r.id, liked.reduce((s, l) => s + similarity(r, l), 0)]));
   const ids = (liked.length ? [...rows].sort((x, y) => score.get(y.id)! - score.get(x.id)! || x.position - y.position) : rows).slice(0, count).map((r) => r.id);
-  return { ids, products: await getCardsByIds(ids) };
+  return { ids, products: await getCardsCached(ids) };
 }
 
 // ───────────────────────────── saved matches ─────────────────────────────
@@ -99,5 +99,5 @@ export async function saveMatch(userId: string | null, answers: MatchAnswers, id
 export async function lastMatch(userId: string) {
   const row = await db.recommendationAnswer.findFirst({ where: { userId, quiz: { slug: QUIZ_SLUG } }, orderBy: { createdAt: 'desc' }, select: { answers: true, recommendedIds: true } });
   if (!row || !row.recommendedIds.length) return null;
-  return { answers: row.answers as unknown as MatchAnswers, products: await getCardsByIds(row.recommendedIds) };
+  return { answers: row.answers as unknown as MatchAnswers, products: await getCardsCached(row.recommendedIds) };
 }

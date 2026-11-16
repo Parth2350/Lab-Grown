@@ -31,8 +31,8 @@ const nextConfig = {
       { source: '/collections/gifts-under-250', destination: '/collections/gifts-under-25000', permanent: true },
       { source: '/collections/gifts-under-500', destination: '/collections/gifts-under-50000', permanent: true },
       { source: '/collections/gifts-under-1000', destination: '/collections/gifts-under-100000', permanent: true },
-      // the store's old address forwards to its own, keeping the page and query
-      { source: '/:path*', has: [{ type: 'host', value: 'lab-grown-pi.vercel.app' }], destination: 'https://thevjewels.vercel.app/:path*', permanent: true },
+      // the store's old address forwards to its own domain, keeping the page and query (thevjewels.vercel.app is forwarded by Vercel)
+      { source: '/:path*', has: [{ type: 'host', value: 'lab-grown-pi.vercel.app' }], destination: 'https://thevjewels.com/:path*', permanent: true },
     ];
   },
   // Partner-catalogue photos (served from the US with no CDN) come through our own address instead, so Vercel's CDN keeps

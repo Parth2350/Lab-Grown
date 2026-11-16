@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getCardsByIds, listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
+import { getCardsCached, listProducts, LISTING_PAGE_SIZE } from '@/lib/server/catalog';
 import { parseFilters } from '@/lib/filters';
 import { VIRTUAL_COLLECTIONS } from '@/config/navigation';
 
@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   const sp = new URL(req.url).searchParams;
   const ids = sp.get('ids');
   if (ids) {
-    const products = await getCardsByIds(ids.split(',').filter(Boolean).slice(0, 100));
+    const products = await getCardsCached(ids.split(',').filter(Boolean).slice(0, 100));
     return NextResponse.json({ products });
   }
   const filters = parseFilters(sp);

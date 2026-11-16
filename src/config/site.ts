@@ -9,7 +9,7 @@ export const site = {
   description:
     'The V Jewels crafts certified natural & lab-grown diamond engagement rings, wedding bands and fine jewelry in our own workshop — made for the moments that matter.',
   // NEXT_PUBLIC_SITE_URL wins; on Vercel the store's own address (the old one forwards to it — see next.config)
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? 'https://thevjewels.vercel.app' : 'http://localhost:3000')).replace(/\/$/, ''),
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ? 'https://thevjewels.com' : 'http://localhost:3000')).replace(/\/$/, ''),
   locale: 'en-IN',
   currency: 'INR',
   currencySymbol: '₹',

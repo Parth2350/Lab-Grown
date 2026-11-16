@@ -18,6 +18,11 @@ import type { DiamondData, ProductCard, ProductDetail, StoneData } from '@/lib/t
 import { SHAPES } from '@/lib/catalog';
 import { MAIN_NAV, type NavItem } from '@/config/navigation';
 
+// Storefront data is cached for a day: the database (Neon) can then sleep between visits instead of waking for every
+// shopper and crawler, which is what its compute time is billed on. Every admin save clears these caches at once
+// (revalidateCatalog / revalidateSettings), so edits still show immediately.
+export const STOREFRONT_CACHE_SECONDS = 86400;
+
 // ───────────────────────────── catalog index ─────────────────────────────
 
 export const getCatalogIndex = unstable_cache(
@@ -76,8 +81,8 @@ export const getCatalogIndex = unstable_cache(
         .replace(/-/g, ' '),
     }));
   },
-  ['catalog-index', 'bc3'],
-  { tags: ['products'], revalidate: 3600 },
+  ['catalog-index', 'bc4'],
+  { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
 
 /** The header menu, keeping only the shapes, metals and styles some product in that category carries — no dead-end links */
@@ -103,8 +108,8 @@ export const getMainNav = unstable_cache(
         : item,
     );
   },
-  ['main-nav', 'v1'],
-  { tags: ['products'], revalidate: 3600 },
+  ['main-nav', 'v2'],
+  { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
 
 // ───────────────────────────── cards ─────────────────────────────
@@ -180,10 +185,27 @@ export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
   return ids.map((id) => map.get(id)).filter(Boolean) as ProductCard[];
 }
 
-export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'bc3'], {
-  tags: ['products'],
-  revalidate: 3600,
-});
+// Cards are cached in fixed groups of products rather than per listing: however many filter combinations and pages
+// shoppers and crawlers open, the database is read at most once per group per day.
+const CARD_GROUPS = 32;
+const groupOf = (id: string) => {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return h % CARD_GROUPS;
+};
+const getCardGroup = unstable_cache(
+  async (group: number) => getCardsByIds((await getCatalogIndex()).filter((r) => groupOf(r.id) === group).map((r) => r.id)),
+  ['card-group', 'bc4'],
+  { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
+);
+
+/** Cards for these products, in this order (inactive or unknown ids are skipped) */
+export async function getCardsCached(ids: string[]): Promise<ProductCard[]> {
+  if (!ids.length) return [];
+  const groups = await Promise.all([...new Set(ids.map(groupOf))].map(getCardGroup));
+  const cards = new Map(groups.flat().map((c) => [c.id, c]));
+  return ids.map((id) => cards.get(id)).filter(Boolean) as ProductCard[];
+}
 
 // ───────────────────────────── listings ─────────────────────────────
 
@@ -280,7 +302,7 @@ export const getCategories = unstable_cache(
       select: { id: true, slug: true, name: true, description: true, image: true, seoTitle: true, seoDescription: true },
     }),
   ['categories'],
-  { tags: ['categories'], revalidate: 3600 },
+  { tags: ['categories'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
 
 export async function getCategory(slug: string) {
@@ -295,7 +317,7 @@ export const getCollections = unstable_cache(
       select: { id: true, slug: true, name: true, description: true, image: true, isFeatured: true, seoTitle: true, seoDescription: true },
     }),
   ['collections'],
-  { tags: ['collections'], revalidate: 3600 },
+  { tags: ['collections'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
 
 export async function getCollection(slug: string) {
@@ -425,8 +447,8 @@ export const getProductBySlug = unstable_cache(
       updatedAt: p.updatedAt.toISOString(),
     };
   },
-  ['product-by-slug', 'bc3'],
-  { tags: ['products'], revalidate: 3600 },
+  ['product-by-slug', 'bc4'],
+  { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
 
 // ───────────────────────────── diamonds ─────────────────────────────

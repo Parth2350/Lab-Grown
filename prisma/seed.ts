@@ -210,6 +210,17 @@ async function main() {
     });
   }
 
+  // a new live database (`--store`): only what the shop needs — the partner catalogue is imported next, and no demo
+  // products, customers, orders, diamonds, reviews or messages are created
+  if (process.argv.includes('--store')) {
+    const email = (process.env.SEED_ADMIN_EMAIL ?? 'admin@aurevia.example').toLowerCase();
+    if (!process.env.SEED_ADMIN_PASSWORD) throw new Error('SEED_ADMIN_PASSWORD is required for a live database');
+    await prisma.user.create({ data: { name: 'Store Admin', email, passwordHash: await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD, 10), role: 'ADMIN' } });
+    await prisma.recommendationQuiz.create({ data: { slug: QUIZ_SLUG, title: 'Find Your Match', questions: [] } });
+    console.log('Done → store settings, metals, categories, collections and the admin account.');
+    return;
+  }
+
   console.log('Diamond inventory …');
   const { list: diamonds, certs } = buildDiamonds();
   await prisma.diamond.createMany({ data: diamonds });

@@ -1,7 +1,8 @@
 // Production build used by Vercel (`npm run vercel-build`):
 //   1. generate the Prisma client
 //   2. apply pending migrations
-//   3. on the very first deploy (empty database) load the demo catalogue
+//   3. on the very first deploy (empty database) set the store up — production: settings, categories, collections and
+//      the admin only (no demo data); previews: the demo catalogue
 //   4. production: import the partner catalogue (data/catalog) — once per catalogue version, in one transaction
 //   5. build Next.js
 //
@@ -34,8 +35,9 @@ if (products === 0) {
     console.error('\n✖ First deploy: set SEED_ADMIN_PASSWORD (and optionally SEED_ADMIN_EMAIL) so the admin account is not created with the public demo password.\n');
     process.exit(1);
   }
-  console.log('Empty database — loading the demo catalogue …');
-  run('npx tsx prisma/seed.ts', { DATABASE_URL: direct });
+  const live = env.VERCEL_ENV === 'production';
+  console.log(live ? 'Empty database — setting up the store (no demo data) …' : 'Empty database — loading the demo catalogue …');
+  run(`npx tsx prisma/seed.ts${live ? ' --store' : ''}`, { DATABASE_URL: direct });
 } else {
   console.log(`Database already has ${products} products — skipping seed.`);
 }
