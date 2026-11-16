@@ -1,7 +1,0 @@
-{
-  "/(store)/about/page": "app/(store)/about/page.js",
-  "/(store)/contact/page": "app/(store)/contact/page.js",
-  "/(store)/pages/[slug]/page": "app/(store)/pages/[slug]/page.js",
-  "/(store)/partner-program/page": "app/(store)/partner-program/page.js",
-  "/(store)/pages/lab-grown-diamonds/page": "app/(store)/pages/lab-grown-diamonds/page.js"
-}

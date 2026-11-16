@@ -9,6 +9,8 @@ public/uploads/*
 !public/uploads/.gitkeep
 .data
 .next-prod
+# any extra local build folder (NEXT_DIST_DIR=.next-…)
+.next-*/
 .env*.local
 .vercel
 .claude/
