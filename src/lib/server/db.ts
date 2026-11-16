@@ -14,7 +14,7 @@ function withPool(url?: string) {
   try {
     const u = new URL(url);
     if (!u.searchParams.has('connection_limit')) u.searchParams.set('connection_limit', '10');
-    if (!u.searchParams.has('pool_timeout')) u.searchParams.set('pool_timeout', '60');
+    if (!u.searchParams.has('pool_timeout')) u.searchParams.set('pool_timeout', '20');
     return u.toString();
   } catch {
     return url;
