@@ -187,7 +187,7 @@ export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
 
 // Cards are cached in fixed groups of products rather than per listing: however many filter combinations and pages
 // shoppers and crawlers open, the database is read at most once per group per day.
-const CARD_GROUPS = 32;
+const CARD_GROUPS = 16;
 const groupOf = (id: string) => {
   let h = 0;
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
@@ -195,7 +195,7 @@ const groupOf = (id: string) => {
 };
 const getCardGroup = unstable_cache(
   async (group: number) => getCardsByIds((await getCatalogIndex()).filter((r) => groupOf(r.id) === group).map((r) => r.id)),
-  ['card-group', 'bc4'],
+  ['card-group', 'bc4-16'],
   { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
 
