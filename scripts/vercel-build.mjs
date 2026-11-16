@@ -7,12 +7,15 @@
 //   5. build Next.js
 //
 // Works with DATABASE_URL directly or with the variables Vercel's Postgres
-// integrations inject (Neon / Supabase: POSTGRES_PRISMA_URL + an unpooled URL).
+// integrations inject (Neon / Supabase: POSTGRES_PRISMA_URL + an unpooled URL). A Supabase database connected with
+// the prefix "SUPABASE" (beside the old Neon one) takes precedence.
 import { execSync } from 'node:child_process';
 
 const env = process.env;
-const pooled = env.POSTGRES_PRISMA_URL || env.DATABASE_URL;
-const direct = env.DATABASE_URL_UNPOOLED || env.POSTGRES_URL_NON_POOLING || env.DIRECT_URL || pooled;
+const supabase = !!env.SUPABASE_POSTGRES_PRISMA_URL;
+const pooled = env.SUPABASE_POSTGRES_PRISMA_URL || env.POSTGRES_PRISMA_URL || env.DATABASE_URL;
+const direct = (supabase ? env.SUPABASE_POSTGRES_URL_NON_POOLING : env.DATABASE_URL_UNPOOLED || env.POSTGRES_URL_NON_POOLING || env.DIRECT_URL) || pooled;
+console.log(`Database: ${supabase ? 'Supabase' : env.NEON_PROJECT_ID ? 'Neon' : 'DATABASE_URL'}`);
 
 if (!pooled) {
   console.error('\n✖ No database configured. Connect a Postgres database to this project (or set DATABASE_URL) and redeploy.\n');
