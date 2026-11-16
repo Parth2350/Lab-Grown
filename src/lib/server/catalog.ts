@@ -25,7 +25,7 @@ export const STOREFRONT_CACHE_SECONDS = 86400;
 
 // ───────────────────────────── catalog index ─────────────────────────────
 
-export const getCatalogIndex = unstable_cache(
+const loadCatalogIndex = unstable_cache(
   async (): Promise<IndexRow[]> => {
     const rows = await db.product.findMany({
       where: { isActive: true, category: { isActive: true } },
@@ -84,6 +84,19 @@ export const getCatalogIndex = unstable_cache(
   ['catalog-index', 'bc4'],
   { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
 );
+
+// The index (≈1.6 MB) would otherwise be fetched from the data cache on every request; a warm server keeps its copy for a
+// minute, so an admin edit reaches every server within a minute.
+let indexMemo: { at: number; rows: Promise<IndexRow[]> } | null = null;
+export function getCatalogIndex(): Promise<IndexRow[]> {
+  if (!indexMemo || Date.now() - indexMemo.at > 60_000) {
+    const rows = loadCatalogIndex();
+    indexMemo = { at: Date.now(), rows };
+    rows.catch(() => (indexMemo = null));
+  }
+  return indexMemo.rows;
+}
+export const forgetCatalogIndex = () => void (indexMemo = null);
 
 /** The header menu, keeping only the shapes, metals and styles some product in that category carries — no dead-end links */
 export const getMainNav = unstable_cache(
@@ -185,27 +198,11 @@ export async function getCardsByIds(ids: string[]): Promise<ProductCard[]> {
   return ids.map((id) => map.get(id)).filter(Boolean) as ProductCard[];
 }
 
-// Cards are cached in fixed groups of products rather than per listing: however many filter combinations and pages
-// shoppers and crawlers open, the database is read at most once per group per day.
-const CARD_GROUPS = 16;
-const groupOf = (id: string) => {
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
-  return h % CARD_GROUPS;
-};
-const getCardGroup = unstable_cache(
-  async (group: number) => getCardsByIds((await getCatalogIndex()).filter((r) => groupOf(r.id) === group).map((r) => r.id)),
-  ['card-group', 'bc4-16'],
-  { tags: ['products'], revalidate: STOREFRONT_CACHE_SECONDS },
-);
-
-/** Cards for these products, in this order (inactive or unknown ids are skipped) */
-export async function getCardsCached(ids: string[]): Promise<ProductCard[]> {
-  if (!ids.length) return [];
-  const groups = await Promise.all([...new Set(ids.map(groupOf))].map(getCardGroup));
-  const cards = new Map(groups.flat().map((c) => [c.id, c]));
-  return ids.map((id) => cards.get(id)).filter(Boolean) as ProductCard[];
-}
+/** Cards for these products, in this order (inactive or unknown ids are skipped) — one small cache entry per list, kept a day */
+export const getCardsCached = unstable_cache(async (ids: string[]) => getCardsByIds(ids), ['cards-by-ids', 'bc5'], {
+  tags: ['products'],
+  revalidate: STOREFRONT_CACHE_SECONDS,
+});
 
 // ───────────────────────────── listings ─────────────────────────────
 

@@ -1,12 +1,14 @@
 import 'server-only';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { forget } from './cache';
+import { forgetCatalogIndex } from './catalog';
 
 /** Call after any admin change to products, variants, diamonds, categories or collections. */
 export async function revalidateCatalog() {
   revalidateTag('products');
   revalidateTag('categories');
   revalidateTag('collections');
+  forgetCatalogIndex();
   await forget('catalog:');
   revalidatePath('/', 'layout');
 }
