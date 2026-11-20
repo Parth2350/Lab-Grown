@@ -1,10 +1,10 @@
 // Loads a database file made from the live shop (schema + all rows) into an EMPTY Postgres database, e.g. a new
 // Supabase project — in one transaction, so a failure leaves the database untouched.
 //
-//   node scripts/db-restore.mjs backups/thevjewels-database-2026-11-20.sql
+//   node scripts/db-restore.mjs backups/thevjewels-database-2026-11-20.sql ['postgresql://…']
 //
-// The target comes from DIRECT_URL (else DATABASE_URL) in the environment or in .env.newvercel.local — the
-// Supabase "Connect → ORMs → Prisma" lines. Afterwards the admin password is set to SEED_ADMIN_PASSWORD if given.
+// The target is the link given after the file, else DIRECT_URL (else DATABASE_URL) from the environment or
+// .env.newvercel.local — the Supabase "Connect → ORMs → Prisma" lines. Afterwards the admin password is set to SEED_ADMIN_PASSWORD if given.
 import { readFileSync, existsSync } from 'node:fs';
 import pg from 'pg';
 import bcrypt from 'bcryptjs';
@@ -21,11 +21,13 @@ const local = existsSync('.env.newvercel.local')
     )
   : {};
 const get = (k) => process.env[k] || local[k];
-const target = get('DIRECT_URL') || get('DATABASE_URL');
-if (!target || !/^postgres(ql)?:\/\//.test(target)) throw new Error('Put your Supabase DIRECT_URL (port 5432) into .env.newvercel.local first.');
+const target = process.argv[3] || get('DIRECT_URL') || get('DATABASE_URL');
+if (!target || !/^postgres(ql)?:\/\//.test(target)) throw new Error('Give your Supabase DIRECT_URL: node scripts/db-restore.mjs <file.sql> "postgresql://…"');
+if (target.includes('[YOUR-PASSWORD]')) throw new Error('Replace [YOUR-PASSWORD] in the link with your database password.');
 
 const url = new URL(target);
 url.search = ''; // drop ?pgbouncer=true&sslmode=… (Prisma-only options)
+if (url.port === '6543') url.port = '5432'; // the transaction pooler link works too: use the session pooler on the same host
 const isLocal = ['localhost', '127.0.0.1'].includes(url.hostname);
 const db = new pg.Client({ connectionString: url.toString(), ssl: isLocal ? false : { rejectUnauthorized: false } });
 await db.connect();
