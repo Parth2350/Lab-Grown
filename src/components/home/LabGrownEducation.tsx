@@ -66,9 +66,10 @@ export function LabGrownEducation() {
             <figure className="relative mx-auto aspect-square w-full max-w-[560px] overflow-hidden bg-white">
               <Image src="/images/home/lab-grown-ring.webp" alt="A lab-grown diamond halo ring in white gold" fill sizes="(min-width:1024px) 560px, 100vw" className="object-contain p-[14%]" />
               {FACTS.map((f) => (
-                <div key={f.label} className={cn('absolute', f.pos)}>
+                // each corner gets under half the width, so long captions wrap instead of running into the next corner on phones
+                <div key={f.label} className={cn('absolute max-w-[44%]', f.pos)}>
                   <p className="font-serif text-xl leading-none text-ink sm:text-2xl">{f.value}</p>
-                  <p className="mt-1.5 text-[11.5px] font-medium uppercase tracking-[0.18em] text-taupe sm:text-[12px]">{f.label}</p>
+                  <p className="mt-1.5 text-[11.5px] font-medium uppercase leading-snug tracking-[0.12em] text-taupe sm:text-[12px] sm:tracking-[0.18em]">{f.label}</p>
                 </div>
               ))}
             </figure>
