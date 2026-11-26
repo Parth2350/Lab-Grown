@@ -70,7 +70,7 @@ export const FAQ_GROUPS: { id: string; title: string; items: Faq[] }[] = [
     items: [
       {
         q: 'What is your return policy?',
-        a: 'You can return or exchange eligible pieces within 30 days of delivery for a full refund. Return shipping is complimentary and insured. Engraved pieces and bespoke commissions are made just for you and cannot be returned.',
+        a: 'You can return or exchange eligible pieces within 7 days of delivery for a full refund. Return shipping is complimentary and insured. Engraved pieces and bespoke commissions are made just for you and cannot be returned.',
       },
       {
         q: 'What does the lifetime warranty cover?',

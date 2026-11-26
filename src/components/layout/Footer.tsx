@@ -9,7 +9,7 @@ import { NewsletterForm } from './NewsletterForm';
 const PROMISES = [
   { icon: Gem, title: 'IGI & GIA Certified', text: 'Every diamond, independently graded' },
   { icon: Award, title: 'Lifetime Warranty', text: 'Manufacturing defects covered forever' },
-  { icon: RefreshCcw, title: '30-Day Returns', text: 'Easy, insured & complimentary' },
+  { icon: RefreshCcw, title: '7-Day Returns', text: 'Easy, insured & complimentary' },
   { icon: MessageCircle, title: 'Order on WhatsApp', text: 'Our team confirms every order personally' },
 ];
 

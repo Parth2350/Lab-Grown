@@ -258,7 +258,7 @@ export const termsSections: DocSection[] = [
     title: 'Returns & warranty',
     body: (
       <p>
-        You may return eligible items within 30 days of delivery as described in our <TextLink href="/pages/returns">Returns</TextLink> page, and every piece is
+        You may return eligible items within 7 days of delivery as described in our <TextLink href="/pages/returns">Returns</TextLink> page, and every piece is
         covered by our <TextLink href="/pages/warranty">lifetime manufacturing warranty</TextLink>. These commitments are in addition to your statutory rights as a
         consumer, which are not affected.
       </p>

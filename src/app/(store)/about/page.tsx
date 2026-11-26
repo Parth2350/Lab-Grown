@@ -67,7 +67,7 @@ const PROMISES = [
   { icon: Gem, t: 'IGI & GIA certified', d: 'Every centre diamond is independently graded and its report travels with your jewelry.' },
   { icon: ShieldCheck, t: 'Hallmarked solid gold', d: 'Cast in 9K to 18K gold, with purity independently verified and stamped.' },
   { icon: Award, t: 'Lifetime warranty', d: 'Manufacturing defects covered for life, with complimentary cleaning and inspection.' },
-  { icon: RefreshCcw, t: '30-day returns', d: 'Complimentary, insured returns and exchanges if a piece is not quite right.' },
+  { icon: RefreshCcw, t: '7-day returns', d: 'Complimentary, insured returns and exchanges if a piece is not quite right.' },
 ];
 
 export default function AboutPage() {

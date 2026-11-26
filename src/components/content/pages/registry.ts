@@ -28,7 +28,7 @@ export const CONTENT_PAGES = {
     title: 'Returns & Exchanges',
     navLabel: 'Returns & Exchanges',
     eyebrow: 'Client Care',
-    description: 'Return or exchange your jewelry within 30 days of delivery with a complimentary, insured return label. How to start a return and what we accept.',
+    description: 'Return or exchange your jewelry within 7 days of delivery with a complimentary, insured return label. How to start a return and what we accept.',
     group: 'care',
     updated: '2026-09-01',
   },

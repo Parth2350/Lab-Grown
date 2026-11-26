@@ -144,15 +144,15 @@ export const shippingSections: DocSection[] = [
 
 // ───────────────────────────── returns ─────────────────────────────
 
-export const returnsIntro = `Fine jewelry should feel exactly right. If it does not, you have 30 days from delivery to return or exchange it — with a complimentary, fully insured return label.`;
+export const returnsIntro = `Fine jewelry should feel exactly right. If it does not, you have 7 days from delivery to return or exchange it — with a complimentary, fully insured return label.`;
 
 export const returnsSections: DocSection[] = [
   {
-    id: 'thirty-days',
-    title: 'Our 30-day promise',
+    id: 'seven-days',
+    title: 'Our 7-day promise',
     body: (
       <p>
-        You may return any eligible piece within 30 days of the delivery date for a full refund or an exchange. Return shipping is complimentary and insured
+        You may return any eligible piece within 7 days of the delivery date for a full refund or an exchange. Return shipping is complimentary and insured
         for the full value of your jewelry, wherever you are in the world.
       </p>
     ),
@@ -207,7 +207,7 @@ export const returnsSections: DocSection[] = [
     body: (
       <>
         <p>
-          Within 30 days you can exchange your piece for a different size, metal or design. If the new piece costs more, we will charge the difference; if it costs
+          Within 7 days you can exchange your piece for a different size, metal or design. If the new piece costs more, we will charge the difference; if it costs
           less, we will refund it.
         </p>
         <p>
@@ -290,7 +290,7 @@ export const refundSections: DocSection[] = [
     body: (
       <p>
         You can cancel any order free of charge within 24 hours of placing it, or at any time before production begins, and we will refund you in full. Once a
-        made-to-order piece is in production we will complete and deliver it — you then remain covered by our 30-day returns window.
+        made-to-order piece is in production we will complete and deliver it — you then remain covered by our 7-day returns window.
       </p>
     ),
   },

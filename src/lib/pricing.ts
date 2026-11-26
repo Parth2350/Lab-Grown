@@ -30,7 +30,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     'IGI & GIA Certified',
     'Made in Our Own Workshop',
     'Free Insured Worldwide Shipping',
-    '30-Day Easy Returns',
+    '7-Day Easy Returns',
     'Natural & Lab-Grown Diamonds',
     'Lifetime Warranty on Every Piece',
   ],
@@ -41,7 +41,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
     { id: 'express', label: 'Insured Express', description: 'Priority handling & tracking', eta: '3–5 business days', price: 150000 },
     { id: 'priority', label: 'Priority Overnight', description: 'Major metros only', eta: '1–2 business days', price: 300000 },
   ],
-  returnsDays: 30,
+  returnsDays: 7,
   hero: {
     eyebrow: 'Natural & Lab-Grown Diamond Fine Jewelry',
     title: 'Jewelry Made for the Moments That Matter',

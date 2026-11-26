@@ -52,7 +52,7 @@ const FAQS: Faq[] = [
   },
   {
     q: 'When and how are commissions paid?',
-    a: 'Commissions are confirmed once an order passes our 30-day returns window and are paid out monthly by bank transfer. You can follow every referral in real time.',
+    a: 'Commissions are confirmed once an order passes our 7-day returns window and are paid out monthly by bank transfer. You can follow every referral in real time.',
   },
   {
     q: 'Can I partner from outside India?',

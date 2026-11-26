@@ -100,7 +100,7 @@ const SERVICES = [
   { icon: Gift, t: 'Complimentary gift wrapping', d: 'Every piece arrives in our signature box, ribboned and ready to give.' },
   { icon: PenLine, t: 'A handwritten note', d: 'Share your message when you order on WhatsApp and we will write it by hand.' },
   { icon: ShieldCheck, t: 'Insured, discreet delivery', d: 'Fully insured and shipped in plain outer packaging — no spoilers.' },
-  { icon: RefreshCcw, t: 'Easy exchanges', d: 'Wrong size or style? Exchange within 30 days, with free insured returns.' },
+  { icon: RefreshCcw, t: 'Easy exchanges', d: 'Wrong size or style? Exchange within 7 days, with free insured returns.' },
 ];
 
 function CategoryTile({ tile, count, priority, tall }: { tile: Tile; count: number; priority?: boolean; tall?: boolean }) {
